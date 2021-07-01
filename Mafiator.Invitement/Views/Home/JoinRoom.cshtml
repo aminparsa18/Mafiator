@@ -1,0 +1,14 @@
+﻿@model string
+
+<div class="m-4 text-center" >
+    <img src="~/img/logo.png" width="100" class="m-4"/>
+    <div class="card">
+        <div class="card-body">
+            <img class="card-img" style="border-radius: 12px;" src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=app://invite.mftor/room/@(Model)&bgcolor=876A96&color=3F395F"/>
+            <h5 class="mt-2">Room Code : @Model</h5>
+            <p>join your fucking friends,get high as fuck and play mafiaa</p>
+            <a href="app://invite.mftor/room/@(Model)" class="btn btn-block btn-danger">Join</a>
+        </div>
+    </div>
+
+</div>

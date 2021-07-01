@@ -1,0 +1,8 @@
+﻿<metadata>
+  <add-node path="/api/package[@name='com.yalantis.ucrop.task']">
+    <class abstract="false" deprecated="not deprecated" final="false" name="BitmapLoadTask" static="true" visibility="public" extends="java.lang.Object">
+    </class>
+    <class abstract="false" deprecated="not deprecated" final="false" name="BitmapCropTask" static="true" visibility="public" extends="java.lang.Object">
+    </class>
+  </add-node>
+</metadata>

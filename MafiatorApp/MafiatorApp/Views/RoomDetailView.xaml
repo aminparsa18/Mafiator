@@ -1,0 +1,135 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.RoomDetailView"
+             BackgroundColor="{StaticResource LightBackgroundColor}"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Resources>
+        <converters:RoomImageConverter x:Key="RoomImageConverter" />
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
+        <converters:ToggleConverter x:Key="ToggleConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto,*">
+            <StackLayout>
+                <Frame Margin="8">
+                    <Grid ColumnDefinitions="2*,3*" Grid.RowDefinitions="*,*">
+                        <Ellipse
+                            StrokeThickness="4"
+                            WidthRequest="110"
+                            HeightRequest="110"
+                            HorizontalOptions="StartAndExpand"
+                            VerticalOptions="CenterAndExpand">
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="1,0">
+                                    <GradientStop Color="#ffbfbf"
+                                                  Offset="0.1" />
+                                    <GradientStop Color="#ff0000"
+                                                  Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                        </Ellipse>
+                        <forms:CachedImage
+                            x:Name="CachedImage"
+                            HorizontalOptions="StartAndExpand"
+                            Margin="8"
+                            WidthRequest="90"
+                            HeightRequest="90"
+                            Aspect="AspectFit"
+                            DownsampleToViewSize="true"
+                            Source="{Binding Room.Image,Converter={StaticResource RoomImageConverter}}"
+                            LoadingPlaceholder="room.png"
+                            ErrorPlaceholder="room.png">
+                            <forms:CachedImage.Transformations>
+                                <transformations:CircleTransformation />
+                            </forms:CachedImage.Transformations>
+                        </forms:CachedImage>
+                        <StackLayout Grid.Column="1">
+                            <Label FontFamily="{StaticResource BoldFont}" Text="{Binding Room.Name}" />
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Room.MemberCount}" TextColor="{StaticResource NavigationPrimary}" />
+                                <Label Text="عضو" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Room.GamePlayedCount}"
+                                       TextColor="{StaticResource NavigationPrimary}" />
+                                <Label Text="بازی انجام شده" />
+                            </StackLayout>
+                        </StackLayout>
+                        <Button Grid.Row="1" VerticalOptions="EndAndExpand" Grid.ColumnSpan="2" Text="پیوستن به گروه" Command="{Binding JoinCommand}"/>
+
+                    </Grid>
+                </Frame>
+                <StackLayout IsVisible="{Binding HasGame}">
+                    <Grid>
+                        <Label HorizontalOptions="CenterAndExpand" FontSize="Large" Text="{Binding Time}"
+                               TextColor="{StaticResource NavigationPrimary}" FontFamily="{StaticResource BoldFont}" />
+                    </Grid>
+                    <Label HorizontalOptions="CenterAndExpand" Text="تا شروع بازی جدید" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding HasGame,Converter={StaticResource ToggleConverter}}">
+                    <Label HorizontalOptions="CenterAndExpand" Text="بازی جدیدی وجود ندارد" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Grid.Row="1">
+                <Label TextColor="{StaticResource HeaderColor}" Text="اعضا" />
+                <RefreshView IsRefreshing="{Binding IsBusy,Mode=TwoWay}"
+                             Command="{Binding LoadMembersCommand}"
+                             Margin="8">
+                    <CollectionView x:Name="RouteListView"
+
+                                    ItemsSource="{Binding Members}"
+                                    SelectedItem="{Binding Member}"
+                                    SelectionMode="Single"
+                                    SelectionChangedCommand="{Binding MemberSelectedCommand}"
+                                    RemainingItemsThreshold="3"
+                                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                        <CollectionView.EmptyView>
+                            <StackLayout>
+                                <StackLayout VerticalOptions="CenterAndExpand">
+                                    <Image Source="empty.png" WidthRequest="100" />
+                                    <Label Text="هنوز کسی عضو نشده" HorizontalOptions="CenterAndExpand" />
+                                </StackLayout>
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame>
+                                    <Grid ColumnDefinitions="2*,3*">
+                                        <forms:CachedImage
+                                            x:Name="CachedImage"
+                                            HorizontalOptions="FillAndExpand"
+                                            Margin="8"
+                                            Aspect="AspectFit"
+                                            DownsampleToViewSize="true"
+                                            Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                            LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                            ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
+                                            <forms:CachedImage.Transformations>
+                                                <transformations:CircleTransformation />
+                                            </forms:CachedImage.Transformations>
+                                        </forms:CachedImage>
+                                        <StackLayout>
+                                            <Label TextColor="{StaticResource HeaderColor}"
+                                                   FontFamily="{StaticResource BoldFont}" Text="{Binding Name}" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding Score}"
+                                                       TextColor="{StaticResource NavigationPrimary}" />
+                                                <Label Text="امتیاز" />
+                                            </StackLayout>
+
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

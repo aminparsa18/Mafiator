@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.7.23" />
+    <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.2.85" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.5" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.10.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mafiator.Service\Mafiator.Service.csproj" />
+  </ItemGroup>
+
+</Project>

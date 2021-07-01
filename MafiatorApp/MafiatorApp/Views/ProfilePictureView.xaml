@@ -1,0 +1,159 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.ProfilePictureView"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Resources>
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid x:Name="MainGrid">
+            <views:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
+
+            <Grid x:Name="ProfileGrid" Margin="36,64,36,36" VerticalOptions="StartAndExpand" Padding="0,0,0,136" >
+                <Frame x:Name="AvatarFrame" IsVisible="False"  CornerRadius="20" VerticalOptions="EndAndExpand"
+                       Padding="16">
+                   <StackLayout>
+                       <StackLayout Orientation="Horizontal">
+                           <Path Data="M310.5,640l-5-5,5-5"
+                                 Stroke="#363853"
+                                 StrokeThickness="3"
+                                 Aspect="Uniform"
+                                 WidthRequest="28"
+                                 HeightRequest="28"
+                                 Margin="8,0,0,0"
+                                 StrokeLineCap="Round"
+                                 StrokeLineJoin="Round"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalOptions="CenterAndExpand">
+                               <Path.RenderTransform>
+                                   <TranslateTransform X="-304.75" Y="-628.939" />
+                               </Path.RenderTransform>
+                               <Path.GestureRecognizers>
+                                   <TapGestureRecognizer x:Name="PreviousTap" Tapped="PreviousTap_OnTapped"></TapGestureRecognizer>
+                               </Path.GestureRecognizers>
+                           </Path>
+                           <CarouselView
+                               x:Name="AvatarView"
+                               ItemsSource="{Binding Avatars}"
+                               CurrentItem="{Binding Avatar,Mode=TwoWay}"
+                               HeightRequest="80"
+                               Loop="True"
+                               CurrentItemChanged="CarouselView_OnCurrentItemChanged">
+                               <CarouselView.ItemTemplate>
+                                   <DataTemplate>
+                                       <ContentView>
+                                           <Grid>
+                                               <forms:CachedImage
+                                                   Aspect="AspectFit"
+                                                   LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                   ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                   Margin="8"
+                                                   Scale="{Binding Scale}"
+                                                   Source="{Binding Name,Converter={StaticResource ProfileImageConverter}}" />
+                                           </Grid>
+                                       </ContentView>
+                                   </DataTemplate>
+                               </CarouselView.ItemTemplate>
+                           </CarouselView>
+                            <Path Data="M379.5,630l5,5-5,5"
+                                 Stroke="#363853"
+                                 StrokeThickness="3"
+                                 Aspect="Uniform"
+                                 WidthRequest="28"
+                                 HeightRequest="28"
+                                 Margin="0,0,8,0"
+                                 StrokeLineCap="Round"
+                                 StrokeLineJoin="Round"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalOptions="CenterAndExpand">
+                               <Path.RenderTransform>
+                                    <TranslateTransform X="-378.439" Y="-628.939" />
+                               </Path.RenderTransform>
+                                <Path.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="NextTap" Tapped="NextTap_OnTapped"></TapGestureRecognizer>
+                                </Path.GestureRecognizers>
+                            </Path>
+                        </StackLayout>
+                       
+                        <Button Text="Set" Command="{Binding AvatarSelectedCommand}" HorizontalOptions="CenterAndExpand"></Button>
+                   </StackLayout>
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                Offset="0.0" />
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night5}}"
+                                Offset="0.25" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                </Frame>
+                <Frame CornerRadius="20" Padding="16,24">
+                    <StackLayout Padding="24" HorizontalOptions="CenterAndExpand">
+                        <Label Margin="0,0,0,16" HorizontalOptions="CenterAndExpand" Text="Upload Profile Picture" />
+                        <forms:CachedImage
+                            x:Name="CachedImage"
+                            WidthRequest="120"
+                            HeightRequest="120"
+                            Margin="8"
+                            Aspect="AspectFit"
+                            DownsampleToViewSize="true"
+                            Source="{Binding Image}"
+                            LoadingPlaceholder="choose_photo.png"
+                            ErrorPlaceholder="choose_photo.png">
+                            <forms:CachedImage.Transformations>
+                                <transformations:CircleTransformation />
+                            </forms:CachedImage.Transformations>
+                            <forms:CachedImage.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChoosePhotoCommand}" />
+                            </forms:CachedImage.GestureRecognizers>
+                        </forms:CachedImage>
+                        <Button Text="Set" IsVisible="{Binding PhotoSet}" Command="{Binding SetPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
+
+                        <StackLayout Margin="0,16,0,0" Orientation="Horizontal">
+                            <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="CenterAndExpand"
+                                     BackgroundColor="White" />
+                            <Label Margin="8" Text="{texts:Translate OR}" />
+                            <BoxView HeightRequest="1" VerticalOptions="CenterAndExpand"
+                                     HorizontalOptions="FillAndExpand"
+                                     BackgroundColor="White" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Switch Toggled="Switch_OnToggled" Margin="0,0,8,0" />
+                            <Label Text="Select Avatar" FontSize="Medium" VerticalOptions="CenterAndExpand" />
+                        </StackLayout>
+
+                        <Label Margin="0,16,0,0" FontSize="14" Padding="12" HorizontalOptions="CenterAndExpand" Text="{texts:Translate Skip}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SkipCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                    </StackLayout>
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                Offset="0.0" />
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night5}}"
+                                Offset="0.25" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                </Frame>
+
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

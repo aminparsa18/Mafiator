@@ -1,0 +1,109 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
+             xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.MyRoomsView"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Resources>
+        <converters:RoomImageConverter x:Key="RoomImageConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid views:StateLayout.CurrentState="{Binding CurrentState}"
+                  views:StateLayout.AnimateStateChanges="True">
+                <views:StateLayout.StateViews>
+                     <views:StateView StateKey="Loading"
+                                     RepeatCount="4">
+                        <views:StateView.Template>
+                            <DataTemplate>
+                                <shimmerLayout:ShimmerLayout Margin="0,48,0,0" Angle="-45" GradientSize="0.4"
+                                                             BackgroundGradientColor="{StaticResource Day4}"
+                                                             IsLoading="True">
+                                    <Grid ColumnDefinitions="3*,2*" Padding="24">
+                                        <StackLayout Margin="24,8">
+                                            <BoxView CornerRadius="12" BackgroundColor="White" HeightRequest="24" />
+                                            <BoxView CornerRadius="12" HeightRequest="24" />
+                                            <BoxView CornerRadius="12" HeightRequest="24" />
+                                        </StackLayout>
+                                        <BoxView Grid.Column="1" CornerRadius="1000" HeightRequest="80"
+                                                 WidthRequest="80" VerticalOptions="CenterAndExpand"
+                                                 HorizontalOptions="EndAndExpand"
+                                                 BackgroundColor="{StaticResource Day5}" />
+                                    </Grid>
+                                </shimmerLayout:ShimmerLayout>
+                            </DataTemplate>
+                        </views:StateView.Template>
+                    </views:StateView>
+                    <views:StateView StateKey="Empty"
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand">
+                        <StackLayout VerticalOptions="FillAndExpand" Margin="0,128,0,0" >
+                            <Image WidthRequest="120" Aspect="AspectFit" HorizontalOptions="CenterAndExpand" Source="{AppThemeBinding Light=empty_day.png, Dark=empty_night.png}" />
+                            <Label Text="No Room" Margin="0,16,0,0"
+                                   HorizontalOptions="CenterAndExpand" FontSize="18" TextColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night1}}" />
+                        </StackLayout>
+                    </views:StateView>
+                    <views:StateView StateKey="Error"
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand">
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Label Text="be ga raftim"
+                                   HorizontalOptions="CenterAndExpand" />
+                        </StackLayout>
+                    </views:StateView>
+               
+                <views:StateView StateKey="Success"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalOptions="FillAndExpand">
+                  
+                    <RefreshView IsRefreshing="{Binding IsBusy,Mode=TwoWay}"
+                             Command="{Binding LoadRoomsCommand}"
+                             Margin="8">
+                    <CollectionView x:Name="RouteListView"
+                                    ItemsSource="{Binding Rooms}"
+                                    SelectedItem="{Binding Room}"
+                                    SelectionMode="Single"
+                                    SelectionChangedCommand="{Binding RoomSelectedCommand}">
+                        <CollectionView.Header>
+                            <StackLayout>
+                                <Label HorizontalOptions="CenterAndExpand" FontSize="Large" FontFamily="{StaticResource BoldFont}"
+                                       Margin="32,24,0,24" Text="Rooms you are in" TextColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night1}}"/>
+                            </StackLayout>
+
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout >
+                                    <Grid Margin="16,8" >
+                                        <Image Source="history.png" Aspect="Fill"/>
+                                        <StackLayout Padding="36,16">
+                                            <Label FontFamily="{StaticResource BoldFont}" FontSize="24" Text="{Binding Name}" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding MemberCount}"
+                                                       TextColor="{StaticResource Day2}"  FontSize="16" />
+                                                        <Label Text="{texts:Translate Members}"  FontSize="16" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding GamePlayedCount}"
+                                                       TextColor="{StaticResource Day2}" FontSize="16" />
+                                                        <Label Text="{texts:Translate GamePlayed}"  FontSize="16" />
+                                            </StackLayout>
+                                            <Button x:Name="LeaveBtn" HorizontalOptions="StartAndExpand" BackgroundColor="{StaticResource Error}"
+                                                    Text="Leave"  Padding="16,4" CornerRadius="24" CommandParameter="{Binding Code}" Clicked="LeaveBtn_OnClicked" />
+                                                </StackLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+                    </views:StateView>
+                    </views:StateLayout.StateViews>
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,140 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.WaitingGameView"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Resources>
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
+        <converters:ToggleConverter x:Key="ToggleConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Margin="24">
+            <Frame Padding="0" HeightRequest="160"  CornerRadius="16" CompressedLayout.IsHeadless="true">
+                <Grid  CompressedLayout.IsHeadless="true">
+                <userControls:WaitingProgressBar userControls:ProgressAttachedProperties.AnimatedProgress="{Binding CapacityPercentage}" ></userControls:WaitingProgressBar>
+                      <StackLayout>
+                          <Label FontSize="Large" FontFamily="{StaticResource BoldFont}" HorizontalOptions="CenterAndExpand" Margin="8" Text="Waiting for all to join..."></Label>
+                          <Label FontSize="Large" HorizontalOptions="CenterAndExpand" Margin="8" >
+                              <Label.FormattedText>
+                                  <FormattedString>
+                                      <Span Text="{Binding Members.Count}"></Span>
+                                      <Span Text="/"></Span>
+                                      <Span Text="{Binding Total}"></Span>
+                                      <Span Text=" Joined"></Span>
+                                  </FormattedString>
+                              </Label.FormattedText>
+                          </Label>
+                      </StackLayout>
+                </Grid>
+            </Frame>
+            <Grid views:StateLayout.CurrentState="{Binding CurrentState}"
+                  views:StateLayout.AnimateStateChanges="True"
+                  HeightRequest="100" CompressedLayout.IsHeadless="true">
+                <views:StateLayout.StateViews>
+                    <views:StateView StateKey="Loading"
+                                     RepeatCount="1">
+                        <views:StateView.Template>
+                            <DataTemplate>
+                               <Label HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Text="Connecting Game Hub..." FontSize="16" TextColor="{StaticResource Day4}"></Label>
+                            </DataTemplate>
+                        </views:StateView.Template>
+                    </views:StateView>
+                    
+                    <views:StateView StateKey="Error"
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                            <Label Text="Couldn't connect,Try Again"  FontSize="16" TextColor="{StaticResource Day4}"
+                                   HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0,0,16,0" />
+                            <Path Data="M1335,635.153a9,9,0,1,0,9-8.848,11.1,11.1,0,0,0-9,4.915m0,0V626m0,5.22h4.66"
+                                  Stroke="#363853"
+                                  StrokeThickness="3"
+                                  Aspect="Uniform"
+                                  WidthRequest="36"
+                                  HeightRequest="36"
+                                >
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="-1333.969" Y="-625.25"></TranslateTransform>
+                                </Path.RenderTransform>
+                            </Path>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding StartHubCommand}"></TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </views:StateView>
+
+                    <views:StateView StateKey="Success"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalOptions="FillAndExpand">
+                      <Grid ColumnDefinitions="*,*">
+                          <Button HorizontalOptions="CenterAndExpand" BackgroundColor="Green"
+                                  Text="Invite friends" Padding="16,4" CornerRadius="24" Command="{Binding InviteCommand}"  />
+                          <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="#FFD460"
+                                  Text="Join" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinGameCommand}"  />
+                          <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
+                                  Text="{Binding LeaveText}" IsVisible="{Binding CanLeave}" Padding="16,4" CornerRadius="24" Command="{Binding LeaveGameCommand}"  />
+                        </Grid>
+                    </views:StateView>
+                </views:StateLayout.StateViews>
+            </Grid>
+           
+            <CollectionView
+                    ItemsSource="{Binding Members}"
+                    SelectedItem="{Binding Member}"
+                    Margin="8"
+
+                    SelectionMode="Single"
+                    SelectionChangedCommand="{Binding MemberSelectedCommand}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="8" VerticalItemSpacing="8" Span="2"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="45" Padding="12" BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}" CompressedLayout.IsHeadless="true">
+                        <StackLayout>
+                            <forms:CachedImage
+                                    x:Name="CachedImage"
+                                    Margin="0,0,0,4"
+                                    Aspect="AspectFit"
+                                    WidthRequest="80"
+                                    HeightRequest="80"
+                                    DownsampleToViewSize="true"
+                                    Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                    LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                    ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
+                                <forms:CachedImage.Transformations>
+                                    <transformations:CircleTransformation />
+                                </forms:CachedImage.Transformations>
+                            </forms:CachedImage>
+                            <Label Text="{Binding DisplayName}" FontAttributes="Bold"
+                                       HorizontalOptions="CenterAndExpand" />
+                            <Label TextColor="#F8D291" HorizontalOptions="CenterAndExpand">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Score :" />
+                                                <Span Text="{Binding Score}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                            <Label TextColor="#91F8AA" HorizontalOptions="CenterAndExpand">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Level:" />
+                                                <Span Text="{Binding Level}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                        </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

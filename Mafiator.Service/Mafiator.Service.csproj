@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KavenegarDotNetCore" Version="1.0.1" />
+    <PackageReference Include="MailKit" Version="2.11.1" />
+    <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.8.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="SmsIrRestfulNetCore" Version="1.1.4" />
+    <PackageReference Include="Twilio" Version="5.61.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mafiator.Repository\Mafiator.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

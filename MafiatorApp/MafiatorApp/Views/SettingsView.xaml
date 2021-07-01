@@ -1,0 +1,66 @@
+﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="http://rotorgames.com"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+                 xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
+                 xmlns:effects="http://xamarin.com/schemas/2020/toolkit"
+                 x:Class="MafiatorApp.Views.SettingsView"
+                 base:ViewModelLocator.AutoWireViewModel="True">
+    <pages:PopupPage.Animation>
+        <pages:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+    <pages:PopupPage.Content>
+        <Frame
+            CornerRadius="52" Margin="24,36" Padding="0"
+            VerticalOptions="CenterAndExpand">
+            <StackLayout  Margin="24">
+                <StackLayout Orientation="Horizontal"
+                            >
+                    <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
+                        <Label Text="Settings" FontSize="Large" FontAttributes="Bold" />
+                    </StackLayout>
+                    <templates:CloseButton/>
+
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="16,16,16,16">
+                    <templates:CheckBoxView Text="Play music" IsChecked="{Binding PlayMusic}"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PlayMusicCommand}"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
+                    <templates:CheckBoxView Text="Play Sound" IsChecked="{Binding PlaySound}"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PlaySoundCommand}"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
+                    <templates:CheckBoxView Text="Allow notifications" IsChecked="{Binding AllowNotification}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
+                    <templates:CheckBoxView Text="Autoplay voices in game"  IsChecked="{Binding Autoplay}"/>
+                </StackLayout>
+
+            </StackLayout>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop
+                        Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                        Offset="0.0" />
+                    <GradientStop
+                        Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                        Offset="0.25" />
+                </LinearGradientBrush>
+            </Frame.Background>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

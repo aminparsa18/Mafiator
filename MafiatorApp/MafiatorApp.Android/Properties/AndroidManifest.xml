@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="6" android:versionName="1.1.4" package="com.parsoft.mafiator" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
+	<application android:label="Mafiator.Android" tools:replace="android:label" android:usesCleartextTraffic="true" android:theme="@style/MainTheme" android:icon="@drawable/logo">
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-5204679523132638~6290921818" />
+		<activity android:name="com.yalantis.ucrop.UCropActivity" android:theme="@style/MainTheme" />
+		<provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
+			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
+		</provider>
+	</application>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.FLASHLIGHT" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="com.android.vending.BILLING" />
+</manifest>

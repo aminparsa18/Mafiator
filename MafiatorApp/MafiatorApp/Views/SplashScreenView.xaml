@@ -1,0 +1,20 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.SplashScreenView"
+             BackgroundColor="Black"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image
+                x:Name="Logo"
+                Source="godfather.png"
+                HeightRequest="150"
+                WidthRequest="150"
+                VerticalOptions="CenterAndExpand"
+                Opacity="0" />
+            <Label x:Name="AppName" Margin="16" FontSize="Medium" Text="Parsoft Studio"
+                   Opacity="0" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

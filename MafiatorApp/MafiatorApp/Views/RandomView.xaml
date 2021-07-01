@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp" xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="MafiatorApp.Views.RandomView"
+             BackgroundColor="{StaticResource LightBackgroundColor}"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Content>
+        <StackLayout Margin="16">
+            <RefreshView IsRefreshing="{Binding IsLoading,Mode=TwoWay}"
+                             Command="{Binding LoadGamesCommand}">
+                <CarouselView
+                        ItemsSource="{Binding Games}"
+                        VerticalOptions="StartAndExpand"
+                        IndicatorView="IndicatorView1">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <ContentView>
+                                <StackLayout Margin="8">
+                                    <Frame>
+                                        <StackLayout>
+                                            <Image Source="room.png"></Image>
+                                            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
+                                                <Label HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="بازی "></Span>
+                                                            <Span Text="{Binding Count}"></Span>
+                                                            <Span Text=" نفره"></Span>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label Grid.Row="1" Text="ظرفیت" HorizontalOptions="EndAndExpand"></Label>
+                                                <Label Grid.Row="1" Grid.Column="1" Text="{Binding Capacity}"></Label>
+                                            </Grid>
+                                            <Button Text="ورود به بازی" ></Button>
+                                            <Button Text="مشاهده گروه" CommandParameter="{Binding RoomId}" Clicked="Button_OnClicked"></Button>
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
+                            </ContentView>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+            </RefreshView>
+            <IndicatorView x:Name="IndicatorView1"
+                           IndicatorColor="White"
+                           SelectedIndicatorColor="{StaticResource NavigationSecondary}"
+                           HorizontalOptions="Center" />
+           
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

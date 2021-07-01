@@ -1,0 +1,50 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.ConfirmPhoneView"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             BackgroundColor="#17161B">
+    <ContentPage.Content>
+        <Grid>
+            <views:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
+            <StackLayout Margin="24">
+            <Image Source="logo.png" x:Name="Logo" Margin="0,16,0,16" WidthRequest="72" />
+            <Label  HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{texts:Translate EnterCode}" />
+                        <Span Text=" 09919002102" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <userControls:ExtendedEntry Margin="24" Text="{Binding Code.Value}" MaxLength="6"
+                                        IsValid="{Binding IsCodeValid, Mode=TwoWay}"
+                                        Placeholder="{texts:Translate ActivationCode}"
+                                        IsVisible="{Binding ActivationSent}" Keyboard="Numeric"
+                                        HorizontalTextAlignment="Center" />
+            <Button Text="{texts:Translate Continue}"  Command="{Binding ConfirmCommand}"
+                    Margin="24" >
+               
+            </Button>
+            <Label HorizontalOptions="CenterAndExpand" x:Name="TimeLbl" />
+            <Button x:Name="ResendBtn" Text="{texts:Translate Resend}" Command="{Binding ConfirmCommand}"
+                    Margin="24" IsEnabled="False" IsVisible="{Binding ActivationSent}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#17161B"
+                                      Offset="0.0" />
+                        <GradientStop Color="#707070"
+                                      Offset="1.0" />
+
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

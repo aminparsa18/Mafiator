@@ -1,0 +1,320 @@
+﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="http://rotorgames.com"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
+                 xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                 xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+                 xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                 xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+                 x:Class="MafiatorApp.Views.GameEventView"
+                 base:ViewModelLocator.AutoWireViewModel="True">
+    <pages:PopupPage.Animation>
+        <pages:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+    <pages:PopupPage.Resources>
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
+        <converters:ToggleConverter x:Key="ToggleConverter" />
+        <converters:EventTypeConverter x:Key="EventTypeConverter" />
+        <converters:PlayerStatusNameConverter x:Key="PlayerStatusNameConverter" />
+    </pages:PopupPage.Resources>
+    <pages:PopupPage.Content>
+        <StackLayout>
+            <Frame
+               
+                CornerRadius="52" Margin="16,36" Padding="0"
+                VerticalOptions="CenterAndExpand">
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="16">
+                        <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
+                            <Label Text="{Binding Title}" FontSize="Large" FontAttributes="Bold" />
+                            <Label Text="{Binding SubTitle}" />
+                        </StackLayout>
+                        <userControls:CircularProgressBar Stroke="18" Progress="{Binding ProgressTimer}"
+                                                          VerticalOptions="Center" HorizontalOptions="EndAndExpand"
+                                                          WidthRequest="60" HeightRequest="60"
+                                                          Color="{StaticResource Night3}" />
+
+                    </StackLayout>
+                    <!--holds the state of game status-->
+                    <Grid views:StateLayout.CurrentState="{Binding MainState}"
+                          views:StateLayout.AnimateStateChanges="True">
+                        <views:StateLayout.StateViews>
+                            <views:StateView StateKey="Loading" RepeatCount="3">
+                                <views:StateView.Template>
+                                    <DataTemplate>
+                                        <!--loads event status-->
+                                        <shimmerLayout:ShimmerLayout Angle="-45" GradientSize="0.4"
+                                                                     BackgroundGradientColor="{StaticResource Day4}"
+                                                                     IsLoading="True">
+                                            <Grid ColumnDefinitions="2*,3*" Padding="24">
+                                                <StackLayout Grid.Column="1" Margin="24,8"
+                                                             VerticalOptions="CenterAndExpand">
+                                                    <BoxView CornerRadius="12" HeightRequest="24" />
+                                                    <BoxView CornerRadius="12" HeightRequest="24" />
+
+                                                </StackLayout>
+                                                <BoxView CornerRadius="1000" HeightRequest="80"
+                                                         WidthRequest="80"
+                                                         HorizontalOptions="Start"
+                                                         BackgroundColor="{StaticResource Day5}" />
+                                            </Grid>
+
+                                        </shimmerLayout:ShimmerLayout>
+                                    </DataTemplate>
+                                </views:StateView.Template>
+                            </views:StateView>
+                            <views:StateView StateKey="Empty"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="FillAndExpand">
+                               
+                                    <StackLayout>
+                                    
+                                    <CollectionView
+                                        ItemsSource="{Binding Candidates}"
+                                        SelectedItem="{Binding Candidate}"
+                                        Margin="16,0"
+                                        SelectionMode="Single"
+                                        SelectionChangedCommand="{Binding CandidateSelectedCommand}">
+                                        <CollectionView.ItemsLayout>
+                                            <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="16"
+                                                             VerticalItemSpacing="16" />
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.Header>
+                                            <Label HorizontalOptions="CenterAndExpand" FontSize="Medium"
+                                                   Text="{Binding PlayerTask}" />
+                                           
+                                        </CollectionView.Header>
+                                        <CollectionView.EmptyView>
+                                            <Grid views:StateLayout.CurrentState="{Binding SleepState}"
+                                                  views:StateLayout.AnimateStateChanges="True">
+                                                <views:StateLayout.StateViews>
+                                                    <!--no work to do for current player-->
+                                                    <views:StateView StateKey="Empty">
+                                                       <Label Text="nothing to do,keep sleeping until other mother fucks do their actions"></Label>
+                                                    </views:StateView>
+                                                    <!--player is killed or kicked-->
+                                                    <views:StateView StateKey="Error">
+                                                        <Label Text="you're fuckin outta this game,just chill"></Label>
+                                                    </views:StateView>
+                                                </views:StateLayout.StateViews>
+                                            </Grid>
+                                        </CollectionView.EmptyView>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout>
+                                                    <Frame CornerRadius="45" HorizontalOptions="CenterAndExpand"
+                                                           BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
+                                                        <StackLayout>
+                                                            <forms:CachedImage
+                                                                x:Name="ProfileImage"
+                                                                WidthRequest="90"
+                                                                HeightRequest="90"
+                                                                DownsampleToViewSize="True"
+                                                                Margin="8"
+                                                                Aspect="AspectFit"
+                                                                Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                                LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                                ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
+                                                                <forms:CachedImage.Transformations>
+                                                                    <transformations:CircleTransformation />
+                                                                </forms:CachedImage.Transformations>
+                                                            </forms:CachedImage>
+                                                            <Label Text="{Binding DisplayName}" FontSize="16"
+                                                                   FontFamily="{StaticResource BoldFont}"
+                                                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
+                                                                   HorizontalOptions="CenterAndExpand" />
+
+                                                            <forms1:SvgCachedImage Source="unchecked.svg"
+                                                                WidthRequest="24"
+                                                                IsVisible="{Binding Selected,Converter={StaticResource ToggleConverter}}" />
+                                                            <forms1:SvgCachedImage Source="checked.svg"
+                                                                WidthRequest="24" IsVisible="{Binding Selected}" />
+                                                        </StackLayout>
+                                                    </Frame>
+
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                    <StackLayout IsVisible="{Binding IsMafia}">
+                                        <Label Text="Your partners choice" FontSize="16" FontFamily="{StaticResource BoldFont}"
+                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
+                                   HorizontalOptions="CenterAndExpand" />
+                                        <CollectionView
+                                ItemsSource="{Binding Partners}"
+                                HeightRequest="120"
+                                Margin="16,0"
+                                SelectionMode="None">
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackLayout>
+                                                        <forms:CachedImage
+                                                x:Name="CachedImage"
+                                                Margin="0,0,0,4"
+                                                Aspect="Fill"
+                                                WidthRequest="60"
+                                                HeightRequest="60"
+                                                DownsampleToViewSize="true"
+                                                Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
+                                                            <forms:CachedImage.Transformations>
+                                                                <transformations:CircleTransformation />
+                                                            </forms:CachedImage.Transformations>
+                                                        </forms:CachedImage>
+                                                        <Label Text="{Binding DisplayName}"
+                                                   HorizontalOptions="CenterAndExpand" />
+                                                    </StackLayout>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </StackLayout>
+                                    <Frame VerticalOptions="EndAndExpand"
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                           CornerRadius="52" Padding="0">
+
+                                        <StackLayout
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
+                                            HeightRequest="64">
+                                            <Label VerticalOptions="CenterAndExpand" Text="{Binding Action}"
+                                                   HorizontalOptions="CenterAndExpand" FontAttributes="Bold"
+                                                   FontSize="Large" />
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ApplyCommand}" />
+                                            </StackLayout.GestureRecognizers>
+                                        </StackLayout>
+
+                                    </Frame>
+                                </StackLayout>
+                            </views:StateView>
+                            <views:StateView StateKey="Error"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="FillAndExpand">
+                                <StackLayout VerticalOptions="CenterAndExpand">
+                                    <Label Text="Something went wrong..."
+                                           HorizontalOptions="CenterAndExpand" />
+                                </StackLayout>
+                            </views:StateView>
+
+                            <views:StateView StateKey="Success"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="FillAndExpand">
+
+                                <StackLayout>
+                                    <Grid>
+                                        <Path
+                                            Data="M521.706,563.9A15.019,15.019,0,0,1,532.9,552.706a26.685,26.685,0,0,1,12.2,0A15.019,15.019,0,0,1,556.293,563.9a26.688,26.688,0,0,1,0,12.2A15.019,15.019,0,0,1,545.1,587.293a26.685,26.685,0,0,1-12.2,0A15.019,15.019,0,0,1,521.706,576.1,26.688,26.688,0,0,1,521.706,563.9Z"
+                                            Stroke="#4df54d"
+                                            StrokeThickness="3"
+                                            Aspect="Uniform"
+                                            WidthRequest="64"
+                                            HeightRequest="64" />
+                                        <Path Data="M527.25,565.364l7.273,7.273L547.25,559"
+                                              Stroke="#4df54d"
+                                              StrokeThickness="3"
+                                              Aspect="Uniform"
+                                              WidthRequest="34"
+                                              HeightRequest="34"
+                                              HorizontalOptions="CenterAndExpand"
+                                              VerticalOptions="CenterAndExpand">
+                                            <Path.RenderTransform>
+                                                <TranslateTransform X="-526.189" Y="-557.94" />
+                                            </Path.RenderTransform>
+                                        </Path>
+                                    </Grid>
+                                    <Label Margin="24" HorizontalOptions="CenterAndExpand" FontSize="Medium"
+                                           Text="Role job is done successfuly,The Result will be appeard at morning." />
+
+                                </StackLayout>
+                            </views:StateView>
+
+                            <views:StateView StateKey="Saving">
+                                <StackLayout>
+                                    <CollectionView
+                                        ItemsSource="{Binding Results}"
+                                        Margin="16,0"
+                                        SelectionMode="None">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout Margin="8">
+                                                    <Frame CornerRadius="45"
+                                                           BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <StackLayout>
+                                                                <Grid>
+                                                                    <userControls:TintedCachedImage
+                                                                        x:Name="ProfileImage"
+                                                                        WidthRequest="90"
+                                                                        HeightRequest="90"
+                                                                        DownsampleToViewSize="True"
+                                                                        Margin="8"
+                                                                        Aspect="AspectFit"
+                                                                        Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                                        LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                                        ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                                        TintColor="{Binding EventType,Converter={StaticResource EventTypeConverter}}">
+                                                                        <forms:CachedImage.Transformations>
+                                                                            <transformations:CircleTransformation />
+                                                                        </forms:CachedImage.Transformations>
+                                                                    </userControls:TintedCachedImage>
+                                                                    <Frame
+                                                                        Padding="4" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand"
+                                                                        BackgroundColor="Red" Margin="8,0">
+                                                                        <Label TextColor="White"
+                                                                               Text="{Binding EventType,Converter={StaticResource PlayerStatusNameConverter}}" />
+                                                                    </Frame>
+                                                                </Grid>
+                                                                <Label Text="{Binding DisplayName}" FontSize="16"
+                                                                       FontFamily="{StaticResource BoldFont}"
+                                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
+                                                                       HorizontalOptions="CenterAndExpand" />
+                                                            </StackLayout>
+                                                            <StackLayout Margin="0,8,0,0">
+                                                                <Label FontSize="Medium"
+                                                                       FontFamily="{StaticResource BoldFont}"
+                                                                       Text="{Binding Status}"
+                                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                                                                <Label Text="{Binding Description}" FontSize="16"
+                                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
+                                                                       HorizontalOptions="CenterAndExpand" />
+                                                            </StackLayout>
+                                                        </StackLayout>
+                                                    </Frame>
+
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </StackLayout>
+                            </views:StateView>
+                        </views:StateLayout.StateViews>
+                    </Grid>
+                </StackLayout>
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                            Offset="0.0" />
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                            Offset="0.25" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+            </Frame>
+        </StackLayout>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

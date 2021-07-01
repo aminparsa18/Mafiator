@@ -1,0 +1,11 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.AdsView">
+    <ContentPage.Content>
+        <StackLayout>
+            <!--<controls:MTAdView x:Name="MyAds" AdsId="ca-app-pub-3940256099942544/6300978111" />-->
+            <userControls:AdControlView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

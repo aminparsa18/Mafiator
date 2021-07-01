@@ -1,0 +1,285 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:helpers="clr-namespace:MafiatorApp.Helpers;assembly=MafiatorApp"
+             xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:effects="clr-namespace:MafiatorApp.Effects;assembly=MafiatorApp"
+             xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="MafiatorApp.Views.GameView"
+             base:ViewModelLocator.AutoWireViewModel="true"
+             BackgroundColor="#191E25"
+             x:Name="Page">
+    <ContentPage.Resources>
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
+        <converters:RoleImageConverter x:Key="RoleImageConverter" />
+        <converters:RecordingTimeConverter x:Key="RecordingTimeConverter" />
+        <helpers:ChatTemplateSelector x:Key="ChatTemplateSelector" />
+        <converters:RoleNameConverter x:Key="RoleNameConverter" />
+        <converters:PlayerStatusTintConverter x:Key="PlayerStatusTintConverter" />
+        <converters:PlayerStatusVisibilityConverter x:Key="PlayerStatusVisibilityConverter" />
+        <converters:PlayerStatusNameConverter x:Key="PlayerStatusNameConverter" />
+        <converters:HubStatusConverter x:Key="HubStatusConverter" />
+        <converters:HubStatusColorConverter x:Key="HubStatusColorConverter" />
+        <converters:TurnTimerColorConverter x:Key="TurnTimerColorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid>
+                <Frame Margin="16,24,16,0" HeightRequest="64" HorizontalOptions="EndAndExpand" Padding="12"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF,Dark={StaticResource Night5}}"
+                       VerticalOptions="StartAndExpand" CornerRadius="36">
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                            <StackLayout Orientation="Horizontal">
+                                <forms1:CachedImage
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    DownsampleToViewSize="True"
+                                    Margin="8,0,0,0"
+                                    Aspect="AspectFit"
+                                    Source="{Binding Role,Converter={StaticResource RoleImageConverter}}"
+                                    LoadingPlaceholder="godfather.png"
+                                    ErrorPlaceholder="godfather.png" />
+                                <Label Margin="0,0,8,0"
+                                       Text="{Binding Role,Converter={StaticResource RoleNameConverter}}"
+                                       VerticalOptions="CenterAndExpand" TextColor="{StaticResource Night5}" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ShowRoleCommand}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                            <Grid>
+                                <Path
+                                    Data="M299.907,483.651l-.647-.379h0Zm16.186,0,.647-.379h0Zm0,6.7-.648-.379Zm-16.186,0,.648-.379Zm.648-6.319a8.615,8.615,0,0,1,14.89,0l1.295-.758a10.116,10.116,0,0,0-17.48,0Zm14.89,0a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.615,8.615,0,0,1-14.89,0l-1.295.758a10.116,10.116,0,0,0,17.48,0Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm10.252-2.909A2.835,2.835,0,0,1,308,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362ZM308,489.923a2.834,2.834,0,0,1-2.806-2.862h-1.5A4.334,4.334,0,0,0,308,491.423Zm-2.806-2.862A2.835,2.835,0,0,1,308,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM308,484.2a2.836,2.836,0,0,1,2.808,2.864h1.5A4.336,4.336,0,0,0,308,482.7Z"
+                                    Stroke="#363853"
+                                    StrokeThickness="3"
+                                    Aspect="Uniform"
+                                    WidthRequest="28"
+                                    HeightRequest="28"
+                                    HorizontalOptions="CenterAndExpand"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-298.25" Y="-478.25" />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                            <Label VerticalOptions="CenterAndExpand" TextColor="{StaticResource Night5}"
+                                   Text="{Binding HubConnected,Converter={StaticResource HubStatusConverter}}" />
+                            <Ellipse Fill="{Binding HubConnected,Converter={StaticResource HubStatusColorConverter}}"
+                                     WidthRequest="16" HeightRequest="16" Margin="8,0" />
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+                <Frame CornerRadius="36" Padding="16,36,16,16" Margin="12,65,0,0"
+                       BackgroundColor="{StaticResource Night3}" VerticalOptions="StartAndExpand"
+                       HorizontalOptions="StartAndExpand">
+                    <StackLayout>
+                        <Label Text="Time left: " FontSize="Medium" />
+                        <Label Text="{Binding ProgressString}" HorizontalOptions="CenterAndExpand"
+                               TextColor="{Binding ProgressString,Converter={StaticResource TurnTimerColorConverter}}"
+                               FontSize="Medium" />
+                    </StackLayout>
+                </Frame>
+                <Frame Margin="-16,16,0,0" Padding="24,0" HeightRequest="78" BackgroundColor="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                       CornerRadius="45" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
+                    <StackLayout Orientation="Horizontal">
+                        <Grid>
+                            <userControls:CircularProgressBar Stroke="20" Progress="{Binding ProgressTimer}"
+                                                              VerticalOptions="Center" HorizontalOptions="Center"
+                                                              WidthRequest="70" HeightRequest="70"
+                                                              Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}" />
+
+                            <forms1:CachedImage
+                                x:Name="ProfileImage"
+                                WidthRequest="50"
+                                HeightRequest="50"
+                                DownsampleToViewSize="True"
+                                Margin="8,0"
+                                Aspect="AspectFit"
+                                Source="{Binding Member.Image,Converter={StaticResource ProfileImageConverter}}"
+                                LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}" />
+                        </Grid>
+                        <Label VerticalOptions="CenterAndExpand" FontFamily="{StaticResource BoldFont}"
+                               FontSize="Medium" Text="{Binding Member.DisplayName}" />
+                    </StackLayout>
+                </Frame>
+                <CollectionView x:Name="ChatListView"
+                                Margin="0,172,0,0"
+                                ItemsSource="{Binding Messages}"
+                                SelectionMode="None"
+                                ItemTemplate="{StaticResource ChatTemplateSelector}" />
+                <views:CameraView
+                    x:Name="VideoCameraView"
+                    IsVisible="False"
+                    CaptureMode="Video"
+                    FlashMode="On"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand" 
+                    CameraOptions="Front"
+                    IsAvailable="True"
+                    
+                    MediaCaptured="VideoCameraView_OnMediaCaptured"
+                    Opacity="0"/>
+                <Frame x:Name="NextFrame" TranslationX="200" views:TouchEffect.Command="{Binding NextCommand}" Padding="12,4" BackgroundColor="{StaticResource Night1}" Margin="8,0" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Next" VerticalOptions="CenterAndExpand" FontSize="Medium" TextColor="{StaticResource Night4}"></Label>
+                        <Path Data="M379.5,630l5,5-5,5"
+                              Stroke="#363853"
+                              StrokeThickness="3"
+                              Aspect="Uniform"
+                              WidthRequest="16"
+                              HeightRequest="16"
+                              Margin="0,0,-10,0"
+                              StrokeLineCap="Round"
+                              StrokeLineJoin="Round"
+                              HorizontalOptions="CenterAndExpand"
+                              VerticalOptions="CenterAndExpand">
+                            <Path.RenderTransform>
+                                <TranslateTransform X="-378.439" Y="-628.939" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+            <Grid>
+                <Grid ColumnDefinitions="*,*" x:Name="ReactionFrame">
+                    <Image Source="like.png" HorizontalOptions="CenterAndExpand">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LikeCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Grid.Column="1" Source="disslike.png" HorizontalOptions="CenterAndExpand">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DissLikeCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
+                <Frame x:Name="MessageBox" TranslationY="200" Margin="8" HeightRequest="80"
+                       BackgroundColor="{StaticResource Night1}"
+                       CornerRadius="16" Padding="8,4,0,4">
+                    <StackLayout Orientation="Horizontal" >
+                        <Grid HorizontalOptions="FillAndExpand">
+                            <Entry x:Name="MessageEntry" Text="{Binding Message,Mode=TwoWay}"
+                                   Placeholder="Type Your message..."
+                                   HorizontalOptions="FillAndExpand"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="DarkGray" />
+                            <StackLayout Padding="8,8,0,8" IsVisible="False" x:Name="CancelView" Orientation="Horizontal"
+                                         BackgroundColor="{StaticResource Night1}">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label VerticalOptions="CenterAndExpand" TextColor="{StaticResource Night4}"
+                                               Text="{Binding RecordingTimer,Converter={StaticResource RecordingTimeConverter}}" />
+                                        <Ellipse Fill="Red"
+                                                 WidthRequest="16"
+                                                 HeightRequest="16"
+                                                 Aspect="Uniform"
+                                                 Margin="4,0,0,0" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Column="1" Padding="-8,0,0,0">
+                                        <Path Data="M310.5,640l-5-5,5-5"
+                                              Stroke="#363853"
+                                              StrokeThickness="3"
+                                              Aspect="Uniform"
+                                              WidthRequest="28"
+                                              HeightRequest="28"
+                                              Margin="0,0,-10,0"
+                                              StrokeLineCap="Round"
+                                              StrokeLineJoin="Round"
+                                              HorizontalOptions="CenterAndExpand"
+                                              VerticalOptions="CenterAndExpand">
+                                            <Path.RenderTransform>
+                                                <TranslateTransform X="-304.75" Y="-628.939" />
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label TextColor="{StaticResource Night4}" FontSize="14" Text="Swipe to cancel..."
+                                               VerticalOptions="CenterAndExpand" />
+                                    </StackLayout>
+                                </Grid>
+                            </StackLayout>
+
+                        </Grid>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                            <Frame x:Name="RecordVideoBtn" Margin="8,0,0,0" Padding="6" VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="EndAndExpand" CornerRadius="500"
+                                   BackgroundColor="{StaticResource Day2}">
+                                <forms:SvgCachedImage HorizontalOptions="CenterAndExpand" Source="scan.svg"
+                                                      Aspect="AspectFit"
+                                                      HeightRequest="24" WidthRequest="24" />
+                                <Frame.Effects>
+                                    <effects:TouchEffect TouchAction="TouchEffect2_TouchAction" />
+                                </Frame.Effects>
+                            </Frame>
+                            <Frame x:Name="RecordBtn" Margin="8,0,-18,0" Padding="6" VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="EndAndExpand" CornerRadius="500"
+                                   BackgroundColor="{StaticResource Day2}">
+
+                                <forms:SvgCachedImage HorizontalOptions="CenterAndExpand" Source="record.svg"
+                                                      Aspect="AspectFit"
+                                                      HeightRequest="24" WidthRequest="24" />
+                                <Frame.Effects>
+                                    <effects:TouchEffect TouchAction="TouchEffect_TouchAction" />
+                                </Frame.Effects>
+                            </Frame>
+
+                            <Button BackgroundColor="Transparent" FontFamily="{StaticResource BoldFont}" Text="Send"
+                                    TextColor="{StaticResource Night4}" Margin="0,0,-12,0" Padding="4" Command="{Binding SendMessageCommand}" />
+                        </StackLayout>
+                       
+
+                    </StackLayout>
+                </Frame>
+            </Grid>
+            <CollectionView
+                x:Name="MembersView"
+                ItemsSource="{Binding Members}"
+                HeightRequest="130">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Margin="8,4">
+                            <Grid>
+                                <userControls:TintedCachedImage
+                                    Aspect="AspectFit"
+                                    LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                    ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                    WidthRequest="60"
+                                    HeightRequest="60"
+                                    DownsampleToViewSize="True"
+                                    Margin="0,6,0,4"
+                                    TintColor="{Binding Status,Converter={StaticResource PlayerStatusTintConverter} }"
+                                    Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}" />
+                                <Frame
+                                    IsVisible="{Binding Status,Converter={StaticResource PlayerStatusVisibilityConverter}}"
+                                    Padding="4" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand"
+                                    BackgroundColor="Red">
+                                    <Label TextColor="White"
+                                           Text="{Binding Status,Converter={StaticResource PlayerStatusNameConverter}}" />
+                                </Frame>
+                            </Grid>
+
+                            <Label Text="{Binding DisplayName}" FontAttributes="Bold"
+                                   HorizontalOptions="CenterAndExpand" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="{StaticResource Day4}"
+                                      Offset="0.0" />
+                        <GradientStop Color="{StaticResource Day5}"
+                                      Offset="0.25" />
+                    </LinearGradientBrush>
+                </CollectionView.Background>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,13 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:googleVisionBarCodeScanner="clr-namespace:GoogleVisionBarCodeScanner;assembly=BarcodeScanner.XF"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.BarcodeScannerView"
+             base:ViewModelLocator.AutoWireViewModel="true">
+    <ContentPage.Content>
+        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <googleVisionBarCodeScanner:CameraView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" OnDetected="CameraView_OnOnDetected"
+                           DefaultTorchOn="True" VibrationOnDetected="True" AutoStartScanning="True" RequestedFPS="30"/>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

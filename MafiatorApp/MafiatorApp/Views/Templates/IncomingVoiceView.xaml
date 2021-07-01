@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MafiatorApp.Views.Templates.IncomingVoiceView">
+    <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Frame Padding="12"
+               HorizontalOptions="FillAndExpand" CornerRadius="10" HasShadow="True">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+                <Image Source="wave.png"></Image>
+                <ImageButton Source="play.png" CommandParameter="{Binding Content}" Command="{Binding PlayVoiceCommand}"></ImageButton>
+            </StackLayout>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="{StaticResource Night3}"
+                                  Offset="0.0" />
+                    <GradientStop Color="{StaticResource Night4}"
+                                  Offset="0.25" />
+                </LinearGradientBrush>
+            </Frame.Background>
+        </Frame>
+    </Grid>
+</ContentView>

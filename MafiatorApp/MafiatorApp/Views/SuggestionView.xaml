@@ -1,0 +1,37 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.SuggestionView"
+             BackgroundImageSource="{AppThemeBinding Light=day.png, Dark=night.png}">
+    <ContentPage.BindingContext>
+        <viewModels:SuggestionViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource PopupDayBackground},Dark={StaticResource PopupNightBackground}}">
+          <Grid>
+
+                <Image Source="sug_header_1.png" Aspect="AspectFill"></Image>
+              <Image Source="start_game.png" Margin="24,16" Aspect="AspectFit"></Image>
+
+          <Image Source="sug_header.png" TranslationY="-72"  Aspect="AspectFill"></Image>
+            </Grid>
+                <Label Margin="0,16,0,0" FontFamily="{StaticResource BoldFont}" TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}"
+                        Text="Create New Room" HorizontalOptions="CenterAndExpand" FontSize="Large"></Label>
+                <Label Margin="36,16" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}"
+                       Text="Start your own room and enjoy playing with friends" HorizontalOptions="CenterAndExpand" ></Label>
+            <Button Margin="48,8" Text="Create Room" TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}" BackgroundColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}" Command="{Binding CreateCommand}" >
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="{AppThemeBinding Light={StaticResource Night1},Dark={StaticResource Night1}}"
+                                      Offset="0.0" />
+                        <GradientStop Color="{AppThemeBinding Light={StaticResource Night2},Dark={StaticResource Night2}}"
+                                      Offset="0.9" />
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Margin="48,8" Text="No Thanks" BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night2}}" Command="{Binding SkipCommand}" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

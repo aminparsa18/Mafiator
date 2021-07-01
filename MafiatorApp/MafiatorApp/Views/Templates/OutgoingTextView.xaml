@@ -1,0 +1,48 @@
+﻿<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.Templates.OutgoingTextView">
+    <ContentView.Resources>
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
+    </ContentView.Resources>
+
+    <Grid Margin="8">
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="80" />
+          </Grid.ColumnDefinitions>
+          <StackLayout  Grid.Column="1">
+              <forms1:CachedImage
+                  Aspect="AspectFit"
+                  LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                  ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                  WidthRequest="60"
+                  HeightRequest="60"
+                  DownsampleToViewSize="True"
+                  Margin="0,6,0,4"
+                  Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}" />
+              <Label Text="{Binding DisplayName}" FontAttributes="Bold"
+                     HorizontalOptions="CenterAndExpand" />
+          </StackLayout>
+        <Frame Grid.Column="0" Padding="12" Margin="24,24,0,0"
+                 HorizontalOptions="FillAndExpand" CornerRadius="10" HasShadow="True"
+                 BackgroundColor="Transparent">
+                  <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+                  <StackLayout>
+                      <Label Text="{Binding Content}" FontSize="Medium" />
+                  </StackLayout>
+              </StackLayout>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="{StaticResource Night4}"
+                                  Offset="0.0" />
+                    <GradientStop Color="{StaticResource Night3}"
+                                  Offset="0.25" />
+                </LinearGradientBrush>
+            </Frame.Background>
+        </Frame>
+      </Grid>
+</ContentView>

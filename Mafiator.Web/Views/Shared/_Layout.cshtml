@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mafiator</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="description" content="Challenging multiplayer online game">
+    <meta name="keywords" content="mafia,mafiator,werewolf,online,multiplayer">
+    <meta name="author" content="amin parsa">
+    <meta name="og:title" property="og:title" content="Mafiator">
+    <meta name="og:description " property="og:description " content="Challenging multiplayer online game">
+    <meta name="og:type" property="og:type" content="website" />
+    <meta name="og:url " property="og:url " content="https://mafiator.com">
+    <meta name="og:image " property="og:image " content="https://mafiator.com/img/logo.png">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:description" content="Challenging multiplayer online game" />
+    <meta name="twitter:title" content="Mafiator" />
+    <meta name="twitter:site" content="@@mafiator" />
+    <meta name="twitter:image" content="https://riratrade.com/images/logo.png" />
+    @*<meta name="twitter:creator" content="@therealdanvega" />*@
+    <link rel="canonical" href="https://mafiator.com/">
+    <link rel="alternate" href="https://mafiator.com/" hreflang="en-us" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+       
+    </div>
+<footer class="text-center mt-5">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>*@
+        <div class=" navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","Home")">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Privacy","Home")">Privacy Policy </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Terms & Conditions </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

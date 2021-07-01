@@ -1,0 +1,106 @@
+﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="http://rotorgames.com"
+                 xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                 xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+                 xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+                 xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:Class="MafiatorApp.Views.CountriesView">
+    <pages:PopupPage.Animation>
+        <pages:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+    <pages:PopupPage.Resources>
+        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
+    </pages:PopupPage.Resources>
+    <pages:PopupPage.Content>
+            <Frame
+               
+                CornerRadius="52" Margin="24,36" Padding="0"
+                VerticalOptions="CenterAndExpand">
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="16">
+                        <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
+                            <Label Text="Select" FontSize="Large" FontAttributes="Bold" />
+                            <Label Text="your country" />
+                        </StackLayout>
+                        <forms1:SvgCachedImage x:Name="CloseBtn" Source="close.svg" Aspect="AspectFit" 
+                                               WidthRequest="36" HeightRequest="36" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" >
+                            <forms1:SvgCachedImage.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding PopCommand}"></TapGestureRecognizer>
+                            </forms1:SvgCachedImage.GestureRecognizers>
+                        </forms1:SvgCachedImage>
+                    </StackLayout>
+                    <Grid  MinimumHeightRequest="60">
+                        <userControls:ExtendedEntry  Margin="16,0"
+                                                     HeightRequest="60"
+                                                    Placeholder="{texts:Translate Search}"
+                                                    HorizontalTextAlignment="Center" 
+                                                    TextChanged="InputView_OnTextChanged"/>
+                        <Image Source="search.png" HorizontalOptions="StartAndExpand" WidthRequest="24" Margin="24,0"></Image>
+                    </Grid>
+                   
+                    <CollectionView
+                        ItemsSource="{Binding Countries}"
+                        SelectedItem="{Binding Country}"
+                        Margin="16,0"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding CountrySelectedCommand}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Margin="8">
+                                    <Frame
+                                        BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
+                                        <StackLayout Orientation="Horizontal">
+                                            <forms:CachedImage
+                                                WidthRequest="60"
+                                                HeightRequest="40"
+                                                DownsampleToViewSize="True"
+                                                Margin="8"
+                                                Aspect="AspectFit"
+                                                Source="{Binding Code,Converter={StaticResource CountryCodelmageConverter}}">
+                                                <forms:CachedImage.Transformations>
+                                                    <transformations:RoundedTransformation Radius="24" />
+                                                </forms:CachedImage.Transformations>
+                                            </forms:CachedImage>
+
+
+                                            <StackLayout Margin="0,8,0,0">
+                                                <Label FontSize="Medium" FontFamily="{StaticResource BoldFont}"
+                                                       Text="{Binding DialCode}"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                                                <Label Text="{Binding Name}" FontSize="16"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Frame>
+
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+                <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop
+                        Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                        Offset="0.0" />
+                    <GradientStop
+                        Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                        Offset="0.25" />
+                </LinearGradientBrush>
+                </Frame.Background>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

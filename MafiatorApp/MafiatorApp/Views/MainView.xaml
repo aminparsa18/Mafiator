@@ -1,0 +1,17 @@
+﻿<FlyoutPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MafiatorApp.Views.MainView"
+             xmlns:pages="clr-namespace:MafiatorApp.Views"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             base:ViewModelLocator.AutoWireViewModel="True">
+    <FlyoutPage.Flyout>
+        <pages:MenuView />
+  </FlyoutPage.Flyout>
+    <FlyoutPage.Detail>
+    <NavigationPage>
+      <x:Arguments>
+        <!--<pages:HomeView />-->
+      </x:Arguments>
+    </NavigationPage>
+  </FlyoutPage.Detail>
+</FlyoutPage>

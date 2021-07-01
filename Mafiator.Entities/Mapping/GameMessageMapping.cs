@@ -1,0 +1,32 @@
+﻿using Mafiator.Entities.Converters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Mafiator.Entities.Mapping
+{
+    public class GameMessageMapping:BaseEntityTypeConfiguration<GameMessage>
+    {
+        public override void Configure(EntityTypeBuilder<GameMessage> builder)
+        {
+            builder.Property(p => p.UserId).HasConversion(new UlidToStringConverter());
+
+            builder.Property(p => p.GameId).HasConversion(new UlidToStringConverter());
+            builder.Property(p => p.MessageType).HasColumnType("smallint");
+            builder.Property(p => p.Content).IsRequired().HasMaxLength(500);
+
+            builder.HasOne(d => d.Game)
+                .WithMany(p => p.GameMessage)
+                .HasForeignKey(d => d.GameId)
+                .HasConstraintName("FK_GameMessage_Game");
+
+            builder.HasOne(d => d.User)
+                .WithMany(p => p.GameMessage)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_GameMessage_User");
+            builder.HasIndex(i => i.GameId);
+
+            base.Configure(builder);
+        }
+    }
+}
