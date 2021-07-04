@@ -1,8 +1,7 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
@@ -15,25 +14,25 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
-            <views:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
+            <xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
             <ScrollView>
                 <StackLayout x:Name="Body">
                     <Image Source="logo.png" x:Name="Logo" Margin="0,148,0,0" TranslationY="200" WidthRequest="72" />
                     <Grid>
                         <StackLayout x:Name="TitlePanel">
-                            <Label Text="{texts:Translate AppTitle}" FontSize="Large" Margin="0,8,0,0"
+                            <Label Text="{xct:Translate AppTitle}" FontSize="Large" Margin="0,8,0,0"
                                    FontAttributes="Bold"
                                    HorizontalOptions="CenterAndExpand" />
-                            <Label Text="{texts:Translate AppSubTitle}" FontSize="Small"
+                            <Label Text="{xct:Translate AppSubTitle}" FontSize="Small"
                                    HorizontalOptions="CenterAndExpand" />
                         </StackLayout>
                         <StackLayout x:Name="LoginPanel" IsVisible="False" Opacity="0" Margin="24">
-                            <userControls:ExtendedEntry Placeholder="{texts:Translate Username}"
+                            <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
                                                         Text="{Binding LoginUsername.Value}"
                                                         IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
                                                         Errors="{Binding LoginUsername.Errors}" />
                                <Grid>
-                                   <userControls:ExtendedEntry x:Name="LoginPassEntry" Placeholder="{texts:Translate Password}" 
+                                   <userControls:ExtendedEntry x:Name="LoginPassEntry" Placeholder="{xct:Translate Password}" 
                                                                Text="{Binding LoginPassword.Value}"
                                                                IsValid="{Binding IsLoginPasswordValid, Mode=TwoWay}"
                                                                Errors="{Binding LoginPassword.Errors}" IsPassword="True" />
@@ -74,19 +73,20 @@
                                    </Path>
                             </Grid>
                            
-                            <Button Margin="48,8" Text="{texts:Translate Continue}" Command="{Binding LoginCommand}" />
-                            <Label Text="{texts:Translate PolicyTitle}" HorizontalOptions="CenterAndExpand"
+                            <Button Margin="48,8" Text="{xct:Translate Continue}" Command="{Binding LoginCommand}" />
+                            <Label Text="{xct:Translate PrivacyPolicy}" HorizontalOptions="CenterAndExpand"
                                    Margin="0,16" FontSize="Small" />
 
                         </StackLayout>
                         <StackLayout x:Name="RegisterPanel" IsVisible="False" Opacity="0" Margin="24">
                             <Grid>
-                                <userControls:ExtendedEntry Placeholder="{texts:Translate PhoneNumber}"
+                                <userControls:ExtendedEntry 
                                                             Text="{Binding PhoneNo.Value}"
+                                                            HorizontalTextAlignment="Center"
                                                             IsValid="{Binding IsPhoneNoValid, Mode=TwoWay}"
                                                             Errors="{Binding PhoneNo.Errors}" Keyboard="Telephone"
                                                             MaxLength="11" />
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" views:TouchEffect.Command="{Binding ShowCountriesCommand}">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" xct:TouchEffect.Command="{Binding ShowCountriesCommand}">
                                     <forms:CachedImage
                                         HorizontalOptions="StartAndExpand"
                                         VerticalOptions="CenterAndExpand"
@@ -100,17 +100,17 @@
                                     <Label Text="{Binding Country.DialCode}" FontSize="Medium" FontAttributes="Bold"  Margin="0,0,0,16" VerticalOptions="CenterAndExpand" TextColor="Black"></Label>
                                 </StackLayout>
                             </Grid>
-                            <userControls:ExtendedEntry Placeholder="{texts:Translate Username}"
+                            <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
                                                         Text="{Binding Username.Value}"
                                                         IsValid="{Binding IsUsernameValid, Mode=TwoWay}"
                                                         Errors="{Binding Username.Errors}" />
-                            <userControls:ExtendedEntry Placeholder="{texts:Translate DisplayName}"
+                            <userControls:ExtendedEntry Placeholder="{xct:Translate DisplayName}"
                                                         Text="{Binding DisplayName.Value}"
                                                         IsValid="{Binding IsDisplayNameValid, Mode=TwoWay}"
                                                         Errors="{Binding DisplayName.Errors}" />
                           <Grid>
                               <userControls:ExtendedEntry x:Name="RegisterPassEntry" Text="{Binding Password.Value,Mode=TwoWay}"
-                                                          Placeholder="{texts:Translate Password}"
+                                                          Placeholder="{xct:Translate Password}"
                                                           Errors="{Binding Password.Errors}" IsPassword="True"
                                                           IsValid="{Binding IsPasswordValid,Mode=TwoWay}"
                                                           HorizontalTextAlignment="Center" />
@@ -153,7 +153,7 @@
                             </Grid>
                            <Grid>
                                <userControls:ExtendedEntry x:Name="ConfPassEntry" Text="{Binding ConfirmPassword.Value,Mode=TwoWay}"
-                                                           Placeholder="{texts:Translate ConfirmPassword}"
+                                                           Placeholder="{xct:Translate ConfirmPassword}"
                                                            IsPassword="True"
                                                            IsValid="{Binding IsConfirmPasswordValid,Mode=TwoWay}"
                                                            Errors="{Binding ConfirmPassword.Errors}"
@@ -195,25 +195,25 @@
                                 </Path>
                             </Grid>
                           
-                            <Button Margin="48,8" Text="{texts:Translate Continue}" Command="{Binding RegisterCommand}" />
+                            <Button Margin="48,8" Text="{xct:Translate Continue}" Command="{Binding RegisterCommand}" />
                         </StackLayout>
                     </Grid>
 
 
                     <Grid VerticalOptions="EndAndExpand" ColumnDefinitions="*,*" Margin="48,16">
-                        <Button x:Name="LoginBtn" Text="Login" Grid.Column="1" Margin="-16,0,16,0" BackgroundColor="#232228"
+                        <Button x:Name="LoginBtn" Text="{xct:Translate Login}" Grid.Column="1" Margin="-16,0,16,0" BackgroundColor="#232228"
                                 Clicked="LoginBtn_OnClicked" />
-                        <Button x:Name="RegisterBtn" Text="Register" Margin="16,0,-16,0" 
+                        <Button x:Name="RegisterBtn" Text="{xct:Translate Register}" Margin="16,0,-16,0" 
                                 BackgroundColor="#707070" Clicked="RegisterBtn_OnClicked" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto,*" Margin="48,0">
                         <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="1"
                                  BackgroundColor="#707070" />
-                        <Label Grid.Column="1" Text="OR" TextColor="#707070" Margin="8,0" />
+                        <Label Grid.Column="1" Text="{xct:Translate Or}" TextColor="#707070" Margin="8,0" />
                         <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
                                  HeightRequest="1" BackgroundColor="#707070" />
                     </Grid>
-                    <Button x:Name="GoogleBtn" Margin="48,16" Text="Sign in With Google" Command="{Binding GoogleCommand}">
+                    <Button x:Name="GoogleBtn" Margin="48,16" Text="{xct:Translate GoogleSignIn}" Command="{Binding GoogleCommand}">
                         <Button.Background>
                             <LinearGradientBrush StartPoint="0,0"
                                                  EndPoint="1,1">
@@ -224,7 +224,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Button x:Name="FacebookBtn" Margin="48,0,48,16" Text="Sign in With Facebook" Command="{Binding FacebookCommand}">
+                    <Button x:Name="FacebookBtn" Margin="48,0,48,16" Text="{xct:Translate FacebookSignIn}" Command="{Binding FacebookCommand}">
                         <Button.Background>
                             <LinearGradientBrush StartPoint="0,0"
                                                  EndPoint="1,1">

@@ -4,14 +4,13 @@
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:pages="http://rotorgames.com"
-                 xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
-                 xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  x:Class="MafiatorApp.Views.NewGameView"
                  CloseWhenBackgroundIsClicked="True"
                  base:ViewModelLocator.AutoWireViewModel="true">
     <ContentPage.Resources>
-        <converters:ToggleConverter x:Key="ToggleConverter"/>
+        <converters:ToggleConverter x:Key="ToggleConverter" />
     </ContentPage.Resources>
     <pages:PopupPage.Animation>
         <pages:MoveAnimation
@@ -25,71 +24,77 @@
     </pages:PopupPage.Animation>
     <pages:PopupPage.Content>
         <StackLayout>
-            <Frame                 
-                                    CornerRadius="52" Margin="16" Padding="0"
-                                    VerticalOptions="CenterAndExpand">
-                <StackLayout >
+            <Frame
+                CornerRadius="52" Margin="16" Padding="0"
+                VerticalOptions="CenterAndExpand">
+                <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16">
                         <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                            <Label Text="Start" FontSize="Large" FontAttributes="Bold" />
-                            <Label Text="New Game" />
+                            <Label Text="{xct:Translate Start}" FontSize="Large" FontAttributes="Bold" />
+                            <Label Text="{xct:Translate NewGame}" />
                         </StackLayout>
-                        <templates:CloseButton/>
+                        <templates:CloseButton />
                     </StackLayout>
 
                     <userControls:ExtendedEntry
                         Keyboard="Numeric"
-                        Placeholder="Game Players Count"
+                        Placeholder="{xct:Translate GamePlayersCount}"
                         Text="{Binding Capacity.Value}"
                         IsValid="{Binding IsCapacityValid,Mode=TwoWay}"
                         Margin="16,0"
-                        Errors="{Binding Capacity.Errors}">
-                    </userControls:ExtendedEntry>
+                        Errors="{Binding Capacity.Errors}" />
                     <Grid IsVisible="{Binding IsImmediate,Converter={StaticResource ToggleConverter}}">
-                        <DatePicker IsVisible="False" Date="{Binding Date,Mode=TwoWay}" Unfocused="GameDatePicker_OnUnfocused" x:Name="GameDatePicker"></DatePicker>
+                        <DatePicker IsVisible="False" Date="{Binding Date,Mode=TwoWay}"
+                                    Unfocused="GameDatePicker_OnUnfocused" x:Name="GameDatePicker" />
 
                         <userControls:ExtendedEntry
                             x:Name="DateInput"
-                            Placeholder="Game Starts At"
+                            Placeholder="{xct:Translate GameStartsAt}"
                             Text="{Binding Date}"
                             Margin="16,0"
-                            Focused="DateInput_OnFocused">
-                        </userControls:ExtendedEntry>
+                            Focused="DateInput_OnFocused" />
                     </Grid>
-                    <TimePicker x:Name="GameTimePicker" IsVisible="False" PropertyChanged="GameTimePicker_OnPropertyChanged" Unfocused="GameTimePicker_OnUnfocused"></TimePicker>
+                    <TimePicker x:Name="GameTimePicker" IsVisible="False"
+                                PropertyChanged="GameTimePicker_OnPropertyChanged"
+                                Unfocused="GameTimePicker_OnUnfocused" />
 
                     <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                        <CheckBox IsChecked="{Binding IsImmediate,Mode=TwoWay}" />
-                        <Label Text="Or start immediately" VerticalOptions="CenterAndExpand" />
+                        <CheckBox IsChecked="{Binding IsImmediate,Mode=TwoWay}"/>
+                        <Label Text="{xct:Translate StartImmediately}" VerticalOptions="CenterAndExpand" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
                         <CheckBox IsChecked="{Binding IsPublic,Mode=TwoWay}" />
-                        <Label Text="Public Live Stream" VerticalOptions="CenterAndExpand" />
-                        <ImageButton Source="help.png" BackgroundColor="Transparent" WidthRequest="24" Aspect="AspectFit" Command="{Binding PrivateHelpCommand}"></ImageButton>
+                        <Label Text="{xct:Translate PublicLiveStream}" VerticalOptions="CenterAndExpand" />
+                        <ImageButton Source="help.png" BackgroundColor="Transparent" WidthRequest="24"
+                                     Aspect="AspectFit" Command="{Binding PrivateHelpCommand}" />
                     </StackLayout>
                     <Grid VerticalOptions="EndAndExpand">
-                        <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}" CornerRadius="52" Padding="0">
+                        <Frame
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                            CornerRadius="52" Padding="0">
                             <StackLayout>
                                 <StackLayout Padding="16">
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="Add Roles" FontSize="Large" FontAttributes="Bold" />
+                                        <Label Text="{xct:Translate AddRoles}" FontSize="Large" FontAttributes="Bold" />
                                         <Image Source="arrow_up.png" HorizontalOptions="EndAndExpand" Margin="16,0" />
                                     </StackLayout>
                                     <Label
-                                        Text="Specify Roles of Players"
+                                        Text="{xct:Translate SpecifyRoles}"
                                         FontSize="Small" />
                                     <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer x:Name="AddByCodeTap" Command="{Binding SetRolesCommand}"></TapGestureRecognizer>
+                                        <TapGestureRecognizer x:Name="AddByCodeTap" Command="{Binding SetRolesCommand}" />
                                     </StackLayout.GestureRecognizers>
                                 </StackLayout>
-                                <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}" HeightRequest="48">
-                                    <Label VerticalOptions="CenterAndExpand" Text="{texts:Translate Start}"
+                                <StackLayout
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
+                                    HeightRequest="48">
+                                    <Label VerticalOptions="CenterAndExpand" Text="{xct:Translate Start}"
                                            HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
                                     <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding SaveGameCommand}"></TapGestureRecognizer>
+                                        <TapGestureRecognizer Command="{Binding SaveGameCommand}" />
                                     </StackLayout.GestureRecognizers>
                                 </StackLayout>
-                               
+
                             </StackLayout>
                         </Frame>
                     </Grid>

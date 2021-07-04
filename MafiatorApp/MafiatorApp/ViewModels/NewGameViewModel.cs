@@ -6,13 +6,12 @@ using MafiatorApp.ViewModels.Base.Interfaces;
 using System.Threading.Tasks;
 using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
+using MafiatorApp.Helpers;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
-using MafiatorApp.Views;
 using MessagePipe;
-using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -128,6 +127,7 @@ namespace MafiatorApp.ViewModels
                     SystemConstant.SelectedRoles = null;
                     //MessagingCenter.Send(this, "GameCreated");
                     publisher.Publish(new UpdateRoomEvent());
+                    Admob.Load();
                     await NavigationService.RemovePopupAsync();
                 }
                 else

@@ -7,7 +7,7 @@
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-                 xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  base:ViewModelLocator.AutoWireViewModel="True"
                  x:Class="MafiatorApp.Views.CountriesView">
     <pages:PopupPage.Animation>
@@ -31,8 +31,8 @@
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16">
                         <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                            <Label Text="Select" FontSize="Large" FontAttributes="Bold" />
-                            <Label Text="your country" />
+                            <Label Text="{xct:Translate Select}" FontSize="Large" FontAttributes="Bold" />
+                            <Label Text="{xct:Translate YourCountry}" />
                         </StackLayout>
                         <forms1:SvgCachedImage x:Name="CloseBtn" Source="close.svg" Aspect="AspectFit" 
                                                WidthRequest="36" HeightRequest="36" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" >
@@ -44,7 +44,7 @@
                     <Grid  MinimumHeightRequest="60">
                         <userControls:ExtendedEntry  Margin="16,0"
                                                      HeightRequest="60"
-                                                    Placeholder="{texts:Translate Search}"
+                                                    Placeholder="{xct:Translate Search}"
                                                     HorizontalTextAlignment="Center" 
                                                     TextChanged="InputView_OnTextChanged"/>
                         <Image Source="search.png" HorizontalOptions="StartAndExpand" WidthRequest="24" Margin="24,0"></Image>

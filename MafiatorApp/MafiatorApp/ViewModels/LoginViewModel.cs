@@ -14,6 +14,7 @@ using MafiatorApp.ViewModels.Base;
 using MafiatorApp.ViewModels.Base.Interfaces;
 using MessagePipe;
 using Microsoft.AppCenter.Crashes;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Forms;
 using Xamarin.Essentials;
 
@@ -254,21 +255,21 @@ namespace MafiatorApp.ViewModels
         private void AddValidations()
         {
             LoginUsername.Validations.Add(new IsNotNullOrEmptyRule<string>
-                {ValidationMessage = TextsTranslateManager.Translate("EmptyUsername")});
+            { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyUsername") });
             //LoginPhoneNo.Validations.Add(new PhoneNoRule<string>());
             LoginPassword.Validations.Add(new IsNotNullOrEmptyRule<string>()
-                {ValidationMessage = TextsTranslateManager.Translate("EmptyPassword")});
+            { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyPassword") });
             PhoneNo.Validations.Add(new IsNotNullOrEmptyRule<string>
-                {ValidationMessage = TextsTranslateManager.Translate("EmptyPhoneNo")});
+            { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyPhoneNo") });
             Username.Validations.Add(new IsNotNullOrEmptyRule<string>
-                { ValidationMessage = TextsTranslateManager.Translate("EmptyUsername") });
+            { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyUsername") });
             DisplayName.Validations.Add(new IsNotNullOrEmptyRule<string>());
             Password.Validations.Add(new IsNotNullOrEmptyRule<string>()
-                {ValidationMessage = TextsTranslateManager.Translate("EmptyPassword")});
+            { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyPassword") });
             ;
             Password.Validations.Add(new PasswordRule<string>());
             ConfirmPassword.Validations.Add(new IsNotNullOrEmptyRule<string>()
-                {ValidationMessage = TextsTranslateManager.Translate("EmptyPassword")});
+            { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyConfirmPassword") });
             ;
             ConfirmPassword.Validations.Add(new PasswordRule<string>());
         }
@@ -393,7 +394,7 @@ namespace MafiatorApp.ViewModels
         {
             if (Password.Value != ConfirmPassword.Value)
                 DependencyService.Get<IAlert>()
-                    .ShortAlert(TextsTranslateManager.Translate("PasswordNotMatch"), MessageType.Error);
+                    .ShortAlert(LocalizationResourceManager.Current.GetValue("PasswordNotMatch"), MessageType.Error);
             IsPhoneNoValid = PhoneNo.Validate();
             IsUsernameValid = Username.Validate();
             IsDisplayNameValid = DisplayName.Validate();

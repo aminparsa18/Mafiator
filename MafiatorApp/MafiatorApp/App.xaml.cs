@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Globalization;
 using MafiatorApp.Cache;
+using MafiatorApp.Resources.Texts;
 using MafiatorApp.UserControls;
 using MafiatorApp.UserControls.ShimmerLayout;
 using MafiatorApp.Views;
+using MarcTron.Plugin;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Plugin.SimpleAudioPlayer;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Application = Xamarin.Forms.Application;
 
@@ -21,12 +24,25 @@ namespace MafiatorApp
             Current.On<Xamarin.Forms.PlatformConfiguration.Android>()
                 .UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
             InitializeComponent();
-            // CultureInfo.CurrentUICulture = new CultureInfo("fa-IR", false);
-            // CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("fa-IR", false);
-           // CrossMTAdmob.Current.UseRestrictedDataProcessing = true;
-           // CrossMTAdmob.Current.AdsId = "ca-app-pub-3940256099942544/6300978111";
+
+            LocalizationResourceManager.Current.PropertyChanged += (_, _) =>
+                AppResources.Culture = LocalizationResourceManager.Current.CurrentCulture;
+            LocalizationResourceManager.Current.Init(AppResources.ResourceManager);
+
             Barrel.ApplicationId = "Mafiator";
             Barrel.EncryptionKey = "NJR*fgpB5a";
+            if (Barrel.Current.Exists("Culture"))
+            {
+                if (Barrel.Current.Get<string>("Culture") == "RU")
+                {
+                    LocalizationResourceManager.Current.CurrentCulture = new CultureInfo("ru-RU", false);
+                }
+                else
+                {
+                    LocalizationResourceManager.Current.CurrentCulture = new CultureInfo("en-US", false);
+                }
+            }
+
             VersionTracking.Track();
             AppCenter.Start("android=4a514da9-9b2f-458a-92a9-62f9e7abfffb;" +
                             "uwp={Your UWP App secret here};" +
@@ -34,27 +50,26 @@ namespace MafiatorApp
                 typeof(Analytics), typeof(Crashes));
             ShimmerLayout.Init(DeviceDisplay.MainDisplayInfo.Density);
             //if (DateTime.Now.Hour > 0 && DateTime.Now.Hour < 6)
-              // UserAppTheme = OSAppTheme.Dark;
+            // UserAppTheme = OSAppTheme.Dark;
             //else
             //    UserAppTheme = OSAppTheme.Light;
 
             MainPage = new TransitionNavigationPage(new SplashScreenView(uri));
         }
+
         protected override void OnStart()
         {
         }
 
         protected override void OnSleep()
         {
-           CrossSimpleAudioPlayer.Current.Pause();
+            CrossSimpleAudioPlayer.Current.Pause();
         }
 
         protected override void OnResume()
         {
-            if(CrossSimpleAudioPlayer.Current.CanSeek)
+            if (CrossSimpleAudioPlayer.Current.CanSeek)
                 CrossSimpleAudioPlayer.Current.Play();
-
         }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Resources.Texts;
+﻿using Xamarin.CommunityToolkit.Helpers;
 
 namespace MafiatorApp.Validations
 {
@@ -6,7 +6,7 @@ namespace MafiatorApp.Validations
     {
         public IsNotNullOrEmptyRule()
         {
-            ValidationMessage = TextsTranslateManager.Translate("EmptyInput");
+            ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyInput");
         }
 
         public string ValidationMessage { get; set; }

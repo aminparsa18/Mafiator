@@ -30,7 +30,6 @@ namespace MafiatorApp.Droid.Renderers
             adView = new AdView(Context) {AdSize = adSize, AdUnitId = adUnitId};
 
             var adParams = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
-
             adView.LayoutParameters = adParams;
             adView.LoadAd(new AdRequest
                     .Builder()

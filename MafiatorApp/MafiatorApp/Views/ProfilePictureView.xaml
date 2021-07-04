@@ -4,8 +4,7 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-             xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
-             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.ProfilePictureView"
              base:ViewModelLocator.AutoWireViewModel="True">
@@ -13,9 +12,8 @@
         <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid x:Name="MainGrid">
-            <views:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
-
+        <Grid>
+            <xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
             <Grid x:Name="ProfileGrid" Margin="36,64,36,36" VerticalOptions="StartAndExpand" Padding="0,0,0,136" >
                 <Frame x:Name="AvatarFrame" IsVisible="False"  CornerRadius="20" VerticalOptions="EndAndExpand"
                        Padding="16">
@@ -82,7 +80,7 @@
                             </Path>
                         </StackLayout>
                        
-                        <Button Text="Set" Command="{Binding AvatarSelectedCommand}" HorizontalOptions="CenterAndExpand"></Button>
+                        <Button Text="{xct:Translate Set}" Command="{Binding AvatarSelectedCommand}" HorizontalOptions="CenterAndExpand"></Button>
                    </StackLayout>
                     <Frame.Background>
                         <LinearGradientBrush StartPoint="0,0"
@@ -98,7 +96,7 @@
                 </Frame>
                 <Frame CornerRadius="20" Padding="16,24">
                     <StackLayout Padding="24" HorizontalOptions="CenterAndExpand">
-                        <Label Margin="0,0,0,16" HorizontalOptions="CenterAndExpand" Text="Upload Profile Picture" />
+                        <Label Margin="0,0,0,16" HorizontalOptions="CenterAndExpand" Text="{xct:Translate UploadPP}" />
                         <forms:CachedImage
                             x:Name="CachedImage"
                             WidthRequest="120"
@@ -116,23 +114,23 @@
                                 <TapGestureRecognizer Command="{Binding ChoosePhotoCommand}" />
                             </forms:CachedImage.GestureRecognizers>
                         </forms:CachedImage>
-                        <Button Text="Set" IsVisible="{Binding PhotoSet}" Command="{Binding SetPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
+                        <Button Text="{xct:Translate Set}" IsVisible="{Binding PhotoSet}" Command="{Binding SetPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
 
                         <StackLayout Margin="0,16,0,0" Orientation="Horizontal">
                             <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand"
                                      VerticalOptions="CenterAndExpand"
                                      BackgroundColor="White" />
-                            <Label Margin="8" Text="{texts:Translate OR}" />
+                            <Label Margin="8" Text="{xct:Translate Or}" />
                             <BoxView HeightRequest="1" VerticalOptions="CenterAndExpand"
                                      HorizontalOptions="FillAndExpand"
                                      BackgroundColor="White" />
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Switch Toggled="Switch_OnToggled" Margin="0,0,8,0" />
-                            <Label Text="Select Avatar" FontSize="Medium" VerticalOptions="CenterAndExpand" />
+                            <Label Text="{xct:Translate SelectAvatar}" FontSize="Medium" VerticalOptions="CenterAndExpand" />
                         </StackLayout>
 
-                        <Label Margin="0,16,0,0" FontSize="14" Padding="12" HorizontalOptions="CenterAndExpand" Text="{texts:Translate Skip}">
+                        <Label Margin="0,16,0,0" FontSize="14" Padding="12" HorizontalOptions="CenterAndExpand" Text="{xct:Translate Skip}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding SkipCommand}" />
                             </Label.GestureRecognizers>

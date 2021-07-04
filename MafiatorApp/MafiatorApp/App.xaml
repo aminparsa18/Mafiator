@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              xmlns:androidSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
              x:Class="MafiatorApp.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -89,7 +90,9 @@
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="CornerRadius" Value="30" />
             </Style>
-           
+            <Style TargetType="controls:MTAdView">
+                <Setter Property="HeightRequest" Value="90"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

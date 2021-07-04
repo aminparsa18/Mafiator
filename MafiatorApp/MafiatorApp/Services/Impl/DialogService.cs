@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MafiatorApp.Resources.Texts;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Services.Impl
@@ -13,9 +13,9 @@ namespace MafiatorApp.Services.Impl
 
         public Task<string> ShowPickImageAsync()
         {
-           return Application.Current.MainPage.DisplayActionSheet(TextsTranslateManager.Translate("ChoosePhoto"),
-                TextsTranslateManager.Translate("Cancel"), "", TextsTranslateManager.Translate("Camera"),
-                TextsTranslateManager.Translate("Gallery"));
+           return Application.Current.MainPage.DisplayActionSheet(LocalizationResourceManager.Current.GetValue("ChoosePhoto"),
+               LocalizationResourceManager.Current.GetValue("Cancel"), "", LocalizationResourceManager.Current.GetValue("Camera"),
+               LocalizationResourceManager.Current.GetValue("Gallery"));
 
         }
     }

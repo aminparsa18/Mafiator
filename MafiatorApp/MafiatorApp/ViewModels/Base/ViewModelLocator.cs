@@ -33,6 +33,7 @@ namespace MafiatorApp.ViewModels.Base
             var services = new ServiceCollection();
             services.AddMessagePipe();
             services.AddTransient<SplashScreenViewModel>();
+            services.AddTransient<LanguagesViewModel>();
             services.AddTransient<HomeViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<ConfirmPhoneViewModel>();

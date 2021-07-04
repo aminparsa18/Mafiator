@@ -28,7 +28,7 @@ namespace MafiatorApp.Views
                 await Logo.RelRotateTo(360, 400, Easing.Linear);
                 await AppName.FadeTo(1, 800, Easing.Linear);
                 await ((SplashScreenViewModel) BindingContext).Navigate(uri);
-                Navigation.RemovePage(this);
+               // Navigation.RemovePage(this);
 
             });
           

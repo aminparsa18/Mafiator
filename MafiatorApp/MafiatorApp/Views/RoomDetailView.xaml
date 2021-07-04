@@ -8,7 +8,6 @@
              BackgroundColor="{StaticResource LightBackgroundColor}"
              base:ViewModelLocator.AutoWireViewModel="True">
     <ContentPage.Resources>
-        <converters:RoomImageConverter x:Key="RoomImageConverter" />
         <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
         <converters:ToggleConverter x:Key="ToggleConverter" />
     </ContentPage.Resources>

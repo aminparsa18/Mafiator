@@ -7,7 +7,7 @@
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-             xmlns:effects1="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="MafiatorApp.Views.HomeView"
              base:ViewModelLocator.AutoWireViewModel="True">
     <ContentPage.Resources>
@@ -49,7 +49,7 @@
                 <IndicatorView x:Name="TipsIndicatorView" HeightRequest="0"/>
                 <StackLayout Orientation="Horizontal" x:Name="SettingGrid" MinimumHeightRequest="40" HorizontalOptions="CenterAndExpand">
 
-                    <Frame x:Name="SettingBtn" Margin="4,0"    effects1:TouchEffect.Command="{Binding SettingsCommand}"
+                    <Frame x:Name="SettingBtn" Margin="4,0"    xct:TouchEffect.Command="{Binding SettingsCommand}"
                    CornerRadius="500" WidthRequest="30" HeightRequest="30" Padding="6"  BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}">
                         <Path
                     Data="M610.48,493.537H613M596.68,487l-1.68.044m1.68-.044a2.4,2.4,0,1,0,2.4-2.4A2.4,2.4,0,0,0,596.68,487Zm5.489.044H613m-8.2-6.493H595m18,0h-2.52M595,493.537h9.8m5.079.063a2.4,2.4,0,1,1-2.4-2.4A2.4,2.4,0,0,1,609.88,493.6Zm0-13.2a2.4,2.4,0,1,1-2.4-2.4A2.4,2.4,0,0,1,609.88,480.4Z"
@@ -186,27 +186,27 @@
             <Grid Grid.Row="1" Padding="16,8" RowSpacing="16" ColumnSpacing="16" VerticalOptions="CenterAndExpand"
                   ColumnDefinitions="*,*" RowDefinitions="*,*">
                 <Frame Padding="0" Margin="0" Grid.RowSpan="2" BackgroundColor="Black" CornerRadius="52"
-                       Grid.Column="0" HorizontalOptions="FillAndExpand" effects1:TouchEffect.PressedScale="1.05" effects1:TouchEffect.PressedOpacity="0.8" effects1:TouchEffect.AnimationEasing="Linear" effects1:TouchEffect.Command="{Binding AddRoomCommand}" >
+                       Grid.Column="0" HorizontalOptions="FillAndExpand" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear" xct:TouchEffect.Command="{Binding AddRoomCommand}" >
                     <Grid>
                         <Image Source="create_room.png" Margin="8" Aspect="AspectFill" />
                         <StackLayout Padding="24,32">
-                            <Label Text="CREATE" FontSize="32" VerticalOptions="EndAndExpand"
+                            <Label Text="{xct:Translate Create}" FontSize="32" VerticalOptions="EndAndExpand"
                                    FontFamily="{StaticResource BoldFont}" />
-                            <Label Text="New Room" FontSize="26" Margin="0,-18,0,0" />
+                            <Label Text="{xct:Translate NewRoom}" FontSize="26" Margin="0,-18,0,0" />
                         </StackLayout>
                     </Grid>
 
                 </Frame>
 
-                <Grid Grid.Row="0" Grid.Column="1" effects1:TouchEffect.Command="{Binding JoinRoomCommand}" effects1:TouchEffect.PressedScale="1.05" effects1:TouchEffect.PressedOpacity="0.8" effects1:TouchEffect.AnimationEasing="Linear">
+                <Grid Grid.Row="0" Grid.Column="1" xct:TouchEffect.Command="{Binding JoinRoomCommand}" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear">
                     <Image Source="{AppThemeBinding Light=room_day.png, Dark=room_night.png}" Aspect="AspectFit" />
                     <StackLayout VerticalOptions="EndAndExpand" Padding="16,32">
-                        <Label Text="JOIN" FontSize="32" FontFamily="{StaticResource BoldFont}" FontAttributes="Bold">
+                        <Label Text="{xct:Translate Join}" FontSize="32" FontFamily="{StaticResource BoldFont}" FontAttributes="Bold">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
                         </Label>
-                        <Label Text="a Room" FontSize="28" Margin="0,-18,0,0">
+                        <Label Text="{xct:Translate ARoom}" FontSize="28" Margin="0,-18,0,0">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
@@ -217,16 +217,16 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <Grid Grid.Row="1" Grid.Column="1" effects1:TouchEffect.Command="{Binding RoomHistoryCommand}" effects1:TouchEffect.PressedScale="1.05" effects1:TouchEffect.PressedOpacity="0.8" effects1:TouchEffect.AnimationEasing="Linear">
+                <Grid Grid.Row="1" Grid.Column="1" xct:TouchEffect.Command="{Binding RoomHistoryCommand}" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear">
                     <Image Source="{AppThemeBinding Light=history_day.png, Dark=history_night.png}"
                            Aspect="AspectFit" />
                     <StackLayout VerticalOptions="EndAndExpand" Padding="16,30">
-                        <Label Text="ROOM" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
+                        <Label Text="{xct:Translate Rooms}" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
                         </Label>
-                        <Label FontSize="28" Margin="0,-18,0,0" Text="History">
+                        <Label FontSize="28" Margin="0,-18,0,0" Text="{xct:Translate History}">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
@@ -305,17 +305,13 @@
                         <StackLayout>
                             <Image Source="gem_white.png" WidthRequest="32" />
                             <Button BackgroundColor="White" Padding="8,6" HorizontalOptions="CenterAndExpand"
-                                    TextColor="{StaticResource Gem}" Text="Buy Gems" />
+                                    TextColor="{StaticResource Gem}" Text="{xct:Translate GetGems}" />
                         </StackLayout>
                     </Frame>
                 </Grid>
                 <Frame CornerRadius="42" HorizontalOptions="CenterAndExpand" Margin="0,16,0,0" HeightRequest="146"
                        Padding="16,8">
                     <Grid ColumnDefinitions="*,*">
-                        <!--<userControls:ShapeView HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" WidthRequest="60" HeightRequest="60" StrokeWidth="6" IndicatorPercentage="{Binding UserStatus.MafiaWin}" Padding="6" StrokeColor="#FEE9D7" />
-                        <userControls:ShapeView HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" WidthRequest="100" HeightRequest="100" StrokeWidth="6" IndicatorPercentage="{Binding UserStatus.CitizenWin}" Padding="6" StrokeColor="#F9BF8F" />
-                        <userControls:ShapeView HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" WidthRequest="140" HeightRequest="140" StrokeWidth="6" IndicatorPercentage="{Binding UserStatus.TotalWin}" Padding="6" StrokeColor="#E2434B" />-->
-
                         <userControls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.MafiaWin}"
                                                           VerticalOptions="Center" HorizontalOptions="Center"
                                                           WidthRequest="60" HeightRequest="60" Color="#FEE9D7" />
@@ -329,17 +325,17 @@
                             <StackLayout Orientation="Horizontal">
                                 <BoxView CornerRadius="36" VerticalOptions="CenterAndExpand" WidthRequest="24"
                                          HeightRequest="24" Color="#E2434B" />
-                                <Label VerticalOptions="CenterAndExpand" Margin="8,0,0,0" Text="Win as mafia" />
+                                <Label VerticalOptions="CenterAndExpand" Margin="8,0,0,0" Text="{xct:Translate WinAsMafia}" />
                             </StackLayout>
                             <StackLayout Orientation="Horizontal">
                                 <BoxView CornerRadius="36" VerticalOptions="CenterAndExpand" WidthRequest="24"
                                          HeightRequest="24" Color="#F9BF8F" />
-                                <Label VerticalOptions="CenterAndExpand" Margin="8,0,0,0" Text="Win as Citizen" />
+                                <Label VerticalOptions="CenterAndExpand" Margin="8,0,0,0" Text="{xct:Translate WinAsCitizen}" />
                             </StackLayout>
                             <StackLayout Orientation="Horizontal">
                                 <BoxView CornerRadius="36" VerticalOptions="CenterAndExpand" WidthRequest="24"
                                          HeightRequest="24" Color="#FEE9D7" />
-                                <Label VerticalOptions="CenterAndExpand" Margin="8,0,0,0" Text="Total win" />
+                                <Label VerticalOptions="CenterAndExpand" Margin="8,0,0,0" Text="{xct:Translate TotalWin}" />
                             </StackLayout>
                         </StackLayout>
                     </Grid>
@@ -355,7 +351,7 @@
                         </LinearGradientBrush>
                     </Frame.Background>
                 </Frame>
-                <Button Margin="8" Text="Sign out" Command="{Binding SignOutCommand}">
+                <Button Margin="8" Text="{xct:Translate SignOut}" Command="{Binding SignOutCommand}">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="1,1">

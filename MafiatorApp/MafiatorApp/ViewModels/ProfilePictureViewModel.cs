@@ -12,13 +12,13 @@ using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
-using MafiatorApp.Resources.Texts;
 using MafiatorApp.Services;
 using MafiatorApp.UserControls;
 using MafiatorApp.ViewModels.Base;
 using MafiatorApp.ViewModels.Base.Interfaces;
 using MafiatorApp.Views;
 using Rg.Plugins.Popup.Services;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -122,7 +122,7 @@ namespace MafiatorApp.ViewModels
             try
             {
                 var result = await DialogService.ShowPickImageAsync();
-                if (result == TextsTranslateManager.Translate("Camera"))
+                if (result == LocalizationResourceManager.Current.GetValue("Camera"))
                 {
                     photo = await MediaPicker.CapturePhotoAsync();
                     //await NavigationService.NavigateToPopupAsync<CropImageViewModel>(photo.FullPath);

@@ -4,8 +4,9 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
              x:Class="MafiatorApp.Views.WaitingGameView"
              base:ViewModelLocator.AutoWireViewModel="True">
     <ContentPage.Resources>
@@ -13,43 +14,44 @@
         <converters:ToggleConverter x:Key="ToggleConverter"/>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Margin="24">
-            <Frame Padding="0" HeightRequest="160"  CornerRadius="16" CompressedLayout.IsHeadless="true">
+        <StackLayout >
+            <Frame Margin="24" Padding="0" HeightRequest="160"  CornerRadius="16" CompressedLayout.IsHeadless="true">
                 <Grid  CompressedLayout.IsHeadless="true">
                 <userControls:WaitingProgressBar userControls:ProgressAttachedProperties.AnimatedProgress="{Binding CapacityPercentage}" ></userControls:WaitingProgressBar>
                       <StackLayout>
-                          <Label FontSize="Large" FontFamily="{StaticResource BoldFont}" HorizontalOptions="CenterAndExpand" Margin="8" Text="Waiting for all to join..."></Label>
+                          <Label FontSize="Large" FontFamily="{StaticResource BoldFont}" HorizontalOptions="CenterAndExpand" Margin="8" Text="{xct:Translate WaitingForAll}"></Label>
                           <Label FontSize="Large" HorizontalOptions="CenterAndExpand" Margin="8" >
                               <Label.FormattedText>
                                   <FormattedString>
                                       <Span Text="{Binding Members.Count}"></Span>
                                       <Span Text="/"></Span>
-                                      <Span Text="{Binding Total}"></Span>
-                                      <Span Text=" Joined"></Span>
+                                      <Span Text="{Binding Total} "></Span>
+                                      <Span Text=" "></Span>
+                                      <Span Text="{xct:Translate Joined}"></Span>
                                   </FormattedString>
                               </Label.FormattedText>
                           </Label>
                       </StackLayout>
                 </Grid>
             </Frame>
-            <Grid views:StateLayout.CurrentState="{Binding CurrentState}"
-                  views:StateLayout.AnimateStateChanges="True"
+            <Grid xct:StateLayout.CurrentState="{Binding CurrentState}"
+                  xct:StateLayout.AnimateStateChanges="True"
                   HeightRequest="100" CompressedLayout.IsHeadless="true">
-                <views:StateLayout.StateViews>
-                    <views:StateView StateKey="Loading"
-                                     RepeatCount="1">
-                        <views:StateView.Template>
+                <xct:StateLayout.StateViews>
+                    <xct:StateView StateKey="Loading"
+                                   RepeatCount="1">
+                        <xct:StateView.Template>
                             <DataTemplate>
-                               <Label HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Text="Connecting Game Hub..." FontSize="16" TextColor="{StaticResource Day4}"></Label>
+                               <Label HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Text="{xct:Translate GameHubConnecting}" FontSize="16" TextColor="{StaticResource Day4}"></Label>
                             </DataTemplate>
-                        </views:StateView.Template>
-                    </views:StateView>
-                    
-                    <views:StateView StateKey="Error"
-                                     HorizontalOptions="FillAndExpand"
-                                     VerticalOptions="FillAndExpand">
+                        </xct:StateView.Template>
+                    </xct:StateView>
+
+                    <xct:StateView StateKey="Error"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand">
                         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                            <Label Text="Couldn't connect,Try Again"  FontSize="16" TextColor="{StaticResource Day4}"
+                            <Label Text="{xct:Translate GameHubError}"  FontSize="16" TextColor="{StaticResource Day4}"
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0,0,16,0" />
                             <Path Data="M1335,635.153a9,9,0,1,0,9-8.848,11.1,11.1,0,0,0-9,4.915m0,0V626m0,5.22h4.66"
                                   Stroke="#363853"
@@ -66,27 +68,27 @@
                                 <TapGestureRecognizer Command="{Binding StartHubCommand}"></TapGestureRecognizer>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
-                    </views:StateView>
+                    </xct:StateView>
 
-                    <views:StateView StateKey="Success"
-                                 HorizontalOptions="FillAndExpand"
-                                 VerticalOptions="FillAndExpand">
+                    <xct:StateView StateKey="Success"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand">
                       <Grid ColumnDefinitions="*,*">
                           <Button HorizontalOptions="CenterAndExpand" BackgroundColor="Green"
-                                  Text="Invite friends" Padding="16,4" CornerRadius="24" Command="{Binding InviteCommand}"  />
+                                  Text="{xct:Translate Invite}" Padding="16,4" CornerRadius="24" Command="{Binding InviteCommand}"  />
                           <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="#FFD460"
-                                  Text="Join" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinGameCommand}"  />
+                                  Text="{xct:Translate Join}" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinGameCommand}"  />
                           <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
                                   Text="{Binding LeaveText}" IsVisible="{Binding CanLeave}" Padding="16,4" CornerRadius="24" Command="{Binding LeaveGameCommand}"  />
                         </Grid>
-                    </views:StateView>
-                </views:StateLayout.StateViews>
+                    </xct:StateView>
+                </xct:StateLayout.StateViews>
             </Grid>
            
             <CollectionView
                     ItemsSource="{Binding Members}"
                     SelectedItem="{Binding Member}"
-                    Margin="8"
+                    Margin="24,8"
 
                     SelectionMode="Single"
                     SelectionChangedCommand="{Binding MemberSelectedCommand}">
@@ -116,7 +118,8 @@
                             <Label TextColor="#F8D291" HorizontalOptions="CenterAndExpand">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="Score :" />
+                                                <Span Text="{xct:Translate Score}" />
+                                                <Span Text=" : " />
                                                 <Span Text="{Binding Score}" />
                                             </FormattedString>
                                         </Label.FormattedText>
@@ -124,7 +127,8 @@
                             <Label TextColor="#91F8AA" HorizontalOptions="CenterAndExpand">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="Level:" />
+                                                <Span Text="{xct:Translate Level}" />
+                                                <Span Text=" : " />
                                                 <Span Text="{Binding Level}" />
                                             </FormattedString>
                                         </Label.FormattedText>
@@ -135,6 +139,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <controls:MTAdView AdsId="{OnPlatform Android='ca-app-pub-3940256099942544/6300978111', 
+                                   iOS='ca-app-pub-3940256099942544/2934735716'}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

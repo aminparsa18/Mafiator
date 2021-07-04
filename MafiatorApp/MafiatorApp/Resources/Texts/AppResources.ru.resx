@@ -118,259 +118,156 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Добавлять</value>
   </data>
   <data name="AddFriends" xml:space="preserve">
-    <value>Add Friends</value>
+    <value>Добавить друзей</value>
   </data>
   <data name="AddFriendsDesc" xml:space="preserve">
-    <value>Add your friends in this room so you can be in touch and play together</value>
+    <value>Добавьте своих друзей в эту комнату, чтобы вы могли быть на связи и играть вместе</value>
   </data>
   <data name="AddRoles" xml:space="preserve">
-    <value>Add Roles</value>
-  </data>
-  <data name="AllowNotifications" xml:space="preserve">
-    <value>Allow notifications</value>
+    <value>Добавить роли</value>
   </data>
   <data name="AppSubTitle" xml:space="preserve">
-    <value>Everybody has a power</value>
+    <value>У каждого есть сила</value>
   </data>
   <data name="AppTitle" xml:space="preserve">
     <value>Mafiator</value>
   </data>
   <data name="ARoom" xml:space="preserve">
-    <value>a room</value>
-  </data>
-  <data name="Autoplay" xml:space="preserve">
-    <value>Autoplay voices in game</value>
-  </data>
-  <data name="Chat" xml:space="preserve">
-    <value>Chat</value>
+    <value>комната</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm Password</value>
+    <value>Подтвердить Пароль</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Продолжать</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>CREATE</value>
+    <value>СОЗДАЙТЕ</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
-    <value>Display Name</value>
-  </data>
-  <data name="EmptyConfirmPassword" xml:space="preserve">
-    <value>password confirmation cannot be empty</value>
-  </data>
-  <data name="EmptyInput" xml:space="preserve">
-    <value>Input cannot be empty</value>
-  </data>
-  <data name="EmptyPassword" xml:space="preserve">
-    <value>Password cannot be empty</value>
-  </data>
-  <data name="EmptyPhoneNo" xml:space="preserve">
-    <value>Phone no cannot be empty</value>
-  </data>
-  <data name="EmptyUsername" xml:space="preserve">
-    <value>Username cannot be empty</value>
+    <value>Отображаемое имя</value>
   </data>
   <data name="EnterCode" xml:space="preserve">
-    <value>Enter Verification Code</value>
+    <value>Введите код подтверждения</value>
   </data>
   <data name="EnterRoomName" xml:space="preserve">
-    <value>Enter Room Name</value>
+    <value>Введите название комнаты</value>
   </data>
   <data name="FacebookSignIn" xml:space="preserve">
-    <value>Sign in With Facebook</value>
-  </data>
-  <data name="GameHubConnecting" xml:space="preserve">
-    <value>Connecting Game Hub...</value>
-  </data>
-  <data name="GameHubError" xml:space="preserve">
-    <value>Couldn't connect,Try Again</value>
-  </data>
-  <data name="GamePlayed" xml:space="preserve">
-    <value>Game Played</value>
+    <value>Авторизоваться с помощью Фэйсбука</value>
   </data>
   <data name="GamePlayersCount" xml:space="preserve">
-    <value>Game Players Count</value>
+    <value>Количество игроков в игре</value>
   </data>
   <data name="GameStartsAt" xml:space="preserve">
-    <value>Game Starts At</value>
+    <value>Игра начинается в</value>
   </data>
   <data name="GetGems" xml:space="preserve">
-    <value>Get Gems</value>
+    <value>получить драгоценные камни</value>
   </data>
   <data name="GoogleSignIn" xml:space="preserve">
-    <value>Sign in With Google</value>
-  </data>
-  <data name="GoToGame" xml:space="preserve">
-    <value>Go To Game</value>
+    <value>Войти через Google</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
-  </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Password must contain at least 6 characters inclusing letters and digits</value>
-  </data>
-  <data name="InvalidPhoneNumber" xml:space="preserve">
-    <value>Phone number format is not valid</value>
-  </data>
-  <data name="Invite" xml:space="preserve">
-    <value>Invite friends</value>
+    <value>История</value>
   </data>
   <data name="Join" xml:space="preserve">
-    <value>JOIN
-</value>
-  </data>
-  <data name="Joined" xml:space="preserve">
-    <value>Joined</value>
-  </data>
-  <data name="LanguageColon" xml:space="preserve">
-    <value>Language:</value>
-  </data>
-  <data name="Leave" xml:space="preserve">
-    <value>Leave</value>
-  </data>
-  <data name="Level" xml:space="preserve">
-    <value>Level</value>
+    <value>ПРИСОЕДИНИТЬСЯ</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="MemberCount" xml:space="preserve">
-    <value>Member Count</value>
-  </data>
-  <data name="Memberss" xml:space="preserve">
-    <value>member(s)</value>
+    <value>Авторизоваться</value>
   </data>
   <data name="NewGame" xml:space="preserve">
-    <value>New Game</value>
+    <value>Новая игра</value>
   </data>
   <data name="NewRoom" xml:space="preserve">
-    <value>New Room</value>
-  </data>
-  <data name="NoGame" xml:space="preserve">
-    <value>No new game is scheduled to start!!!</value>
-  </data>
-  <data name="NoRoom" xml:space="preserve">
-    <value>No Room</value>
+    <value>Новая Комната</value>
   </data>
   <data name="Or" xml:space="preserve">
-    <value>OR</value>
+    <value>ИЛИ ЖЕ</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="PlayMusic" xml:space="preserve">
-    <value>Play music</value>
-  </data>
-  <data name="PlaySound" xml:space="preserve">
-    <value>Play Sound</value>
+    <value>Пароль</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Политика конфиденциальности</value>
   </data>
   <data name="PrivateRoom" xml:space="preserve">
-    <value>Private Room</value>
+    <value>Приватная комната</value>
   </data>
   <data name="PublicLiveStream" xml:space="preserve">
-    <value>Public Live Stream</value>
+    <value>Публичная прямая трансляция</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Register</value>
+    <value>регистр</value>
   </data>
   <data name="Resend" xml:space="preserve">
-    <value>Resend Code</value>
-  </data>
-  <data name="RolesInGame" xml:space="preserve">
-    <value>Roles in game:</value>
-  </data>
-  <data name="RoomCode" xml:space="preserve">
-    <value>Room Code</value>
-  </data>
-  <data name="RoomCodeDesc" xml:space="preserve">
-    <value>Scan room barcode to join immediately</value>
+    <value>Отправить код еще раз</value>
   </data>
   <data name="Rooms" xml:space="preserve">
-    <value>ROOMS</value>
+    <value>НОМЕРА</value>
   </data>
   <data name="ScanBarcode" xml:space="preserve">
-    <value>Scan Barcode</value>
+    <value>Сканировать штрих-код</value>
   </data>
   <data name="ScanBarcodeDesc" xml:space="preserve">
-    <value>Scan User Code using scanner</value>
-  </data>
-  <data name="Score" xml:space="preserve">
-    <value>Score</value>
+    <value>Отсканировать код пользователя с помощью сканера</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Поиск</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Выбирать</value>
   </data>
   <data name="SelectAvatar" xml:space="preserve">
-    <value>Select Avatar</value>
+    <value>Выберите аватар</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Set</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Набор</value>
   </data>
   <data name="SignOut" xml:space="preserve">
-    <value>Sign Out</value>
+    <value>Выход</value>
   </data>
   <data name="Skip" xml:space="preserve">
-    <value>Skip</value>
+    <value>Пропускать</value>
   </data>
   <data name="SpecifyRoles" xml:space="preserve">
-    <value>Specify Roles of Players</value>
+    <value>Укажите роли игроков</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Начинать</value>
   </data>
   <data name="StartImmediately" xml:space="preserve">
-    <value>Or Start Immediately</value>
-  </data>
-  <data name="SthError" xml:space="preserve">
-    <value>Something bad happened,Try again later</value>
+    <value>Или начать немедленно</value>
   </data>
   <data name="TotalWin" xml:space="preserve">
-    <value>Total win</value>
+    <value>Всего вина</value>
   </data>
   <data name="UploadPP" xml:space="preserve">
-    <value>Upload Profile Picture</value>
+    <value>Загрузить изображение профиля</value>
   </data>
   <data name="UserCode" xml:space="preserve">
-    <value>User Code</value>
+    <value>Код пользователя</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
-  </data>
-  <data name="WaitingForAll" xml:space="preserve">
-    <value>Waiting for all to join...</value>
+    <value>Проверяющий код</value>
   </data>
   <data name="WinAsCitizen" xml:space="preserve">
-    <value>Win as Citizen</value>
+    <value>Победа за гражданина</value>
   </data>
   <data name="WinAsMafia" xml:space="preserve">
-    <value>Win as mafia</value>
+    <value>Победи мафии</value>
   </data>
   <data name="YourCountry" xml:space="preserve">
-    <value>your country</value>
+    <value>твоя страна</value>
   </data>
   <data name="YourFriends" xml:space="preserve">
-    <value>Your Friends</value>
-  </data>
-  <data name="YourLanguage" xml:space="preserve">
-    <value>Your Language</value>
-  </data>
-  <data name="YourRooms" xml:space="preserve">
-    <value>Rooms you play in</value>
+    <value>Твои друзья</value>
   </data>
 </root>

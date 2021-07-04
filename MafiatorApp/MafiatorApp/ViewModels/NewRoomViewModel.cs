@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
+using MafiatorApp.Helpers;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
@@ -118,6 +119,7 @@ namespace MafiatorApp.ViewModels
                         await NavigationService.RemovePopupAsync();
                         await NavigationService.RemovePopupAsync();
                         await NavigationService.NavigateToAsync<MyRoomViewModel>(result.Data.Id);
+                        Admob.Load();
                     }
                     else
                     {

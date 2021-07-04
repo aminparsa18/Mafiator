@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using MafiatorApp.Resources.Texts;
+using Xamarin.CommunityToolkit.Helpers;
 
 namespace MafiatorApp.Validations
 {
@@ -7,7 +7,7 @@ namespace MafiatorApp.Validations
     {
         public PasswordRule()
         {
-            ValidationMessage = TextsTranslateManager.Translate("InvalidPassword");
+            ValidationMessage = LocalizationResourceManager.Current.GetValue("InvalidPassword");
         }
         public string ValidationMessage { get; set; }
         public bool Check(T value)

@@ -3,9 +3,8 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-             xmlns:texts="clr-namespace:MafiatorApp.Resources.Texts;assembly=MafiatorApp"
              xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.MyRoomView"
@@ -21,7 +20,6 @@
             <Grid>
                 
                 <Frame Margin="16,16,16,36" Padding="16,16,16,24">
-                <!--<Image Source="history.png" Aspect="Fill" />-->
                 <StackLayout Orientation="Horizontal">
                     <forms:CachedImage
                         x:Name="CachedImage"
@@ -39,7 +37,7 @@
                             TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="Game Played: " />
+                                    <Span Text="{xct:Translate GamePlayed}" />
                                     <Span Text="{Binding Room.GamePlayedCount}" />
                                 </FormattedString>
                             </Label.FormattedText>
@@ -48,7 +46,7 @@
                             TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="Room Code: " />
+                                    <Span Text="{xct:Translate RoomCode}" />
                                     <Span x:Name="RoomCodeSpan" Text="{Binding Room.Code}" />
                                 </FormattedString>
                             </Label.FormattedText>
@@ -80,25 +78,25 @@
                 </Frame>
                     <Grid ColumnDefinitions="*,*,*"  VerticalOptions="EndAndExpand">
                         <Button Grid.Column="0" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Gem}"
-                                Text="Chat" IsVisible="{Binding NewGameAvailable}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
+                                Text="{xct:Translate Chat}" IsVisible="{Binding NewGameAvailable}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
 
                         <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night2}}"
-                                Text="{texts:Translate NewGame}" IsVisible="{Binding NewGameAvailable}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
+                                Text="{xct:Translate NewGame}" IsVisible="{Binding NewGameAvailable}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
 
                         <Button Grid.Column="2" HorizontalOptions="CenterAndExpand" BackgroundColor="#FFD460"
-                                Text="Join" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinCommand}"  />
+                                Text="{xct:Translate Join}" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinCommand}"  />
                         <Button Grid.Column="2" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
-                                Text="Leave" IsVisible="{Binding CanLeave}" Padding="16,4" CornerRadius="24" Command="{Binding LeaveCommand}"  />
+                                Text="{xct:Translate Leave}" IsVisible="{Binding CanLeave}" Padding="16,4" CornerRadius="24" Command="{Binding LeaveCommand}"  />
                     </Grid>
                
             </Grid>
-          
-            <Grid views:StateLayout.CurrentState="{Binding CurrentState}"
-                  views:StateLayout.AnimateStateChanges="True">
-                <views:StateLayout.StateViews>
-                    <views:StateView StateKey="Loading"
-                                     RepeatCount="1">
-                        <views:StateView.Template>
+
+            <Grid xct:StateLayout.CurrentState="{Binding CurrentState}"
+                  xct:StateLayout.AnimateStateChanges="True">
+                <xct:StateLayout.StateViews>
+                    <xct:StateView StateKey="Loading"
+                                   RepeatCount="1">
+                        <xct:StateView.Template>
                             <DataTemplate>
                                 <shimmerLayout:ShimmerLayout Angle="-45" GradientSize="0.4"
                                                              BackgroundGradientColor="{StaticResource Day4}"
@@ -116,34 +114,34 @@
 
                                 </shimmerLayout:ShimmerLayout>
                             </DataTemplate>
-                        </views:StateView.Template>
-                    </views:StateView>
-                    <views:StateView StateKey="Empty"
-                                     HorizontalOptions="FillAndExpand"
-                                     VerticalOptions="FillAndExpand">
+                        </xct:StateView.Template>
+                    </xct:StateView>
+                    <xct:StateView StateKey="Empty"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand">
                         <StackLayout Margin="0,16">
                             <Image WidthRequest="120" Aspect="AspectFit" HorizontalOptions="CenterAndExpand"
                                    Source="{AppThemeBinding Light=empty_day.png, Dark=empty_night.png}" />
-                            <Label Text="No new game is scheduled to start!!!" Margin="0,16,0,0"
+                            <Label Text="{xct:Translate NoGame}" Margin="0,16,0,0"
                                    HorizontalOptions="CenterAndExpand" FontSize="Medium"
                                    TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}" />
                         </StackLayout>
-                    </views:StateView>
-                    <views:StateView StateKey="Error"
-                                     HorizontalOptions="FillAndExpand"
-                                     VerticalOptions="FillAndExpand">
+                    </xct:StateView>
+                    <xct:StateView StateKey="Error"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand">
                         <StackLayout VerticalOptions="CenterAndExpand">
-                            <Label Text="be ga raftim"
+                            <Label Text="{xct:Translate SthError}"
                                    HorizontalOptions="CenterAndExpand" />
                         </StackLayout>
-                    </views:StateView>
+                    </xct:StateView>
 
-                    <views:StateView StateKey="Success"
-                                     HorizontalOptions="FillAndExpand"
-                                     VerticalOptions="FillAndExpand" >
+                    <xct:StateView StateKey="Success"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand" >
                             <StackLayout Margin="0,8,0,0" >
                                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="Medium" FontFamily="{StaticResource BoldFont}" TextColor="{StaticResource Error}" Text="{Binding RemainingTime}"></Label>
-                               <Label HorizontalOptions="CenterAndExpand" Text="Roles in game:"
+                               <Label HorizontalOptions="CenterAndExpand" Text="{xct:Translate RolesInGame}"
                                       Margin="0,16,0,0" TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}"></Label>
                                 <CollectionView
                         ItemsSource="{Binding Roles}"
@@ -185,10 +183,10 @@
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
                                 <Button HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
-                                        Text="Go To Game"  Padding="36,4" CornerRadius="24" Command="{Binding GoToGameCommand}"  />
+                                        Text="{xct:Translate GoToGame}"  Padding="36,4" CornerRadius="24" Command="{Binding GoToGameCommand}"  />
                             </StackLayout>
-                    </views:StateView>
-                </views:StateLayout.StateViews>
+                    </xct:StateView>
+                </xct:StateLayout.StateViews>
             </Grid>
 
             <StackLayout VerticalOptions="EndAndExpand" Padding="8,12,8,0" Margin="0,0,0,-4">
@@ -200,7 +198,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="{Binding Members.Count}" />
-                                        <Span Text=" member(s) " />
+                                        <Span Text="{xct:Translate Memberss}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>

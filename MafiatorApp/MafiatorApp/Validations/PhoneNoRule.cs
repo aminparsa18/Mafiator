@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Resources.Texts;
+﻿using Xamarin.CommunityToolkit.Helpers;
 
 namespace MafiatorApp.Validations
 {
@@ -6,7 +6,7 @@ namespace MafiatorApp.Validations
     {
         public PhoneNoRule()
         {
-            ValidationMessage = TextsTranslateManager.Translate("InvalidPhoneNumber");
+            ValidationMessage = LocalizationResourceManager.Current.GetValue("InvalidPhoneNumber");
         }
         public string ValidationMessage { get; set; }
 
