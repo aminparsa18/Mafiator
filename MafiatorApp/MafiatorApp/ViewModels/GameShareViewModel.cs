@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 
 namespace MafiatorApp.ViewModels
@@ -12,21 +12,13 @@ namespace MafiatorApp.ViewModels
         public string Date
         {
             get => date;
-            set
-            {
-                date = value;
-                RaisePropertyChanged(()=>Date);
-            }
+            set => SetProperty(ref date, value);
         }
         private Ulid gameId;
         public Ulid GameId
         {
             get => gameId;
-            set
-            {
-                gameId = value;
-                RaisePropertyChanged(() => GameId);
-            }
+            set => SetProperty(ref gameId, value);
         }
 
         public IAsyncCommand ShareCommand { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 
@@ -11,14 +12,12 @@ namespace Mafiator.Service.Contracts.Impl
         public string SendAuthSmsAsync(string code, string phoneNumber)
         {
             TwilioClient.Init(accountSid, authToken);
-
             var message = MessageResource.Create(
-                body: "Your verification code: " + code + Environment.NewLine+" Mafiator",
+                body: new StringBuilder("Your verification code: ").Append(code).Append(Environment.NewLine).Append(" Mafiator").ToString(),
                 from: new Twilio.Types.PhoneNumber("+13153337534"),
                 to: new Twilio.Types.PhoneNumber(phoneNumber)
             );
             return message.Status.ToString();
-
         }
     }
 }

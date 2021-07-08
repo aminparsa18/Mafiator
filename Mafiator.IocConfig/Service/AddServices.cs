@@ -1,5 +1,4 @@
-﻿using Mafiator.Common.SiteSetting;
-using Mafiator.IocConfig.Extensions;
+﻿using Mafiator.IocConfig.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

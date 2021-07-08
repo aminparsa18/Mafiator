@@ -17,12 +17,14 @@ namespace Mafiator.Data
         public virtual DbSet<Avatar> Avatar{ get; set; }
         public virtual DbSet<Event> Event{ get; set; }
         public virtual DbSet<EventJoin> EventJoin{ get; set; }
+        public virtual DbSet<ChatMessage> ChatMessage{ get; set; }
         public virtual DbSet<Game> Game{ get; set; }
         public virtual DbSet<GameEvent> GameEvent{ get; set; }
         public virtual DbSet<GameMember> GameMember{ get; set; }
         public virtual DbSet<GameMessage> GameMessage{ get; set; }
         public virtual DbSet<GameViolationReport> GameViolationReport{ get; set; }
         public virtual DbSet<Gem> Gem{ get; set; }
+        public virtual DbSet<Reaction> Reaction{ get; set; }
         public virtual DbSet<RefreshToken> RefreshToken{ get; set; }
         public virtual DbSet<Room> Room{ get; set; }
         public virtual DbSet<RoomMember> RoomMember{ get; set; }

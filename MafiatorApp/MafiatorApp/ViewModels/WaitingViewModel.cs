@@ -9,11 +9,7 @@ namespace MafiatorApp.ViewModels
         public string Message
         {
             get => message;
-            set
-            {
-                message = value;
-                RaisePropertyChanged(()=>Message);
-            }
+            set => SetProperty(ref message, value);
         }
 
         public override Task InitializeAsync(object navigationData)

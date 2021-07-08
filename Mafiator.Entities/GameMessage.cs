@@ -9,10 +9,8 @@ namespace Mafiator.Entities
   public class GameMessage:BaseEntity
     {
         [PropertyHandler(typeof(UlidPropertyHandler))]
-
         public Ulid GameId { get; set; }
         [PropertyHandler(typeof(UlidPropertyHandler))]
-
         public Ulid UserId { get; set; }
         public GameMessageType MessageType { get; set; }
         public string Content { get; set; }

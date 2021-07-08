@@ -5,8 +5,8 @@ using MafiatorApp.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MessagePipe;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.Helpers;
 
 namespace MafiatorApp.ViewModels
@@ -21,17 +21,13 @@ namespace MafiatorApp.ViewModels
         public Country Country
         {
             get => country;
-            set
-            {
-                country = value;
-                RaisePropertyChanged(() => Country);
-            }
+            set => SetProperty(ref country, value);
         }
 
         public LanguagesViewModel(IPublisher<ChangeLanguageEvent> publisher)
         {
             this._publisher = publisher;
-            Countries = new ObservableRangeCollection<Country>()
+            Countries = new Xamarin.CommunityToolkit.ObjectModel.ObservableRangeCollection<Country>()
             {
                 new Country() {Code = "US", Name = "English"},
                 new Country() {Code = "RU", Name = "Russian"}

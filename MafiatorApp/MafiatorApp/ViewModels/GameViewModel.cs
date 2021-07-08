@@ -14,7 +14,6 @@ using MafiatorApp.Enums;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MediaManager;
 using MediaManager.Playback;
 using MediaManager.Player;
@@ -22,6 +21,7 @@ using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
 using Plugin.AudioRecorder;
 using Plugin.SimpleAudioPlayer;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -40,11 +40,7 @@ namespace MafiatorApp.ViewModels
         public LayoutState CurrentState
         {
             get => currentState;
-            set
-            {
-                currentState = value;
-                RaisePropertyChanged(() => CurrentState);
-            }
+            set => SetProperty(ref currentState, value);
         }
 
         //
@@ -53,11 +49,7 @@ namespace MafiatorApp.ViewModels
         public bool HubConnected
         {
             get => hubConnected;
-            set
-            {
-                hubConnected = value;
-                RaisePropertyChanged(() => HubConnected);
-            }
+            set => SetProperty(ref hubConnected, value);
         }
 
         //message sent on player turn
@@ -66,11 +58,7 @@ namespace MafiatorApp.ViewModels
         public string Message
         {
             get => message;
-            set
-            {
-                message = value;
-                RaisePropertyChanged(() => Message);
-            }
+            set => SetProperty(ref message, value);
         }
 
         //showing while recoding audio
@@ -81,11 +69,7 @@ namespace MafiatorApp.ViewModels
         public TimeSpan RecordingTimer
         {
             get => recordingTimer;
-            set
-            {
-                recordingTimer = value;
-                RaisePropertyChanged(() => RecordingTimer);
-            }
+            set => SetProperty(ref recordingTimer, value);
         }
 
         private bool isRecording;
@@ -96,11 +80,7 @@ namespace MafiatorApp.ViewModels
         public PlayerDto Member
         {
             get => member;
-            set
-            {
-                member = value;
-                RaisePropertyChanged(() => Member);
-            }
+            set => SetProperty(ref member, value);
         }
 
         private Timer _timer;
@@ -114,11 +94,7 @@ namespace MafiatorApp.ViewModels
         public double ProgressTimer
         {
             get => progressTimer;
-            set
-            {
-                progressTimer = value;
-                RaisePropertyChanged(() => ProgressTimer);
-            }
+            set => SetProperty(ref progressTimer, value);
         }
 
         //remining time for current speaking user
@@ -127,11 +103,7 @@ namespace MafiatorApp.ViewModels
         public string ProgressString
         {
             get => progressString;
-            set
-            {
-                progressString = value;
-                RaisePropertyChanged(() => ProgressString);
-            }
+            set => SetProperty(ref progressString, value);
         }
 
         private GameRole? role;
@@ -139,11 +111,7 @@ namespace MafiatorApp.ViewModels
         public GameRole? Role
         {
             get => role;
-            set
-            {
-                role = value;
-                RaisePropertyChanged(() => Role);
-            }
+            set => SetProperty(ref role, value);
         }
 
         public event EventHandler<bool> TurnChanged;

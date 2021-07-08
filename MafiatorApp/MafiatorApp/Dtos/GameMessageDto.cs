@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using MafiatorApp.Enums;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MediaManager;
 using MediaManager.Player;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 
 namespace MafiatorApp.Dtos
 {
-    public class GameMessageDto:ExtendedBindableObject
+    public class GameMessageDto:ObservableObject
     {
         public bool Sender{ get; set; }
         public string Content { get; set; }
@@ -19,33 +19,21 @@ namespace MafiatorApp.Dtos
         public double TotalLength
         {
             get => _totalLength;
-            set
-            {
-                _totalLength = value;
-                RaisePropertyChanged(() => TotalLength);
-            }
+            set => SetProperty(ref _totalLength, value);
         }
         private double _currentPosition;
 
         public double CurrentPosition
         {
             get => _currentPosition;
-            set 
-            {
-                _currentPosition = value;
-                RaisePropertyChanged(()=>CurrentPosition);
-            }
+            set => SetProperty(ref _currentPosition, value);
         }
         private LayoutState _currentState=LayoutState.Empty;
 
         public LayoutState CurrentState
         {
             get => _currentState;
-            set
-            {
-                _currentState = value;
-                RaisePropertyChanged(() => CurrentState);
-            }
+            set => SetProperty(ref _currentState, value);
         }
         public bool IsPlaying { get; set; }
         public IAsyncCommand PlayVoiceCommand { get; set; }

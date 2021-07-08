@@ -8,8 +8,8 @@ using MafiatorApp.Extentions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -24,11 +24,7 @@ namespace MafiatorApp.ViewModels
         public LayoutState CurrentState
         {
             get => currentState;
-            set
-            {
-                currentState = value;
-                RaisePropertyChanged(() => CurrentState);
-            }
+            set => SetProperty(ref currentState, value);
         }
 
         //detail of occuring game
@@ -40,11 +36,7 @@ namespace MafiatorApp.ViewModels
         public int Total
         {
             get => total;
-            set
-            {
-                total = value;
-                RaisePropertyChanged(() => Total);
-            }
+            set => SetProperty(ref total, value);
         }
 
         //indicates progress of join to game
@@ -53,11 +45,7 @@ namespace MafiatorApp.ViewModels
         public double CapacityPercentage
         {
             get => capacityPercentage;
-            set
-            {
-                capacityPercentage = value;
-                RaisePropertyChanged(() => CapacityPercentage);
-            }
+            set => SetProperty(ref capacityPercentage, value);
         }
 
         private bool isJoined = true;
@@ -65,11 +53,7 @@ namespace MafiatorApp.ViewModels
         public bool IsJoined
         {
             get => isJoined;
-            set
-            {
-                isJoined = value;
-                RaisePropertyChanged(() => IsJoined);
-            }
+            set => SetProperty(ref isJoined, value);
         }
 
         private bool canLeave;
@@ -77,11 +61,7 @@ namespace MafiatorApp.ViewModels
         public bool CanLeave
         {
             get => canLeave;
-            set
-            {
-                canLeave = value;
-                RaisePropertyChanged(() => CanLeave);
-            }
+            set => SetProperty(ref canLeave, value);
         }
 
         private string leaveText;
@@ -89,11 +69,7 @@ namespace MafiatorApp.ViewModels
         public string LeaveText
         {
             get => leaveText;
-            set
-            {
-                leaveText = value;
-                RaisePropertyChanged(() => LeaveText);
-            }
+            set => SetProperty(ref leaveText, value);
         }
 
         public IAsyncCommand InviteCommand { get; set; }

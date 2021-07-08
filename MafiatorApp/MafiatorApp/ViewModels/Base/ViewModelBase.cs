@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using MafiatorApp.Services;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels.Base
 {
-    public abstract class ViewModelBase : ExtendedBindableObject
+    public abstract class ViewModelBase : ObservableObject
     {
         protected readonly IDialogService DialogService;
         protected readonly INavigationService NavigationService;
@@ -15,11 +16,7 @@ namespace MafiatorApp.ViewModels.Base
         public bool IsBusy
         {
             get => _isBusy;
-            set
-            {
-                _isBusy = value;
-                RaisePropertyChanged(() => IsBusy);
-            }
+            set => SetProperty(ref _isBusy, value);
         }
 
         protected ViewModelBase()
@@ -37,11 +34,7 @@ namespace MafiatorApp.ViewModels.Base
         public string PageTitle
         {
             get => _pageTitle;
-            set
-            {
-                _pageTitle = value;
-                RaisePropertyChanged(() => PageTitle);
-            }
+            set => SetProperty(ref _pageTitle, value);
         }
     }
 }

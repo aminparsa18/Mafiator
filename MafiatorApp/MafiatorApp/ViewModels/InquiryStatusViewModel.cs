@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels
 {
@@ -11,11 +11,7 @@ namespace MafiatorApp.ViewModels
         public bool Inquiry
         {
             get => inquiry;
-            set
-            {
-                inquiry = value;
-                RaisePropertyChanged(()=>Inquiry);
-            }
+            set => SetProperty(ref inquiry, value);
         }
         public IAsyncCommand PopCommand { get; set; }
 

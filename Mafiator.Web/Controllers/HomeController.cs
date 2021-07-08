@@ -2,20 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Mafiator.Web.Controllers
 {
     [Route("")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IWebHostEnvironment webHostEnvironment)
         {
-            _logger = logger;
+            this.webHostEnvironment = webHostEnvironment;
         }
         [Route("")]
         [Route("[action]")]
@@ -88,8 +90,18 @@ namespace Mafiator.Web.Controllers
         {
             return View();
         }
-        [Route("[action]")]
 
+
+        [Route("[action]")]
+        public FileResult Help(string lang)
+        {
+            var filePath = Path.Combine(webHostEnvironment.WebRootPath, "game-en.pdf");
+            var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read);
+            return File(fileStream, "application/pdf");
+        }
+
+
+        [Route("[action]")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

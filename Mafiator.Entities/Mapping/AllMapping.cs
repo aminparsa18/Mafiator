@@ -9,12 +9,14 @@ namespace Mafiator.Entities.Mapping
             modelBuilder.ApplyConfiguration(new AvatarMapping());
             modelBuilder.ApplyConfiguration(new EventJoinMapping());
             modelBuilder.ApplyConfiguration(new EventMapping());
+            modelBuilder.ApplyConfiguration(new ChatMessageMapping());
             modelBuilder.ApplyConfiguration(new GameEventMapping());
             modelBuilder.ApplyConfiguration(new GameMapping());
             modelBuilder.ApplyConfiguration(new GameMemberMapping());
             modelBuilder.ApplyConfiguration(new GameMessageMapping());
             modelBuilder.ApplyConfiguration(new GameViolationReportMapping());
             modelBuilder.ApplyConfiguration(new GemMapping());
+            modelBuilder.ApplyConfiguration(new ReactionMapping());
             modelBuilder.ApplyConfiguration(new RefreshTokenMapping());
             modelBuilder.ApplyConfiguration(new RoomMapping());
             modelBuilder.ApplyConfiguration(new RoomMemberMapping());

@@ -7,14 +7,13 @@ using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
-using MafiatorApp.Resources.Texts;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MessagePipe;
 using Microsoft.AppCenter.Crashes;
 using Xamarin.CommunityToolkit.Helpers;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 using Xamarin.Essentials;
 
@@ -27,154 +26,100 @@ namespace MafiatorApp.ViewModels
         public ValidatableObject<string> LoginUsername
         {
             get => _loginUsername;
-            set
-            {
-                _loginUsername = value;
-                RaisePropertyChanged(() => LoginUsername);
-            }
+            set => SetProperty(ref _loginUsername, value);
         }
 
         private ValidatableObject<string> _loginPassword;
+
         public ValidatableObject<string> LoginPassword
         {
             get => _loginPassword;
-            set
-            {
-                _loginPassword = value;
-                RaisePropertyChanged(() => LoginPassword);
-            }
+            set => SetProperty(ref _loginPassword, value);
         }
 
         private ValidatableObject<string> _phoneNo;
         public ValidatableObject<string> PhoneNo
         {
             get => _phoneNo;
-            set
-            {
-                _phoneNo = value;
-                RaisePropertyChanged(() => PhoneNo);
-            }
+            set => SetProperty(ref _phoneNo, value);
         }
 
         private ValidatableObject<string> _displayName;
         public ValidatableObject<string> DisplayName
         {
             get => _displayName;
-            set
-            {
-                _displayName = value;
-                RaisePropertyChanged(() => DisplayName);
-            }
+            set => SetProperty(ref _displayName, value);
         }
 
         private ValidatableObject<string> _username;
         public ValidatableObject<string> Username
         {
             get => _username;
-            set
-            {
-                _username = value;
-                RaisePropertyChanged(() => Username);
-            }
+            set => SetProperty(ref _username, value);
         }
 
         private ValidatableObject<string> _password;
         public ValidatableObject<string> Password
         {
             get => _password;
-            set
-            {
-                _password = value;
-                RaisePropertyChanged(() => Password);
-            }
+            set => SetProperty(ref _password, value);
         }
 
         private ValidatableObject<string> _confirmPassword;
+
         public ValidatableObject<string> ConfirmPassword
         {
             get => _confirmPassword;
-            set
-            {
-                _confirmPassword = value;
-                RaisePropertyChanged(() => ConfirmPassword);
-            }
+            set => SetProperty(ref _confirmPassword, value);
         }
 
         private bool _isLoginPhoneNoValid = true;
         public bool IsLoginPhoneNoValid
         {
             get => _isLoginPhoneNoValid;
-            set
-            {
-                _isLoginPhoneNoValid = value;
-                RaisePropertyChanged(() => IsLoginPhoneNoValid);
-            }
+            set => SetProperty(ref _isLoginPhoneNoValid, value);
         }
 
         private bool _isLoginPasswordValid = true;
         public bool IsLoginPasswordValid
         {
             get => _isLoginPasswordValid;
-            set
-            {
-                _isLoginPasswordValid = value;
-                RaisePropertyChanged(() => IsLoginPasswordValid);
-            }
+            set => SetProperty(ref _isLoginPasswordValid, value);
         }
 
         private bool _isPhoneNoValid = true;
         public bool IsPhoneNoValid
         {
             get => _isPhoneNoValid;
-            set
-            {
-                _isPhoneNoValid = value;
-                RaisePropertyChanged(() => IsPhoneNoValid);
-            }
+            set => SetProperty(ref _isPhoneNoValid, value);
         }
 
         private bool _isPasswordValid = true;
         public bool IsPasswordValid
         {
             get => _isPasswordValid;
-            set
-            {
-                _isPasswordValid = value;
-                RaisePropertyChanged(() => IsPasswordValid);
-            }
+            set => SetProperty(ref _isPasswordValid, value);
         }
 
         private bool _isConfirmPasswordValid = true;
         public bool IsConfirmPasswordValid
         {
             get => _isConfirmPasswordValid;
-            set
-            {
-                _isConfirmPasswordValid = value;
-                RaisePropertyChanged(() => IsConfirmPasswordValid);
-            }
+            set => SetProperty(ref _isConfirmPasswordValid, value);
         }
 
         private bool _isDisplayNameValid = true;
         public bool IsDisplayNameValid
         {
             get => _isDisplayNameValid;
-            set
-            {
-                _isDisplayNameValid = value;
-                RaisePropertyChanged(() => IsDisplayNameValid);
-            }
+            set => SetProperty(ref _isDisplayNameValid, value);
         }
 
         private bool _isUsernameValid = true;
         public bool IsUsernameValid
         {
             get => _isUsernameValid;
-            set
-            {
-                _isUsernameValid = value;
-                RaisePropertyChanged(() => IsUsernameValid);
-            }
+            set => SetProperty(ref _isUsernameValid, value);
         }
 
         private Country country=new Country()
@@ -183,14 +128,11 @@ namespace MafiatorApp.ViewModels
             Code = "US",
             DialCode = "+1"
         };
+
         public Country Country
         {
             get => country;
-            set
-            {
-                country = value;
-                RaisePropertyChanged(() => Country);
-            }
+            set => SetProperty(ref country, value);
         }
         public IAsyncCommand LoginCommand { get; set; }
         public IAsyncCommand RegisterCommand { get; set; }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -18,11 +17,7 @@ namespace MafiatorApp.ViewModels
         public ValidatableObject<string> Code
         {
             get => code;
-            set
-            {
-                code = value;
-                RaisePropertyChanged(() => Code);
-            }
+            set => SetProperty(ref code, value);
         }
         public IAsyncCommand PopCommand { get; set; }
         public IAsyncCommand JoinRoomCommand { get; set; }
@@ -46,7 +41,7 @@ namespace MafiatorApp.ViewModels
                 {
                     await NavigationService.RemovePopupAsync();
                     await NavigationService.RemovePopupAsync();
-                    await NavigationService.NavigateToAsync<MyRoomViewModel>(Ulid.Parse(result.Data));
+                    await NavigationService.NavigateToAsync<RoomDetailViewModel>(Ulid.Parse(result.Data));
                 }
                 else
                 {

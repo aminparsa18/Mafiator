@@ -11,11 +11,7 @@ namespace MafiatorApp.ViewModels
         public ImageSource ImageSource
         {
             get => imageSource;
-            set
-            {
-                imageSource = value;
-                RaisePropertyChanged(()=>ImageSource);
-            }
+            set => SetProperty(ref imageSource, value);
         }
 
         public override Task InitializeAsync(object navigationData)

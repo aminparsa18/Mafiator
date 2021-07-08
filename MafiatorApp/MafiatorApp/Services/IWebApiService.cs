@@ -60,5 +60,8 @@ namespace MafiatorApp.Services
         Task<HttpResponseMessage> Cure(GameEventDto gameEvent);
         Task<HttpResponseMessage> Inquiry(GameEventDto gameEvent);
         Task<ApiResult<IEnumerable<GameEventStatusDto>>> GetEventStatus(string gameId);
+
+        //gem
+        Task<ApiResult<IEnumerable<GemDto>>> GetAllGems();
     }
 }

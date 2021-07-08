@@ -2,11 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using MafiatorApp.ViewModels.Base;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Validations
 {
-    public class ValidatableObject<T> : ExtendedBindableObject, IValidity
+    public class ValidatableObject<T> : ObservableObject, IValidity
     {
         private readonly List<IValidationRule<T>> _validations;
         private List<string> _errors;
@@ -18,33 +19,19 @@ namespace MafiatorApp.Validations
         public List<string> Errors
         {
             get => _errors;
-            set
-            {
-                _errors = value;
-                RaisePropertyChanged(() => Errors);
-            }
+            set => SetProperty(ref _errors, value);
         }
 
         public T Value
         {
             get => _value;
-
-            set
-            {
-                _value = value;
-                RaisePropertyChanged(() => Value);
-            }
+            set => SetProperty(ref _value, value);
         }
 
         public bool IsValid
         {
             get => _isValid;
-
-            set
-            {
-                _isValid = value;
-                RaisePropertyChanged(() => IsValid);
-            }
+            set => SetProperty(ref _isValid,value);
         }
 
         public ValidatableObject()

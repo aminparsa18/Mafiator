@@ -34,7 +34,7 @@ namespace MafiatorApp.ViewModels
                     var path = uri.Segments[1];
                     await NavigationService.NavigateToAsync<HomeViewModel>();
                     if (path.StartsWith("room"))
-                        await NavigationService.NavigateToAsync<MyRoomViewModel>(Ulid.Parse(uri.Segments[2]));
+                        await NavigationService.NavigateToAsync<RoomDetailViewModel>(Ulid.Parse(uri.Segments[2]));
                     else if (path.StartsWith("game"))
                         await NavigationService.NavigateToAsync<WaitingGameViewModel>(Ulid.Parse(uri.Segments[2]));
                 }

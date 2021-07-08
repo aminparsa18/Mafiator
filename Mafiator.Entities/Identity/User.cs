@@ -21,6 +21,7 @@ namespace Mafiator.Entities.Identity
         public virtual ICollection<EventJoin> EventJoin { get; set; }
         public virtual ICollection<GameMember> GameMember { get; set; }
         public virtual ICollection<GameMessage> GameMessage { get; set; }
+        public virtual ICollection<ChatMessage> ChatMessage{ get; set; }
         public virtual ICollection<RefreshToken> RefreshToken { get; set; }
         public virtual ICollection<GameViolationReport> Reporter { get; set; }
         public virtual ICollection<GameViolationReport> Reported { get; set; }

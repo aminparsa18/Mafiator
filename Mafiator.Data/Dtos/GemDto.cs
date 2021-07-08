@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using System;
+using MessagePack;
 
 namespace Mafiator.Data.Dtos
 {
@@ -6,10 +7,12 @@ namespace Mafiator.Data.Dtos
    public class GemDto
     {
         [Key(0)]
-        public int Count { get; set; }
+        public Ulid Id { get; set; }
         [Key(1)]
-        public int Price { get; set; }
+        public int Count { get; set; }
         [Key(2)]
+        public int Price { get; set; }
+        [Key(3)]
         public string Image { get; set; }
     }
 }

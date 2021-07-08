@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
@@ -20,16 +21,12 @@ namespace Mafiator.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddVotes([FromBody] VoteDto dto)
         {
-            foreach (var target in dto.Targets)
+            await _unitOfWork.Vote.AddRangeFast(dto.Targets.Select(s => new Vote()
             {
-                var vote=new Vote()
-                {
-                    GameId = dto.GameId,
-                    TargetId = target,
-                    VoterId = dto.VoterId
-                };
-                await _unitOfWork.Vote.AddFast(vote);
-            }
+                GameId = dto.GameId,
+                TargetId = s,
+                VoterId = dto.VoterId
+            }));
 
             return Ok();
         }

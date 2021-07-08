@@ -80,6 +80,9 @@
     <Compile Update="Views\CropImageView.xaml.cs">
       <DependentUpon>CropImageView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\RoomDetailView.xaml.cs">
+      <DependentUpon>RoomDetailView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\PlayerRoleView.xaml.cs">
       <DependentUpon>PlayerRoleView.xaml</DependentUpon>
     </Compile>
@@ -152,7 +155,7 @@
     <EmbeddedResource Update="Views\MyRoomsView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MyRoomView.xaml">
+    <EmbeddedResource Update="Views\RoomDetailView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\NewGameView.xaml">
@@ -170,9 +173,6 @@
     <EmbeddedResource Update="Views\RandomView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\RoomDetailView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\RoomGamesView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -186,6 +186,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SplashScreenView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StoreView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SuggestionView.xaml">

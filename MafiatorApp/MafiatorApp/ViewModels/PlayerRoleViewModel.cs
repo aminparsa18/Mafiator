@@ -6,8 +6,7 @@ using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Enums;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
-using Xamarin.CommunityToolkit.UI.Views;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -19,33 +18,21 @@ namespace MafiatorApp.ViewModels
         public double ProgressTimer
         {
             get => progressTimer;
-            set
-            {
-                progressTimer = value;
-                RaisePropertyChanged(() => ProgressTimer);
-            }
+            set => SetProperty(ref progressTimer, value);
         }
        
         private bool canClose;
         public bool CanClose
         {
             get => canClose;
-            set
-            {
-                canClose = value;
-                RaisePropertyChanged(() => CanClose);
-            }
+            set => SetProperty(ref canClose, value);
         }
 
         private bool isMafia;
         public bool IsMafia
         {
             get => isMafia;
-            set
-            {
-                isMafia = value;
-                RaisePropertyChanged(() => IsMafia);
-            }
+            set => SetProperty(ref isMafia, value);
         }
 
         private string gameId;
@@ -55,11 +42,7 @@ namespace MafiatorApp.ViewModels
         public GameRole? Role
         {
             get=>role;
-            set
-            {
-                role = value;
-                RaisePropertyChanged(()=>Role);
-            }
+            set => SetProperty(ref role, value);
         }
         public IAsyncCommand PopCommand { get; set; }
         public ObservableRangeCollection<PartnerDto> Partners { get; set; }

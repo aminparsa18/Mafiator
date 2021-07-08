@@ -8,9 +8,9 @@ using MafiatorApp.Helpers;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MafiatorApp.Views;
-using MarcTron.Plugin;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 //using MagicOnion.Client;
 using Xamarin.Forms;
 
@@ -23,11 +23,7 @@ namespace MafiatorApp.ViewModels
         public UserDto User
         {
             get => user;
-            set
-            {
-                user = value;
-                RaisePropertyChanged(() => User);
-            }
+            set => SetProperty(ref user, value);
         }
 
         private RoomDto room;
@@ -35,11 +31,7 @@ namespace MafiatorApp.ViewModels
         public RoomDto Room
         {
             get => room;
-            set
-            {
-                room = value;
-                RaisePropertyChanged(() => Room);
-            }
+            set => SetProperty(ref room, value);
         }
 
         public UserStatusDto UserStatus { get; set; }
@@ -48,7 +40,9 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand RandomCommand { get; set; }
         public IAsyncCommand JoinRoomCommand { get; set; }
         public IAsyncCommand RoomHistoryCommand { get; set; }
+        public IAsyncCommand StoreCommand { get; set; }
         public IAsyncCommand SettingsCommand { get; set; }
+        public IAsyncCommand HelpCommand { get; set; }
         public IAsyncCommand SignOutCommand { get; set; }
 
         public HomeViewModel()
@@ -58,7 +52,9 @@ namespace MafiatorApp.ViewModels
             RandomCommand = new AsyncCommand(Random);
             JoinRoomCommand = new AsyncCommand(JoinRoom);
             RoomHistoryCommand = new AsyncCommand(RoomHistory);
+            StoreCommand = new AsyncCommand(Store);
             SettingsCommand = new AsyncCommand(Settings);
+            HelpCommand = new AsyncCommand(Help);
             SignOutCommand = new AsyncCommand(SignOut);
             Tips = new List<Tip>()
             {
@@ -87,6 +83,16 @@ namespace MafiatorApp.ViewModels
                         "The game continues until all the Mafias are out of the game (citizens win) or the number of Mafias and citizens is equal (Mafia wins) or one of the independent characters, each with a different winning condition, wins the game. In a game, the characters usually have to be arranged in such a way that for each character, there are opposite and complementary characters."
                 }
             };
+        }
+
+        private async Task Store()
+        {
+            await NavigationService.NavigateToAsync<StoreViewModel>();
+        }
+
+        private async Task Help()
+        {
+            await Launcher.OpenAsync(new Uri("https://mafiator.com/game-en.pdf"));
         }
 
         private async Task Settings()

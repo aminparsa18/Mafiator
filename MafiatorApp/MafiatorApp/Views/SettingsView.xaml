@@ -35,10 +35,8 @@
 
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,16,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate PlayMusic}" IsChecked="{Binding PlayMusic}"/>
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding PlayMusicCommand}"></TapGestureRecognizer>
-                    </StackLayout.GestureRecognizers>
+                    <templates:CheckBoxView Text="{xct:Translate PlayMusic}" IsChecked="{Binding PlayMusic,Mode=TwoWay}"/>
+                   
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
                     <templates:CheckBoxView Text="{xct:Translate PlaySound}" IsChecked="{Binding PlaySound}"/>

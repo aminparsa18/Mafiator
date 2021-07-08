@@ -51,7 +51,6 @@ namespace Mafiator.Api.Controllers
             //        AudioToImageConverter.CreateSpectrogram(file);
             //    }
             //}
-            //BackgroundJob.Enqueue(() => gameService.StartGame("01F67JMR0NZQYQRAG659EKY4RQ"));
 
             return Ok();
         }
@@ -65,7 +64,7 @@ namespace Mafiator.Api.Controllers
                 {
                     IsSuccess = false,
                     StatusCode = ApiResultStatusCode.Conflict,
-                    Errors = new[] {"Another game is already waiting to play"}
+                    Errors = new[] {"Another game is already playing"}
                 });
             var game = _mapper.Map<GameCreateDto, Game>(gameCreateDto);
             game.Status = GameStatus.NotStarted;

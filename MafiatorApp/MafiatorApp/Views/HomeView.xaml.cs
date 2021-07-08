@@ -67,9 +67,7 @@ namespace MafiatorApp.Views
             OverlayBox.FadeTo(0.8, 600, Easing.Linear);
             ProfilePanel.TranslateTo(0, 0, 600, Easing.SpringOut);
             ProfileImage.TranslateTo(0, 200, 600, Easing.SpringIn);
-            SettingGrid.TranslateTo(0, 200, 600, Easing.SpringIn);
             CloseBtn.FadeTo(1,500,Easing.Linear);
-            //  Abs.LowerChild(ProfileGrid);
         }
 
         private void TapGestureRecognizer_OnTapped_(object sender, EventArgs e)
@@ -78,10 +76,7 @@ namespace MafiatorApp.Views
             OverlayBox.FadeTo(0.8, 600, Easing.Linear);
             ProfilePanel.TranslateTo(0, 0, 600, Easing.SpringOut);
             ProfileImage.TranslateTo(0, 200, 600, Easing.SpringIn);
-            SettingGrid.TranslateTo(0, 200, 600, Easing.SpringIn);
             CloseBtn.FadeTo(1, 500, Easing.Linear);
-
-            //  Abs.LowerChild(ProfileGrid);
         }
 
         private async void CloseBtn_OnClicked(object sender, EventArgs e)
@@ -90,26 +85,12 @@ namespace MafiatorApp.Views
             CloseBtn.FadeTo(0, 500, Easing.Linear);
             ProfilePanel.TranslateTo(0, ProfilePanel.Height - 48, 600, Easing.SpringIn);
             ProfileImage.TranslateTo(0, 0, 600, Easing.SpringOut);
-            SettingGrid.TranslateTo(0, 0, 600, Easing.SpringOut);
+
             await OverlayBox.FadeTo(0, 600, Easing.Linear);
             OverlayBox.IsVisible = false;
         }
 
-        private void PrevBtn_OnClicked(object sender, EventArgs e)
-        {
-            if (TipsIndicatorView.Position != 0)
-                TipsIndicatorView.Position--;
-            else
-                TipsIndicatorView.Position = TipsIndicatorView.Count - 1;
-        }
-
-        private void NextBtn_OnClicked(object sender, EventArgs e)
-        {
-            if (TipsIndicatorView.Position != TipsIndicatorView.Count - 1)
-                TipsIndicatorView.Position++;
-            else
-                TipsIndicatorView.Position = 0;
-        }
+       
 
         protected override bool OnBackButtonPressed()
         {
@@ -137,6 +118,7 @@ namespace MafiatorApp.Views
 
         private async void GemTap_OnTapped(object sender, EventArgs e)
         {
+
             if (!CrossInAppBilling.IsSupported)
             {
                 DependencyService.Get<IAlert>().ShortAlert("Payment not supported for your device",MessageType.Error);

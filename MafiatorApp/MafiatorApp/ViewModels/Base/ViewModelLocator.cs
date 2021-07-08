@@ -41,7 +41,7 @@ namespace MafiatorApp.ViewModels.Base
             services.AddTransient<ProfilePictureViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<MyRoomsViewModel>();
-            services.AddTransient<MyRoomViewModel>();
+            services.AddTransient<RoomDetailViewModel>();
             services.AddTransient<JoinRoomViewModel>();
             services.AddTransient<NewRoomViewModel>();
             services.AddTransient<NewMemberViewModel>();
@@ -54,6 +54,7 @@ namespace MafiatorApp.ViewModels.Base
             services.AddTransient<GameEventViewModel>();
             services.AddTransient<InquiryStatusViewModel>();
             services.AddTransient<WaitingViewModel>();
+            services.AddTransient<StoreViewModel>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService,NavigationService>();
             services.AddSingleton<IWebApiService,WebApiService>();

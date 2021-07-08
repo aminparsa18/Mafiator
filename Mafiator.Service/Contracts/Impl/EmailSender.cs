@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Mafiator.Common.SiteSetting;
 using MailKit.Net.Smtp;
 using MimeKit;
 

@@ -7,7 +7,7 @@ namespace Mafiator.Service.Contracts.Identity
 {
     public interface IIdentityService
     {
-        Task<IEnumerable<ValidateUserDto>> GetUserByCode(string code);
+        Task<IEnumerable<ValidateUserDto>> GetByUsername(string username);
         Task<AuthResult> Login(UserLoginDto userLogin);
         Task<ApiResult> Register(RegisterUserDto registerUser);
         Task<AuthResult> RefreshToken(RefreshTokenRequest refreshTokenRequest);

@@ -8,12 +8,11 @@ using AutoMapper;
 using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Enums;
-using MafiatorApp.Models;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -28,11 +27,7 @@ namespace MafiatorApp.ViewModels
         public LayoutState CurrentState
         {
             get => currentState;
-            set
-            {
-                currentState = value;
-                RaisePropertyChanged(() => CurrentState);
-            }
+            set => SetProperty(ref currentState, value);
         }
 
         private string title= "It's Voting";
@@ -40,21 +35,13 @@ namespace MafiatorApp.ViewModels
         public string Title
         {
             get => title;
-            set
-            {
-                title = value;
-                RaisePropertyChanged(()=>Title);
-            }
+            set => SetProperty(ref title, value);
         }
         private string subTitle = "Choose your candidates";
         public string SubTitle
         {
             get => subTitle;
-            set
-            {
-                subTitle = value;
-                RaisePropertyChanged(() => SubTitle);
-            }
+            set => SetProperty(ref subTitle, value);
         }
         public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
         public ObservableRangeCollection<VoteStatusResultDto> Votes { get; set; }
@@ -63,11 +50,7 @@ namespace MafiatorApp.ViewModels
         public CandidateDto Candidate
         {
             get => candidate;
-            set
-            {
-                candidate = value;
-                RaisePropertyChanged(() => Candidate);
-            }
+            set => SetProperty(ref candidate, value);
         }
 
         private Timer _timer;
@@ -77,11 +60,7 @@ namespace MafiatorApp.ViewModels
         public double ProgressTimer
         {
             get => progressTimer;
-            set
-            {
-                progressTimer = value;
-                RaisePropertyChanged(() => ProgressTimer);
-            }
+            set => SetProperty(ref progressTimer, value);
         }
 
 

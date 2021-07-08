@@ -38,7 +38,7 @@
                     <StackLayout Margin="16">
                      
                         <Frame Padding="0">
-                            <SearchBar Placeholder="{xct:Translate UserCode}"
+                            <SearchBar Placeholder="{xct:Translate Username}"
                                        BackgroundColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}"
                                        CancelButtonColor="{StaticResource Error}" Text="{Binding Name.Value,Mode=TwoWay}"
                                        SearchCommand="{Binding SearchMemberCommand}" />

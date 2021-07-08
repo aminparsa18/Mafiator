@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
-  <g id="Group_409" data-name="Group 409" transform="translate(-375 -257)">
-    <path id="Path_339" data-name="Path 339" d="M382,257a4.372,4.372,0,1,0,4.407,4.371A4.389,4.389,0,0,0,382,257Z" fill="#fff"/>
-    <path id="Path_340" data-name="Path 340" d="M384.6,267.688a16.624,16.624,0,0,0-5.2,0l-.185.029a4.973,4.973,0,0,0-4.214,4.9A2.393,2.393,0,0,0,377.4,275H386.6a2.393,2.393,0,0,0,2.4-2.383,4.973,4.973,0,0,0-4.214-4.9Z" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="15.5" height="19.5" viewBox="0 0 15.5 19.5">
+  <g id="Group_410" data-name="Group 410" transform="translate(-374.25 -255.25)">
+    <path id="Path_565" data-name="Path 565" d="M375,272.111a4.864,4.864,0,0,1,4-4.848l.208-.035a17.161,17.161,0,0,1,5.576,0l.208.035a4.864,4.864,0,0,1,4,4.848A1.859,1.859,0,0,1,387.172,274H376.828A1.859,1.859,0,0,1,375,272.111Z" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <path id="Path_566" data-name="Path 566" d="M386.083,259.938A4.086,4.086,0,1,1,382,256,4.012,4.012,0,0,1,386.083,259.938Z" fill="none" stroke="#fff" stroke-width="1.5"/>
   </g>
 </svg>

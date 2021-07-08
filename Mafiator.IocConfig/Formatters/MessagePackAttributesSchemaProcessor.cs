@@ -6,14 +6,15 @@ using NJsonSchema.Generation;
 
 namespace Mafiator.IocConfig.Formatters
 {
-   public class MessagePackAttributesSchemaProcessor: ISchemaProcessor
+    public class MessagePackAttributesSchemaProcessor : ISchemaProcessor
     {
         public void Process(SchemaProcessorContext context)
         {
-           if (context == null)
+            if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            var msgPackAttr = context.Type.GetCustomAttributes(true).OfType<MessagePack.MessagePackObjectAttribute>().SingleOrDefault();
+            var msgPackAttr = context.Type.GetCustomAttributes(true).OfType<MessagePack.MessagePackObjectAttribute>()
+                .SingleOrDefault();
             if (msgPackAttr == null) return;
             context.Schema.ExtensionData ??= new Dictionary<string, object>();
 
@@ -37,7 +38,8 @@ namespace Mafiator.IocConfig.Formatters
                     schemaProp.ExtensionData.Add("x-msgpack-key", keyAttr.IntKey);
                 }
 
-                var ignoreAttr = properties.GetCustomAttributes(true).OfType<MessagePack.IgnoreMemberAttribute>().SingleOrDefault();
+                var ignoreAttr = properties.GetCustomAttributes(true).OfType<MessagePack.IgnoreMemberAttribute>()
+                    .SingleOrDefault();
                 if (ignoreAttr == null) continue;
                 schemaProp.ExtensionData ??= new Dictionary<string, object>();
                 schemaProp.ExtensionData.Add("x-msgpack-ignore", true);

@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafiator.Common.Api;
-using Mafiator.Common.Extensions;
 using Mafiator.Common.Helpers;
 using Mafiator.Data;
 using Mafiator.Data.Dtos;
@@ -43,9 +42,9 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<ValidateUserDto>> GetUserByCode(string code)
+        public async Task<IEnumerable<ValidateUserDto>> GetByUsername(string username)
         {
-            return await dbConnection.ExecuteQueryAsync<ValidateUserDto>("SELECT TOP 1 [Id],[DisplayName],[Image] FROM [Users] WHERE Code = @code",new {code});
+            return await dbConnection.ExecuteQueryAsync<ValidateUserDto>("SELECT TOP 1 [Id],[DisplayName],[Image] FROM [Users] WHERE Username = @username",new {username});
         }
 
         public async Task<AuthResult> Login(UserLoginDto userLogin)
@@ -83,8 +82,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, Constants.PlayerRole),
-                new Claim(JwtRegisteredClaimNames.Sub, user.PhoneNumber),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
                 new Claim(ClaimTypes.Name, user.Id.ToString())
             };
             var tokenResult = tokenService.GenerateAccessToken(user, claims);
@@ -95,8 +93,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 ExpirationDate = DateTime.UtcNow.AddMonths(6),
                 Token = tokenService.GenerateRefreshToken()
             };
-            await unitOfWork.RefreshToken.Add(refreshToken);
-            await unitOfWork.Commit();
+            await unitOfWork.RefreshToken.AddFast(refreshToken);
             return new AuthResult()
             {
                 IsSuccess = true,
@@ -206,8 +203,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, Constants.PlayerRole),
-                new Claim(JwtRegisteredClaimNames.Sub, user.PhoneNumber),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
                 new Claim(ClaimTypes.Name, user.Id.ToString())
             };
             var tokenResult = tokenService.GenerateAccessToken(user, claims);
@@ -244,8 +240,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Role, Constants.PlayerRole),
-                    new Claim(JwtRegisteredClaimNames.Sub, existingUser.PhoneNumber),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
                     new Claim(ClaimTypes.Name, existingUser.Id.ToString())
                 };
 

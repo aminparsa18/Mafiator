@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
-using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Enums;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models.Api;
-using MafiatorApp.Views;
-using Polly;
-using Polly.Retry;
-using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
 namespace MafiatorApp.Services.Impl
@@ -25,9 +17,9 @@ namespace MafiatorApp.Services.Impl
         {
         }
 
-        public async Task<HttpResponseMessage> ConfirmPhoneNo(ConfirmPhoneDto confirmPhoneDto)
+        public Task<HttpResponseMessage> ConfirmPhoneNo(ConfirmPhoneDto confirmPhoneDto)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/User/ConfirmPhoneNo"), confirmPhoneDto);
         }
 
@@ -49,76 +41,76 @@ namespace MafiatorApp.Services.Impl
                 registerUserDto);
         }
 
-        public async Task<HttpResponseMessage> UpdateProfilePicture(string name)
+        public Task<HttpResponseMessage> UpdateProfilePicture(string name)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/User/UpdateProfilePicture"),
                 name);
         }
 
-        public async Task<ApiResult<UserDto>> GetUser()
+        public Task<ApiResult<UserDto>> GetUser()
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<UserDto>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<UserDto>>(
                 new Uri(Constants.BaseUrl + "api/User/GetUser"));
         }
 
-        public async Task<ApiResult<UserStatusDto>> GetUserStatus()
+        public Task<ApiResult<UserStatusDto>> GetUserStatus()
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<UserStatusDto>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<UserStatusDto>>(
                 new Uri(Constants.BaseUrl + "api/GameMember/GetMemberStatus"));
         }
 
-        public async Task<ApiResult<ValidateUserDto>> ValidateUser(string userCode)
+        public Task<ApiResult<ValidateUserDto>> ValidateUser(string userCode)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<ValidateUserDto>>(
-                new Uri(Constants.BaseUrl + "api/User/ValidateUser?userCode=" + userCode));
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<ValidateUserDto>>(
+                new Uri(Constants.BaseUrl + "api/User/ValidateUser?username=" + userCode));
         }
 
-        public async Task<ApiResult<IEnumerable<AvatarDto>>> GetAllAvatars()
+        public Task<ApiResult<IEnumerable<AvatarDto>>> GetAllAvatars()
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<AvatarDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<AvatarDto>>>(
                 new Uri(Constants.BaseUrl + "api/Avatar/GetAll"));
         }
 
-        public async Task<ApiResult<RoomDto>> GetRoom(string roomId)
+        public Task<ApiResult<RoomDto>> GetRoom(string roomId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<RoomDto>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<RoomDto>>(
                 new Uri(Constants.BaseUrl + "api/Room/GetRoom?roomId=" + roomId));
         }
 
-        public async Task<ApiResult<IEnumerable<RoomDto>>> GetRoomPage(int skip)
+        public Task<ApiResult<IEnumerable<RoomDto>>> GetRoomPage(int skip)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomDto>>>(
                 new Uri(Constants.BaseUrl + "api/Room/GetPage?skip=" + skip));
         }
 
-        public async Task<ApiResult<IEnumerable<RoomDto>>> GetMyRooms()
+        public Task<ApiResult<IEnumerable<RoomDto>>> GetMyRooms()
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomDto>>>(
                 new Uri(Constants.BaseUrl + "api/Room/GetMyRooms"));
         }
 
-        public async Task<HttpResponseMessage> AddRoom(RoomCreateDto room)
+        public Task<HttpResponseMessage> AddRoom(RoomCreateDto room)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(new Uri(Constants.BaseUrl + "api/Room/Add"),
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(new Uri(Constants.BaseUrl + "api/Room/Add"),
                 room);
         }
 
-        public async Task<HttpResponseMessage> UpdateRoomImage(UpdateRoomImageDto roomImage)
+        public Task<HttpResponseMessage> UpdateRoomImage(UpdateRoomImageDto roomImage)
         {
-            return await BaseHttpClient.Instance.PutAsMessagePackAsync(
+            return BaseHttpClient.Instance.PutAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/Room/UpdateRoomImage"), roomImage);
         }
 
-        public async Task<ApiResult<string>> IsRoomJoined(string roomId)
+        public Task<ApiResult<string>> IsRoomJoined(string roomId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<string>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<string>>(
                 new Uri(Constants.BaseUrl + "api/Room/IsJoined?roomId=" + roomId));
         }
 
-        public async Task<HttpResponseMessage> AddGame(GameCreateDto game)
+        public Task<HttpResponseMessage> AddGame(GameCreateDto game)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(new Uri(Constants.BaseUrl + "api/Game/Add"),
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(new Uri(Constants.BaseUrl + "api/Game/Add"),
                 game);
         }
 
@@ -150,39 +142,39 @@ namespace MafiatorApp.Services.Impl
                 new Uri(Constants.BaseUrl + "api/Game/GetAllRoles"));
         }
 
-        public async Task<ApiResult<string>> IsGameJoined(string roomId)
+        public Task<ApiResult<string>> IsGameJoined(string roomId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<string>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<string>>(
                 new Uri(Constants.BaseUrl + "api/Game/IsJoined?gameId=" + roomId));
         }
 
-        public async Task<HttpResponseMessage> JoinGame(string gameId)
+        public Task<HttpResponseMessage> JoinGame(string gameId)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/Game/Join"), gameId);
         }
 
-        public async Task<HttpResponseMessage> LeaveGame(string gameId)
+        public Task<HttpResponseMessage> LeaveGame(string gameId)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/Game/Leave"), gameId);
         }
 
-        public async Task<ApiResult<IEnumerable<GameMemberDto>>> GetMembersOfGame(string gameId)
+        public Task<ApiResult<IEnumerable<GameMemberDto>>> GetMembersOfGame(string gameId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameMemberDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameMemberDto>>>(
                 new Uri(Constants.BaseUrl + "api/GameMember/GetByGame?gameId=" + gameId));
         }
 
-        public async Task<ApiResult<IEnumerable<WaitingPlayerDto>>> GetWaitingPlayersByGame(string gameId)
+        public Task<ApiResult<IEnumerable<WaitingPlayerDto>>> GetWaitingPlayersByGame(string gameId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<WaitingPlayerDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<WaitingPlayerDto>>>(
                 new Uri(Constants.BaseUrl + "api/GameMember/GetWaitingPlayersByGame?gameId=" + gameId));
         }
 
-        public async Task<ApiResult<IEnumerable<PlayerRoleDto>>> GetMafiaPartners(string gameId)
+        public Task<ApiResult<IEnumerable<PlayerRoleDto>>> GetMafiaPartners(string gameId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<PlayerRoleDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<PlayerRoleDto>>>(
                 new Uri(Constants.BaseUrl + "api/Game/GetMafiaPartners?gameId=" + gameId));
         }
 
@@ -198,15 +190,15 @@ namespace MafiatorApp.Services.Impl
                 new Uri(Constants.BaseUrl + "api/RoomMember/AddMember"), member);
         }
 
-        public async Task<HttpResponseMessage> JoinRoom(string code)
+        public Task<HttpResponseMessage> JoinRoom(string code)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/Room/Join"), code);
         }
 
-        public async Task<HttpResponseMessage> LeaveRoom(string code)
+        public Task<HttpResponseMessage> LeaveRoom(string code)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/Room/Leave"), code);
         }
 
@@ -216,40 +208,46 @@ namespace MafiatorApp.Services.Impl
                 new Uri(Constants.BaseUrl + "api/RoomMember/GetByRoom?roomId=" + roomId));
         }
 
-        public async Task<HttpResponseMessage> SendVotes(VoteDto vote)
+        public Task<HttpResponseMessage> SendVotes(VoteDto vote)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/Vote/AddVotes"), vote);
         }
 
-        public async Task<ApiResult<IEnumerable<VoteStatusDto>>> GetVotesStatus(string gameId)
+        public Task<ApiResult<IEnumerable<VoteStatusDto>>> GetVotesStatus(string gameId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<VoteStatusDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<VoteStatusDto>>>(
                 new Uri(Constants.BaseUrl + "api/Vote/GetVoteStatus?gameId=" + gameId));
         }
 
-        public async Task<HttpResponseMessage> FireGameEvent(GameEventDto gameEvent)
+        public Task<HttpResponseMessage> FireGameEvent(GameEventDto gameEvent)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/GameEvent/Add"), gameEvent);
         }
 
-        public async Task<HttpResponseMessage> Cure(GameEventDto gameEvent)
+        public Task<HttpResponseMessage> Cure(GameEventDto gameEvent)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/GameEvent/Cure"), gameEvent);
         }
 
-        public async Task<HttpResponseMessage> Inquiry(GameEventDto gameEvent)
+        public Task<HttpResponseMessage> Inquiry(GameEventDto gameEvent)
         {
-            return await BaseHttpClient.Instance.PostAsMessagePackAsync(
+            return BaseHttpClient.Instance.PostAsMessagePackAsync(
                 new Uri(Constants.BaseUrl + "api/GameEvent/Inquiry"), gameEvent);
         }
 
-        public async Task<ApiResult<IEnumerable<GameEventStatusDto>>> GetEventStatus(string gameId)
+        public Task<ApiResult<IEnumerable<GameEventStatusDto>>> GetEventStatus(string gameId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventStatusDto>>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventStatusDto>>>(
                 new Uri(Constants.BaseUrl + "api/GameEvent/GetStatus?gameId=" + gameId));
+        }
+
+        public Task<ApiResult<IEnumerable<GemDto>>> GetAllGems()
+        {
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GemDto>>>(
+                new Uri(Constants.BaseUrl + "api/Gem/GetAll"));
         }
     }
 }

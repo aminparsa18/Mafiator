@@ -17,7 +17,7 @@ namespace Mafiator.Repository.Repositories
 
         public Task<IEnumerable<GemDto>> GetAllDto()
         {
-            return connection.ExecuteQueryAsync<GemDto>("SELECT Count,Price,Image FROM [Gem] ORDER BY Count");
+            return connection.ExecuteQueryAsync<GemDto>("SELECT Id,Count,Price,Image FROM [Gem] ORDER BY Count");
         }
     }
 }

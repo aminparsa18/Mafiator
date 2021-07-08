@@ -1,4 +1,5 @@
-﻿using Rg.Plugins.Popup.Pages;
+﻿using System;
+using Rg.Plugins.Popup.Pages;
 using Xamarin.Forms.Xaml;
 
 namespace MafiatorApp.Views
@@ -10,5 +11,7 @@ namespace MafiatorApp.Views
         {
             InitializeComponent();
         }
+
+      
     }
 }

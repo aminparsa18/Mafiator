@@ -1,11 +1,10 @@
 ﻿using MafiatorApp.Enums;
 using MafiatorApp.ViewModels.Base;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -17,11 +16,7 @@ namespace MafiatorApp.ViewModels
         public int SelectedCount
         {
             get => selectedCount;
-            set
-            {
-                selectedCount = value;
-                RaisePropertyChanged(() => SelectedCount);
-            }
+            set => SetProperty(ref selectedCount, value);
         }
 
         private short totalCount;
@@ -29,11 +24,7 @@ namespace MafiatorApp.ViewModels
         public short TotalCount
         {
             get => totalCount;
-            set
-            {
-                totalCount = value;
-                RaisePropertyChanged(() => TotalCount);
-            }
+            set => SetProperty(ref totalCount, value);
         }
 
         public ObservableRangeCollection<NewGameRole> Roles { get; set; }
@@ -42,11 +33,7 @@ namespace MafiatorApp.ViewModels
         public NewGameRole Role
         {
             get => role;
-            set
-            {
-                role = value;
-                RaisePropertyChanged(() => Role);
-            }
+            set => SetProperty(ref role, value);
         }
 
         public IAsyncCommand LoadRolesCommand { get; set; }

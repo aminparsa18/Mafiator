@@ -28,9 +28,9 @@ namespace Mafiator.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ValidateUser(string userCode)
+        public async Task<IActionResult> ValidateUser(string username)
         {
-            var user = await identityService.GetUserByCode(userCode);
+            var user = await identityService.GetByUsername(username);
             if (!user.Any())
                 return Ok(new ApiResult()
                 {
@@ -38,7 +38,7 @@ namespace Mafiator.Api.Controllers
                     StatusCode = ApiResultStatusCode.NotFound,
                     Errors = new[] {"User not Found"}
                 });
-            user.ForAll(u=>u.Image=Constants.BlobStorageEndpoint+u.Image);
+           // user.ForAll(u=>u.Image=Constants.BlobStorageEndpoint+u.Image);
             return Ok(new ApiResult<ValidateUserDto>()
             {
                 IsSuccess = true,

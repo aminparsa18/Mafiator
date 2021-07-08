@@ -1,9 +1,9 @@
 ﻿using MafiatorApp.Enums;
-using MafiatorApp.ViewModels.Base;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.Dtos
 {
-    public class PlayerDto:ExtendedBindableObject
+    public class PlayerDto:ObservableObject
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }
@@ -13,11 +13,7 @@ namespace MafiatorApp.Dtos
         public PlayerStatus Status
         {
             get => _status;
-            set
-            {
-                _status = value;
-                RaisePropertyChanged(()=>Status);
-            }
+            set => SetProperty(ref _status, value);
         }
     }
 }

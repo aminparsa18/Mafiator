@@ -19,6 +19,6 @@ namespace MafiatorApp.Droid.Helpers
                 }
         }
 
-        
+      
    }
 }

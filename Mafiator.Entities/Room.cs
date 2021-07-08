@@ -16,6 +16,7 @@ namespace Mafiator.Entities
         public bool IsPrivate { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<Game> Game { get; set; }
+        public virtual ICollection<ChatMessage> ChatMessage{ get; set; }
         public virtual ICollection<RoomMember> RoomMember { get; set; }
     }
 }

@@ -8,17 +8,13 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
-using MafiatorApp.UserControls;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
-using MafiatorApp.Views;
-using Rg.Plugins.Popup.Services;
 using Xamarin.CommunityToolkit.Helpers;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -31,11 +27,7 @@ namespace MafiatorApp.ViewModels
         public string Name
         {
             get => name;
-            set
-            {
-                name = value;
-                RaisePropertyChanged(() => Name);
-            }
+            set => SetProperty(ref name, value);
         }
 
         private Avatar avatar;
@@ -43,11 +35,7 @@ namespace MafiatorApp.ViewModels
         public Avatar Avatar
         {
             get => avatar;
-            set
-            {
-                avatar = value;
-                RaisePropertyChanged(() => Avatar);
-            }
+            set => SetProperty(ref avatar, value);
         }
 
         private ImageSource image = "choose_photo.png";
@@ -55,11 +43,7 @@ namespace MafiatorApp.ViewModels
         public ImageSource Image
         {
             get => image;
-            set
-            {
-                image = value;
-                RaisePropertyChanged(() => Image);
-            }
+            set => SetProperty(ref image, value);
         }
 
         private bool photoSet;
@@ -67,11 +51,7 @@ namespace MafiatorApp.ViewModels
         public bool PhotoSet
         {
             get => photoSet;
-            set
-            {
-                photoSet = value;
-                RaisePropertyChanged(() => PhotoSet);
-            }
+            set => SetProperty(ref photoSet, value);
         }
 
         public ObservableRangeCollection<Avatar> Avatars { get; set; }

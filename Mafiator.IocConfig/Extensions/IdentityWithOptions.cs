@@ -6,11 +6,9 @@ using Mafiator.Data;
 using Mafiator.Entities.Identity;
 using Mafiator.Service.Contracts.Identity;
 using Mafiator.Service.Contracts.Impl.Identity;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,11 +30,9 @@ namespace Mafiator.IocConfig.Extensions
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
-
-                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
                     options.User.RequireUniqueEmail = false;
                     options.SignIn.RequireConfirmedEmail = false;
-
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20);
                     options.Lockout.MaxFailedAccessAttempts = 3;
                 })
@@ -47,7 +43,6 @@ namespace Mafiator.IocConfig.Extensions
             // configure strongly typed settings objects
             var appSettingsSection = configuration.GetSection("Jwt");
             services.Configure<Jwt>(appSettingsSection);
-
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<Jwt>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -101,11 +96,11 @@ namespace Mafiator.IocConfig.Extensions
                     if (!string.IsNullOrEmpty(accessToken) &&
                     (path.StartsWithSegments("/gamehub")))
                     {
-                    // Read the token out of the query string
-                    context.Token = accessToken;
-                }
-                return Task.CompletedTask;
-                }
+                        // Read the token out of the query string
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                    }
                 };
             });
             var keysFolder = Path.Combine(webHostEnvironment.ContentRootPath, "Keys");

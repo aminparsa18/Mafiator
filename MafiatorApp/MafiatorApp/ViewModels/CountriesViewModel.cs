@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs.Models;
 using MafiatorApp.Models;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MessagePipe;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels
 {
@@ -23,11 +21,7 @@ namespace MafiatorApp.ViewModels
         public Country Country
         {
             get => country;
-            set
-            {
-                country = value;
-                RaisePropertyChanged(()=>Country);
-            }
+            set => SetProperty(ref country, value);
         }
 
         private List<Country> countries;

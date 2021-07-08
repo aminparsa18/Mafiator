@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
+using System.Text.Json;
+using FFImageLoading;
 using MafiatorApp.Cache;
+using MafiatorApp.Models;
 using MafiatorApp.Resources.Texts;
 using MafiatorApp.UserControls;
 using MafiatorApp.UserControls.ShimmerLayout;
 using MafiatorApp.Views;
-using MarcTron.Plugin;
+using MessagePack;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
@@ -31,6 +36,7 @@ namespace MafiatorApp
 
             Barrel.ApplicationId = "Mafiator";
             Barrel.EncryptionKey = "NJR*fgpB5a";
+            InitBarrel();
             if (Barrel.Current.Exists("Culture"))
             {
                 if (Barrel.Current.Get<string>("Culture") == "RU")
@@ -54,7 +60,17 @@ namespace MafiatorApp
             //else
             //    UserAppTheme = OSAppTheme.Light;
 
-            MainPage = new TransitionNavigationPage(new SplashScreenView(uri));
+            MainPage = new TransitionNavigationPage(new HomeView());
+        }
+
+        private async void InitBarrel()
+        {
+            if (!Barrel.Current.Exists("Countries"))
+            {
+                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MafiatorApp.countries.json");
+                var countries = await JsonSerializer.DeserializeAsync<List<Country>>(stream);
+                Barrel.Current.Add("Countries", countries, TimeSpan.MaxValue);
+            }
         }
 
         protected override void OnStart()

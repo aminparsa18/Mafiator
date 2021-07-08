@@ -1,8 +1,8 @@
-﻿using MafiatorApp.ViewModels.Base;
+﻿using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.Dtos
 {
-    public class CandidateDto:ExtendedBindableObject
+    public class CandidateDto:ObservableObject
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }
@@ -12,11 +12,7 @@ namespace MafiatorApp.Dtos
         public bool Selected
         {
             get => selected;
-            set
-            {
-                selected = value;
-                RaisePropertyChanged(()=>Selected);
-            }
+            set => SetProperty(ref selected, value);
         }
     }
 }

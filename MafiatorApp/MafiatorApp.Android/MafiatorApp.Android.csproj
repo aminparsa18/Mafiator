@@ -126,6 +126,9 @@
     <PackageReference Include="Xamarin.Forms.Visual.Material">
       <Version>5.0.0.2012</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Kotlin.StdLib">
+      <Version>1.5.10</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\Shape.cs" />
@@ -134,6 +137,7 @@
     <Compile Include="Effects\EntryLineColorEffect.cs" />
     <Compile Include="Effects\LabelShadowEffect.cs" />
     <Compile Include="Effects\TouchEffect.cs" />
+    <Compile Include="GameActivity.cs" />
     <Compile Include="Helpers\Calculator.cs" />
     <Compile Include="Helpers\CropperHelper.cs" />
     <Compile Include="Helpers\ToastHelper.cs" />
@@ -156,6 +160,7 @@
     <Compile Include="ServiceReceiver.cs" />
     <Compile Include="Services\FlacEncoder.cs" />
     <Compile Include="Services\OverlayService.cs" />
+    <Compile Include="SmsReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\NunitoSans_Regular.ttf" />
@@ -466,10 +471,21 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\send.svg" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\splash.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\loading.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties TriggeredFromHotReload="False" XamarinHotReloadDebuggerTimeoutExceptionMafiatorAppAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionMafiatorAppAndroidHideInfoBar="True" TriggeredFromHotReload="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -5,7 +5,7 @@ using MafiatorApp.Extentions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 
@@ -14,15 +14,10 @@ namespace MafiatorApp.ViewModels
     public class MyRoomsViewModel : ViewModelBase
     {
         private LayoutState currentState;
-
         public LayoutState CurrentState
         {
             get => currentState;
-            set
-            {
-                currentState = value;
-                RaisePropertyChanged(() => CurrentState);
-            }
+            set => SetProperty(ref currentState, value);
         }
 
         private RoomDto room;
@@ -30,11 +25,7 @@ namespace MafiatorApp.ViewModels
         public RoomDto Room
         {
             get => room;
-            set
-            {
-                room = value;
-                RaisePropertyChanged(() => Room);
-            }
+            set => SetProperty(ref room, value);
         }
 
         public ObservableRangeCollection<RoomDto> Rooms { get; set; }
@@ -60,7 +51,7 @@ namespace MafiatorApp.ViewModels
         {
             if (Room == null)
                 return;
-            await NavigationService.NavigateToAsync<MyRoomViewModel>(Room);
+            await NavigationService.NavigateToAsync<RoomDetailViewModel>(Room);
             Room = null;
         }
 

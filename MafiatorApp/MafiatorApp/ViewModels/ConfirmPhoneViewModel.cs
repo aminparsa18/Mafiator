@@ -8,8 +8,8 @@ using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using Rg.Plugins.Popup.Services;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -20,24 +20,15 @@ namespace MafiatorApp.ViewModels
         public ValidatableObject<string> Code
         {
             get => code;
-            set
-            {
-                code = value;
-                RaisePropertyChanged(() => Code);
-            }
+            set => SetProperty(ref code, value);
         }
 
         private bool isCodeValid;
         public bool IsCodeValid
         {
             get => isCodeValid;
-            set
-            {
-                isCodeValid = value;
-                RaisePropertyChanged(() => IsCodeValid);
-            }
+            set => SetProperty(ref isCodeValid, value);
         }
-
 
         public IAsyncCommand ConfirmCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
@@ -50,7 +41,6 @@ namespace MafiatorApp.ViewModels
             Code = new ValidatableObject<string>();
             AddValidations();
             IsCodeValid = true;
-           
         }
 
         public override Task InitializeAsync(object navigationData)

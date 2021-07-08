@@ -1,7 +1,6 @@
 ﻿using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using System;
 using System.Linq;
 using System.Net;
@@ -11,10 +10,9 @@ using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
-using MafiatorApp.Views;
 using MessagePack;
 using MessagePipe;
-using Rg.Plugins.Popup.Services;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -28,11 +26,7 @@ namespace MafiatorApp.ViewModels
         public ValidatableObject<string> Name
         {
             get => name;
-            set
-            {
-                name = value;
-                RaisePropertyChanged(() => Name);
-            }
+            set => SetProperty(ref name, value);
         }
 
         private bool isNameValid;
@@ -40,11 +34,7 @@ namespace MafiatorApp.ViewModels
         public bool IsNameValid
         {
             get => isNameValid;
-            set
-            {
-                isNameValid = value;
-                RaisePropertyChanged(() => IsNameValid);
-            }
+            set => SetProperty(ref isNameValid, value);
         }
 
         public IAsyncCommand AddMemberCommand { get; set; }

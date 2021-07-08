@@ -1,19 +1,15 @@
-﻿using MafiatorApp.ViewModels.Base;
+﻿using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.Models
 {
-    public class Avatar: ExtendedBindableObject
+    public class Avatar: ObservableObject
     {
         public string Name { get; set; }
         private double scale=1;
         public double Scale
         {
             get => scale;
-            set
-            {
-                scale = value;
-                RaisePropertyChanged(() => Scale);
-            }
+            set => SetProperty(ref scale, value);
         }
     }
 }

@@ -43,7 +43,21 @@
                         IsValid="{Binding IsCapacityValid,Mode=TwoWay}"
                         Margin="16,0"
                         Errors="{Binding Capacity.Errors}" />
-                    <Grid IsVisible="{Binding IsImmediate,Converter={StaticResource ToggleConverter}}">
+                    <Label Text="Start Now" HorizontalOptions="CenterAndExpand" FontSize="18" FontFamily="{StaticResource BoldFont}"></Label>
+
+                    <Grid ColumnDefinitions="*,Auto,*" Margin="48,6">
+                        <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="1"
+                                 BackgroundColor="#fff" />
+                        <Label Grid.Column="1" Text="{xct:Translate Or}"  Margin="8,0" />
+                        <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
+                                 HeightRequest="1" BackgroundColor="#fff" />
+                    </Grid>
+                    <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
+                        <templates:CheckBoxView Text="{xct:Translate ScheduleGame}"
+                                                IsChecked="{Binding IsImmediate,Mode=TwoWay}" />
+                    </StackLayout>
+                    
+                    <Grid IsVisible="{Binding IsImmediate}">
                         <DatePicker IsVisible="False" Date="{Binding Date,Mode=TwoWay}"
                                     Unfocused="GameDatePicker_OnUnfocused" x:Name="GameDatePicker" />
 
@@ -54,20 +68,58 @@
                             Margin="16,0"
                             Focused="DateInput_OnFocused" />
                     </Grid>
+                    <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
+                        <templates:CheckBoxView Text="{xct:Translate PublicLiveStream}"
+                                                IsChecked="{Binding IsPublic,Mode=TwoWay}" />
+
+                        <Grid WidthRequest="30" HeightRequest="30">
+                            <Path
+                        Data="M822.95,569.647a7.51,7.51,0,0,1-5.6-5.6,13.343,13.343,0,0,1,0-6.1,7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6A13.343,13.343,0,0,1,822.95,569.647Z"
+                        Stroke="#FFF"
+                        StrokeThickness="2"
+                        Aspect="Uniform">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="-816.245" Y="-551.245" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data=" M 0, 1 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0"
+                          Stroke="#fff"
+                          Fill="#fff"
+                          HorizontalOptions="CenterAndExpand"
+                          Margin="0,14,0,0"
+                          WidthRequest="4"
+                          StrokeThickness="2"
+                          Aspect="Uniform">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="-816.245" Y="-551.245" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="M824,559v-.5a2,2,0,0,1,2-2h0a2,2,0,0,1,2,2v.121a2.12,2.12,0,0,1-.621,1.5L826,561.5"
+                          Stroke="#fff"
+                          StrokeThickness="2"
+                          Aspect="Uniform"
+                          HorizontalOptions="CenterAndExpand"
+                          VerticalOptions="StartAndExpand"
+                          Margin="0,8,0,0"
+                          WidthRequest="12"
+                          HeightRequest="12"
+                          StrokeLineCap="Round"
+                          StrokeLineJoin="Round">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="-816.245" Y="-551.245" />
+                                </Path.RenderTransform>
+
+                            </Path>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding PrivateHelpCommand}"></TapGestureRecognizer>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </StackLayout>
                     <TimePicker x:Name="GameTimePicker" IsVisible="False"
                                 PropertyChanged="GameTimePicker_OnPropertyChanged"
                                 Unfocused="GameTimePicker_OnUnfocused" />
 
-                    <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                        <CheckBox IsChecked="{Binding IsImmediate,Mode=TwoWay}"/>
-                        <Label Text="{xct:Translate StartImmediately}" VerticalOptions="CenterAndExpand" />
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                        <CheckBox IsChecked="{Binding IsPublic,Mode=TwoWay}" />
-                        <Label Text="{xct:Translate PublicLiveStream}" VerticalOptions="CenterAndExpand" />
-                        <ImageButton Source="help.png" BackgroundColor="Transparent" WidthRequest="24"
-                                     Aspect="AspectFit" Command="{Binding PrivateHelpCommand}" />
-                    </StackLayout>
+                    
                     <Grid VerticalOptions="EndAndExpand">
                         <Frame
                             BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"

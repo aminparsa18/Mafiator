@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MafiatorApp.Models;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 
 namespace MafiatorApp.ViewModels
@@ -14,11 +14,7 @@ namespace MafiatorApp.ViewModels
         public HomeMenuItem SelectedItem
         {
             get => selectedItem;
-            set
-            {
-                selectedItem = value;
-                RaisePropertyChanged(() => SelectedItem);
-            }
+            set => SetProperty(ref selectedItem, value);
         }
 
         public ObservableCollection<HomeMenuItem> MenuItems { get; set; }

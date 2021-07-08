@@ -1,23 +1,36 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Mafiator.Entities;
+using Mafiator.Entities.Enums;
+using Mafiator.Repository;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Mafiator.IocConfig.Hubs
 {
     public class ChatHub:Hub
     {
-        public async Task JoinGroup(string gpName)
+        private readonly IUnitOfWork unitOfWork;
+
+        public ChatHub(IUnitOfWork unitOfWork)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, gpName);
-            await Clients.Group(gpName).SendAsync("JoinNotif", $"{Context.ConnectionId} has joined the group.");
+            this.unitOfWork = unitOfWork;
         }
-        public async Task RemoveFromGroup(string groupName)
+
+        public async Task SendMessage(string groupName, string msg, string type, string sender)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Group(groupName).SendAsync("LeftNotif", $"{Context.ConnectionId} has left the group.");
-        }
-        public async Task SendMessage(string groupName,string msg,string type)
-        {
-            await Clients.OthersInGroup(groupName).SendAsync("MessageReceived", msg,type);
+            await Clients.OthersInGroup(groupName).SendAsync("MessageReceived", msg, type, sender);
+            await unitOfWork.ChatMessage.AddFast(new ChatMessage()
+            {
+                Content = msg,
+                RoomId = Ulid.Parse(groupName),
+                MessageType = type switch
+                {
+                    "text" => GameMessageType.Text,
+                    "voice" => GameMessageType.Voice,
+                    _ => GameMessageType.Video
+                },
+                UserId = Ulid.Parse(sender)
+            });
         }
     }
 }

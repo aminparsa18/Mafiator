@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MafiatorApp.Enums;
-using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels
 {
@@ -15,11 +14,7 @@ namespace MafiatorApp.ViewModels
         public bool NoGame
         {
             get => noGame;
-            set
-            {
-                noGame = value;
-                RaisePropertyChanged(()=> NoGame);
-            }
+            set => SetProperty(ref noGame, value);
         }
 
         private Ulid _roomId;

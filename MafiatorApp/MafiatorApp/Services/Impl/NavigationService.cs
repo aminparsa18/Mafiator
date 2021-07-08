@@ -14,8 +14,8 @@ namespace MafiatorApp.Services.Impl
 {
     public class NavigationService : INavigationService
     {
-       // private readonly ISettingsService _settingsService;
-       // private readonly IAuthenticationService _authenticationService;
+        // private readonly ISettingsService _settingsService;
+        // private readonly IAuthenticationService _authenticationService;
         public ViewModelBase PreviousPageViewModel
         {
             get
@@ -25,6 +25,7 @@ namespace MafiatorApp.Services.Impl
                 return viewModel as ViewModelBase;
             }
         }
+
         public string PreviousPage
         {
             get
@@ -58,10 +59,12 @@ namespace MafiatorApp.Services.Impl
         {
             return InternalNavigateToAsync(typeof(TViewModel), parameter);
         }
+
         public async Task NavigateToModalAsync<TViewModel>(object parameter) where TViewModel : ViewModelBase
         {
             await InternalNavigateToModalAsync(typeof(TViewModel), parameter);
         }
+
         public async Task<Page> NavigateToPopupAsync<TViewModel>() where TViewModel : ViewModelBase
         {
             return await InternalNavigateToPopupAsync(typeof(TViewModel), null);
@@ -71,26 +74,30 @@ namespace MafiatorApp.Services.Impl
         {
             return await InternalNavigateToPopupAsync(typeof(TViewModel), parameter);
         }
-       
+
         public Task NavigateToPageAsync(Page page, object parameter)
         {
             return InternalNavigateToAsync(page, parameter);
         }
+
         public async Task NavigateToRootPage()
         {
             var navigation = GetNavigation();
             await navigation.PopToRootAsync(true);
         }
+
         public async Task RemovePopupAsync()
         {
             var navigation = GetNavigation();
             await navigation.PopPopupAsync();
         }
+
         public async Task RemoveModalAsync()
         {
             var navigation = GetNavigation();
             await navigation.PopModalAsync();
         }
+
         public async Task RemoveLastFromBackStackAsync()
         {
             var navigation = GetNavigation();
@@ -115,10 +122,11 @@ namespace MafiatorApp.Services.Impl
         {
             var page = CreatePage(viewModelType, parameter);
             var navigation = GetNavigation();
-            
+
             await navigation.PushAsync(page);
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
         }
+
         private static async Task InternalNavigateToModalAsync(Type viewModelType, object parameter)
         {
             var page = CreatePage(viewModelType, parameter);
@@ -126,21 +134,23 @@ namespace MafiatorApp.Services.Impl
             await navigation.PushModalAsync(page);
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
         }
+
         private static async Task<Page> InternalNavigateToPopupAsync(Type viewModelType, object parameter)
         {
             var page = CreatePage(viewModelType, parameter);
             var navigation = GetNavigation();
-            
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
             await navigation.PushPopupAsync(page as PopupPage);
             return page;
         }
+
         private static async Task InternalNavigateToAsync(Page page, object parameter)
         {
             var navigationPage = GetNavigation();
             await navigationPage.PushAsync(page);
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
         }
+
         private static INavigation GetNavigation()
         {
             INavigation navigationPage;
@@ -160,14 +170,16 @@ namespace MafiatorApp.Services.Impl
             {
                 navigationPage = Application.Current.MainPage.Navigation;
             }
+
             return navigationPage;
         }
+
         private static Type GetPageTypeForViewModel(Type viewModelType)
         {
-          
             var viewName = viewModelType.FullName?.Replace("Model", string.Empty);
             var viewModelAssemblyName = viewModelType.GetTypeInfo().Assembly.FullName;
-            var viewAssemblyName = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", viewName, viewModelAssemblyName);
+            var viewAssemblyName =
+                string.Format(CultureInfo.InvariantCulture, "{0}, {1}", viewName, viewModelAssemblyName);
             var viewType = Type.GetType(viewAssemblyName);
             return viewType;
         }
@@ -179,6 +191,7 @@ namespace MafiatorApp.Services.Impl
             {
                 throw new Exception($"Cannot locate page type for {viewModelType}");
             }
+
             var page = Activator.CreateInstance(pageType) as Page;
             return page;
         }

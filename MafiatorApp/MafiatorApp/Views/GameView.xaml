@@ -7,7 +7,7 @@
              xmlns:effects="clr-namespace:MafiatorApp.Effects;assembly=MafiatorApp"
              xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="MafiatorApp.Views.GameView"
              base:ViewModelLocator.AutoWireViewModel="true"
              BackgroundColor="#191E25"
@@ -78,7 +78,7 @@
                        BackgroundColor="{StaticResource Night3}" VerticalOptions="StartAndExpand"
                        HorizontalOptions="StartAndExpand">
                     <StackLayout>
-                        <Label Text="Time left: " FontSize="Medium" />
+                        <Label Text="{xct:Translate TimeLeft}" FontSize="Medium" />
                         <Label Text="{Binding ProgressString}" HorizontalOptions="CenterAndExpand"
                                TextColor="{Binding ProgressString,Converter={StaticResource TurnTimerColorConverter}}"
                                FontSize="Medium" />
@@ -113,7 +113,7 @@
                                 ItemsSource="{Binding Messages}"
                                 SelectionMode="None"
                                 ItemTemplate="{StaticResource ChatTemplateSelector}" />
-                <views:CameraView
+                <xct:CameraView
                     x:Name="VideoCameraView"
                     IsVisible="False"
                     CaptureMode="Video"
@@ -125,9 +125,9 @@
                     
                     MediaCaptured="VideoCameraView_OnMediaCaptured"
                     Opacity="0"/>
-                <Frame x:Name="NextFrame" TranslationX="200" views:TouchEffect.Command="{Binding NextCommand}" Padding="12,4" BackgroundColor="{StaticResource Night1}" Margin="8,0" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+                <Frame x:Name="NextFrame" TranslationX="200" xct:TouchEffect.Command="{Binding NextCommand}" Padding="12,4" BackgroundColor="{StaticResource Night1}" Margin="8,0" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="Next" VerticalOptions="CenterAndExpand" FontSize="Medium" TextColor="{StaticResource Night4}"></Label>
+                        <Label Text="{xct:Translate Next}" VerticalOptions="CenterAndExpand" FontSize="Medium" TextColor="{StaticResource Night4}"></Label>
                         <Path Data="M379.5,630l5,5-5,5"
                               Stroke="#363853"
                               StrokeThickness="3"
@@ -165,7 +165,7 @@
                     <StackLayout Orientation="Horizontal" >
                         <Grid HorizontalOptions="FillAndExpand">
                             <Entry x:Name="MessageEntry" Text="{Binding Message,Mode=TwoWay}"
-                                   Placeholder="Type Your message..."
+                                   Placeholder="{xct:Translate TypeMessage}"
                                    HorizontalOptions="FillAndExpand"
                                    BackgroundColor="Transparent"
                                    PlaceholderColor="DarkGray" />
@@ -197,7 +197,7 @@
                                                 <TranslateTransform X="-304.75" Y="-628.939" />
                                             </Path.RenderTransform>
                                         </Path>
-                                        <Label TextColor="{StaticResource Night4}" FontSize="14" Text="Swipe to cancel..."
+                                        <Label TextColor="{StaticResource Night4}" FontSize="14" Text="{xct:Translate SwipeToCancel}"
                                                VerticalOptions="CenterAndExpand" />
                                     </StackLayout>
                                 </Grid>
@@ -227,7 +227,7 @@
                                 </Frame.Effects>
                             </Frame>
 
-                            <Button BackgroundColor="Transparent" FontFamily="{StaticResource BoldFont}" Text="Send"
+                            <Button BackgroundColor="Transparent" FontFamily="{StaticResource BoldFont}" Text="{xct:Translate Send}"
                                     TextColor="{StaticResource Night4}" Margin="0,0,-12,0" Padding="4" Command="{Binding SendMessageCommand}" />
                         </StackLayout>
                        

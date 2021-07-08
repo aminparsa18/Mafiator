@@ -15,28 +15,26 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 {
     public class TokenService : ITokenService
     {
-        private readonly Jwt jwt;
+        private readonly Jwt _jwt;
         private readonly TokenValidationParameters _tokenValidationParameters;
         public TokenService(IOptions<Jwt> jwt,TokenValidationParameters tokenValidationParameters)
         {
-            this.jwt = jwt.Value;
-            this._tokenValidationParameters = tokenValidationParameters;
+            _jwt = jwt.Value;
+            _tokenValidationParameters = tokenValidationParameters;
         }
 
         public GenerateTokenResult GenerateAccessToken(User user,List<Claim> claims)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(jwt.Secret);
-            
+            var key = Encoding.ASCII.GetBytes(_jwt.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(jwt.TokenLifeTime),
+                Expires = DateTime.UtcNow.Add(_jwt.TokenLifeTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-
             return new GenerateTokenResult()
             {
                 JwtId = token.Id,

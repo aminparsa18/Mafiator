@@ -27,6 +27,7 @@ namespace Mafiator.Api.Controllers
               IsSuccess = true
             });
         }
+
         [HttpGet]
         public IActionResult RemoveCache()
         {

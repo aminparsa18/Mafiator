@@ -15,8 +15,8 @@
                  base:ViewModelLocator.AutoWireViewModel="true">
     <pages:PopupPage.Animation>
         <animations:MoveAnimation
-            PositionIn="Bottom"
-            PositionOut="Bottom"
+            PositionIn="Left"
+            PositionOut="Right"
             DurationIn="400"
             DurationOut="400"
             EasingIn="SpringOut"
@@ -27,82 +27,128 @@
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
-        <StackLayout>
-            <Frame
-                CornerRadius="52" Margin="16" Padding="0"
-                VerticalOptions="CenterAndExpand">
-                <StackLayout>
-                    <StackLayout Orientation="Horizontal" Margin="16">
-                        <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                            <Label Text="{xct:Translate Create}" FontSize="Large" FontAttributes="Bold" />
-                            <Label Text="{xct:Translate NewRoom}" />
-                        </StackLayout>
-                        <templates:CloseButton />
+        <Frame
+            CornerRadius="52" Margin="16" Padding="0"
+            VerticalOptions="CenterAndExpand">
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Margin="16">
+                    <StackLayout CompressedLayout.IsHeadless="true" VerticalOptions="EndAndExpand" Margin="16,0,0,0">
+                        <Label Text="{xct:Translate Create}" FontSize="Large" FontAttributes="Bold" />
+                        <Label Text="{xct:Translate NewRoom}" />
                     </StackLayout>
-                    <Frame Margin="16,0,8,8" Padding="4,0"
-                           BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
-                           HorizontalOptions="StartAndExpand">
-                        <StackLayout Orientation="Horizontal">
-                            <forms1:CachedImage
-                                WidthRequest="60"
-                                HeightRequest="40"
-                                DownsampleToViewSize="True"
-                                Margin="8,8,0,8"
-                                Aspect="AspectFit"
-                                Source="{Binding Country.Code,Converter={StaticResource CountryCodelmageConverter}}">
-                                <forms1:CachedImage.Transformations>
-                                    <transformations:RoundedTransformation Radius="24" />
-                                </forms1:CachedImage.Transformations>
-                            </forms1:CachedImage>
-                            <Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
-                                   VerticalOptions="CenterAndExpand"
-                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
-                        </StackLayout>
-                    </Frame>
-                    <userControls:ExtendedEntry
-                        Placeholder="{xct:Translate EnterRoomName}"
-                        Text="{Binding Name.Value}"
-                        IsValid="{Binding IsNameValid,Mode=TwoWay}"
-                        Margin="16,0"
-                        Errors="{Binding Name.Errors}" />
-
-
-                    <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                        <CheckBox IsChecked="{Binding IsPrivate,Mode=TwoWay}" />
-                        <Label Text="{xct:Translate PrivateRoom}" VerticalOptions="CenterAndExpand" />
-                        <ImageButton Source="help.svg" BackgroundColor="Transparent" WidthRequest="24" Margin="8,0,0,0"
-                                     Command="{Binding PrivateHelpCommand}" />
+                    <templates:CloseButton />
+                </StackLayout>
+                <Frame Margin="16,0,8,8" Padding="4,0"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
+                       HorizontalOptions="StartAndExpand">
+                    <StackLayout Orientation="Horizontal">
+                        <forms1:CachedImage
+                            WidthRequest="60"
+                            HeightRequest="40"
+                            DownsampleToViewSize="True"
+                            Margin="8,8,0,8"
+                            Aspect="AspectFit"
+                            Source="{Binding Country.Code,Converter={StaticResource CountryCodelmageConverter}}">
+                            <forms1:CachedImage.Transformations>
+                                <transformations:RoundedTransformation Radius="24" />
+                            </forms1:CachedImage.Transformations>
+                        </forms1:CachedImage>
+                        <Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
+                               VerticalOptions="CenterAndExpand"
+                               TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
                     </StackLayout>
-                    <Grid VerticalOptions="EndAndExpand">
-                        <Frame
-                            BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
-                            CornerRadius="52" Padding="0">
-                            <StackLayout>
-                                <StackLayout Padding="16">
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="{xct:Translate AddFriends}" FontSize="Large"
-                                               FontAttributes="Bold" />
-                                        <forms:SvgCachedImage Source="chevron_up.svg" HorizontalOptions="EndAndExpand"
-                                                              WidthRequest="24" Margin="16,0" />
-                                    </StackLayout>
-                                    <Label
-                                        Text="{xct:Translate AddFriendsDesc}"
-                                        FontSize="Small" />
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer x:Name="AddByCodeTap"
-                                                              Command="{Binding AddByCodeCommand}" />
-                                    </StackLayout.GestureRecognizers>
+                </Frame>
+                <userControls:ExtendedEntry
+                    Placeholder="{xct:Translate EnterRoomName}"
+                    Text="{Binding Name.Value}"
+                    IsValid="{Binding IsNameValid,Mode=TwoWay}"
+                    Margin="16,0"
+                    Errors="{Binding Name.Errors}" />
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Margin="16,0,16,16">
+                    <templates:CheckBoxView x:Name="PrivateChkBox" Text="{xct:Translate PrivateRoom}"
+                                            IsChecked="{Binding IsPrivate,Mode=TwoWay}" />
+                    
+                    <Grid WidthRequest="30" HeightRequest="30">
+                        <Path
+                        Data="M822.95,569.647a7.51,7.51,0,0,1-5.6-5.6,13.343,13.343,0,0,1,0-6.1,7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6A13.343,13.343,0,0,1,822.95,569.647Z"
+                        Stroke="#FFF"
+                        StrokeThickness="2"
+                        Aspect="Uniform">
+                            <Path.RenderTransform>
+                                <TranslateTransform X="-816.245" Y="-551.245" />
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Data=" M 0, 1 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0"
+                          Stroke="#fff"
+                          Fill="#fff"
+                          HorizontalOptions="CenterAndExpand"
+                          Margin="0,14,0,0"
+                          WidthRequest="4"
+                          StrokeThickness="2"
+                          Aspect="Uniform">
+                            <Path.RenderTransform>
+                                <TranslateTransform X="-816.245" Y="-551.245" />
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Data="M824,559v-.5a2,2,0,0,1,2-2h0a2,2,0,0,1,2,2v.121a2.12,2.12,0,0,1-.621,1.5L826,561.5"
+                          Stroke="#fff"
+                          StrokeThickness="2"
+                          Aspect="Uniform"
+                          HorizontalOptions="CenterAndExpand"
+                          VerticalOptions="StartAndExpand"
+                          Margin="0,8,0,0"
+                          WidthRequest="12"
+                          HeightRequest="12"
+                          StrokeLineCap="Round"
+                          StrokeLineJoin="Round">
+                            <Path.RenderTransform>
+                                <TranslateTransform X="-816.245" Y="-551.245" />
+                            </Path.RenderTransform>
+
+                        </Path>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PrivateHelpCommand}"></TapGestureRecognizer>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                   
+                </StackLayout>
+                <!--<StackLayout Orientation="Horizontal" Margin="16,0,16,16">
+                    <CheckBox IsChecked="{Binding IsPrivate,Mode=TwoWay}" />
+                    <Label Text="{xct:Translate PrivateRoom}" VerticalOptions="CenterAndExpand" />
+                    <ImageButton Source="help.svg" BackgroundColor="Transparent" WidthRequest="24" Margin="8,0,0,0"
+                                 Command="{Binding PrivateHelpCommand}" />
+                </StackLayout>-->
+                <Grid VerticalOptions="EndAndExpand">
+                    <Frame
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                        CornerRadius="52" Padding="0">
+                        <StackLayout>
+                            <StackLayout Padding="16">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{xct:Translate AddFriends}" FontSize="Large"
+                                           FontAttributes="Bold" />
+                                    <forms:SvgCachedImage Source="chevron_up.svg" HorizontalOptions="EndAndExpand"
+                                                          WidthRequest="24" Margin="16,0" />
                                 </StackLayout>
-                                <StackLayout
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
-                                    HeightRequest="48">
-                                    <Label VerticalOptions="CenterAndExpand" Text="{xct:Translate Create}"
-                                           HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding AddRoomCommand}" />
-                                    </StackLayout.GestureRecognizers>
-                                </StackLayout>
-                                <!--<Frame BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}" CornerRadius="52" Padding="0">
+                                <Label
+                                    Text="{xct:Translate AddFriendsDesc}"
+                                    FontSize="Small" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="AddByCodeTap"
+                                                          Command="{Binding AddByCodeCommand}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                            <StackLayout
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
+                                HeightRequest="48">
+                                <Label VerticalOptions="CenterAndExpand" Text="{xct:Translate Create}"
+                                       HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding AddRoomCommand}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                            <!--<Frame BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}" CornerRadius="52" Padding="0">
                                     <StackLayout>
                                         <StackLayout Padding="16">
                                             <StackLayout Orientation="Horizontal">
@@ -118,24 +164,23 @@
                                     </StackLayout>
                                 </Frame>-->
 
-                            </StackLayout>
-                        </Frame>
-                    </Grid>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
 
-                </StackLayout>
-                <Frame.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,1">
-                        <GradientStop
-                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
-                            Offset="0.0" />
-                        <GradientStop
-                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
-                            Offset="0.25" />
-                    </LinearGradientBrush>
-                </Frame.Background>
-            </Frame>
+            </StackLayout>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop
+                        Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                        Offset="0.0" />
+                    <GradientStop
+                        Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                        Offset="0.25" />
+                </LinearGradientBrush>
+            </Frame.Background>
+        </Frame>
 
-        </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels
 {

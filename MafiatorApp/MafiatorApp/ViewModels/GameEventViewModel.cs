@@ -10,14 +10,13 @@ using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Enums;
 using MafiatorApp.Extentions;
-using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -31,11 +30,7 @@ namespace MafiatorApp.ViewModels
         public LayoutState MainState
         {
             get => mainState;
-            set
-            {
-                mainState = value;
-                RaisePropertyChanged(() => MainState);
-            }
+            set => SetProperty(ref mainState, value);
         }
 
         private LayoutState sleepState;
@@ -43,11 +38,7 @@ namespace MafiatorApp.ViewModels
         public LayoutState SleepState
         {
             get => sleepState;
-            set
-            {
-                sleepState = value;
-                RaisePropertyChanged(() => SleepState);
-            }
+            set => SetProperty(ref sleepState, value);
         }
 
         public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
@@ -59,11 +50,7 @@ namespace MafiatorApp.ViewModels
         public CandidateDto Candidate
         {
             get => candidate;
-            set
-            {
-                candidate = value;
-                RaisePropertyChanged(() => Candidate);
-            }
+            set => SetProperty(ref candidate, value);
         }
 
         private Timer _timer;
@@ -73,11 +60,7 @@ namespace MafiatorApp.ViewModels
         public double ProgressTimer
         {
             get => progressTimer;
-            set
-            {
-                progressTimer = value;
-                RaisePropertyChanged(() => ProgressTimer);
-            }
+            set => SetProperty(ref progressTimer, value);
         }
 
         private string title = "It's night";
@@ -85,11 +68,7 @@ namespace MafiatorApp.ViewModels
         public string Title
         {
             get => title;
-            set
-            {
-                title = value;
-                RaisePropertyChanged(() => Title);
-            }
+            set => SetProperty(ref title, value);
         }
 
         private string subTitle = "play your role";
@@ -97,11 +76,7 @@ namespace MafiatorApp.ViewModels
         public string SubTitle
         {
             get => subTitle;
-            set
-            {
-                subTitle = value;
-                RaisePropertyChanged(() => SubTitle);
-            }
+            set => SetProperty(ref subTitle, value);
         }
 
         private string playerTask;
@@ -109,33 +84,21 @@ namespace MafiatorApp.ViewModels
         public string PlayerTask
         {
             get => playerTask;
-            set
-            {
-                playerTask = value;
-                RaisePropertyChanged(() => PlayerTask);
-            }
+            set => SetProperty(ref playerTask, value);
         }
 
         private string action;
         public string Action
         {
             get => action;
-            set
-            {
-                action = value;
-                RaisePropertyChanged(() => Action);
-            }
+            set => SetProperty(ref action, value);
         }
 
         private bool isMafia;
         public bool IsMafia
         {
             get => isMafia;
-            set
-            {
-                isMafia = value;
-                RaisePropertyChanged(() => IsMafia);
-            }
+            set => SetProperty(ref isMafia, value);
         }
 
         public ICommand CandidateSelectedCommand { get; set; }

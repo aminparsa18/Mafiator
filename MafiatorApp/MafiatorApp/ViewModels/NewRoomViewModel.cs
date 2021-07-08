@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
@@ -12,7 +11,7 @@ using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -20,70 +19,66 @@ namespace MafiatorApp.ViewModels
     public class NewRoomViewModel : ViewModelBase
     {
         private ValidatableObject<string> _name;
+
         public ValidatableObject<string> Name
         {
             get => _name;
-            set
-            {
-                _name = value;
-                RaisePropertyChanged(() => Name);
-            }
+            set => SetProperty(ref _name, value);
         }
 
         private bool _isPrivate;
+
         public bool IsPrivate
         {
             get => _isPrivate;
-            set
-            {
-                _isPrivate = value;
-                RaisePropertyChanged(() => IsPrivate);
-            }
+            set => SetProperty(ref _isPrivate, value);
         }
 
         private bool _isNameValid;
+
         public bool IsNameValid
         {
             get => _isNameValid;
-            set
-            {
-                _isNameValid = value;
-                RaisePropertyChanged(() => IsNameValid);
-            }
+            set => SetProperty(ref _isNameValid, value);
         }
 
         private Country country;
+
         public Country Country
         {
             get => country;
-            set
-            {
-                country = value;
-                RaisePropertyChanged(()=>Country);
-            }
+            set => SetProperty(ref country, value);
         }
 
         public IAsyncCommand AddRoomCommand { get; set; }
         public IAsyncCommand AddByCodeCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
+        public ICommand PrivateHelpCommand { get; set; }
         private List<Country> countries;
-
         public NewRoomViewModel()
-        {
+        { 
             Name = new ValidatableObject<string>();
             AddValidations();
             AddRoomCommand = new AsyncCommand(AddRoom);
             AddByCodeCommand = new AsyncCommand(AddByCode);
             PopCommand = new AsyncCommand(Pop);
-            LoadData();
+            PrivateHelpCommand=new Command(PrivateHelp);
+           LoadData();
         }
 
-        private async void LoadData()
+        private void PrivateHelp()
         {
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MafiatorApp.countries.json");
-            countries = await JsonSerializer.DeserializeAsync<List<Country>>(stream);
-            var code = Barrel.Current.Get<UserDto>("User")?.CountryCode;
-            Country = countries.FirstOrDefault(c => c.Code == code);
+            DependencyService.Get<IAlert>().ShortAlert("Members can only join using invitation link",MessageType.Info);
+        }
+
+        private void LoadData()
+        {
+            Task.Run(() =>
+            {
+                countries = Barrel.Current.Get<List<Country>>("Countries");
+                var code = Barrel.Current.Get<UserDto>("User")?.CountryCode;
+                Country = countries.FirstOrDefault(c => c.Code == code);
+            });
         }
 
         private async Task AddByCode()
@@ -118,7 +113,7 @@ namespace MafiatorApp.ViewModels
                         SystemConstant.Members = null;
                         await NavigationService.RemovePopupAsync();
                         await NavigationService.RemovePopupAsync();
-                        await NavigationService.NavigateToAsync<MyRoomViewModel>(result.Data.Id);
+                        await NavigationService.NavigateToAsync<RoomDetailViewModel>(result.Data.Id);
                         Admob.Load();
                     }
                     else

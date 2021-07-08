@@ -14,41 +14,9 @@
         <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
     </ContentPage.Resources>
     <Grid>
-        <Grid RowDefinitions="3*,4*,64" CompressedLayout.IsHeadless="true">
-            <Image x:Name="HeaderImage" Source="{AppThemeBinding Light=header_day.png,Dark=header_night.png}"
-                   VerticalOptions="StartAndExpand" Aspect="AspectFit" />
+        <Grid RowDefinitions="*,64" CompressedLayout.IsHeadless="true">
             <StackLayout>
-                <CarouselView
-                    Margin="0,16,0,0"
-                    ItemsSource="{Binding Tips}"
-                    IndicatorView="TipsIndicatorView">
-                    <CarouselView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout CompressedLayout.IsHeadless="true">
-                                <Label FontSize="36" Margin="0,24,0,0" FontAttributes="Bold"
-                                       FontFamily="{StaticResource BoldFont}" Text="{Binding Title}"
-                                       HorizontalOptions="CenterAndExpand"
-                                       TextColor="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night1}}">
-                                    <Label.Effects>
-                                        <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
-                                    </Label.Effects>
-                                </Label>
-                                <Label Text="{Binding Description}"
-                                       TextColor="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night1}}"
-                                       Margin="48,16,48,0"
-                                       FontSize="16" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
-                                    <Label.Effects>
-                                        <effects:ShadowEffect Radius="2" Color="Black" DistanceX="2" DistanceY="2" />
-                                    </Label.Effects>
-                                </Label>
-                            </StackLayout>
-
-                        </DataTemplate>
-                    </CarouselView.ItemTemplate>
-                </CarouselView>
-                <IndicatorView x:Name="TipsIndicatorView" HeightRequest="0"/>
-                <StackLayout Orientation="Horizontal" x:Name="SettingGrid" MinimumHeightRequest="40" HorizontalOptions="CenterAndExpand">
-
+                <StackLayout Orientation="Horizontal" x:Name="SettingGrid" Margin="0,36" MinimumHeightRequest="40" HorizontalOptions="CenterAndExpand">
                     <Frame x:Name="SettingBtn" Margin="4,0"    xct:TouchEffect.Command="{Binding SettingsCommand}"
                    CornerRadius="500" WidthRequest="30" HeightRequest="30" Padding="6"  BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}">
                         <Path
@@ -65,7 +33,7 @@
                             </Path.RenderTransform>
                         </Path>
                     </Frame>
-                    <Frame x:Name="LiveBtn" WidthRequest="30" HeightRequest="30" Padding="6" Margin="4,0"
+                    <!--<Frame x:Name="LiveBtn" WidthRequest="30" HeightRequest="30" Padding="6" Margin="4,0"
                    CornerRadius="500"  BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}">
                         <Path
                         Data="M817.353,490.05l-.73.171Zm0-6.1-.73-.171Zm17.294,0-.73.172Zm0,6.1-.73-.172Zm-5.6,5.6-.172-.73Zm-6.1,0,.172-.73Zm0-17.294.172.73Zm6.1,0-.172.73Zm-6.921,11.768a.75.75,0,0,0,1.5,0Zm1.5-4.161a.75.75,0,0,0-1.5,0Zm4.742,4.161a.75.75,0,0,0,1.5,0Zm1.5-3.121a.75.75,0,0,0-1.5,0Zm-4.621,2.081a.75.75,0,0,0,1.5,0Zm1.5-5.2a.75.75,0,0,0-1.5,0Zm-8.667,6a12.6,12.6,0,0,1,0-5.756l-1.46-.343a14.1,14.1,0,0,0,0,6.442Zm15.834-5.756a12.6,12.6,0,0,1,0,5.756l1.46.343a14.1,14.1,0,0,0,0-6.442Zm-5.039,10.795a12.6,12.6,0,0,1-5.756,0l-.343,1.46a14.1,14.1,0,0,0,6.442,0Zm-5.756-15.834a12.6,12.6,0,0,1,5.756,0l.343-1.46a14.1,14.1,0,0,0-6.442,0Zm0,15.834a6.764,6.764,0,0,1-5.039-5.039l-1.46.343a8.258,8.258,0,0,0,6.156,6.156Zm6.1,1.46a8.258,8.258,0,0,0,6.156-6.156l-1.46-.343a6.764,6.764,0,0,1-5.039,5.039Zm-.343-17.294a6.764,6.764,0,0,1,5.039,5.039l1.46-.343a8.258,8.258,0,0,0-6.156-6.156Zm-6.1-1.46a8.258,8.258,0,0,0-6.156,6.156l1.46.343a6.764,6.764,0,0,1,5.039-5.039Zm.85,12.5V485.96h-1.5v4.161Zm6.242,0V487h-1.5v3.121Zm-3.121-1.04v-5.2h-1.5v5.2Z"
@@ -76,7 +44,7 @@
                         HeightRequest="24"
                         Aspect="Uniform">
                         </Path>
-                    </Frame>
+                    </Frame>-->
                     <Frame x:Name="HelpBtn"  WidthRequest="30" HeightRequest="30" Padding="6" Margin="4,0"
                    CornerRadius="500"  BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}">
                         <Grid WidthRequest="34" HeightRequest="34">
@@ -88,7 +56,6 @@
                                 <Path.RenderTransform>
                                     <TranslateTransform X="-816.245" Y="-551.245" />
                                 </Path.RenderTransform>
-
                             </Path>
                             <Path Data=" M 0, 1 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0"
                           Stroke="#fff"
@@ -101,7 +68,6 @@
                                 <Path.RenderTransform>
                                     <TranslateTransform X="-816.245" Y="-551.245" />
                                 </Path.RenderTransform>
-
                             </Path>
                             <Path Data="M824,559v-.5a2,2,0,0,1,2-2h0a2,2,0,0,1,2,2v.121a2.12,2.12,0,0,1-.621,1.5L826,561.5"
                           Stroke="#fff"
@@ -120,6 +86,9 @@
 
                             </Path>
                         </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding HelpCommand}"></TapGestureRecognizer>
+                        </Frame.GestureRecognizers>
                     </Frame>
                     <Frame x:Name="ShareBtn"  WidthRequest="30" HeightRequest="30" Padding="6" Margin="4,0"
                    CornerRadius="500"  BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}">
@@ -129,6 +98,7 @@
                         Stroke="#FFF"
                         StrokeThickness="1.5"
                         Fill="#fff"
+                        Margin="2,0,0,0"
                         HorizontalOptions="CenterAndExpand"
                         WidthRequest="24"
                         HeightRequest="24"
@@ -141,58 +111,24 @@
                     </Frame>
 
                 </StackLayout>
-            </StackLayout>
+        
 
-
-            <Path Data="M379.5,630l5,5-5,5"
-                  Stroke="#ffffff"
-                  StrokeThickness="3"
-                  Aspect="Uniform"
-                  WidthRequest="24"
-                  HeightRequest="24"
-                  StrokeLineCap="Round"
-                  StrokeLineJoin="Round"
-                  Margin="0,0,16,0"
-                  HorizontalOptions="EndAndExpand"
-                  VerticalOptions="CenterAndExpand"
-                 >
-                <Path.RenderTransform>
-                    <TranslateTransform X="-378.439" Y="-628.939" />
-                </Path.RenderTransform>
-                <Path.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NextBtn_OnClicked" />
-                </Path.GestureRecognizers>
-            </Path>
-            <Path Data="M310.5,640l-5-5,5-5"
-                  Stroke="#ffffff"
-                  StrokeThickness="3"
-                  Aspect="Uniform"
-                  WidthRequest="24"
-                  HeightRequest="24"
-                  StrokeLineCap="Round"
-                  StrokeLineJoin="Round"
-                  Margin="16,0,0,0"
-                  HorizontalOptions="StartAndExpand"
-                  VerticalOptions="CenterAndExpand"
-    >
-                <Path.RenderTransform>
-                    <TranslateTransform X="-304.75" Y="-628.939" />
-                </Path.RenderTransform>
-                <Path.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="PrevBtn_OnClicked" />
-                </Path.GestureRecognizers>
-            </Path>
-       
-            <Grid Grid.Row="1" Padding="16,8" RowSpacing="16" ColumnSpacing="16" VerticalOptions="CenterAndExpand"
+            <Grid Padding="16,0" 
                   ColumnDefinitions="*,*" RowDefinitions="*,*">
-                <Frame Padding="0" Margin="0" Grid.RowSpan="2" BackgroundColor="Black" CornerRadius="52"
+                <Grid.ColumnSpacing>
+                    <x:OnIdiom Phone="16" Tablet="24"></x:OnIdiom>
+                </Grid.ColumnSpacing>
+                <Grid.RowSpacing>
+                    <x:OnIdiom Phone="16" Tablet="24"></x:OnIdiom>
+                </Grid.RowSpacing>
+                    <Frame Padding="0" Margin="0" Grid.RowSpan="2" BackgroundColor="Black" CornerRadius="52"
                        Grid.Column="0" HorizontalOptions="FillAndExpand" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear" xct:TouchEffect.Command="{Binding AddRoomCommand}" >
                     <Grid>
                         <Image Source="create_room.png" Margin="8" Aspect="AspectFill" />
                         <StackLayout Padding="24,32">
                             <Label Text="{xct:Translate Create}" FontSize="32" VerticalOptions="EndAndExpand"
                                    FontFamily="{StaticResource BoldFont}" />
-                            <Label Text="{xct:Translate NewRoom}" FontSize="26" Margin="0,-18,0,0" />
+                            <Label Text="{xct:Translate NewRoom}" FontSize="26" Margin="0,-12,0,0" />
                         </StackLayout>
                     </Grid>
 
@@ -200,14 +136,14 @@
 
                 <Grid Grid.Row="0" Grid.Column="1" xct:TouchEffect.Command="{Binding JoinRoomCommand}" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear">
                     <Image Source="{AppThemeBinding Light=room_day.png, Dark=room_night.png}" Aspect="AspectFit" />
-                    <StackLayout VerticalOptions="EndAndExpand" Padding="16,32">
+                    <StackLayout VerticalOptions="EndAndExpand"  Margin="20,16">
                         <Label Text="{xct:Translate Join}" FontSize="32" FontFamily="{StaticResource BoldFont}" FontAttributes="Bold">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
                         </Label>
-                        <Label Text="{xct:Translate ARoom}" FontSize="28" Margin="0,-18,0,0">
-                            <Label.Effects>
+                            <Label Text="{xct:Translate ARoom}" FontSize="28" Margin="0,-58,0,0">
+                                <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
                         </Label>
@@ -220,21 +156,30 @@
                 <Grid Grid.Row="1" Grid.Column="1" xct:TouchEffect.Command="{Binding RoomHistoryCommand}" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear">
                     <Image Source="{AppThemeBinding Light=history_day.png, Dark=history_night.png}"
                            Aspect="AspectFit" />
-                    <StackLayout VerticalOptions="EndAndExpand" Padding="16,30">
+                    <StackLayout VerticalOptions="EndAndExpand"  Margin="20,16">
                         <Label Text="{xct:Translate Rooms}" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
                         </Label>
-                        <Label FontSize="28" Margin="0,-18,0,0" Text="{xct:Translate History}">
+                        <Label FontSize="28" Margin="0,-12,0,0" Text="{xct:Translate History}">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
                         </Label>
                     </StackLayout>
                 </Grid>
-
-            </Grid>
+                <Grid Grid.Row="2" Grid.ColumnSpan="2" xct:TouchEffect.Command="{Binding StoreCommand}" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear">
+                    <!--<Image Source="{AppThemeBinding Light=history_day.png, Dark=history_night.png}"
+                           Aspect="AspectFit" />-->
+                        <Label Text="{xct:Translate Store}" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
+                            <Label.Effects>
+                                <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
+                            </Label.Effects>
+                        </Label>
+                </Grid>
+                </Grid>
+            </StackLayout>
 
 
         </Grid>
@@ -253,9 +198,8 @@
                     </forms1:SvgCachedImage.GestureRecognizers>
                 </forms1:SvgCachedImage>
                 <!--first panel -->
-                <Grid HeightRequest="218">
                     <Frame VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" CornerRadius="42"
-                           Padding="16">
+                           Padding="16" Margin="0,0,0,16">
                         <StackLayout Orientation="Horizontal">
                             <forms:CachedImage
                                 WidthRequest="80"
@@ -270,10 +214,10 @@
                                     </forms:CachedImage.Transformations>
                             </forms:CachedImage>
                             <StackLayout>
-                                <Label Text="{Binding User.DisplayName}" FontAttributes="Bold" />
+                                <Label Text="{Binding User.DisplayName}" Margin="12,0,0,0" FontSize="16" FontFamily="{StaticResource BoldFont}" />
                                 <StackLayout Orientation="Horizontal">
-                                    <Button BackgroundColor="Transparent" BorderWidth="1" BorderColor="White"
-                                            Text="Edit Profile" Padding="8,2" />
+                                    <Button BackgroundColor="Transparent" BorderWidth="1" FontSize="10" BorderColor="Transparent"
+                                            Text="{xct:Translate EditProfile}" Padding="8,2" Margin="0" />
                                     <Frame Margin="8,0" Padding="16,0">
                                         <StackLayout Orientation="Horizontal">
                                             <Image Source="gem.png" WidthRequest="24" />
@@ -281,7 +225,7 @@
                                                    TextColor="{StaticResource Gem}" FontSize="16" />
                                         </StackLayout>
                                         <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer x:Name="GemTap" Tapped="GemTap_OnTapped"></TapGestureRecognizer>
+                                            <TapGestureRecognizer Command="{Binding StoreCommand}"></TapGestureRecognizer>
                                         </Frame.GestureRecognizers>
                                     </Frame>
                                 </StackLayout>
@@ -299,17 +243,8 @@
                             </LinearGradientBrush>
                         </Frame.Background>
                     </Frame>
-                    <Frame Padding="16,8" CornerRadius="42" VerticalOptions="EndAndExpand"
-                           HorizontalOptions="CenterAndExpand"
-                           BackgroundColor="{StaticResource Gem}">
-                        <StackLayout>
-                            <Image Source="gem_white.png" WidthRequest="32" />
-                            <Button BackgroundColor="White" Padding="8,6" HorizontalOptions="CenterAndExpand"
-                                    TextColor="{StaticResource Gem}" Text="{xct:Translate GetGems}" />
-                        </StackLayout>
-                    </Frame>
-                </Grid>
-                <Frame CornerRadius="42" HorizontalOptions="CenterAndExpand" Margin="0,16,0,0" HeightRequest="146"
+                   
+                <Frame CornerRadius="42" HorizontalOptions="CenterAndExpand" HeightRequest="146"
                        Padding="16,8">
                     <Grid ColumnDefinitions="*,*">
                         <userControls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.MafiaWin}"

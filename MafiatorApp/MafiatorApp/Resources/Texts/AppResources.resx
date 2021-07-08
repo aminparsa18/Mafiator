@@ -159,6 +159,9 @@
   <data name="DisplayName" xml:space="preserve">
     <value>Display Name</value>
   </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Edit Profile</value>
+  </data>
   <data name="EmptyConfirmPassword" xml:space="preserve">
     <value>password confirmation cannot be empty</value>
   </data>
@@ -301,6 +304,9 @@
   <data name="ScanBarcodeDesc" xml:space="preserve">
     <value>Scan User Code using scanner</value>
   </data>
+  <data name="ScheduleGame" xml:space="preserve">
+    <value>Schedule Game</value>
+  </data>
   <data name="Score" xml:space="preserve">
     <value>Score</value>
   </data>
@@ -312,6 +318,9 @@
   </data>
   <data name="SelectAvatar" xml:space="preserve">
     <value>Select Avatar</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>Set</value>
@@ -331,14 +340,23 @@
   <data name="Start" xml:space="preserve">
     <value>Start</value>
   </data>
-  <data name="StartImmediately" xml:space="preserve">
-    <value>Or Start Immediately</value>
-  </data>
   <data name="SthError" xml:space="preserve">
     <value>Something bad happened,Try again later</value>
   </data>
+  <data name="Store" xml:space="preserve">
+    <value>Store</value>
+  </data>
+  <data name="SwipeToCancel" xml:space="preserve">
+    <value>Swipe to cancel...</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Time left:</value>
+  </data>
   <data name="TotalWin" xml:space="preserve">
     <value>Total win</value>
+  </data>
+  <data name="TypeMessage" xml:space="preserve">
+    <value>Type Your message...</value>
   </data>
   <data name="UploadPP" xml:space="preserve">
     <value>Upload Profile Picture</value>

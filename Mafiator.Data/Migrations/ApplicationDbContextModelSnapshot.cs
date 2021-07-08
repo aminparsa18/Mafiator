@@ -44,6 +44,46 @@ namespace Mafiator.Data.Migrations
                     b.ToTable("Avatar");
                 });
 
+            modelBuilder.Entity("Mafiator.Entities.ChatMessage", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(26)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getDate())");
+
+                    b.Property<short>("MessageType")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getDate())");
+
+                    b.Property<string>("RoomId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(26)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(26)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatMessage");
+                });
+
             modelBuilder.Entity("Mafiator.Entities.Event", b =>
                 {
                     b.Property<string>("Id")
@@ -410,6 +450,9 @@ namespace Mafiator.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CountryCode")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(max)");
 
@@ -470,6 +513,8 @@ namespace Mafiator.Data.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
+                    b.HasIndex("CountryCode");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -518,6 +563,37 @@ namespace Mafiator.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("Mafiator.Entities.Reaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(26)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getDate())");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getDate())");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reaction");
                 });
 
             modelBuilder.Entity("Mafiator.Entities.RefreshToken", b =>
@@ -716,6 +792,27 @@ namespace Mafiator.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Mafiator.Entities.ChatMessage", b =>
+                {
+                    b.HasOne("Mafiator.Entities.Room", "Room")
+                        .WithMany("ChatMessage")
+                        .HasForeignKey("RoomId")
+                        .HasConstraintName("FK_ChatMessage_Room")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mafiator.Entities.Identity.User", "User")
+                        .WithMany("ChatMessage")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_ChatMessage_User")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Mafiator.Entities.Event", b =>
@@ -1023,6 +1120,8 @@ namespace Mafiator.Data.Migrations
 
             modelBuilder.Entity("Mafiator.Entities.Identity.User", b =>
                 {
+                    b.Navigation("ChatMessage");
+
                     b.Navigation("Claims");
 
                     b.Navigation("EventJoin");
@@ -1046,6 +1145,8 @@ namespace Mafiator.Data.Migrations
 
             modelBuilder.Entity("Mafiator.Entities.Room", b =>
                 {
+                    b.Navigation("ChatMessage");
+
                     b.Navigation("Game");
 
                     b.Navigation("RoomMember");

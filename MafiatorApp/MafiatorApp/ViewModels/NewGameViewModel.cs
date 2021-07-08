@@ -2,7 +2,6 @@
 using System.Linq;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
-using MafiatorApp.ViewModels.Base.Interfaces;
 using System.Threading.Tasks;
 using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
@@ -12,6 +11,7 @@ using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MessagePipe;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -23,11 +23,7 @@ namespace MafiatorApp.ViewModels
         public ValidatableObject<short> Capacity
         {
             get => capacity;
-            set
-            {
-                capacity = value;
-                RaisePropertyChanged(() => Capacity);
-            }
+            set => SetProperty(ref capacity, value);
         }
 
         private bool isCapacityValid;
@@ -35,11 +31,7 @@ namespace MafiatorApp.ViewModels
         public bool IsCapacityValid
         {
             get => isCapacityValid;
-            set
-            {
-                isCapacityValid = value;
-                RaisePropertyChanged(() => IsCapacityValid);
-            }
+            set => SetProperty(ref isCapacityValid, value);
         }
 
         private bool isImmediate;
@@ -47,11 +39,7 @@ namespace MafiatorApp.ViewModels
         public bool IsImmediate
         {
             get => isImmediate;
-            set
-            {
-                isImmediate = value;
-                RaisePropertyChanged(() => IsImmediate);
-            }
+            set => SetProperty(ref isImmediate, value);
         }
 
         private DateTime? date = DateTime.Now;
@@ -59,11 +47,7 @@ namespace MafiatorApp.ViewModels
         public DateTime? Date
         {
             get => date;
-            set
-            {
-                date = value;
-                RaisePropertyChanged(() => Date);
-            }
+            set => SetProperty(ref date, value);
         }
 
         public ObservableRangeCollection<NewGameRole> Roles { get; set; }
