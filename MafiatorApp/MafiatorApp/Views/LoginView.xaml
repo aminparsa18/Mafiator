@@ -6,9 +6,11 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.LoginView"
              base:ViewModelLocator.AutoWireViewModel="True"
-             BackgroundColor="Black">
+             BackgroundColor="Black"
+             x:DataType="viewModels:LoginViewModel">
     <ContentPage.Resources>
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </ContentPage.Resources>

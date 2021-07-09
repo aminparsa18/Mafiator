@@ -37106,34 +37106,37 @@ namespace MafiatorApp.Droid
 			public const int start_game = 2131165652;
 			
 			// aapt resource value: 0x7F0701D5
-			public const int sug_header = 2131165653;
+			public const int store = 2131165653;
 			
 			// aapt resource value: 0x7F0701D6
-			public const int sug_header_1 = 2131165654;
+			public const int sug_header = 2131165654;
 			
 			// aapt resource value: 0x7F0701D7
-			public const int test_custom_background = 2131165655;
+			public const int sug_header_1 = 2131165655;
 			
 			// aapt resource value: 0x7F0701D8
-			public const int toast_frame = 2131165656;
+			public const int test_custom_background = 2131165656;
 			
 			// aapt resource value: 0x7F0701D9
-			public const int tooltip_frame_dark = 2131165657;
+			public const int toast_frame = 2131165657;
 			
 			// aapt resource value: 0x7F0701DA
-			public const int tooltip_frame_light = 2131165658;
+			public const int tooltip_frame_dark = 2131165658;
 			
 			// aapt resource value: 0x7F0701DB
-			public const int @unchecked = 2131165659;
+			public const int tooltip_frame_light = 2131165659;
 			
 			// aapt resource value: 0x7F0701DC
-			public const int user = 2131165660;
+			public const int @unchecked = 2131165660;
 			
 			// aapt resource value: 0x7F0701DD
-			public const int user_add = 2131165661;
+			public const int user = 2131165661;
 			
 			// aapt resource value: 0x7F0701DE
-			public const int wave = 2131165662;
+			public const int user_add = 2131165662;
+			
+			// aapt resource value: 0x7F0701DF
+			public const int wave = 2131165663;
 			
 			static Drawable()
 			{
@@ -39290,10 +39293,166 @@ namespace MafiatorApp.Droid
 		{
 			
 			// aapt resource value: 0x7F0E0000
-			public const int day = 2131623936;
+			public const int amaro = 2131623936;
 			
 			// aapt resource value: 0x7F0E0001
-			public const int night = 2131623937;
+			public const int antique = 2131623937;
+			
+			// aapt resource value: 0x7F0E0002
+			public const int beauty = 2131623938;
+			
+			// aapt resource value: 0x7F0E0003
+			public const int blackcat = 2131623939;
+			
+			// aapt resource value: 0x7F0E0004
+			public const int brannan = 2131623940;
+			
+			// aapt resource value: 0x7F0E0005
+			public const int brightness = 2131623941;
+			
+			// aapt resource value: 0x7F0E0006
+			public const int brooklyn = 2131623942;
+			
+			// aapt resource value: 0x7F0E0007
+			public const int calm = 2131623943;
+			
+			// aapt resource value: 0x7F0E0008
+			public const int constrast = 2131623944;
+			
+			// aapt resource value: 0x7F0E0009
+			public const int cool = 2131623945;
+			
+			// aapt resource value: 0x7F0E000A
+			public const int crayon = 2131623946;
+			
+			// aapt resource value: 0x7F0E000B
+			public const int day = 2131623947;
+			
+			// aapt resource value: 0x7F0E000C
+			public const int earlybird = 2131623948;
+			
+			// aapt resource value: 0x7F0E000D
+			public const int emerald = 2131623949;
+			
+			// aapt resource value: 0x7F0E000E
+			public const int evergreen = 2131623950;
+			
+			// aapt resource value: 0x7F0E000F
+			public const int exposure = 2131623951;
+			
+			// aapt resource value: 0x7F0E0010
+			public const int fragment = 2131623952;
+			
+			// aapt resource value: 0x7F0E0011
+			public const int freud = 2131623953;
+			
+			// aapt resource value: 0x7F0E0012
+			public const int healthy = 2131623954;
+			
+			// aapt resource value: 0x7F0E0013
+			public const int hefe = 2131623955;
+			
+			// aapt resource value: 0x7F0E0014
+			public const int hudson = 2131623956;
+			
+			// aapt resource value: 0x7F0E0015
+			public const int hue = 2131623957;
+			
+			// aapt resource value: 0x7F0E0016
+			public const int inkwell = 2131623958;
+			
+			// aapt resource value: 0x7F0E0017
+			public const int kevin_new = 2131623959;
+			
+			// aapt resource value: 0x7F0E0018
+			public const int latte = 2131623960;
+			
+			// aapt resource value: 0x7F0E0019
+			public const int lomo = 2131623961;
+			
+			// aapt resource value: 0x7F0E001A
+			public const int lookup = 2131623962;
+			
+			// aapt resource value: 0x7F0E001B
+			public const int n1977 = 2131623963;
+			
+			// aapt resource value: 0x7F0E001C
+			public const int nashville = 2131623964;
+			
+			// aapt resource value: 0x7F0E001D
+			public const int night = 2131623965;
+			
+			// aapt resource value: 0x7F0E001E
+			public const int nostalgia = 2131623966;
+			
+			// aapt resource value: 0x7F0E001F
+			public const int pixar = 2131623967;
+			
+			// aapt resource value: 0x7F0E0020
+			public const int rise = 2131623968;
+			
+			// aapt resource value: 0x7F0E0021
+			public const int romance = 2131623969;
+			
+			// aapt resource value: 0x7F0E0022
+			public const int sakura = 2131623970;
+			
+			// aapt resource value: 0x7F0E0023
+			public const int saturation = 2131623971;
+			
+			// aapt resource value: 0x7F0E0024
+			public const int sharpen = 2131623972;
+			
+			// aapt resource value: 0x7F0E0025
+			public const int sierra = 2131623973;
+			
+			// aapt resource value: 0x7F0E0026
+			public const int sketch = 2131623974;
+			
+			// aapt resource value: 0x7F0E0027
+			public const int skinwhiten = 2131623975;
+			
+			// aapt resource value: 0x7F0E0028
+			public const int suger_tablets = 2131623976;
+			
+			// aapt resource value: 0x7F0E0029
+			public const int sunrise = 2131623977;
+			
+			// aapt resource value: 0x7F0E002A
+			public const int sunset = 2131623978;
+			
+			// aapt resource value: 0x7F0E002B
+			public const int sutro = 2131623979;
+			
+			// aapt resource value: 0x7F0E002C
+			public const int sweets = 2131623980;
+			
+			// aapt resource value: 0x7F0E002D
+			public const int tender = 2131623981;
+			
+			// aapt resource value: 0x7F0E002E
+			public const int toaster2_filter_shader = 2131623982;
+			
+			// aapt resource value: 0x7F0E002F
+			public const int valencia = 2131623983;
+			
+			// aapt resource value: 0x7F0E0030
+			public const int vertex = 2131623984;
+			
+			// aapt resource value: 0x7F0E0031
+			public const int vertex_sharpen = 2131623985;
+			
+			// aapt resource value: 0x7F0E0032
+			public const int walden = 2131623986;
+			
+			// aapt resource value: 0x7F0E0033
+			public const int warm = 2131623987;
+			
+			// aapt resource value: 0x7F0E0034
+			public const int whitecat = 2131623988;
+			
+			// aapt resource value: 0x7F0E0035
+			public const int xproii_filter_shader = 2131623989;
 			
 			static Raw()
 			{

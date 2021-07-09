@@ -9,8 +9,11 @@
                  xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:views1="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.CandidatesView"
-                 base:ViewModelLocator.AutoWireViewModel="True">
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:CandidatesViewModel">
     <pages:PopupPage.Animation>
         <pages:ScaleAnimation
             PositionIn="Bottom"
@@ -83,7 +86,7 @@
                                              VerticalItemSpacing="16" />
                                     </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
+                                            <DataTemplate x:DataType="dtos:CandidateDto">
                                             <StackLayout>
                                                 <Frame CornerRadius="45" HorizontalOptions="CenterAndExpand"
                                            BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
@@ -173,7 +176,7 @@
                         Margin="16,0"
                         SelectionMode="None">
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
+                                            <DataTemplate x:DataType="dtos:VoteStatusResultDto">
                                             <StackLayout Margin="8">
                                                 <Frame CornerRadius="45" 
                                            BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">

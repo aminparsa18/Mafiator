@@ -36,6 +36,7 @@ namespace MafiatorApp.ViewModels.Base
             services.AddTransient<LanguagesViewModel>();
             services.AddTransient<HomeViewModel>();
             services.AddTransient<LoginViewModel>();
+            services.AddTransient<ChatViewModel>();
             services.AddTransient<ConfirmPhoneViewModel>();
             services.AddTransient<CountriesViewModel>();
             services.AddTransient<ProfilePictureViewModel>();

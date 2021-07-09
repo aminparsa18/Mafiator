@@ -178,10 +178,16 @@ namespace MafiatorApp.Services.Impl
                 new Uri(Constants.BaseUrl + "api/Game/GetMafiaPartners?gameId=" + gameId));
         }
 
-        public async Task<ApiResult<PlayerRoleDto>> GetPlayerRole(string gameId)
+        public Task<ApiResult<PlayerRoleDto>> GetPlayerRole(string gameId)
         {
-            return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<PlayerRoleDto>>(
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<PlayerRoleDto>>(
                 new Uri(Constants.BaseUrl + "api/Game/GetRoleOfPlayer?gameId=" + gameId));
+        }
+
+        public Task<ApiResult<IEnumerable<GameEventResultDto>>> GetNightResult(string gameId)
+        {
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResultDto>>>(
+                new Uri(Constants.BaseUrl + "api/GameEvent/GetNightResult?gameId=" + gameId));
         }
 
         public async Task<HttpResponseMessage> AddMember(AddMemberDto member)
@@ -248,6 +254,12 @@ namespace MafiatorApp.Services.Impl
         {
             return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GemDto>>>(
                 new Uri(Constants.BaseUrl + "api/Gem/GetAll"));
+        }
+
+        public Task<ApiResult<IEnumerable<ChatMessageDto>>> GetChatByRoom(string roomId)
+        {
+            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<ChatMessageDto>>>(
+                new Uri(Constants.BaseUrl + "api/Chat/GetByRoom?roomId=" + roomId));
         }
     }
 }

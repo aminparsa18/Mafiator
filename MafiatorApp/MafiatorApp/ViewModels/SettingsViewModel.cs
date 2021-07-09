@@ -58,7 +58,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref country, value);
         }
 
-        private bool initial = true;
+        public bool Initial = true;
         public ICommand PlaySoundCommand { get; set; }
         public ICommand PlayMusicCommand { get; set; }
         public ICommand AllowNotificationCommand { get; set; }
@@ -79,7 +79,6 @@ namespace MafiatorApp.ViewModels
             AllowNotification = !Barrel.Current.Exists("AllowNotification") ||
                                 Barrel.Current.Get<bool>("AllowNotification");
             Autoplay = !Barrel.Current.Exists("Autoplay") || Barrel.Current.Get<bool>("Autoplay");
-            initial = false;
             var culture = Barrel.Current.Get<string>("Culture");
             if (culture == "RU")
                 Country = new Country() {Code = culture, Name = "Russian"};
@@ -91,6 +90,7 @@ namespace MafiatorApp.ViewModels
             AllowNotificationCommand = new Command(ToggleAllowNotification);
             AutoplayCommand = new Command(ToggleAutoplay);
             ChangeLangCommand = new AsyncCommand(ChangeLang);
+
         }
 
         private void LangChanged()
@@ -114,7 +114,7 @@ namespace MafiatorApp.ViewModels
 
         private void TogglePlayMusic()
         {
-            if (initial) return;
+            if (Initial) return;
             //make it reverse
             if (!PlayMusic)
             {
@@ -126,6 +126,7 @@ namespace MafiatorApp.ViewModels
                 if (CrossSimpleAudioPlayer.Current.IsPlaying)
                     CrossSimpleAudioPlayer.Current.Pause();
             }
+
         }
 
         private void ToggleAllowNotification()

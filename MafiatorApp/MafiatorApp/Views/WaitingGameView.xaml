@@ -6,9 +6,12 @@
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-             xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+             xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob" 
+             xmlns:viewmodels="clr-namespace:MafiatorApp.ViewModels"
+             xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.WaitingGameView"
-             base:ViewModelLocator.AutoWireViewModel="True">
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewmodels:WaitingGameViewModel">
     <ContentPage.Resources>
         <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
         <converters:ToggleConverter x:Key="ToggleConverter"/>
@@ -87,16 +90,13 @@
            
             <CollectionView
                     ItemsSource="{Binding Members}"
-                    SelectedItem="{Binding Member}"
                     Margin="24,8"
-
-                    SelectionMode="Single"
-                    SelectionChangedCommand="{Binding MemberSelectedCommand}">
+                    SelectionMode="Single">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="8" VerticalItemSpacing="8" Span="2"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="dtos:WaitingPlayerDto">
                         <Frame CornerRadius="45" Padding="12" BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}" CompressedLayout.IsHeadless="true">
                         <StackLayout>
                             <forms:CachedImage
@@ -124,17 +124,7 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-                            <Label TextColor="#91F8AA" HorizontalOptions="CenterAndExpand">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{xct:Translate Level}" />
-                                                <Span Text=" : " />
-                                                <Span Text="{Binding Level}" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                        </StackLayout>
+                          </StackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

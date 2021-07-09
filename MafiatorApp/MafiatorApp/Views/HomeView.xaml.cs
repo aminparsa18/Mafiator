@@ -20,7 +20,6 @@ namespace MafiatorApp.Views
         private readonly string nightColor;
 
         private bool once;
-        private bool menu;
         public HomeView()
         {
             InitializeComponent();
@@ -29,8 +28,6 @@ namespace MafiatorApp.Views
             nightColor = ((Color)Application.Current.Resources["Night4"]).ToHex();
             ProfileCircleTransformation.BorderHexColor =
                 Application.Current.RequestedTheme == OSAppTheme.Dark ? nightColor : dayColor;
-
-           
             Application.Current.RequestedThemeChanged += ThemeChanged;
         }
 

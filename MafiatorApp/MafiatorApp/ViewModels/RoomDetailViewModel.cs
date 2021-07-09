@@ -30,6 +30,13 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref room, value);
         }
 
+        private GameRoleDto role;
+
+        public GameRoleDto Role
+        {
+            get => role;
+            set => SetProperty(ref role, value);
+        }
         private bool newGameAvailable;
 
         public bool NewGameAvailable
@@ -74,7 +81,9 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand AddMemberCommand { get; set; }
         public IAsyncCommand QrCommand { get; set; }
         public IAsyncCommand NewGameCommand { get; set; }
+        public IAsyncCommand ChatCommand { get; set; }
         public IAsyncCommand GoToGameCommand { get; set; }
+        public IAsyncCommand RoleChangeCommand { get; set; }
         public IAsyncCommand JoinCommand { get; set; }
         public IAsyncCommand LeaveCommand { get; set; }
         private ApiResult<WaitingGameDto> waiting;
@@ -91,7 +100,19 @@ namespace MafiatorApp.ViewModels
             GoToGameCommand = new AsyncCommand(GoToGame);
             LeaveCommand = new AsyncCommand(Leave);
             JoinCommand = new AsyncCommand(Join);
+            RoleChangeCommand = new AsyncCommand(RoleChanged);
+            ChatCommand=new AsyncCommand(Chat);
             subscriber.Subscribe(async s => await LoadDataCommand.ExecuteAsync());
+        }
+
+        private async Task Chat()
+        {
+            await NavigationService.NavigateToAsync<ChatViewModel>(Members.ToList());
+        }
+
+        private async Task RoleChanged()
+        {
+            await NavigationService.NavigateToPopupAsync<PlayerRoleViewModel>(Tuple.Create(Role.Role,false));
         }
 
         private async Task Join()

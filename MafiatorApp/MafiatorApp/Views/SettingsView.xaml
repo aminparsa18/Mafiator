@@ -6,8 +6,10 @@
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.SettingsView"
-                 base:ViewModelLocator.AutoWireViewModel="True">
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:SettingsViewModel">
     <pages:PopupPage.Animation>
         <pages:ScaleAnimation
             PositionIn="Bottom"

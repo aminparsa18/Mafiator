@@ -44,6 +44,8 @@ namespace MafiatorApp.ViewModels
             get=>role;
             set => SetProperty(ref role, value);
         }
+
+        private bool fromDetail;
         public IAsyncCommand PopCommand { get; set; }
         public ObservableRangeCollection<PartnerDto> Partners { get; set; }
         public PlayerRoleViewModel()
@@ -74,6 +76,7 @@ namespace MafiatorApp.ViewModels
             else
                 CanClose = true;
             
+            if(fromDetail)return;
             IsMafia = Role == GameRole.Mafia || Role == GameRole.GodFather;
                 if (IsMafia)
                 {
@@ -99,13 +102,14 @@ namespace MafiatorApp.ViewModels
                 this.gameId = data.Item2;
                 this.first = data.Item3;
                 await LoadRole();
+            }else if (navigationData is Tuple<GameRole?, bool> data2)
+            {
+                this.Role = data2.Item1;
+                this.fromDetail = true;
+                await LoadRole();
             }
         }
 
-        public class PartnerDto
-        {
-            public GameRole Role { get; set; }
-            public string Name { get; set; }
-        }
+        
     }
 }

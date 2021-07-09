@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,8 +13,6 @@ namespace MafiatorApp.Services.Impl
 {
     public class NavigationService : INavigationService
     {
-        // private readonly ISettingsService _settingsService;
-        // private readonly IAuthenticationService _authenticationService;
         public ViewModelBase PreviousPageViewModel
         {
             get
@@ -36,19 +33,6 @@ namespace MafiatorApp.Services.Impl
             }
         }
 
-        //public NavigationService(ISettingsService settingsService, IAuthenticationService authenticationService)
-        //{
-        //    _settingsService = settingsService;
-        //    _authenticationService = authenticationService;
-        //}
-
-        //public Task InitializeAsync()
-        //{
-        //    //if (string.IsNullOrEmpty(_settingsService.AuthAccessToken))
-        //    //    return NavigateToAsync<LoginViewModel>();
-        //    //else
-        //    return NavigateToAsync<LoginViewModel>();
-        //}
 
         public Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase
         {

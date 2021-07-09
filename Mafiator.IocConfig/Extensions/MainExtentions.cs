@@ -32,8 +32,8 @@ namespace Mafiator.IocConfig.Extensions
             var messagePackOption = MessagePackSerializerOptions.Standard.WithResolver(resolver);
             services.AddControllers(option =>
             {
-             //  option.OutputFormatters.Add(new MessagePackOutputFormatter(messagePackOption));
-             //   option.InputFormatters.Add(new MessagePackInputFormatter(messagePackOption));
+              option.OutputFormatters.Add(new MessagePackOutputFormatter(messagePackOption)); 
+              option.InputFormatters.Add(new MessagePackInputFormatter(messagePackOption));
             }).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MafiatorApp.Enums;
-using MafiatorApp.ViewModels.Base;
 using MediaManager;
 using MediaManager.Player;
 using Xamarin.CommunityToolkit.ObjectModel;

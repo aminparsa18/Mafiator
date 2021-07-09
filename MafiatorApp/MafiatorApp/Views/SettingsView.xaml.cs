@@ -1,5 +1,4 @@
-﻿using System;
-using MafiatorApp.Views.Templates;
+﻿using MafiatorApp.ViewModels;
 using Rg.Plugins.Popup.Pages;
 using Xamarin.Forms.Xaml;
 
@@ -11,11 +10,8 @@ namespace MafiatorApp.Views
         public SettingsView()
         {
             InitializeComponent();
+            ((SettingsViewModel) this.BindingContext).Initial = false;
         }
 
-        private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
-        {
-            ((CheckBoxView) sender).IsChecked = !((CheckBoxView) sender).IsChecked;
-        }
     }
 }

@@ -7,13 +7,15 @@
                  xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.JoinRoomView"
                  CloseWhenBackgroundIsClicked="True"
-                 base:ViewModelLocator.AutoWireViewModel="True">
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:JoinRoomViewModel">
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation
-            PositionIn="Bottom"
-            PositionOut="Bottom"
+            PositionIn="Right"
+            PositionOut="Right"
             DurationIn="400"
             DurationOut="400"
             EasingIn="SinOut"
@@ -35,7 +37,6 @@
                     <userControls:ExtendedEntry
                         x:Name="NameInput"
                         Text="{Binding Code.Value,Mode=TwoWay}"
-                        IsValid="{Binding IsCodeValid,Mode=TwoWay}"
                         Placeholder="{xct:Translate RoomCode}"
                         FontSize="Medium">
                         <userControls:ExtendedEntry.HorizontalOptions>

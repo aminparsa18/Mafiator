@@ -65,7 +65,6 @@ namespace MafiatorApp.ViewModels
         private int voiceMiliSeconds;
 
         private TimeSpan recordingTimer;
-
         public TimeSpan RecordingTimer
         {
             get => recordingTimer;

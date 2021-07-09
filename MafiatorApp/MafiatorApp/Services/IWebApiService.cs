@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MafiatorApp.Dtos;
 using MafiatorApp.Enums;
 using MafiatorApp.Models.Api;
+using MafiatorApp.ViewModels;
 
 namespace MafiatorApp.Services
 {
@@ -44,6 +45,7 @@ namespace MafiatorApp.Services
         Task<ApiResult<IEnumerable<WaitingPlayerDto>>> GetWaitingPlayersByGame(string gameId);
         Task<ApiResult<IEnumerable<PlayerRoleDto>>> GetMafiaPartners(string gameId);
         Task<ApiResult<PlayerRoleDto>> GetPlayerRole(string gameId);
+        Task<ApiResult<IEnumerable<GameEventResultDto>>> GetNightResult(string gameId);
 
         //Members
         Task<HttpResponseMessage> AddMember(AddMemberDto member);
@@ -63,5 +65,8 @@ namespace MafiatorApp.Services
 
         //gem
         Task<ApiResult<IEnumerable<GemDto>>> GetAllGems();
+
+        //chat
+        Task<ApiResult<IEnumerable<ChatMessageDto>>> GetChatByRoom(string roomId);
     }
 }

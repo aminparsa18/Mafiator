@@ -8,10 +8,11 @@
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
-                 xmlns:effects="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.SetRolesView"
                  base:ViewModelLocator.AutoWireViewModel="True"
-                 x:Name="SetRolesPopup">
+                 x:DataType="viewModels:SetRolesViewModel">
     <pages:PopupPage.Resources>
         <converters:RoleNameConverter x:Key="RoleNameConverter" />
         <converters:RoleImageConverter x:Key="RoleImageConverter" />
@@ -52,7 +53,7 @@
                                              VerticalItemSpacing="16" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="models:NewGameRole">
                                 <StackLayout>
                                     <Frame CornerRadius="45" HorizontalOptions="CenterAndExpand"
                                            BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4} }">

@@ -1,0 +1,89 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:helpers="clr-namespace:MafiatorApp.Helpers;assembly=MafiatorApp"
+             xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:effects="clr-namespace:MafiatorApp.Effects;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.ChatView"
+             base:ViewModelLocator.AutoWireViewModel="true"
+             x:DataType="viewModels:ChatViewModel">
+    <ContentPage.Resources>
+        <helpers:ChatTemplateSelector x:Key="ChatTemplateSelector" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <CollectionView x:Name="ChatListView"
+                            Margin="0,172,0,0"
+                            ItemsSource="{Binding Messages}"
+                            SelectionMode="None"
+                            ItemTemplate="{StaticResource ChatTemplateSelector}" />
+            <Frame x:Name="MessageBox" TranslationY="200" Margin="8" HeightRequest="80"
+                       BackgroundColor="{StaticResource Night1}"
+                       CornerRadius="16" Padding="8,4,0,4">
+                <StackLayout Orientation="Horizontal" >
+                    <Grid HorizontalOptions="FillAndExpand">
+                        <Entry x:Name="MessageEntry" Text="{Binding Message,Mode=TwoWay}"
+                                   Placeholder="{extensions:Translate TypeMessage}"
+                                   HorizontalOptions="FillAndExpand"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="DarkGray" />
+                        <StackLayout Padding="8,8,0,8" IsVisible="False" x:Name="CancelView" Orientation="Horizontal"
+                                         BackgroundColor="{StaticResource Night1}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label VerticalOptions="CenterAndExpand" TextColor="{StaticResource Night4}"
+                                               Text="{Binding RecordingTimer,Converter={StaticResource RecordingTimeConverter}}" />
+                                    <Ellipse Fill="Red"
+                                                 WidthRequest="16"
+                                                 HeightRequest="16"
+                                                 Aspect="Uniform"
+                                                 Margin="4,0,0,0" />
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Grid.Column="1" Padding="-8,0,0,0">
+                                    <Path Data="M310.5,640l-5-5,5-5"
+                                              Stroke="#363853"
+                                              StrokeThickness="3"
+                                              Aspect="Uniform"
+                                              WidthRequest="28"
+                                              HeightRequest="28"
+                                              Margin="0,0,-10,0"
+                                              StrokeLineCap="Round"
+                                              StrokeLineJoin="Round"
+                                              HorizontalOptions="CenterAndExpand"
+                                              VerticalOptions="CenterAndExpand">
+                                        <Path.RenderTransform>
+                                            <TranslateTransform X="-304.75" Y="-628.939" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Label TextColor="{StaticResource Night4}" FontSize="14" Text="{extensions:Translate SwipeToCancel}"
+                                               VerticalOptions="CenterAndExpand" />
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                    </Grid>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                        <Frame x:Name="RecordBtn" Margin="8,0,-18,0" Padding="6" VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="EndAndExpand" CornerRadius="500"
+                               BackgroundColor="{StaticResource Day2}">
+
+                            <forms:SvgCachedImage HorizontalOptions="CenterAndExpand" Source="record.svg"
+                                                      Aspect="AspectFit"
+                                                      HeightRequest="24" WidthRequest="24" />
+                            <Frame.Effects>
+                                <effects:TouchEffect TouchAction="TouchEffect_TouchAction" />
+                            </Frame.Effects>
+                        </Frame>
+
+                        <Button BackgroundColor="Transparent" FontFamily="{StaticResource BoldFont}" Text="{extensions:Translate Send}"
+                                    TextColor="{StaticResource Night4}" Margin="0,0,-12,0" Padding="4" Command="{Binding SendMessageCommand}" />
+                    </StackLayout>
+
+
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -8,5 +8,7 @@ namespace MafiatorApp.Enums
         Inquired = 3,
         Silenced = 4,
         Speak = 5,
+        Sniped = 6,
+        Poisoned = 7
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
+using Mafiator.Common.Api;
+using Mafiator.Data.Dtos;
 using Mafiator.Entities.Enums;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
@@ -147,6 +150,7 @@ namespace Mafiator.Api
 
         public async Task ShowNightResult(string gameId)
         {
+            var results=new List<GameEventResultDto>(); 
             var events = await unitOfWork.GameEvent.GetByGame(gameId);
             var _members = await unitOfWork.GameMember.GetPlayerByGame(gameId);
             if (events.Any())
@@ -173,24 +177,67 @@ namespace Mafiator.Api
                     }else if (fuckedUp.Role == GameRole.Priest)
                     {
                         speak = null;
+                    }else if(fuckedUp.Role == GameRole.Doctor)
+                    {
+                        cured = null;
+                    }
+                    
+
+                    if (fuckedUp.Role == GameRole.Detective && inquired!=null)
+                    {
+                        Inquiry(gameId,inquired.MemberId,true);
+                    }
+                    else if(inquired!=null)
+                    {
+                        Inquiry(gameId, inquired.MemberId,false);
                     }
                 }
-
+                
                 if (killed != null && killed.MemberId != cured?.MemberId)
                 {
                     var fuckedUp = _members.FirstOrDefault(m => m.MemberId == killed.MemberId);
                     if(fuckedUp?.Role!=GameRole.Immortal)
                         await unitOfWork.GameMember.KillMember(killed.MemberId);
+                    results.Add(new GameEventResultDto()
+                    {
+                        MemberId = killed.MemberId,
+                        //Description = "Can no longer play or vote",
+                        //Status = "Is Killed",
+                        //DisplayName = _members.FirstOrDefault(p => p.MemberId == killed.MemberId)?.UserId,
+                        EventType = GameEventType.Killed
+                    });
                 }
 
                 if (speak != null)
                 {
                     if (speak.MemberId == silenced?.MemberId)
                         silenced = null;
+                    else
+                    {
+                        results.Add(new GameEventResultDto()
+                        {
+                            MemberId = speak.MemberId,
+                            //Description = "Has Extra talk tomorrow",
+                            //Status = "Is Speaked",
+                            //DisplayName = _members.FirstOrDefault(p => p.MemberId == speak.MemberId)?.UserId,
+                            EventType = GameEventType.Speak
+                        });
+                    }
                 }
 
                 if (silenced != null)
+                {
                     await unitOfWork.GameMember.SilenceMember(silenced.MemberId);
+                    results.Add(new GameEventResultDto()
+                    {
+                        MemberId = silenced.MemberId,
+                        //Description = "Can't Talk tomorrow",
+                        //Status = "Is Silenced",
+                        //DisplayName = _members.FirstOrDefault(p => p.MemberId == silenced.MemberId)?.UserId,
+                        EventType = GameEventType.Silenced
+                    });
+                }
+
                 if (sniped != null)
                 {
                     var targets = await unitOfWork.GameMember.GetPlayerStatusFast(sniped.MemberId);
@@ -206,16 +253,32 @@ namespace Mafiator.Api
                             {
                                 var sniper = snipers.FirstOrDefault();
                                 await unitOfWork.GameMember.KillMember(sniper.MemberId);
+                                results.Add(new GameEventResultDto()
+                                {
+                                    MemberId = sniper.MemberId,
+                                    //Description = "Can no longer play or vote",
+                                    //Status = "Is Killed",
+                                    //DisplayName = _members.FirstOrDefault(p => p.MemberId == sniper.MemberId)?.UserId,
+                                    EventType = GameEventType.Killed
+                                });
                             }
                         }
                         else
                         {
                             await unitOfWork.GameMember.KillMember(sniped.MemberId);
+                            results.Add(new GameEventResultDto()
+                            {
+                                MemberId = sniped.MemberId,
+                                //Description = "Can no longer play or vote",
+                                //Status = "Is Killed",
+                                //DisplayName = _members.FirstOrDefault(p => p.MemberId == sniped.MemberId)?.UserId,
+                                EventType = GameEventType.Killed
+                            });
                         }
 
                     }
                 }
-
+                cache.SetCache(results,$"NightResults-{gameId}");
                 try
                 {
                     //remove player status cache
@@ -226,6 +289,20 @@ namespace Mafiator.Api
             await _gameHub.Clients.Group(gameId).SendAsync("NightResult");
             BackgroundJob.Schedule(() => ValidateGameEvents(gameId), TimeSpan.FromSeconds(20));
 
+        }
+
+        public async void Inquiry(string gameId,string memberId,bool isToggled)
+        {
+            var targets = await unitOfWork.GameMember.GetPlayerStatusFast(memberId);
+            if (targets.Any())
+            {
+                var target = targets.FirstOrDefault();
+                if (target.GameRole == GameRole.Mafia || target.GameRole == GameRole.Terrorist)
+                   await _gameHub.Clients.Group(gameId).SendAsync("Inquiry",!isToggled);
+                else
+                    await _gameHub.Clients.Group(gameId).SendAsync("Inquiry", isToggled);
+
+            }
         }
 
         public async Task ValidateGameEvents(string gameId)

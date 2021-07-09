@@ -3,10 +3,12 @@
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
-             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.MyRoomsView"
-             base:ViewModelLocator.AutoWireViewModel="True">
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:MyRoomsViewModel">
     <ContentPage.Content>
         <StackLayout>
             <Grid xct:StateLayout.CurrentState="{Binding CurrentState}"
@@ -72,7 +74,7 @@
 
                         </CollectionView.Header>
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                                    <DataTemplate x:DataType="dtos:RoomDto">
                                 <StackLayout >
                                     <Grid Margin="16,8" >
                                         <Image Source="history.png" Aspect="Fill"/>

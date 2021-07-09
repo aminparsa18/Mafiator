@@ -60,7 +60,7 @@ namespace MafiatorApp
             //else
             //    UserAppTheme = OSAppTheme.Light;
 
-            MainPage = new TransitionNavigationPage(new HomeView());
+            MainPage = new TransitionNavigationPage(new SplashScreenView(uri));
         }
 
         private async void InitBarrel()

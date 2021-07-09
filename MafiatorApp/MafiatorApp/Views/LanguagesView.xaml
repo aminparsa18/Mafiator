@@ -7,8 +7,11 @@
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
                  base:ViewModelLocator.AutoWireViewModel="True"
-                 x:Class="MafiatorApp.Views.LanguagesView">
+                 x:Class="MafiatorApp.Views.LanguagesView"
+                 x:DataType="viewModels:LanguagesViewModel">
     <pages:PopupPage.Animation>
         <pages:ScaleAnimation
             PositionIn="Bottom"
@@ -49,7 +52,7 @@
                     SelectionMode="Single"
                     SelectionChangedCommand="{Binding CountrySelectedCommand}">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="models:Country">
                             <StackLayout Margin="8">
                                 <Frame
                                     BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">

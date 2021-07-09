@@ -4,8 +4,10 @@
                  xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.InquiryStatusView"
-                 base:ViewModelLocator.AutoWireViewModel="True">
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:InquiryStatusViewModel">
     <pages:PopupPage.Animation>
         <pages:ScaleAnimation
             PositionIn="Bottom"

@@ -8,9 +8,12 @@
                  xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.NewMemberView"
                  CloseWhenBackgroundIsClicked="True"
-                 base:ViewModelLocator.AutoWireViewModel="True">
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:NewMemberViewModel">
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation
             PositionIn="Bottom"
@@ -45,7 +48,7 @@
                         </Frame>
                         <StackLayout BindableLayout.ItemsSource="{Binding Members}">
                             <BindableLayout.ItemTemplate>
-                                <DataTemplate>
+                                    <DataTemplate x:DataType="dtos:ValidateUserDto">
                                     <StackLayout Orientation="Horizontal">
                                         <forms:CachedImage
                                             x:Name="ProfileImage"

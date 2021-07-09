@@ -3,6 +3,7 @@ using System.Linq;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Helpers;
@@ -42,6 +43,13 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref isImmediate, value);
         }
 
+        private bool isPublic;
+
+        public bool IsPublic
+        {
+            get => isPublic;
+            set => SetProperty(ref isPublic, value);
+        }
         private DateTime? date = DateTime.Now;
 
         public DateTime? Date
@@ -54,6 +62,7 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand SetRolesCommand { get; set; }
         public IAsyncCommand SaveGameCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
+        public ICommand PublicHelpCommand { get; set; }
         private Ulid _roomId;
         public NewGameViewModel(IPublisher<UpdateRoomEvent> publisher)
         {
@@ -62,7 +71,13 @@ namespace MafiatorApp.ViewModels
             Roles = new ObservableRangeCollection<NewGameRole>();
             SetRolesCommand = new AsyncCommand(SetRoles);
             SaveGameCommand = new AsyncCommand(SaveGame);
+            PublicHelpCommand=new Command(PublicHelp);
             PopCommand = new AsyncCommand(Pop);
+        }
+
+        private void PublicHelp()
+        {
+            DependencyService.Get<IAlert>().ShortAlert("Everyone can observe your game live as guests",MessageType.Info);
         }
 
         private async Task Pop()

@@ -46,7 +46,7 @@
     <PackageReference Include="Ulid.MessagePack" Version="1.2.6" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
     <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.4.0" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.1.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
     <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
@@ -58,6 +58,9 @@
   <ItemGroup>
     <Compile Update="Views\BarcodeScannerView.xaml.cs">
       <DependentUpon>BarcodeScannerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ChatView.xaml.cs">
+      <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\LanguagesView.xaml.cs">
       <DependentUpon>LanguagesView.xaml</DependentUpon>
@@ -122,7 +125,7 @@
     <EmbeddedResource Update="Views\CountriesView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\FriendsView.xaml">
+    <EmbeddedResource Update="Views\ChatView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\GameEventView.xaml">

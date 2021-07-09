@@ -4,9 +4,11 @@
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.ConfirmPhoneView"
              base:ViewModelLocator.AutoWireViewModel="True"
-             BackgroundColor="#17161B">
+             BackgroundColor="#17161B"
+             x:DataType="viewModels:ConfirmPhoneViewModel">
     <ContentPage.Content>
         <Grid>
             <xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
@@ -23,7 +25,7 @@
             <userControls:ExtendedEntry Margin="24" Text="{Binding Code.Value}" MaxLength="6"
                                         IsValid="{Binding IsCodeValid, Mode=TwoWay}"
                                         Placeholder="{xct:Translate VerificationCode}"
-                                        IsVisible="{Binding ActivationSent}" Keyboard="Numeric"
+                                        Keyboard="Numeric"
                                         HorizontalTextAlignment="Center" />
             <Button Text="{xct:Translate Continue}"  Command="{Binding ConfirmCommand}"
                     Margin="24" >
@@ -31,7 +33,7 @@
             </Button>
             <Label HorizontalOptions="CenterAndExpand" x:Name="TimeLbl" />
             <Button x:Name="ResendBtn" Text="{xct:Translate Resend}" Command="{Binding ConfirmCommand}"
-                    Margin="24" IsEnabled="False" IsVisible="{Binding ActivationSent}">
+                    Margin="24" IsEnabled="False" IsVisible="False">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0,0"
                                          EndPoint="1,1">

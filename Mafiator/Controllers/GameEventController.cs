@@ -9,6 +9,7 @@ using Mafiator.Data.Dtos;
 using Mafiator.Entities;
 using Mafiator.Entities.Enums;
 using Mafiator.Repository;
+using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mafiator.Api.Controllers
@@ -17,10 +18,12 @@ namespace Mafiator.Api.Controllers
     {
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMemoryCache cache;
 
-        public GameEventController(IMapper mapper, IUnitOfWork unitOfWork)
+        public GameEventController(IMapper mapper,IMemoryCache memoryCache, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
+            this.cache = memoryCache;
             this.unitOfWork = unitOfWork;
         }
 
@@ -33,56 +36,7 @@ namespace Mafiator.Api.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Inquiry([FromBody] GameEventDto ev)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.Name);
-            var playerStatus = await unitOfWork.GameMember.GetUserStatusFast(userId);
-            if (playerStatus.Any())
-            {
-                if (playerStatus.FirstOrDefault().GameRole == GameRole.Detective)
-                {
-                    var targets = await unitOfWork.GameMember.GetPlayerStatusFast(ev.MemberId.ToString());
-                    if (targets.Any())
-                    {
-                        var target = targets.FirstOrDefault();
-                        if (target.GameRole == GameRole.Mafia || target.GameRole == GameRole.Terrorist)
-                            return Ok(new ApiResult<InquiryStatusDto>()
-                            {
-                                IsSuccess = true,
-                                Data = new InquiryStatusDto() {IsMafia = true}
-                            });
-                        return Ok(new ApiResult<InquiryStatusDto>()
-                        {
-                            IsSuccess = true,
-                            Data = new InquiryStatusDto() {IsMafia = false}
-                        });
-                    }
-
-                    return Ok(new ApiResult()
-                    {
-                        IsSuccess = false,
-                        StatusCode = ApiResultStatusCode.NotFound,
-                        Errors = new[] {"no such target in game!!!"}
-                    });
-                }
-
-                return Ok(new ApiResult()
-                {
-                    IsSuccess = false,
-                    StatusCode = ApiResultStatusCode.Conflict,
-                    Errors = new[] {"only detective have rights to do this!!!"}
-                });
-            }
-
-            return Ok(new ApiResult()
-            {
-                IsSuccess = false,
-                StatusCode = ApiResultStatusCode.NotFound,
-                Errors = new[] {"no such user in game!!!"}
-            });
-        }
-
+        
         [HttpPost]
         public async Task<IActionResult> Cure([FromBody] GameEventDto ev)
         {
@@ -146,6 +100,16 @@ namespace Mafiator.Api.Controllers
             {
                 IsSuccess = true,
                 Data = await unitOfWork.GameEvent.GetByGame(gameId)
+            });
+        }
+
+        [HttpGet]
+        public IActionResult GetNightResult(string gameId)
+        {
+            return Ok(new ApiResult<IEnumerable<GameEventResultDto>>()
+            {
+                IsSuccess = true,
+                Data = cache.GetCache<List<GameEventResultDto>>($"NightResults-{gameId}")
             });
         }
     }

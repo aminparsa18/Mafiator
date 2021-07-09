@@ -27,6 +27,7 @@ namespace MafiatorApp.ViewModels
     {
         private readonly IPublisher<UpdateMembersEvent> publisher;
         private LayoutState mainState = LayoutState.Empty;
+
         public LayoutState MainState
         {
             get => mainState;
@@ -88,6 +89,7 @@ namespace MafiatorApp.ViewModels
         }
 
         private string action;
+
         public string Action
         {
             get => action;
@@ -95,6 +97,7 @@ namespace MafiatorApp.ViewModels
         }
 
         private bool isMafia;
+
         public bool IsMafia
         {
             get => isMafia;
@@ -106,7 +109,7 @@ namespace MafiatorApp.ViewModels
         private string gameId;
         private readonly IMapper mapper;
 
-        public GameEventViewModel(IMapper mapper,IPublisher<UpdateMembersEvent> publisher)
+        public GameEventViewModel(IMapper mapper, IPublisher<UpdateMembersEvent> publisher)
         {
             this.mapper = mapper;
             this.publisher = publisher;
@@ -118,6 +121,14 @@ namespace MafiatorApp.ViewModels
             _timer ??= new Timer(Callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             GameHub.Instance.On<string>("MafiaChose", MafiaChose);
             GameHub.Instance.On("NightResult", ShowStatus);
+            GameHub.Instance.On<bool>("Inqiry", ShowInquiryResult);
+        }
+
+        private async Task ShowInquiryResult(bool value)
+        {
+            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            if (player.Role == GameRole.Detective)
+                await NavigationService.NavigateToPopupAsync<InquiryStatusViewModel>(value);
         }
 
         private void MafiaChose(string memberId)
@@ -162,45 +173,17 @@ namespace MafiatorApp.ViewModels
             GameHub.Instance.Remove("NightResult");
             _timer ??= new Timer(Callback2, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             MainState = LayoutState.Loading;
-            var status = await WebApiService.GetEventStatus(gameId);
+            var status = await WebApiService.GetNightResult(gameId);
             if (status.IsSuccess)
             {
                 Title = "Status Board";
                 SubTitle = "See what happened last night";
-                if (status.Data.Any())
+                Results.Clear();
+                Results.AddRange(status.Data);
+                if (Results.Any())
                 {
-                    var players = mapper.Map<List<CandidateDto>>(Barrel.Current.Get<IEnumerable<PlayerDto>>("Members"));
-                    var killed = status.Data.FirstOrDefault(e => e.EventType == GameEventType.Killed);
-                    var cured = status.Data.FirstOrDefault(e => e.EventType == GameEventType.Cured);
-                    var inquired = status.Data.FirstOrDefault(e => e.EventType == GameEventType.Inquired);
-                    var silenced = status.Data.FirstOrDefault(e => e.EventType == GameEventType.Silenced);
-                    var speak = status.Data.FirstOrDefault(e => e.EventType == GameEventType.Speak);
-                    if (killed != null && killed.MemberId != cured?.MemberId)
-                        //member id is killed
-                        Results.Add(new GameEventResultDto()
-                        {
-                            MemberId = killed.MemberId,
-                            Description = "Can no longer play or vote",
-                            Status = "Is Killed",
-                            DisplayName = players.FirstOrDefault(p => p.Id == killed.MemberId)?.DisplayName,
-                            Image = players.FirstOrDefault(p => p.Id == killed.MemberId)?.Image,
-                            EventType = GameEventType.Killed
-                        });
-                    if (silenced != null)
-                        Results.Add(new GameEventResultDto()
-                        {
-                            MemberId = silenced.MemberId,
-                            Description = "Can't Talk tomorrow",
-                            Status = "Is Silenced",
-                            DisplayName = players.FirstOrDefault(p => p.Id == silenced.MemberId)?.DisplayName,
-                            Image = players.FirstOrDefault(p => p.Id == silenced.MemberId)?.Image,
-                            EventType = GameEventType.Silenced
-                        });
-                    if (Results.Any())
-                    {
-                        Barrel.Current.Add("EventResults", Results.ToList(), TimeSpan.FromMinutes(1));
-                       publisher.Publish(new UpdateMembersEvent());// MessagingCenter.Send(this, "UpdateMembers");
-                    }
+                    Barrel.Current.Add("EventResults", Results.ToList(), TimeSpan.FromMinutes(1));
+                    publisher.Publish(new UpdateMembersEvent());
                 }
 
                 MainState = LayoutState.Saving;
@@ -229,25 +212,6 @@ namespace MafiatorApp.ViewModels
                     GameId = Ulid.Parse(gameId),
                     EventType = GameEventType.Inquired
                 });
-
-                if (request.IsSuccessStatusCode)
-                {
-                    var response = await request.Content.ReadAsMessagePackAsync<ApiResult<InquiryStatusDto>>();
-                    if (response.IsSuccess)
-                    {
-                        //show result
-                        await NavigationService.NavigateToPopupAsync<InquiryStatusViewModel>(response.Data.IsMafia);
-                    }
-                    else
-                    {
-                        DependencyService.Get<IAlert>().ShortAlert(response.Errors.FirstOrDefault(), MessageType.Error);
-                    }
-                }
-                else
-                {
-                    var response = await request.Content.ReadAsStringAsync();
-                    DependencyService.Get<IAlert>().ShortAlert(response, MessageType.Error);
-                }
             }
             else if (player.Role == GameRole.Doctor)
             {
@@ -347,16 +311,6 @@ namespace MafiatorApp.ViewModels
         {
             Candidates.ForEach(c => c.Selected = false);
             Candidate.Selected = !Candidate.Selected;
-        }
-
-        public class GameEventResultDto
-        {
-            public string MemberId { get; set; }
-            public string DisplayName { get; set; }
-            public string Image { get; set; }
-            public string Status { get; set; }
-            public string Description { get; set; }
-            public GameEventType EventType { get; set; }
         }
     }
 }

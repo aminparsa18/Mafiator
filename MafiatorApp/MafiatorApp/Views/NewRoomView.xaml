@@ -10,9 +10,11 @@
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.NewRoomView"
                  CloseWhenBackgroundIsClicked="True"
-                 base:ViewModelLocator.AutoWireViewModel="true">
+                 base:ViewModelLocator.AutoWireViewModel="true"
+                 x:DataType="viewModels:NewRoomViewModel">
     <pages:PopupPage.Animation>
         <animations:MoveAnimation
             PositionIn="Left"

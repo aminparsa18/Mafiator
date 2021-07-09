@@ -6,9 +6,11 @@
                  xmlns:pages="http://rotorgames.com"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.NewGameView"
                  CloseWhenBackgroundIsClicked="True"
-                 base:ViewModelLocator.AutoWireViewModel="true">
+                 base:ViewModelLocator.AutoWireViewModel="true"
+                 x:DataType="viewModels:NewGameViewModel">
     <ContentPage.Resources>
         <converters:ToggleConverter x:Key="ToggleConverter" />
     </ContentPage.Resources>
@@ -111,7 +113,7 @@
 
                             </Path>
                             <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding PrivateHelpCommand}"></TapGestureRecognizer>
+                                <TapGestureRecognizer Command="{Binding PublicHelpCommand}"></TapGestureRecognizer>
                             </Grid.GestureRecognizers>
                         </Grid>
                     </StackLayout>

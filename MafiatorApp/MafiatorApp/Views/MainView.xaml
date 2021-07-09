@@ -3,7 +3,9 @@
              x:Class="MafiatorApp.Views.MainView"
              xmlns:pages="clr-namespace:MafiatorApp.Views"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-             base:ViewModelLocator.AutoWireViewModel="True">
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:MainViewModel">
     <FlyoutPage.Flyout>
         <pages:MenuView />
   </FlyoutPage.Flyout>

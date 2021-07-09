@@ -1,9 +1,11 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.SplashScreenView"
              BackgroundColor="Black"
-             base:ViewModelLocator.AutoWireViewModel="True">
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:SplashScreenViewModel">
     <ContentPage.Content>
         <StackLayout>
             <Image

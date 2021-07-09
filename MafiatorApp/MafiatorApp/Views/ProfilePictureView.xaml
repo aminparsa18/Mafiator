@@ -6,8 +6,11 @@
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.ProfilePictureView"
-             base:ViewModelLocator.AutoWireViewModel="True">
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:ProfilePictureViewModel">
     <ContentPage.Resources>
         <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
     </ContentPage.Resources>
@@ -45,7 +48,7 @@
                                Loop="True"
                                CurrentItemChanged="CarouselView_OnCurrentItemChanged">
                                <CarouselView.ItemTemplate>
-                                   <DataTemplate>
+                                    <DataTemplate x:DataType="models:Avatar">
                                        <ContentView>
                                            <Grid>
                                                <forms:CachedImage

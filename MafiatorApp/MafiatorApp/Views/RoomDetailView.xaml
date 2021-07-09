@@ -7,8 +7,11 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.RoomDetailView"
-             base:ViewModelLocator.AutoWireViewModel="True">
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:RoomDetailViewModel">
     <ContentPage.Resources>
         <converters:RoleNameConverter x:Key="RoleNameConverter" />
         <converters:RoleImageConverter x:Key="RoleImageConverter" />
@@ -119,7 +122,7 @@
                 </Frame>
                     <Grid ColumnDefinitions="*,*,*"  VerticalOptions="EndAndExpand">
                         <Button Grid.Column="0" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Gem}"
-                                Text="{xct:Translate Chat}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
+                                Text="{xct:Translate Chat}" Padding="16,4" CornerRadius="24" Command="{Binding ChatCommand}"  />
 
                         <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night2}}"
                                 Text="{xct:Translate NewGame}" IsVisible="{Binding NewGameAvailable}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
@@ -186,11 +189,11 @@
                                       Margin="0,16,0,0" TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}"></Label>
                                 <CollectionView
                         ItemsSource="{Binding Roles}"
+                        SelectedItem="{Binding Role}"
                         HeightRequest="160"
                         Margin="16"
-                        SelectionMode="None"
-                                >
-                                    
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding RoleChangeCommand}">
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Horizontal"></LinearItemsLayout>
                                     </CollectionView.ItemsLayout>
@@ -254,17 +257,14 @@
                 </StackLayout>
                 <CollectionView
                     ItemsSource="{Binding Members}"
-                    SelectedItem="{Binding Member}"
                     HeightRequest="120"
                     Margin="8,8,8,0"
-
-                    SelectionMode="Single"
-                    SelectionChangedCommand="{Binding MemberSelectedCommand}">
+                    SelectionMode="Single">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="dtos:RoomMemberDto">
                             <StackLayout>
                                 <forms:CachedImage
                                     x:Name="CachedImage"

@@ -9,8 +9,11 @@
                  xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.PlayerRoleView"
-                 base:ViewModelLocator.AutoWireViewModel="True">
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:PlayerRoleViewModel">
     <pages:PopupPage.Resources>
         <converters:RoleNameConverter x:Key="RoleNameConverter" />
         <converters:RoleImageConverter x:Key="RoleImageConverter" />
@@ -73,12 +76,12 @@
                                 HeightRequest="120"
                                 Margin="16,0"
                                 SelectionMode="None"
-                                SelectionChangedCommand="{Binding MemberSelectedCommand}">
+                               >
                                 <CollectionView.ItemsLayout>
                                     <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
                                 </CollectionView.ItemsLayout>
                                 <CollectionView.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dtos:PartnerDto">
                                         <StackLayout>
                                             <forms:CachedImage
                                                 x:Name="CachedImage"
