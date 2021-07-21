@@ -9,7 +9,6 @@ namespace MafiatorApp
     public class ChatHub
     {
         private static HubConnection _instance;
-        private static readonly object Padlock = new object();
 
         private ChatHub()
         {
@@ -19,10 +18,7 @@ namespace MafiatorApp
         {
             get
             {
-                lock (Padlock)
-                {
                     return _instance ??= CreateInstance();
-                }
             }
         }
         private static HubConnection CreateInstance()

@@ -46,7 +46,6 @@
                     <Label HorizontalOptions="CenterAndExpand">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Inquiry is "></Span>
                                 <Span Text="{Binding Inquiry,Converter={StaticResource InquiryStatusConverter}}"></Span>
                             </FormattedString>
                         </Label.FormattedText>

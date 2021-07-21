@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
@@ -9,7 +10,7 @@ namespace MafiatorApp.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool inquiry)
-                return inquiry ? "Positive" : "negative";
+                return inquiry ? LocalizationResourceManager.Current.GetValue("Positive") : LocalizationResourceManager.Current.GetValue("Negative");
             return "";
         }
 

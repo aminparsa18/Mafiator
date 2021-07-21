@@ -350,6 +350,7 @@ namespace MafiatorApp.ViewModels
             await GameHub.Instance.InvokeAsync("Subscribe", gameId);
             GameHub.Instance.On<string, string,string>("SendMessage", MessageReceived);
             GameHub.Instance.On<string>("Turn", SetTurn);
+            GameHub.Instance.On<string>("AdvocacyTurn", SetAdvocacyTurn);
             GameHub.Instance.On("ShowCandidates", ShowCandidates);
             GameHub.Instance.On("ShowAdvocacyCandidates", ShowAdvocacyCandidates);
         }
@@ -383,7 +384,27 @@ namespace MafiatorApp.ViewModels
         private void Callback(object state)
         {
             totalTime += 100;
-            ProgressTimer = 100 * (double) totalTime / 45000;
+            ProgressTimer = 100 * (double) totalTime / 30000;
+            ProgressString = TimeSpan.FromMilliseconds(30000 - totalTime).ToString(@"mm\:ss");
+            if (totalTime == 30000)
+            {
+                _timer?.Dispose();
+                _timer = null;
+            }
+        }
+        private void SetAdvocacyTurn(string memberId)
+        {
+            NavigationService.RemovePopupAsync();
+            Member = Members.FirstOrDefault(m => m.Id == memberId);
+            totalTime = 0;
+            _timer ??= new Timer(Callback2, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            TurnChanged?.Invoke(this, player?.MemberId == memberId);
+        }
+        private void Callback2(object state)
+        {
+            totalTime += 100;
+            ProgressTimer = 100 * (double)totalTime / 45000;
             ProgressString = TimeSpan.FromMilliseconds(45000 - totalTime).ToString(@"mm\:ss");
             if (totalTime == 45000)
             {
@@ -391,7 +412,6 @@ namespace MafiatorApp.ViewModels
                 _timer = null;
             }
         }
-
         private async Task HubReconnected(string arg)
         {
             HubConnected = true;

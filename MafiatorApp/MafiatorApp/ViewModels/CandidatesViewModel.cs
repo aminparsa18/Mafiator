@@ -12,6 +12,8 @@ using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
+using Xamarin.CommunityToolkit.Extensions;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -30,14 +32,14 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref currentState, value);
         }
 
-        private string title= "It's Voting";
+        private string title= LocalizationResourceManager.Current.GetValue("VotingTitle");
 
         public string Title
         {
             get => title;
             set => SetProperty(ref title, value);
         }
-        private string subTitle = "Choose your candidates";
+        private string subTitle = LocalizationResourceManager.Current.GetValue("VotingSubTitle");
         public string SubTitle
         {
             get => subTitle;
@@ -80,6 +82,12 @@ namespace MafiatorApp.ViewModels
             _timer ??= new Timer(Callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             GameHub.Instance.On("ShowVoteStatus", ShowStatus);
             GameHub.Instance.On("Night", FirstNight);
+            GameHub.Instance.On<string>("GameFinish", GameFinish);
+        }
+
+        private async Task GameFinish(string arg)
+        {
+            await NavigationService.NavigateToPopupAsync<GameFinishViewModel>(arg);
         }
 
         private async Task FirstNight()
@@ -169,8 +177,8 @@ namespace MafiatorApp.ViewModels
                     }
 
                 }
-                Title = "Now see result";
-                SubTitle = "Who voted who?!";
+                Title = LocalizationResourceManager.Current.GetValue("VotingResultTitle");
+                SubTitle = LocalizationResourceManager.Current.GetValue("VotingResultSubTitle");
                 CurrentState = LayoutState.Saving;
             }
             else
@@ -184,7 +192,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task SendVotes()
         {
-            await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Sending votes...");
+            await NavigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Current.GetValue("SendingVotes"));
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
             var request = await WebApiService.SendVotes(new VoteDto()
             {
@@ -200,8 +208,8 @@ namespace MafiatorApp.ViewModels
             {
                 CurrentState = LayoutState.Error;
             }
-            Title = "Happy voting";
-            SubTitle = "wait for others";
+            Title = LocalizationResourceManager.Current.GetValue("VoteSentTitle");
+            SubTitle = LocalizationResourceManager.Current.GetValue("VoteSentSubTitle");
             await NavigationService.RemovePopupAsync();
         }
 

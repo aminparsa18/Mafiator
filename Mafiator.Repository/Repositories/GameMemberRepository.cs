@@ -110,7 +110,7 @@ namespace Mafiator.Repository.Repositories
         public Task<IEnumerable<PlayerDto>> GetPlayerByGame(string gameId)
         {
             return connection.ExecuteQueryAsync<PlayerDto>(
-                @"SELECT [g].[UserId],[g].[Id] AS MemberId,[g].[Role] FROM [dbo].[GameMember] AS [g] WHERE [g].[GameId] = @gameId AND g.[Status] = 0",
+                @"SELECT [g].[UserId],[g].[Id] AS MemberId,[g].[Role],[g].[Status] FROM [dbo].[GameMember] AS [g] WHERE [g].[GameId] = @gameId AND g.[Status] = 0",
                 new {gameId}, cacheKey: $"GamePlayers-{gameId}", cache: CacheFactory.GetCache());
         }
 

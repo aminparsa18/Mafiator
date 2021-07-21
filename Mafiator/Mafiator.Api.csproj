@@ -5,7 +5,6 @@
     <UserSecretsId>cd45931b-b57d-4098-bcb4-aef3f70acfa2</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
-    <ApplicationInsightsResourceId>/subscriptions/aeee2bda-4450-449b-8057-4770b7a70362/resourceGroups/mafiator/providers/microsoft.insights/components/mafiatorapi</ApplicationInsightsResourceId>
 
   </PropertyGroup>
 

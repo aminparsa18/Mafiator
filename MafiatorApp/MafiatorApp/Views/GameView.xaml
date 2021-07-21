@@ -11,6 +11,7 @@
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.GameView"
+             BackgroundColor="{StaticResource Day4}"
              base:ViewModelLocator.AutoWireViewModel="true"
              x:Name="Page"
              x:DataType="viewModels:GameViewModel">
@@ -31,7 +32,7 @@
         <StackLayout>
             <Grid>
                 <Frame Margin="16,24,16,0" HeightRequest="64" HorizontalOptions="EndAndExpand" Padding="12"
-                       BackgroundColor="{AppThemeBinding Light=#FFFFFF,Dark={StaticResource Night5}}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night5}}"
                        VerticalOptions="StartAndExpand" CornerRadius="36">
                     <StackLayout>
                         <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
@@ -56,7 +57,7 @@
                                 <Path
                                     Data="M299.907,483.651l-.647-.379h0Zm16.186,0,.647-.379h0Zm0,6.7-.648-.379Zm-16.186,0,.648-.379Zm.648-6.319a8.615,8.615,0,0,1,14.89,0l1.295-.758a10.116,10.116,0,0,0-17.48,0Zm14.89,0a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.615,8.615,0,0,1-14.89,0l-1.295.758a10.116,10.116,0,0,0,17.48,0Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm10.252-2.909A2.835,2.835,0,0,1,308,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362ZM308,489.923a2.834,2.834,0,0,1-2.806-2.862h-1.5A4.334,4.334,0,0,0,308,491.423Zm-2.806-2.862A2.835,2.835,0,0,1,308,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM308,484.2a2.836,2.836,0,0,1,2.808,2.864h1.5A4.336,4.336,0,0,0,308,482.7Z"
                                     Stroke="#363853"
-                                    StrokeThickness="3"
+                                    StrokeThickness="2"
                                     Aspect="Uniform"
                                     WidthRequest="28"
                                     HeightRequest="28"
@@ -93,7 +94,7 @@
                             <userControls:CircularProgressBar Stroke="20" Progress="{Binding ProgressTimer}"
                                                               VerticalOptions="Center" HorizontalOptions="Center"
                                                               WidthRequest="70" HeightRequest="70"
-                                                              Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}" />
+                                                              Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}" />
 
                             <forms1:CachedImage
                                 x:Name="ProfileImage"

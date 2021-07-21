@@ -9,13 +9,11 @@ using AutoMapper;
 using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Enums;
-using MafiatorApp.Extentions;
-using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
-using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -35,19 +33,15 @@ namespace MafiatorApp.ViewModels
         }
 
         private LayoutState sleepState;
-
         public LayoutState SleepState
         {
             get => sleepState;
             set => SetProperty(ref sleepState, value);
         }
-
         public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
         public ObservableRangeCollection<GameEventResultDto> Results { get; set; }
         public ObservableRangeCollection<PlayerDto> Partners { get; set; }
-
         private CandidateDto candidate;
-
         public CandidateDto Candidate
         {
             get => candidate;
@@ -64,7 +58,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref progressTimer, value);
         }
 
-        private string title = "It's night";
+        private string title = LocalizationResourceManager.Current.GetValue("NightTitle");
 
         public string Title
         {
@@ -72,7 +66,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref title, value);
         }
 
-        private string subTitle = "play your role";
+        private string subTitle = LocalizationResourceManager.Current.GetValue("NightSubTitle");
 
         public string SubTitle
         {
@@ -122,6 +116,13 @@ namespace MafiatorApp.ViewModels
             GameHub.Instance.On<string>("MafiaChose", MafiaChose);
             GameHub.Instance.On("NightResult", ShowStatus);
             GameHub.Instance.On<bool>("Inqiry", ShowInquiryResult);
+            GameHub.Instance.On<string>("GameFinish", GameFinish);
+
+        }
+
+        private async Task GameFinish(string arg)
+        {
+            await NavigationService.NavigateToPopupAsync<GameFinishViewModel>(arg);
         }
 
         private async Task ShowInquiryResult(bool value)
@@ -176,8 +177,8 @@ namespace MafiatorApp.ViewModels
             var status = await WebApiService.GetNightResult(gameId);
             if (status.IsSuccess)
             {
-                Title = "Status Board";
-                SubTitle = "See what happened last night";
+                Title = LocalizationResourceManager.Current.GetValue("StatusBoard");
+                SubTitle = LocalizationResourceManager.Current.GetValue("StatusBoardSub");
                 Results.Clear();
                 Results.AddRange(status.Data);
                 if (Results.Any())
@@ -196,7 +197,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task Apply()
         {
-            await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Applying Target...");
+            await NavigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Current.GetValue("ApplyingTarget"));
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
             HttpResponseMessage request = null;
             if (player.Role == GameRole.Mafia)
@@ -237,8 +238,8 @@ namespace MafiatorApp.ViewModels
                 MainState = request.IsSuccessStatusCode ? LayoutState.Success : LayoutState.Error;
             else
                 MainState = LayoutState.Success;
-            Title = "Well done";
-            SubTitle = "Now wait till morning";
+            Title = LocalizationResourceManager.Current.GetValue("WellDone");
+            SubTitle = LocalizationResourceManager.Current.GetValue("NowWait");
         }
 
         public override Task InitializeAsync(object navigationData)
@@ -284,12 +285,14 @@ namespace MafiatorApp.ViewModels
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
             switch (player.Role)
             {
-                case GameRole.GodFather: return "Kill Someone";
-                case GameRole.Mafia: return "Choose Someone to kill";
-                case GameRole.Doctor: return "Cure Someone";
-                case GameRole.Detective: return "Inquiry Someone";
-                case GameRole.Sniper: return "You can shoot or not";
-                default: return "Wait for player to take their actions";
+                case GameRole.GodFather: return LocalizationResourceManager.Current.GetValue("KillDesc");
+                case GameRole.Mafia: return LocalizationResourceManager.Current.GetValue("MafiaDesc");
+                case GameRole.Doctor: return LocalizationResourceManager.Current.GetValue("CureDesc");
+                case GameRole.Detective: return LocalizationResourceManager.Current.GetValue("InquiryDesc");
+                case GameRole.Sniper: return LocalizationResourceManager.Current.GetValue("ShootDesc");
+                case GameRole.Natasha: return LocalizationResourceManager.Current.GetValue("SilenceDesc");
+                case GameRole.Priest: return LocalizationResourceManager.Current.GetValue("GiveSpeechDesc");
+                default: return LocalizationResourceManager.Current.GetValue("DefaultActionDesc");
             }
         }
 
@@ -298,12 +301,14 @@ namespace MafiatorApp.ViewModels
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
             switch (player.Role)
             {
-                case GameRole.GodFather: return "Kill";
-                case GameRole.Mafia: return "Select";
-                case GameRole.Doctor: return "Cure";
-                case GameRole.Detective: return "Inquiry";
-                case GameRole.Sniper: return "Shoot";
-                default: return "Action";
+                case GameRole.GodFather: return LocalizationResourceManager.Current.GetValue("Kill");
+                case GameRole.Mafia: return LocalizationResourceManager.Current.GetValue("Select");
+                case GameRole.Doctor: return LocalizationResourceManager.Current.GetValue("Cure");
+                case GameRole.Detective: return LocalizationResourceManager.Current.GetValue("Inquiry");
+                case GameRole.Sniper: return LocalizationResourceManager.Current.GetValue("Shoot");
+                case GameRole.Natasha: return LocalizationResourceManager.Current.GetValue("Silence");
+                case GameRole.Priest: return LocalizationResourceManager.Current.GetValue("GiveSpeech");
+                default: return LocalizationResourceManager.Current.GetValue("Action");
             }
         }
 

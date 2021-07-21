@@ -30,13 +30,13 @@ namespace Mafiator.Api
         {
             services.AddHangfire(x => x.UseSqlServerStorage("Server=94.130.50.85;Initial Catalog=MafiatorJobs;User ID=MafiatorJobs;Integrated Security=False;Password=54Delta45!;MultipleActiveResultSets=true;"));
             services.AddHangfireServer();
-            var c = Configuration.GetConnectionString("MafiatorContext");
+            var cc = Configuration.GetConnectionString("MafiatorContext");
             var cs = "Server=94.130.50.85;Initial Catalog=MafiatorDB;User ID=Mafiator;Integrated Security=False;Password=54Delta45!;MultipleActiveResultSets=true;";
             var csLocal = "data source=LAPTOP-OFP1Q77E;Initial Catalog=mftor;integrated security=True;MultipleActiveResultSets=true;";
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(cs).EnableSensitiveDataLogging());
+                options.UseSqlServer(Configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
             SqlServerBootstrap.Initialize();
-            services.AddTransient<IDbConnection>(sp => new SqlConnection(cs));
+            services.AddTransient<IDbConnection>(sp => new SqlConnection(Configuration.GetConnectionString("MafiatorContext")));
             services.AddCustomServices(Configuration,WebHostEnvironment);
             services.AddScoped<IGameService, GameService>();
         }

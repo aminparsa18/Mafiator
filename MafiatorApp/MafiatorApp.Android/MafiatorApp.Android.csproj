@@ -55,7 +55,7 @@
     <LangVersion>latest</LangVersion>
     <MandroidI18n />
     <BundleAssemblies>true</BundleAssemblies>
-    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidDexTool>d8</AndroidDexTool>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
@@ -65,7 +65,7 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -133,7 +133,6 @@
   <ItemGroup>
     <Compile Include="Controls\Shape.cs" />
     <Compile Include="Controls\ShowCaseImageView.cs" />
-    <Compile Include="CustomUrlSchemeInterceptorActivity.cs" />
     <Compile Include="Effects\EntryLineColorEffect.cs" />
     <Compile Include="Effects\LabelShadowEffect.cs" />
     <Compile Include="Effects\TouchEffect.cs" />
@@ -151,7 +150,6 @@
     <Compile Include="Renderers\AdViewRenderer.cs" />
     <Compile Include="Renderers\AndroidVideoRecorderRenderer.cs" />
     <Compile Include="Renderers\ShapeRenderer.cs" />
-    <Compile Include="Renderers\WaitingProgressBarRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="Renderers\ExtendedEntryRenderer.cs" />
     <Compile Include="Renderers\TransitionNavigationPageRenderer.cs" />
@@ -442,7 +440,7 @@
     <AndroidResource Include="Resources\drawable\checked.svg" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\custom_progress_bar.xml" />
+    <AndroidResource Include="Resources\drawable\custom_progress_bar_light.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\chat_back.svg" />
@@ -485,10 +483,16 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\store.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\custom_progress_bar_dark.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionMafiatorAppAndroidHideInfoBar="True" TriggeredFromHotReload="False" />
+      <UserProperties TriggeredFromHotReload="False" XamarinHotReloadDebuggerTimeoutExceptionMafiatorAppAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

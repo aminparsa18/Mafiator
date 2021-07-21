@@ -15,5 +15,7 @@ namespace Mafiator.Repository.Contracts
         Task<string> IsJoinedFast(string userId, string gameId);
         Task<string> IsAlreadyPlaying(string roomId);
         Task<int> StartGame(string gameId);
+        Task<int> MafiaWin(string gameId);
+        Task<int> CitizenWin(string gameId);
     }
 }

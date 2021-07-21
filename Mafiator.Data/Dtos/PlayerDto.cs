@@ -12,5 +12,7 @@ namespace Mafiator.Data.Dtos
         public string UserId { get; set; }
         [Key(2)]
         public GameRole Role{ get; set; }
+        [Key(3)]
+        public PlayerStatus Status{ get; set; }
     }
 }

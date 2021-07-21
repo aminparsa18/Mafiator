@@ -1,5 +1,4 @@
 ﻿using System;
-using Android;
 using Android.App;
 using Android.Content.PM;
 using Android.Content.Res;
@@ -10,10 +9,10 @@ using Xamarin.Forms;
 using Android.Content;
 using Android.Gms.Ads;
 using Android.Views;
-using AndroidX.Core.App;
 using MafiatorApp.Droid.Recorder;
 using MafiatorApp.Services;
 using MediaManager;
+
 //using Xamarin.Auth;
 
 namespace MafiatorApp.Droid
@@ -38,7 +37,7 @@ namespace MafiatorApp.Droid
             RequestWindowFeature(WindowFeatures.NoTitle);
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-            Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+            Window?.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
             base.OnCreate(savedInstanceState);
             CachedImageRenderer.Init(true);
             Rg.Plugins.Popup.Popup.Init(this);
@@ -50,9 +49,9 @@ namespace MafiatorApp.Droid
             DependencyService.RegisterSingleton<IAudioStream>(new AudioStream(44100, 48));
             CrossMediaManager.Current.Init(this);
             MobileAds.Initialize(this);
-            if (Intent.Data != null)
+            if (Intent?.Data != null)
             {
-                var uri = new Uri(Intent.Data?.ToString());
+                var uri = new Uri(Intent.Data.ToString() ?? string.Empty);
                 LoadApplication(new App(uri));
             }
             else
@@ -68,8 +67,8 @@ namespace MafiatorApp.Droid
                 var res = base.Resources;
                 var config = new Configuration();
                 config.SetToDefaults();
-                //if (Build.VERSION.SdkInt >= BuildVersionCodes.NMr1)
-                //  return CreateConfigurationContext(config)?.Resources;
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.NMr1)
+                    return CreateConfigurationContext(config)?.Resources;
                 res?.UpdateConfiguration(config, res.DisplayMetrics);
                 return res;
             }
@@ -81,8 +80,6 @@ namespace MafiatorApp.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             //   ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-         
         }
-
     }
 }

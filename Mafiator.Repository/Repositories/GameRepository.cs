@@ -116,5 +116,17 @@ namespace Mafiator.Repository.Repositories
             return connection.ExecuteNonQueryAsync("UPDATE [Game] SET [Status] = 1 WHERE [Id] = @gameId",
                 new { gameId });
         }
+
+        public Task<int> MafiaWin(string gameId)
+        {
+            return connection.ExecuteNonQueryAsync("UPDATE [Game] SET [Status] = 2 WHERE [Id] = @gameId",
+                new { gameId });
+        }
+
+        public Task<int> CitizenWin(string gameId)
+        {
+            return connection.ExecuteNonQueryAsync("UPDATE [Game] SET [Status] = 3 WHERE [Id] = @gameId",
+                new { gameId });
+        }
     }
 }

@@ -20,7 +20,6 @@ namespace MafiatorApp.ViewModels
     {
         //current state of SignalR Game Hub
         private LayoutState currentState = LayoutState.Loading;
-
         public LayoutState CurrentState
         {
             get => currentState;
@@ -32,7 +31,6 @@ namespace MafiatorApp.ViewModels
 
         //total capacity of game
         private int total;
-
         public int Total
         {
             get => total;
@@ -41,7 +39,6 @@ namespace MafiatorApp.ViewModels
 
         //indicates progress of join to game
         private double capacityPercentage;
-
         public double CapacityPercentage
         {
             get => capacityPercentage;
@@ -49,7 +46,6 @@ namespace MafiatorApp.ViewModels
         }
 
         private bool isJoined = true;
-
         public bool IsJoined
         {
             get => isJoined;
@@ -57,7 +53,6 @@ namespace MafiatorApp.ViewModels
         }
 
         private bool canLeave;
-
         public bool CanLeave
         {
             get => canLeave;
@@ -65,7 +60,6 @@ namespace MafiatorApp.ViewModels
         }
 
         private string leaveText;
-
         public string LeaveText
         {
             get => leaveText;
@@ -102,8 +96,8 @@ namespace MafiatorApp.ViewModels
         private async Task LeaveGame()
         {
             if (waiting.Status == GameStatus.Playing)
-            {
-                await StartGame();
+            { 
+                StartGame();
                 return;
             }
 
@@ -182,11 +176,15 @@ namespace MafiatorApp.ViewModels
             }
         }
 
-        private async Task StartGame()
+        private void StartGame()
         {
-            await NavigationService.NavigateToAsync<GameViewModel>(waiting.Id.ToString());
-            GameHub.Instance.Remove("Join");
-            GameHub.Instance.Remove("StartGame");
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await NavigationService.NavigateToAsync<GameViewModel>(waiting.Id.ToString());
+                GameHub.Instance.Remove("Join");
+                GameHub.Instance.Remove("StartGame");
+            });
+        
         }
 
         private async Task SomebodyJoined(string user)

@@ -6,8 +6,7 @@
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-                 xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-                 xmlns:views1="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
@@ -28,13 +27,11 @@
         <converters:CandidateStatusNameConverter x:Key="CandidateStatusNameConverter" />
         <converters:CandidateStatusVisibilityConverter x:Key="CandidateStatusVisibilityConverter" />
         <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
-        <converters:ToggleConverter x:Key="ToggleConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
         <StackLayout>
             <Frame
-                CornerRadius="52" Margin="16" Padding="0"
-                VerticalOptions="CenterAndExpand">
+                CornerRadius="52" Margin="16,36" Padding="0">
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16">
                         <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
@@ -46,113 +43,149 @@
                                                           WidthRequest="60" HeightRequest="60"
                                                           Color="{StaticResource Night3}" />
                     </StackLayout>
-                    <Grid views1:StateLayout.CurrentState="{Binding CurrentState}"
-                  views1:StateLayout.AnimateStateChanges="True">
-                        <views1:StateLayout.StateViews>
-                            <views1:StateView StateKey="Loading" RepeatCount="3">
-                                <views1:StateView.Template>
+                    <Grid xct:StateLayout.CurrentState="{Binding CurrentState}"
+                          xct:StateLayout.AnimateStateChanges="True">
+                        <xct:StateLayout.StateViews>
+                            <xct:StateView StateKey="Loading" RepeatCount="3">
+                                <xct:StateView.Template>
                                     <DataTemplate>
                                         <shimmerLayout:ShimmerLayout Angle="-45" GradientSize="0.4"
                                                                      BackgroundGradientColor="{StaticResource Day4}"
                                                                      IsLoading="True">
                                             <Grid ColumnDefinitions="2*,3*" Padding="24">
-                                                <StackLayout  Grid.Column="1" Margin="24,8" VerticalOptions="CenterAndExpand">
+                                                <StackLayout Grid.Column="1" Margin="24,8"
+                                                             VerticalOptions="CenterAndExpand">
                                                     <BoxView CornerRadius="12" HeightRequest="24" />
                                                     <BoxView CornerRadius="12" HeightRequest="24" />
-                                                    
+
                                                 </StackLayout>
                                                 <BoxView CornerRadius="1000" HeightRequest="80"
-                                                         WidthRequest="80" 
+                                                         WidthRequest="80"
                                                          HorizontalOptions="Start"
                                                          BackgroundColor="{StaticResource Day5}" />
                                             </Grid>
 
                                         </shimmerLayout:ShimmerLayout>
                                     </DataTemplate>
-                                </views1:StateView.Template>
-                            </views1:StateView>
-                            <views1:StateView StateKey="Empty"
-                                     HorizontalOptions="FillAndExpand"
-                                     VerticalOptions="FillAndExpand">
+                                </xct:StateView.Template>
+                            </xct:StateView>
+                            <xct:StateView StateKey="Empty"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="FillAndExpand">
                                 <StackLayout>
-                                <CollectionView
-                        ItemsSource="{Binding Candidates}"
-                        SelectedItem="{Binding Candidate}"
-                        Margin="16,0"
-                        SelectionMode="Single"
-                        SelectionChangedCommand="{Binding CandidateSelectedCommand}">
-                                    <CollectionView.ItemsLayout>
-                                        <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="16"
-                                             VerticalItemSpacing="16" />
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.ItemTemplate>
+                                    <CollectionView
+                                        ItemsSource="{Binding Candidates}"
+                                        SelectedItem="{Binding Candidate}"
+                                        Margin="16,0"
+                                        SelectionMode="Single"
+                                        SelectionChangedCommand="{Binding CandidateSelectedCommand}">
+                                        <CollectionView.ItemsLayout>
+                                            <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="16"
+                                                             VerticalItemSpacing="16" />
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.ItemTemplate>
                                             <DataTemplate x:DataType="dtos:CandidateDto">
-                                            <StackLayout>
-                                                <Frame CornerRadius="45" HorizontalOptions="CenterAndExpand"
-                                           BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
-                                                    <StackLayout>
-                                                        <forms1:CachedImage
-                                                x:Name="ProfileImage"
-                                                WidthRequest="90"
-                                                HeightRequest="90"
-                                                DownsampleToViewSize="True"
-                                                Margin="8"
-                                                Aspect="AspectFit"
-                                                Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
-                                                LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
-                                                ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
-                                                            <forms1:CachedImage.Transformations>
-                                                                <transformations:CircleTransformation />
-                                                            </forms1:CachedImage.Transformations>
-                                                        </forms1:CachedImage>
-                                                        <Label Text="{Binding DisplayName}" FontSize="16"
-                                                   FontFamily="{StaticResource BoldFont}"
-                                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
-                                                   HorizontalOptions="CenterAndExpand" />
+                                                <StackLayout>
+                                                    <Frame CornerRadius="45" HorizontalOptions="CenterAndExpand"
+                                                           BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night4} }">
+                                                        <StackLayout>
+                                                            <forms1:CachedImage
+                                                                x:Name="ProfileImage"
+                                                                WidthRequest="90"
+                                                                HeightRequest="90"
+                                                                DownsampleToViewSize="True"
+                                                                Margin="8"
+                                                                Aspect="AspectFit"
+                                                                Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                                LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                                ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
+                                                                <forms1:CachedImage.Transformations>
+                                                                    <transformations:CircleTransformation />
+                                                                </forms1:CachedImage.Transformations>
+                                                            </forms1:CachedImage>
+                                                            <Label Text="{Binding DisplayName}" FontSize="16"
+                                                                   FontFamily="{StaticResource BoldFont}"
+                                                                   HorizontalOptions="CenterAndExpand" />
+                                                            <Grid>
+                                                                <Path
+                                                                    Data="M521.353,557.95a7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6,13.343,13.343,0,0,1-6.1,0,7.51,7.51,0,0,1-5.6-5.6A13.343,13.343,0,0,1,521.353,557.95Z"
+                                                                    Stroke="#ffffff"
+                                                                    StrokeThickness="3"
+                                                                    Aspect="Uniform"
+                                                                    WidthRequest="34"
+                                                                    HeightRequest="34"
+                                                                    HorizontalOptions="CenterAndExpand"
+                                                                    VerticalOptions="CenterAndExpand">
+                                                                    <Path.RenderTransform>
+                                                                        <TranslateTransform X="-520.245" Y="-551.245" />
+                                                                    </Path.RenderTransform>
+                                                                </Path>
+                                                                <Path x:Name="CheckMark" Data="M527.25,560.75l2,2,3.5-3.75"
+                                                                      Stroke="#ffffff"
+                                                                      StrokeThickness="3"
+                                                                      Aspect="Uniform"
+                                                                      WidthRequest="18"
+                                                                      HeightRequest="18"
+                                                                      IsVisible="{Binding Selected}"
+                                                                      StrokeLineCap="Round"
+                                                                      StrokeLineJoin="Round"
+                                                                      HorizontalOptions="CenterAndExpand"
+                                                                      VerticalOptions="CenterAndExpand">
+                                                                    <Path.RenderTransform>
+                                                                        <TranslateTransform X="-526.189" Y="-557.94" />
+                                                                    </Path.RenderTransform>
+                                                                </Path>
 
-                                                        <forms:SvgCachedImage Source="unchecked.svg"
-                                                                  WidthRequest="24"
-                                                                  IsVisible="{Binding Selected,Converter={StaticResource ToggleConverter}}" />
-                                                        <forms:SvgCachedImage Source="checked.svg"
-                                                                  WidthRequest="24" IsVisible="{Binding Selected}" />
-                                                    </StackLayout>
-                                                </Frame>
+                                                            </Grid>
 
-                                            </StackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                                <Frame  VerticalOptions="EndAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}" CornerRadius="52" Padding="0">
-                                    <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}" HeightRequest="64">
-                                        <Label VerticalOptions="CenterAndExpand" Text="Send Votes"
-                                   HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding SendVotesCommand}"></TapGestureRecognizer>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                </Frame>
+                                                            <!--<forms:SvgCachedImage Source="unchecked.svg"
+                                                                WidthRequest="24"
+                                                                IsVisible="{Binding Selected,Converter={StaticResource ToggleConverter}}" />
+                                                            <forms:SvgCachedImage Source="checked.svg"
+                                                                WidthRequest="24" IsVisible="{Binding Selected}" />-->
+                                                        </StackLayout>
+                                                    </Frame>
+
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                    <Frame VerticalOptions="EndAndExpand"
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                           CornerRadius="52" Padding="0">
+                                        <StackLayout
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
+                                            HeightRequest="64">
+                                            <Label VerticalOptions="CenterAndExpand" Text="{xct:Translate SendVotes}"
+                                                   HorizontalOptions="CenterAndExpand" FontAttributes="Bold"
+                                                   FontSize="Large" />
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding SendVotesCommand}" />
+                                            </StackLayout.GestureRecognizers>
+                                        </StackLayout>
+                                    </Frame>
                                 </StackLayout>
-                            </views1:StateView>
-                            <views1:StateView StateKey="Error"
-                                     HorizontalOptions="FillAndExpand"
-                                     VerticalOptions="FillAndExpand">
+                            </xct:StateView>
+                            <xct:StateView StateKey="Error"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="FillAndExpand">
                                 <StackLayout VerticalOptions="CenterAndExpand">
-                                    <Label Text="Something went wrong..."
-                                   HorizontalOptions="CenterAndExpand" />
+                                    <Label Text="{xct:Translate SthWrong}"
+                                           HorizontalOptions="CenterAndExpand" />
                                 </StackLayout>
-                            </views1:StateView>
-                            <views1:StateView StateKey="Success"
-                                 HorizontalOptions="FillAndExpand"
-                                 VerticalOptions="FillAndExpand">
+                            </xct:StateView>
+                            <xct:StateView StateKey="Success"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="FillAndExpand">
                                 <StackLayout>
                                     <Grid>
-                                        <Path Data="M521.706,563.9A15.019,15.019,0,0,1,532.9,552.706a26.685,26.685,0,0,1,12.2,0A15.019,15.019,0,0,1,556.293,563.9a26.688,26.688,0,0,1,0,12.2A15.019,15.019,0,0,1,545.1,587.293a26.685,26.685,0,0,1-12.2,0A15.019,15.019,0,0,1,521.706,576.1,26.688,26.688,0,0,1,521.706,563.9Z"
-                                              Stroke="#4df54d"
-                                              StrokeThickness="3"
-                                              Aspect="Uniform"
-                                              WidthRequest="64"
-                                              HeightRequest="64">
-                                        </Path>
+                                        <Path
+                                            Data="M521.706,563.9A15.019,15.019,0,0,1,532.9,552.706a26.685,26.685,0,0,1,12.2,0A15.019,15.019,0,0,1,556.293,563.9a26.688,26.688,0,0,1,0,12.2A15.019,15.019,0,0,1,545.1,587.293a26.685,26.685,0,0,1-12.2,0A15.019,15.019,0,0,1,521.706,576.1,26.688,26.688,0,0,1,521.706,563.9Z"
+                                            Stroke="#4df54d"
+                                            StrokeThickness="3"
+                                            Aspect="Uniform"
+                                            WidthRequest="64"
+                                            HeightRequest="64" />
                                         <Path Data="M527.25,565.364l7.273,7.273L547.25,559"
                                               Stroke="#4df54d"
                                               StrokeThickness="3"
@@ -162,68 +195,71 @@
                                               HorizontalOptions="CenterAndExpand"
                                               VerticalOptions="CenterAndExpand">
                                             <Path.RenderTransform>
-                                                <TranslateTransform X="-526.189" Y="-557.94"></TranslateTransform>
+                                                <TranslateTransform X="-526.189" Y="-557.94" />
                                             </Path.RenderTransform>
                                         </Path>
                                     </Grid>
-                                    <Label Margin="24" HorizontalOptions="CenterAndExpand" FontSize="Medium" Text="Your vote is received,The Result will be appeard after time out."></Label>
+                                    <Label Margin="24" HorizontalOptions="CenterAndExpand" FontSize="Medium"
+                                           Text="{xct:Translate VoteReceived}" />
                                 </StackLayout>
-                            </views1:StateView>
-                            <views1:StateView StateKey="Saving">
+                            </xct:StateView>
+                            <xct:StateView StateKey="Saving">
                                 <StackLayout>
                                     <CollectionView
-                        ItemsSource="{Binding Votes}"
-                        Margin="16,0"
-                        SelectionMode="None">
-                                    <CollectionView.ItemTemplate>
+                                        ItemsSource="{Binding Votes}"
+                                        Margin="16,0"
+                                        SelectionMode="None">
+                                        <CollectionView.ItemTemplate>
                                             <DataTemplate x:DataType="dtos:VoteStatusResultDto">
-                                            <StackLayout Margin="8">
-                                                <Frame CornerRadius="45" 
-                                           BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <StackLayout>
-                                                            <Grid>
+                                                <StackLayout Margin="8">
+                                                    <Frame CornerRadius="45"
+                                                           BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night4} }">
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <StackLayout>
+                                                                <Grid>
                                                                     <forms1:CachedImage
-                                                x:Name="ProfileImage"
-                                                WidthRequest="90"
-                                                HeightRequest="90"
-                                                DownsampleToViewSize="True"
-                                                Margin="8"
-                                                Aspect="AspectFit"
-                                                Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
-                                                LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
-                                                ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
-                                                            <forms1:CachedImage.Transformations>
-                                                                <transformations:CircleTransformation />
-                                                            </forms1:CachedImage.Transformations>
-                                                        </forms1:CachedImage>
-                                                                <Frame IsVisible="{Binding Status,Converter={StaticResource CandidateStatusVisibilityConverter}}"
-                                                                    Padding="4" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand"
-                                                                    BackgroundColor="Red" Margin="8,0">
-                                                                    <Label TextColor="White"
-                                                                           Text="{Binding Status,Converter={StaticResource CandidateStatusNameConverter}}" />
-                                                                </Frame>
+                                                                        x:Name="ProfileImage"
+                                                                        WidthRequest="90"
+                                                                        HeightRequest="90"
+                                                                        DownsampleToViewSize="True"
+                                                                        Margin="8"
+                                                                        Aspect="AspectFit"
+                                                                        Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                                        LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+                                                                        ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
+                                                                        <forms1:CachedImage.Transformations>
+                                                                            <transformations:CircleTransformation />
+                                                                        </forms1:CachedImage.Transformations>
+                                                                    </forms1:CachedImage>
+                                                                    <Frame
+                                                                        IsVisible="{Binding Status,Converter={StaticResource CandidateStatusVisibilityConverter}}"
+                                                                        Padding="4" VerticalOptions="StartAndExpand"
+                                                                        HorizontalOptions="StartAndExpand"
+                                                                        BackgroundColor="Red" Margin="8,0">
+                                                                        <Label TextColor="White"
+                                                                               Text="{Binding Status,Converter={StaticResource CandidateStatusNameConverter}}" />
+                                                                    </Frame>
                                                                 </Grid>
-                                                        <Label Text="{Binding DisplayName}" FontSize="16"
-                                                   FontFamily="{StaticResource BoldFont}"
-                                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
-                                                   HorizontalOptions="CenterAndExpand" />
+                                                                <Label Text="{Binding DisplayName}" FontSize="16"
+                                                                       FontFamily="{StaticResource BoldFont}"
+                                                                       HorizontalOptions="CenterAndExpand" />
+                                                            </StackLayout>
+                                                            <StackLayout Margin="0,8,0,0">
+                                                                <Label FontSize="Medium"
+                                                                       FontFamily="{StaticResource BoldFont}"
+                                                                       Text="{xct:Translate Voters}"/>
+                                                                <Label Text="{Binding Votes}" FontSize="16"
+                                                                       HorizontalOptions="CenterAndExpand" />
+                                                            </StackLayout>
                                                         </StackLayout>
-                                                        <StackLayout Margin="0,8,0,0">
-                                                                <Label FontSize="Medium" FontFamily="{StaticResource BoldFont}" Text="Voters:"  TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"></Label>
-                                                        <Label Text="{Binding Votes}" FontSize="16"
-                                                               TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
-                                                               HorizontalOptions="CenterAndExpand" />
-                                                        </StackLayout>
-                                                        </StackLayout>
-                                                </Frame>
-                                            </StackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
+                                                    </Frame>
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
                                 </StackLayout>
-                            </views1:StateView>
-                        </views1:StateLayout.StateViews>
+                            </xct:StateView>
+                        </xct:StateLayout.StateViews>
                     </Grid>
                 </StackLayout>
                 <Frame.Background>

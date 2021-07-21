@@ -89,6 +89,9 @@
     <Compile Update="Views\PlayerRoleView.xaml.cs">
       <DependentUpon>PlayerRoleView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\GameFinishView.xaml.cs">
+      <DependentUpon>GameFinishView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Templates\IncomingDissLikeView.xaml.cs">
       <DependentUpon>IncomingDissLikeView.xaml</DependentUpon>
     </Compile>
@@ -194,7 +197,7 @@
     <EmbeddedResource Update="Views\StoreView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SuggestionView.xaml">
+    <EmbeddedResource Update="Views\GameFinishView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Templates\CheckBoxView.xaml">

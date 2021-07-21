@@ -20,10 +20,18 @@
         <StackLayout >
             <Frame Margin="24" Padding="0" HeightRequest="160"  CornerRadius="16" CompressedLayout.IsHeadless="true">
                 <Grid  CompressedLayout.IsHeadless="true">
-                <userControls:WaitingProgressBar userControls:ProgressAttachedProperties.AnimatedProgress="{Binding CapacityPercentage}" ></userControls:WaitingProgressBar>
-                      <StackLayout>
+                    <!-- <userControls:WaitingProgressBar userControls:ProgressAttachedProperties.AnimatedProgress="{Binding CapacityPercentage}" ></userControls:WaitingProgressBar>-->
+                    <userControls:WaitingProgressBar
+                        BarBackgroundColor="{StaticResource Day2}"
+                        CornerRadius="6"
+                        GradientEndColor="{StaticResource Day3}"
+                        GradientStartColor="{StaticResource Day4}"
+                        HeightRequest="30"
+                        Percentage="{Binding CapacityPercentage}"
+                       />
+                    <StackLayout>
                           <Label FontSize="Large" FontFamily="{StaticResource BoldFont}" HorizontalOptions="CenterAndExpand" Margin="8" Text="{xct:Translate WaitingForAll}"></Label>
-                          <Label FontSize="Large" HorizontalOptions="CenterAndExpand" Margin="8" >
+                          <Label FontSize="Large" HorizontalOptions="CenterAndExpand" Margin="8,0,8,8" >
                               <Label.FormattedText>
                                   <FormattedString>
                                       <Span Text="{Binding Members.Count}"></Span>
@@ -80,7 +88,7 @@
                           <Button HorizontalOptions="CenterAndExpand" BackgroundColor="Green"
                                   Text="{xct:Translate Invite}" Padding="16,4" CornerRadius="24" Command="{Binding InviteCommand}"  />
                           <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="#FFD460"
-                                  Text="{xct:Translate Join}" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinGameCommand}"  />
+                                  Text="{xct:Translate Join}" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,8,16,0" CornerRadius="24" Command="{Binding JoinGameCommand}"  />
                           <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
                                   Text="{Binding LeaveText}" IsVisible="{Binding CanLeave}" Padding="16,4" CornerRadius="24" Command="{Binding LeaveGameCommand}"  />
                         </Grid>

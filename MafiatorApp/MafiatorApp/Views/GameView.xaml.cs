@@ -55,7 +55,7 @@ namespace MafiatorApp.Views
             {
                 MessageBox.TranslateTo(0, 200, 600, Easing.SpringIn);
                 NextFrame.TranslateTo(200, 0, 600, Easing.SpringIn);
-                ReactionFrame.TranslateTo(0, 50, 600, Easing.SpringOut);
+                ReactionFrame.TranslateTo(0, 0, 600, Easing.SpringOut);
                 keepMsgBoxDown = true;
                 ((GameViewModel) BindingContext).StopRecordAudioCommand.ExecuteAsync();
                 ((GameViewModel) BindingContext).SendMessageCommand.ExecuteAsync();
