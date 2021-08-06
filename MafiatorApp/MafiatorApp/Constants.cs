@@ -6,7 +6,7 @@ namespace MafiatorApp
 {
    public class Constants
     {
-        public static string BaseUrl { get; } = "https://api.mafiator.com/";
+        public static string BaseUrl { get; } = "https://mafiatorapi.azurewebsites.net/";
         public static string VaultUrl { get; } = "https://mftor.blob.core.windows.net/mftor/";
         public static string FtpUrl { get; } = "94.130.50.78";
         public static string AndroidClientId = "562105913185-b5ihurtioohnocsncsu40nc3396uacbp.apps.googleusercontent.com";

@@ -16,7 +16,6 @@
         <converters:RoleNameConverter x:Key="RoleNameConverter" />
         <converters:RoleImageConverter x:Key="RoleImageConverter" />
         <converters:ToggleConverter x:Key="ToggleConverter" />
-        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
             <StackLayout>
@@ -273,7 +272,7 @@
                                     WidthRequest="60"
                                     HeightRequest="60"
                                     DownsampleToViewSize="true"
-                                    Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                    Source="{Binding Image}"
                                     LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                     ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
                                     <forms:CachedImage.Transformations>

@@ -26,12 +26,11 @@
     <pages:PopupPage.Resources>
         <converters:CandidateStatusNameConverter x:Key="CandidateStatusNameConverter" />
         <converters:CandidateStatusVisibilityConverter x:Key="CandidateStatusVisibilityConverter" />
-        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
         <StackLayout>
             <Frame
-                CornerRadius="52" Margin="16,36" Padding="0">
+                CornerRadius="52" Margin="16,36" Padding="0" VerticalOptions="CenterAndExpand">
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16">
                         <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
@@ -96,7 +95,7 @@
                                                                 DownsampleToViewSize="True"
                                                                 Margin="8"
                                                                 Aspect="AspectFit"
-                                                                Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                                Source="{Binding Image}"
                                                                 LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                                                 ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
                                                                 <forms1:CachedImage.Transformations>
@@ -224,7 +223,7 @@
                                                                         DownsampleToViewSize="True"
                                                                         Margin="8"
                                                                         Aspect="AspectFit"
-                                                                        Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                                                        Source="{Binding Image}"
                                                                         LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                                                         ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
                                                                         <forms1:CachedImage.Transformations>

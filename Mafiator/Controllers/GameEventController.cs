@@ -96,6 +96,7 @@ namespace Mafiator.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStatus(string gameId)
         {
+
             return Ok(new ApiResult<IEnumerable<GameEventStatusDto>>()
             {
                 IsSuccess = true,

@@ -16,20 +16,17 @@ namespace MafiatorApp
 
         public static HubConnection Instance
         {
-            get
-            {
-                    return _instance ??= CreateInstance();
-            }
+            get { return _instance ??= CreateInstance(); }
         }
+
         private static HubConnection CreateInstance()
         {
-           return new HubConnectionBuilder().WithUrl("https://api.mafiator.com/gamehub", options =>
-                {
-                    options.AccessTokenProvider = () => Task.FromResult(Barrel.Current.Get<string>("Token"));
-                }).ConfigureLogging(logging =>
-               {
-                   logging.AddConsole();
-               }).WithAutomaticReconnect()
+            return new HubConnectionBuilder()
+                .WithUrl("https://mafiatorapi.azurewebsites.net/gamehub",
+                    options =>
+                    {
+                        options.AccessTokenProvider = () => Task.FromResult(Barrel.Current.Get<string>("Token"));
+                    }).ConfigureLogging(logging => { logging.AddConsole(); }).WithAutomaticReconnect()
                 .AddMessagePackProtocol().Build();
         }
 

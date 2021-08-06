@@ -22,23 +22,13 @@ namespace MafiatorApp.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ((GameViewModel) BindingContext).TurnChanged += TurnChanged;
-            //MessagingCenter.Subscribe<GameEventViewModel>(this, "UpdateMembers", s =>
-            //{
-            //    ((GameViewModel) this.BindingContext).UpdateMembers();
-            //});
-            //MessagingCenter.Subscribe<CandidatesViewModel>(this, "UpdateMembers", s =>
-            //{
-            //    ((GameViewModel)this.BindingContext).UpdateMembers();
-            //});
+        //    ((GameViewModel) BindingContext).TurnChanged += TurnChanged;
         }
 
 
         protected override void OnDisappearing()
         {
-            ((GameViewModel) BindingContext).TurnChanged -= TurnChanged;
-            //MessagingCenter.Unsubscribe<GameEventViewModel>(this, "UpdateMembers");
-            //MessagingCenter.Unsubscribe<CandidatesViewModel>(this, "UpdateMembers");
+          //  ((GameViewModel) BindingContext).TurnChanged -= TurnChanged;
             base.OnDisappearing();
         }
 
@@ -115,7 +105,7 @@ namespace MafiatorApp.Views
 
         protected override bool OnBackButtonPressed()
         {
-            return false;
+            return true;
         }
 
         private async void TouchEffect2_TouchAction(object sender, TouchActionEventArgs args)

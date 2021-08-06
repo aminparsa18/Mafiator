@@ -44,12 +44,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref _phoneNo, value);
         }
 
-        private ValidatableObject<string> _displayName;
-        public ValidatableObject<string> DisplayName
-        {
-            get => _displayName;
-            set => SetProperty(ref _displayName, value);
-        }
+       
 
         private ValidatableObject<string> _username;
         public ValidatableObject<string> Username
@@ -108,12 +103,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref _isConfirmPasswordValid, value);
         }
 
-        private bool _isDisplayNameValid = true;
-        public bool IsDisplayNameValid
-        {
-            get => _isDisplayNameValid;
-            set => SetProperty(ref _isDisplayNameValid, value);
-        }
+       
 
         private bool _isUsernameValid = true;
         public bool IsUsernameValid
@@ -152,7 +142,6 @@ namespace MafiatorApp.ViewModels
             LoginPassword = new ValidatableObject<string>();
             Username = new ValidatableObject<string>();
             PhoneNo = new ValidatableObject<string>();
-            DisplayName = new ValidatableObject<string>();
             Password = new ValidatableObject<string>();
             ConfirmPassword = new ValidatableObject<string>();
             AddValidations();
@@ -205,7 +194,6 @@ namespace MafiatorApp.ViewModels
             { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyPhoneNo") });
             Username.Validations.Add(new IsNotNullOrEmptyRule<string>
             { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyUsername") });
-            DisplayName.Validations.Add(new IsNotNullOrEmptyRule<string>());
             Password.Validations.Add(new IsNotNullOrEmptyRule<string>()
             { ValidationMessage = LocalizationResourceManager.Current.GetValue("EmptyPassword") });
             ;
@@ -287,7 +275,6 @@ namespace MafiatorApp.ViewModels
                     {
                         Username = Username.Value,
                         PhoneNumber = Country.DialCode+PhoneNo.Value,
-                        DisplayName = DisplayName.Value,
                         Password = Password.Value,
                         CountryCode = Country.Code
                     });
@@ -339,10 +326,9 @@ namespace MafiatorApp.ViewModels
                     .ShortAlert(LocalizationResourceManager.Current.GetValue("PasswordNotMatch"), MessageType.Error);
             IsPhoneNoValid = PhoneNo.Validate();
             IsUsernameValid = Username.Validate();
-            IsDisplayNameValid = DisplayName.Validate();
             IsPasswordValid = Password.Validate();
             IsConfirmPasswordValid = ConfirmPassword.Validate();
-            return IsPhoneNoValid && IsDisplayNameValid && IsPasswordValid && IsConfirmPasswordValid;
+            return IsPhoneNoValid && IsPasswordValid && IsConfirmPasswordValid;
         }
     }
 }

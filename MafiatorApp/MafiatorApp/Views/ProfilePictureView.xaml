@@ -8,12 +8,11 @@
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.ProfilePictureView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:ProfilePictureViewModel">
-    <ContentPage.Resources>
-        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
-    </ContentPage.Resources>
+   
     <ContentPage.Content>
         <Grid>
             <xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />
@@ -23,7 +22,7 @@
                    <StackLayout>
                        <StackLayout Orientation="Horizontal">
                            <Path Data="M310.5,640l-5-5,5-5"
-                                 Stroke="#363853"
+                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
                                  StrokeThickness="3"
                                  Aspect="Uniform"
                                  WidthRequest="28"
@@ -57,14 +56,14 @@
                                                    ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                                    Margin="8"
                                                    Scale="{Binding Scale}"
-                                                   Source="{Binding Name,Converter={StaticResource ProfileImageConverter}}" />
+                                                   Source="{Binding Name}" />
                                            </Grid>
                                        </ContentView>
                                    </DataTemplate>
                                </CarouselView.ItemTemplate>
                            </CarouselView>
                             <Path Data="M379.5,630l5,5-5,5"
-                                 Stroke="#363853"
+                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
                                  StrokeThickness="3"
                                  Aspect="Uniform"
                                  WidthRequest="28"
@@ -89,16 +88,21 @@
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="1,1">
                             <GradientStop
-                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
                                 Offset="0.0" />
                             <GradientStop
-                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night5}}"
+                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
                                 Offset="0.25" />
                         </LinearGradientBrush>
                     </Frame.Background>
                 </Frame>
+               
                 <Frame CornerRadius="20" Padding="16,24">
                     <StackLayout Padding="24" HorizontalOptions="CenterAndExpand">
+                        <userControls:ExtendedEntry Placeholder="{xct:Translate DisplayName}"
+                                                    Text="{Binding DisplayName.Value}"
+                                                    IsValid="{Binding IsDisplayNameValid, Mode=TwoWay}"
+                                                    Errors="{Binding DisplayName.Errors}" />
                         <Label Margin="0,0,0,16" HorizontalOptions="CenterAndExpand" Text="{xct:Translate UploadPP}" />
                         <forms:CachedImage
                             x:Name="CachedImage"
@@ -108,8 +112,8 @@
                             Aspect="AspectFit"
                             DownsampleToViewSize="true"
                             Source="{Binding Image}"
-                            LoadingPlaceholder="choose_photo.png"
-                            ErrorPlaceholder="choose_photo.png">
+                            LoadingPlaceholder="{AppThemeBinding Light=photo_day.png,Dark=photo_night.png}"
+                            ErrorPlaceholder="{AppThemeBinding Light=photo_day.png,Dark=photo_night.png}">
                             <forms:CachedImage.Transformations>
                                 <transformations:CircleTransformation />
                             </forms:CachedImage.Transformations>
@@ -117,6 +121,7 @@
                                 <TapGestureRecognizer Command="{Binding ChoosePhotoCommand}" />
                             </forms:CachedImage.GestureRecognizers>
                         </forms:CachedImage>
+
                         <Button Text="{xct:Translate Set}" IsVisible="{Binding PhotoSet}" Command="{Binding SetPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
 
                         <StackLayout Margin="0,16,0,0" Orientation="Horizontal">
@@ -144,10 +149,10 @@
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="1,1">
                             <GradientStop
-                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
                                 Offset="0.0" />
                             <GradientStop
-                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night5}}"
+                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
                                 Offset="0.25" />
                         </LinearGradientBrush>
                     </Frame.Background>

@@ -41,11 +41,11 @@ namespace MafiatorApp.Services.Impl
                 registerUserDto);
         }
 
-        public Task<HttpResponseMessage> UpdateProfilePicture(string name)
+        public Task<HttpResponseMessage> UpdateProfile(UpdateProfileDto profile)
         {
             return BaseHttpClient.Instance.PostAsMessagePackAsync(
-                new Uri(Constants.BaseUrl + "api/User/UpdateProfilePicture"),
-                name);
+                new Uri(Constants.BaseUrl + "api/User/UpdateProfile"),
+                profile);
         }
 
         public Task<ApiResult<UserDto>> GetUser()

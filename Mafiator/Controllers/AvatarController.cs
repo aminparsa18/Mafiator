@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper.Internal;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
+using Mafiator.Data;
 using Mafiator.Data.Dtos;
 using Mafiator.Repository;
+using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mafiator.Api.Controllers
@@ -11,16 +15,21 @@ namespace Mafiator.Api.Controllers
     public class AvatarController:ApiBaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public AvatarController(IUnitOfWork unitOfWork)
+        private readonly ILiveEventManager _liveEventManager;
+        public AvatarController(IUnitOfWork unitOfWork,ILiveEventManager liveEventManager)
         {
             _unitOfWork = unitOfWork;
+            _liveEventManager = liveEventManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var avatars = await _unitOfWork.Avatar.GetAllDto();
-            //  avatars.ForAll(s=>s.Name=Constants.BlobStorageEndpoint+s.Name);
+            foreach (var avatar in avatars)
+            {
+                avatar.Name = Constants.BlobStorageEndpoint + avatar.Name;
+            }
             return Ok(new ApiResult<IEnumerable<AvatarDto>>
             {
               Data = avatars,
@@ -28,6 +37,12 @@ namespace Mafiator.Api.Controllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> TestSetting()
+        {
+            await _liveEventManager.CreateLiveEvent(Ulid.NewUlid().ToString());
+            return Ok();
+        }
         [HttpGet]
         public IActionResult RemoveCache()
         {

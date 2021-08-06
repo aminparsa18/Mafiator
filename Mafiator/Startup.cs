@@ -28,17 +28,15 @@ namespace Mafiator.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage("Server=94.130.50.85;Initial Catalog=MafiatorJobs;User ID=MafiatorJobs;Integrated Security=False;Password=54Delta45!;MultipleActiveResultSets=true;"));
+            services.AddHangfire(x => x.UseSqlServerStorage("Server=tcp:mftor.database.windows.net,1433;Initial Catalog=mftor_jobs;Persist Security Info=False;User ID=mftor_admin;Password=54Delta45!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
             services.AddHangfireServer();
-            var cc = Configuration.GetConnectionString("MafiatorContext");
-            var cs = "Server=94.130.50.85;Initial Catalog=MafiatorDB;User ID=Mafiator;Integrated Security=False;Password=54Delta45!;MultipleActiveResultSets=true;";
-            var csLocal = "data source=LAPTOP-OFP1Q77E;Initial Catalog=mftor;integrated security=True;MultipleActiveResultSets=true;";
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
             SqlServerBootstrap.Initialize();
             services.AddTransient<IDbConnection>(sp => new SqlConnection(Configuration.GetConnectionString("MafiatorContext")));
             services.AddCustomServices(Configuration,WebHostEnvironment);
             services.AddScoped<IGameService, GameService>();
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,9 +6,11 @@ using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
 using MafiatorApp.Helpers;
 using MafiatorApp.Models;
+using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using MafiatorApp.Views;
+using MessagePipe;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 //using MagicOnion.Client;
@@ -35,7 +37,6 @@ namespace MafiatorApp.ViewModels
         }
 
         public UserStatusDto UserStatus { get; set; }
-        public List<Tip> Tips { get; set; }
         public IAsyncCommand AddRoomCommand { get; set; }
         public IAsyncCommand RandomCommand { get; set; }
         public IAsyncCommand JoinRoomCommand { get; set; }
@@ -43,10 +44,16 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand StoreCommand { get; set; }
         public IAsyncCommand SettingsCommand { get; set; }
         public IAsyncCommand HelpCommand { get; set; }
+        public IAsyncCommand EditProfileCommand { get; set; }
         public IAsyncCommand SignOutCommand { get; set; }
-
-        public HomeViewModel()
+        private readonly ISubscriber<UpdateProfileEvent> _subscriber;
+        private readonly IDisposable _disposable;
+        public HomeViewModel(ISubscriber<UpdateProfileEvent> subscriber)
         {
+            _subscriber = subscriber;
+            var bag = DisposableBag.CreateBuilder();
+            _subscriber.Subscribe(c => LoadData()).AddTo(bag);
+            _disposable = bag.Build();
             LoadData();
             AddRoomCommand = new AsyncCommand(AddRoom);
             RandomCommand = new AsyncCommand(Random);
@@ -55,34 +62,14 @@ namespace MafiatorApp.ViewModels
             StoreCommand = new AsyncCommand(Store);
             SettingsCommand = new AsyncCommand(Settings);
             HelpCommand = new AsyncCommand(Help);
+            EditProfileCommand = new AsyncCommand(EditProfile);
             SignOutCommand = new AsyncCommand(SignOut);
-            Tips = new List<Tip>()
-            {
-                new Tip()
-                {
-                    Title = "Whats the matter?",
-                    Description =
-                        "The Mafia, also known as the Werewolf, is a group and argumentative game that simulates a battle between a conscious minority and an unconscious majority."
-                },
-                new Tip()
-                {
-                    Title = "Ok,What else?",
-                    Description =
-                        "In general, in this game, the power of speech, maintaining composure and making logical arguments play an important role in victory. Players are secretly identified; Mafias know each other and citizens who are only aware of the number of Mafia members and a few of them are aware of some maps."
-                },
-                new Tip()
-                {
-                    Title = "How to play?",
-                    Description =
-                        "In the night phase of the game, Mafia members secretly kill a citizen. The doctor tries to save the person whom the Mafia wants to kill. The detective also seeks to identify the Mafia, and if he identifies the Mafia, he must prove to other citizens by argument that he is a Mafia. Mafia, doctor, citizen and detective are the main characters of the game and other characters such as sniper may be added to the game in other games. During the day phase, all surviving players discuss mafia identities and vote to remove a suspect."
-                },
-                new Tip()
-                {
-                    Title = "How it ends?",
-                    Description =
-                        "The game continues until all the Mafias are out of the game (citizens win) or the number of Mafias and citizens is equal (Mafia wins) or one of the independent characters, each with a different winning condition, wins the game. In a game, the characters usually have to be arranged in such a way that for each character, there are opposite and complementary characters."
-                }
-            };
+           
+        }
+
+        private async Task EditProfile()
+        {
+            await NavigationService.NavigateToAsync<ProfilePictureViewModel>(true);
         }
 
         private async Task Store()
@@ -167,7 +154,6 @@ namespace MafiatorApp.ViewModels
                 DependencyService.Get<IAlert>().ShortAlert(response.Errors.ToString(), MessageType.Error);
             }
 
-            //  await NavigationService.NavigateToPopupAsync<PlayerRoleViewModel>();
         }
     }
 }

@@ -8,11 +8,15 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using MafiatorApp.Cache;
+using MafiatorApp.Dtos;
 using MafiatorApp.Extentions;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
+using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
+using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
+using MessagePipe;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
@@ -22,6 +26,22 @@ namespace MafiatorApp.ViewModels
 {
     public class ProfilePictureViewModel : ViewModelBase
     {
+        private ValidatableObject<string> _displayName;
+
+        public ValidatableObject<string> DisplayName
+        {
+            get => _displayName;
+            set => SetProperty(ref _displayName, value);
+        }
+
+        private bool _isDisplayNameValid = true;
+
+        public bool IsDisplayNameValid
+        {
+            get => _isDisplayNameValid;
+            set => SetProperty(ref _isDisplayNameValid, value);
+        }
+
         private string name;
 
         public string Name
@@ -60,15 +80,18 @@ namespace MafiatorApp.ViewModels
         public ICommand SkipCommand { get; set; }
         public IAsyncCommand ChoosePhotoCommand { get; set; }
         public IAsyncCommand SetPhotoCommand { get; set; }
+
         private IEnumerable<Avatar> avatars;
-        private readonly IWebApiService webApiService;
         private readonly IMapper mapper;
         private FileResult photo;
+        private bool isEdit;
+        private readonly IPublisher<UpdateProfileEvent> publisher;
 
-        public ProfilePictureViewModel(IWebApiService webApiService, IMapper mapper)
+        public ProfilePictureViewModel(IPublisher<UpdateProfileEvent> publisher, IMapper mapper)
         {
+            this.publisher = publisher;
             this.mapper = mapper;
-            this.webApiService = webApiService;
+            DisplayName = new ValidatableObject<string>();
             SkipCommand = new Command(Skip);
             ChoosePhotoCommand = new AsyncCommand(ChoosePhoto);
             SetPhotoCommand = new AsyncCommand(SetPhoto);
@@ -76,6 +99,25 @@ namespace MafiatorApp.ViewModels
             LoadAvatarsCommand = new AsyncCommand(LoadAvatars);
             LoadAvatarsCommand.ExecuteAsync();
             AvatarSelectedCommand = new AsyncCommand(AvatarSelected);
+            AddValidations();
+        }
+
+        public override Task InitializeAsync(object navigationData)
+        {
+            if (navigationData is bool)
+            {
+                isEdit = true;
+                var user = Barrel.Current.Get<UserDto>("User");
+                DisplayName.Value = user.DisplayName;
+               // Image = ImageSource.FromUri(new Uri(user.Image));
+            }
+
+            return base.InitializeAsync(navigationData);
+        }
+
+        private void AddValidations()
+        {
+            DisplayName.Validations.Add(new IsNotNullOrEmptyRule<string>());
         }
 
         private async Task SetPhoto()
@@ -84,8 +126,8 @@ namespace MafiatorApp.ViewModels
             try
             {
                 var blobServiceClient = new BlobServiceClient(
-                    "DefaultEndpointsProtocol=https;AccountName=mftor;AccountKey=op73DprkZvRMfUzeB9TeUs+V9IviHcwlp8/4Gcj8HXtYIc5vuPP5C5bDuD+3RpTbVXkmljJDpDp1J3hP596tAA==;EndpointSuffix=core.windows.net");
-                var blobContainerClient = blobServiceClient.GetBlobContainerClient("mftor");
+                    "DefaultEndpointsProtocol=https;AccountName=mftor;AccountKey=pLoQjG6uKWpWe1vG+iVU+zKjYRpuM/tPKACmd/kM/AuBXHHfsvLOGKXsq96BusnCfrx/4St1INHVk4tibVLElA==;EndpointSuffix=core.windows.net");
+                var blobContainerClient = blobServiceClient.GetBlobContainerClient("avatars");
                 var blobClient = blobContainerClient.GetBlobClient(HttpUtility.UrlEncode(photo.FileName));
                 await blobClient.UploadAsync(System.IO.File.OpenRead(photo.FullPath), new BlobUploadOptions());
                 await SetProfilePicture(HttpUtility.UrlEncode(photo.FileName));
@@ -101,17 +143,17 @@ namespace MafiatorApp.ViewModels
         {
             try
             {
-                var result = await DialogService.ShowPickImageAsync();
-                if (result == LocalizationResourceManager.Current.GetValue("Camera"))
-                {
-                    photo = await MediaPicker.CapturePhotoAsync();
-                    //await NavigationService.NavigateToPopupAsync<CropImageViewModel>(photo.FullPath);
-                }
-                else
-                {
-                    photo = await MediaPicker.PickPhotoAsync();
-                    //  await NavigationService.NavigateToPopupAsync<CropImageViewModel>(photo.FullPath);
-                }
+                //   var result = await DialogService.ShowPickImageAsync();
+                // if (result == LocalizationResourceManager.Current.GetValue("Camera"))
+                // {
+                //   photo = await MediaPicker.CapturePhotoAsync();
+                //await NavigationService.NavigateToPopupAsync<CropImageViewModel>(photo.FullPath);
+                //}
+                // else
+                //{
+                photo = await MediaPicker.PickPhotoAsync();
+                //    //  await NavigationService.NavigateToPopupAsync<CropImageViewModel>(photo.FullPath);
+                //}
 
                 if (photo == null)
                     return;
@@ -127,8 +169,14 @@ namespace MafiatorApp.ViewModels
 
         private async Task AvatarSelected()
         {
+            if (!ValidateUpdate())
+                return;
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Changing profile picture");
-            var response = await webApiService.UpdateProfilePicture(Avatar.Name);
+            var response = await WebApiService.UpdateProfile(new UpdateProfileDto()
+            {
+                Image = System.IO.Path.GetFileName(new Uri(Avatar.Name).LocalPath),
+                Name = DisplayName.Value
+            });
             await NavigationService.RemovePopupAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -136,7 +184,14 @@ namespace MafiatorApp.ViewModels
                 if (result.IsSuccess)
                 {
                     Barrel.Current.Add("UserImage", Avatar.Name, TimeSpan.FromDays(180));
-                 //   Application.Current.MainPage = new TransitionNavigationPage(new HomeView());
+                    Barrel.Current.Empty("User");
+                    if (isEdit)
+                    {
+                        publisher.Publish(new UpdateProfileEvent());
+                        await NavigationService.RemoveLastFromBackStackAsync();
+                    }
+                    else
+                        await NavigationService.NavigateToAsync<HomeViewModel>();
                 }
                 else
                     DependencyService.Get<IAlert>().ShortAlert(result.Errors.ToString(), MessageType.Error);
@@ -150,7 +205,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task LoadAvatars()
         {
-            var response = await webApiService.GetAllAvatars();
+            var response = await WebApiService.GetAllAvatars();
             if (response.IsSuccess)
             {
                 avatars = mapper.Map<IEnumerable<Avatar>>(response.Data);
@@ -163,9 +218,15 @@ namespace MafiatorApp.ViewModels
 
         private async void Skip()
         {
-            await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Starting Game...");
-            await NavigationService.NavigateToAsync<HomeViewModel>(); // new TransitionNavigationPage(new HomeView());
-            await NavigationService.RemovePopupAsync();
+            if (isEdit)
+                await NavigationService.RemoveLastFromBackStackAsync();
+            else
+            {
+                await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Starting Game...");
+                await NavigationService
+                    .NavigateToAsync<HomeViewModel>(); // new TransitionNavigationPage(new HomeView());
+                await NavigationService.RemovePopupAsync();
+            }
         }
 
         public void RefreshImage()
@@ -173,17 +234,30 @@ namespace MafiatorApp.ViewModels
             Name = Barrel.Current.Get<string>("UserImage");
         }
 
-        public async Task SetProfilePicture(string name)
+        public async Task SetProfilePicture(string image)
         {
-            var response = await webApiService.UpdateProfilePicture(name);
+            if (!ValidateUpdate())
+                return;
+            var response = await WebApiService.UpdateProfile(new UpdateProfileDto()
+            {
+                Image = image,
+                Name = DisplayName.Value
+            });
             var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
             if (response.IsSuccessStatusCode)
             {
                 if (result.IsSuccess)
                 {
                     Barrel.Current.Add("UserImage", name, TimeSpan.FromDays(180));
-                    await NavigationService.NavigateToAsync<HomeViewModel>();
+                    Barrel.Current.Empty("User");
+                    publisher.Publish(new UpdateProfileEvent());
                     await NavigationService.RemovePopupAsync();
+                    if (isEdit)
+                    {
+                        await NavigationService.RemoveLastFromBackStackAsync();
+                    }
+                    else
+                        await NavigationService.NavigateToAsync<HomeViewModel>();
                 }
                 else
                 {
@@ -196,6 +270,12 @@ namespace MafiatorApp.ViewModels
                 await NavigationService.RemovePopupAsync();
                 DependencyService.Get<IAlert>().ShortAlert(result.Errors.ToString(), MessageType.Error);
             }
+        }
+
+        private bool ValidateUpdate()
+        {
+            IsDisplayNameValid = DisplayName.Validate();
+            return IsDisplayNameValid;
         }
     }
 }

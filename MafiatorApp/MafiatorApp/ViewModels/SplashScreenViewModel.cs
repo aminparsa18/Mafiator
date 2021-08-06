@@ -12,11 +12,12 @@ namespace MafiatorApp.ViewModels
     {
         private readonly ISubscriber<ChangeLanguageEvent> _subscriber;
         private readonly IDisposable _disposable;
+
         public SplashScreenViewModel(ISubscriber<ChangeLanguageEvent> subscriber)
         {
             _subscriber = subscriber;
             var bag = DisposableBag.CreateBuilder();
-            _subscriber.Subscribe(async c => { await Navigate(new Uri("about:blank")); }).AddTo(bag);
+            _subscriber.Subscribe(async _ => { await Navigate(new Uri("about:blank")); }).AddTo(bag);
             _disposable = bag.Build();
         }
 
@@ -27,16 +28,16 @@ namespace MafiatorApp.ViewModels
                 await NavigationService.NavigateToPopupAsync<LanguagesViewModel>();
                 return;
             }
+
             if (Barrel.Current.Exists("Token"))
             {
                 if (uri.Segments.Length == 3)
                 {
                     var path = uri.Segments[1];
-                    await NavigationService.NavigateToAsync<HomeViewModel>();
                     if (path.StartsWith("room"))
-                        await NavigationService.NavigateToAsync<RoomDetailViewModel>(Ulid.Parse(uri.Segments[2]));
+                     await NavigationService.NavigateToAsync<RoomDetailViewModel>(Ulid.Parse(uri.Segments[2]));
                     else if (path.StartsWith("game"))
-                        await NavigationService.NavigateToAsync<WaitingGameViewModel>(Ulid.Parse(uri.Segments[2]));
+                       await NavigationService.NavigateToAsync<WaitingGameViewModel>(Ulid.Parse(uri.Segments[2]));
                 }
                 else
                     await NavigationService.NavigateToAsync<HomeViewModel>();
@@ -44,7 +45,8 @@ namespace MafiatorApp.ViewModels
             else
                 await NavigationService.NavigateToAsync<LoginViewModel>();
 
-            if ((!Barrel.Current.Exists("PlayMusic") || Barrel.Current.Get<bool>("PlayMusic")) && CrossSimpleAudioPlayer.Current.Load("mafia1.mp3"))
+            if ((!Barrel.Current.Exists("PlayMusic") || Barrel.Current.Get<bool>("PlayMusic")) &&
+                CrossSimpleAudioPlayer.Current.Load("mafia1.mp3"))
                 CrossSimpleAudioPlayer.Current.Play();
             _disposable.Dispose();
         }

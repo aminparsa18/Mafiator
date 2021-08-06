@@ -1,7 +1,9 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using Cysharp.Serialization.MessagePack;
 using Mafiator.Common.Api;
 using Mafiator.Common.Extensions;
+using Mafiator.Common.SiteSetting;
 using Mafiator.Data;
 using Mafiator.IocConfig.Formatters;
 using Mafiator.IocConfig.Hubs;
@@ -17,7 +19,10 @@ using MessagePack;
 using MessagePack.AspNetCoreMvcFormatter;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Azure.Management.Media;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Rest;
 using Serilog;
 using MessagePackOutputFormatter = MessagePack.AspNetCoreMvcFormatter.MessagePackOutputFormatter;
 
@@ -40,11 +45,15 @@ namespace Mafiator.IocConfig.Extensions
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ISmsSender, TwilioSmsSender>();
+            services.AddScoped<ILiveEventManager, LiveEventManager>();
             services.AddSingleton<INotificationService, NotificationHubService>();
             services.AddDistributedMemoryCache();
             services.AddScoped<IMemoryCache, MemoryCache>();
             services.AddOptions<NotificationHubOptions>()
                 .Configure(configuration.GetSection("NotificationHub").Bind)
+                .ValidateDataAnnotations();
+            services.AddOptions<MediaServiceCredential>()
+                .Configure(configuration.GetSection("MediaService").Bind)
                 .ValidateDataAnnotations();
             services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapping>());
             services.AddSwaggerDocument(setting =>
@@ -69,9 +78,9 @@ namespace Mafiator.IocConfig.Extensions
                     };
                 };
             });
-            services.AddSignalR().AddMessagePackProtocol(o=>o.SerializerOptions=messagePackOption);
-            //.AddAzureSignalR(
-            //  "Endpoint=https://mftor.service.signalr.net;AccessKey=inOoFhEvNI35aI1mHRZ1lbJjO3kFdgiyNmGbOy4brns=;Version=1.0;");
+            services.AddSignalR().AddMessagePackProtocol(o=>o.SerializerOptions=messagePackOption)
+                .AddAzureSignalR("Endpoint=https://mftor.service.signalr.net;AccessKey=/bXupX8SacE1iztiuK/ZqxdZopEVKtaYTUVb3xUjs9U=;Version=1.0;");
+         
             return services;
         }
 

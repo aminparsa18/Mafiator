@@ -13,10 +13,8 @@ namespace MafiatorApp.Dtos
         [Key(2)]
         public Ulid RoomId{ get; set; }
         [Key(3)]
-        public string RoomImage{ get; set; }
-        [Key(4)]
         public short Count{ get; set; }
-        [Key(5)]
+        [Key(4)]
         public DateTime Date{ get; set; }
     }
 }

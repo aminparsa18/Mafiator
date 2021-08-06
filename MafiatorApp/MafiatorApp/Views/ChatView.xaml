@@ -6,11 +6,13 @@
              xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
              xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              xmlns:effects="clr-namespace:MafiatorApp.Effects;assembly=MafiatorApp"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.ChatView"
              base:ViewModelLocator.AutoWireViewModel="true"
              x:DataType="viewModels:ChatViewModel">
     <ContentPage.Resources>
         <helpers:ChatTemplateSelector x:Key="ChatTemplateSelector" />
+        <converters:RecordingTimeConverter x:Key="RecordingTimeConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>

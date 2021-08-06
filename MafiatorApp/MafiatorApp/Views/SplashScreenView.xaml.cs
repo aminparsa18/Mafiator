@@ -14,6 +14,7 @@ namespace MafiatorApp.Views
         public SplashScreenView(Uri uri)
         {
             this.uri = uri;
+           NavigationPage.SetHasNavigationBar(this,false);
             InitializeComponent();
         }
 

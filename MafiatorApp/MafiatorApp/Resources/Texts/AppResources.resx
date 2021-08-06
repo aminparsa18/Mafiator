@@ -153,8 +153,17 @@
   <data name="Autoplay" xml:space="preserve">
     <value>Autoplay voices in game</value>
   </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Chat" xml:space="preserve">
     <value>Chat</value>
+  </data>
+  <data name="ChoosePhoto" xml:space="preserve">
+    <value>Choose Photo</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirm Password</value>
@@ -203,6 +212,9 @@
   </data>
   <data name="FacebookSignIn" xml:space="preserve">
     <value>Sign in With Facebook</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Gallery</value>
   </data>
   <data name="GameHubConnecting" xml:space="preserve">
     <value>Connecting Game Hub...</value>

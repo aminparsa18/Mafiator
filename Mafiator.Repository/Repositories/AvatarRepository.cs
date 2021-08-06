@@ -17,7 +17,8 @@ namespace Mafiator.Repository.Repositories
 
         public async Task<IEnumerable<AvatarDto>> GetAllDto()
         {
-            return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]",cacheKey:"ActiveAvatars",cache:CacheFactory.GetCache());
+            //return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]",cacheKey:"ActiveAvatars",cache:CacheFactory.GetCache());
+            return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]");
         }
     }
 }

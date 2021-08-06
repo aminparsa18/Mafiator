@@ -16,7 +16,6 @@
              x:Name="Page"
              x:DataType="viewModels:GameViewModel">
     <ContentPage.Resources>
-        <converters:ProfileImageConverter x:Key="ProfileImageConverter" />
         <converters:RoleImageConverter x:Key="RoleImageConverter" />
         <converters:RecordingTimeConverter x:Key="RecordingTimeConverter" />
         <helpers:ChatTemplateSelector x:Key="ChatTemplateSelector" />
@@ -103,7 +102,7 @@
                                 DownsampleToViewSize="True"
                                 Margin="8,0"
                                 Aspect="AspectFit"
-                                Source="{Binding Member.Image,Converter={StaticResource ProfileImageConverter}}"
+                                Source="{Binding Member.Image}"
                                 LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                 ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}" />
                         </Grid>
@@ -162,7 +161,7 @@
                         </Image.GestureRecognizers>
                     </Image>
                 </Grid>
-                <Frame x:Name="MessageBox" TranslationY="200" Margin="8" HeightRequest="80"
+                <Frame x:Name="MessageBox" TranslationY="0" Margin="8" HeightRequest="80"
                        BackgroundColor="{StaticResource Night1}"
                        CornerRadius="16" Padding="8,4,0,4">
                     <StackLayout Orientation="Horizontal" >
@@ -258,7 +257,7 @@
                                     DownsampleToViewSize="True"
                                     Margin="0,6,0,4"
                                     TintColor="{Binding Status,Converter={StaticResource PlayerStatusTintConverter} }"
-                                    Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}" />
+                                    Source="{Binding Image}" />
                                 <Frame
                                     IsVisible="{Binding Status,Converter={StaticResource PlayerStatusVisibilityConverter}}"
                                     Padding="4" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand"

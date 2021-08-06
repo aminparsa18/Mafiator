@@ -56,6 +56,8 @@ namespace MafiatorApp.ViewModels.Base
             services.AddTransient<InquiryStatusViewModel>();
             services.AddTransient<WaitingViewModel>();
             services.AddTransient<StoreViewModel>();
+            services.AddTransient<BarcodeScannerViewModel>();
+            services.AddTransient<GameFinishViewModel>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService,NavigationService>();
             services.AddSingleton<IWebApiService,WebApiService>();

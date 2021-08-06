@@ -8,6 +8,7 @@ using Hangfire;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
 using Mafiator.Common.Extensions;
+using Mafiator.Data;
 using Mafiator.Data.Dtos;
 using Mafiator.Entities;
 using Mafiator.Entities.Enums;
@@ -25,16 +26,17 @@ namespace Mafiator.Api.Controllers
     public class GameController : ApiBaseController
     {
         private readonly IGameService gameService;
-        private readonly IMemoryCache cache;
+        private readonly ILiveEventManager liveEventManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHubContext<GameHub> _gameHub;
 
-        public GameController(IMemoryCache memoryCache,IGameService gameService, IUnitOfWork unitOfWork, IMapper mapper,
+        public GameController(ILiveEventManager liveEventManager, IGameService gameService, IUnitOfWork unitOfWork,
+            IMapper mapper,
             IHubContext<GameHub> gameHub)
         {
             this.gameService = gameService;
-            this.cache = memoryCache;
+            this.liveEventManager = liveEventManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _gameHub = gameHub;
@@ -118,49 +120,29 @@ namespace Mafiator.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetWaitingGameByRoom(string roomId)
         {
-            try
+            var data = await _unitOfWork.Game.GetWaitingGameByRoom(Ulid.Parse(roomId));
+            data?.Members.ForEach(m => m.Image = Constants.BlobStorageEndpoint + m.Image);
+            return Ok(new ApiResult<WaitingGameDto>
             {
-                var data = await _unitOfWork.Game.GetWaitingGameByRoom(Ulid.Parse(roomId));
-                return Ok(new ApiResult<WaitingGameDto>
-                {
-                    IsSuccess = true,
-                    Data = data
-                });
-            }
-            catch (Exception ex)
-            {
-                return Ok(new ApiResult()
-                {
-                    Errors = new[] {ex.Message},
-                    IsSuccess = false
-                });
-            }
+                IsSuccess = true,
+                Data = data
+            });
         }
 
         [HttpGet]
         public async Task<IActionResult> GetWaitingGameByGame(string gameId)
         {
-            try
+            var data = await _unitOfWork.Game.GetWaitingGameByGame(Ulid.Parse(gameId));
+            data?.Members.ForEach(m => m.Image = Constants.BlobStorageEndpoint + m.Image);
+            return Ok(new ApiResult<WaitingGameDto>
             {
-                var data = await _unitOfWork.Game.GetWaitingGameByGame(Ulid.Parse(gameId));
-                return Ok(new ApiResult<WaitingGameDto>
-                {
-                    IsSuccess = true,
-                    Data = data
-                });
-            }
-            catch (Exception ex)
-            {
-                return Ok(new ApiResult()
-                {
-                    Errors = new[] { ex.Message },
-                    IsSuccess = false
-                });
-            }
+                IsSuccess = true,
+                Data = data
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Join([FromBody]string gameId)
+        public async Task<IActionResult> Join([FromBody] string gameId)
         {
             var members = await _unitOfWork.GameMember.GetUsersByGame(gameId);
             if (!members.Any())
@@ -185,16 +167,19 @@ namespace Mafiator.Api.Controllers
                 return Ok(new ApiResult()
                 {
                     IsSuccess = false,
-                    Errors = new[] {"You are already part of this game!!!",userId,JsonConvert.SerializeObject(members)},
+                    Errors = new[]
+                        {"You are already part of this game!!!", userId, JsonConvert.SerializeObject(members)},
                     StatusCode = ApiResultStatusCode.Conflict
                 });
             var selected = members.Where(m => string.IsNullOrEmpty(m.UserId)).SelectRandom();
-            await  _unitOfWork.GameMember.Join(userId,selected.MemberId);
+            await _unitOfWork.GameMember.Join(userId, selected.MemberId);
             await _gameHub.Clients.Group(gameId).SendAsync("Join", userId);
-            if (members.Count(m => string.IsNullOrEmpty(m.UserId))==1)
+            if (members.Count(m => string.IsNullOrEmpty(m.UserId)) == 1)
             {
-                await _gameHub.Clients.Group(gameId).SendAsync("StartGame");
-                BackgroundJob.Schedule(() => gameService.SetTurn(gameId,0),TimeSpan.FromSeconds(30));
+                await _gameHub.Clients.Group(gameId).SendAsync("StartLiveEvent");
+                var live= await liveEventManager.CreateLiveEvent(gameId);
+                await _gameHub.Clients.Group(gameId).SendAsync("StartGame",live.Item1,live.Item2);
+                BackgroundJob.Schedule(() => gameService.SetTurn(gameId, 0), TimeSpan.FromSeconds(30));
                 await _unitOfWork.Game.StartGame(gameId);
             }
 
@@ -208,7 +193,7 @@ namespace Mafiator.Api.Controllers
         public async Task<IActionResult> Leave([FromBody] string gameId)
         {
             var userId = User.FindFirstValue(ClaimTypes.Name);
-            var member = await _unitOfWork.GameMember.GetUser(userId,gameId);
+            var member = await _unitOfWork.GameMember.GetUser(userId, gameId);
             if (!member.Any())
                 return Ok(new ApiResult<string>()
                 {
@@ -289,18 +274,18 @@ namespace Mafiator.Api.Controllers
             var roles = await _unitOfWork.GameMember.GetRoleOfPlayer(userId, gameId);
             if (!roles.Any())
                 return Ok(new ApiResult<PlayerRoleDto>()
-            {
-                IsSuccess = false,
-                StatusCode = ApiResultStatusCode.NotFound,
-                Errors = new[] { "No such member found for this game" }
-            });
+                {
+                    IsSuccess = false,
+                    StatusCode = ApiResultStatusCode.NotFound,
+                    Errors = new[] {"No such member found for this game"}
+                });
             var role = roles.FirstOrDefault();
-            if(role.Role!= GameRole.GodFather && role.Role!=GameRole.Mafia)
+            if (role.Role != GameRole.GodFather && role.Role != GameRole.Mafia)
                 return Ok(new ApiResult<PlayerRoleDto>()
                 {
                     IsSuccess = false,
                     StatusCode = ApiResultStatusCode.NotFound,
-                    Errors = new[] { "Reallyyy???!!!Only mafia players can use it" }
+                    Errors = new[] {"Reallyyy???!!!Only mafia players can use it"}
                 });
             var partners = await _unitOfWork.GameMember.GetMafiaPartners(role.MemberId, gameId);
 
@@ -310,6 +295,5 @@ namespace Mafiator.Api.Controllers
                 Data = partners
             });
         }
-
     }
 }

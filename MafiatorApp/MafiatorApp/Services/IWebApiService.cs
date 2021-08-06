@@ -16,7 +16,7 @@ namespace MafiatorApp.Services
         Task<HttpResponseMessage> Login(UserLoginDto userLogin);
         Task<HttpResponseMessage> RefreshToken(RefreshTokenRequest refreshTokenRequest);
         Task<HttpResponseMessage> RegisterUser(RegisterUserDto registerUserDto);
-        Task<HttpResponseMessage> UpdateProfilePicture(string name);
+        Task<HttpResponseMessage> UpdateProfile(UpdateProfileDto profile);
         Task<ApiResult<UserDto>> GetUser();
         Task<ApiResult<UserStatusDto>> GetUserStatus();
         Task<ApiResult<ValidateUserDto>> ValidateUser(string userCode);

@@ -6,7 +6,10 @@ using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using FluentFTP;
 using MafiatorApp.Cache;
 using MafiatorApp.Dtos;
@@ -262,7 +265,7 @@ namespace MafiatorApp.ViewModels
         private async void SendVoice()
         {
             var id = Ulid.NewUlid();
-            var path = "http://vault.mafiator.com/audio/" + id + ".aac";
+            var path = "https://mftorblob.azureedge.net/voices/" + id + ".aac";
             var message = new GameMessageDto()
             {
                 Sender = true,
@@ -273,24 +276,12 @@ namespace MafiatorApp.ViewModels
                 DisplayName = Members.FirstOrDefault(m => m.Id == player.MemberId)?.DisplayName,
             };
             Messages.Add(message);
-            using var client = new FtpClient(Constants.FtpUrl)
-            {
-                EncryptionMode = FtpEncryptionMode.None,
-                ValidateAnyCertificate = true,
-                DataConnectionEncryption = true,
-                Credentials = new NetworkCredential("mafiator", "54Delta45!"),
-                Port = 21,
-                SslProtocols = SslProtocols.Tls12
-            };
-            await client.ConnectAsync();
-            await using var fs2 = File.OpenRead(Path.Combine(Path.GetTempPath(), "myrecording.aac"));
-            var sts2 = await client.UploadAsync(fs2, "/vault.mafiator.com/audio/" + id + ".aac", FtpRemoteExists.Append,
-                true);
-            if (sts2 == FtpStatus.Success)
+            var blobServiceClient = new BlobServiceClient(
+                "DefaultEndpointsProtocol=https;AccountName=mftor;AccountKey=pLoQjG6uKWpWe1vG+iVU+zKjYRpuM/tPKACmd/kM/AuBXHHfsvLOGKXsq96BusnCfrx/4St1INHVk4tibVLElA==;EndpointSuffix=core.windows.net");
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient("voices");
+            var blobClient = blobContainerClient.GetBlobClient(id+".aac");
+            var response=await blobClient.UploadAsync(File.OpenRead(Path.Combine(Path.GetTempPath(), "myrecording.aac")), new BlobUploadOptions());
                 message.CurrentState = LayoutState.Empty;
-            else
-                message.CurrentState = LayoutState.Error;
-            await client.DisconnectAsync();
 
             await GameHub.Instance.InvokeAsync("SendMessage", gameId, Message, "voice",player?.MemberId);
         }
@@ -353,6 +344,13 @@ namespace MafiatorApp.ViewModels
             GameHub.Instance.On<string>("AdvocacyTurn", SetAdvocacyTurn);
             GameHub.Instance.On("ShowCandidates", ShowCandidates);
             GameHub.Instance.On("ShowAdvocacyCandidates", ShowAdvocacyCandidates);
+            GameHub.Instance.On<string>("GameFinish",GameFinish);
+        }
+
+        private async Task GameFinish(string arg)
+        {
+            await NavigationService.RemovePopupAsync();
+            await NavigationService.NavigateToPopupAsync<GameFinishViewModel>(arg);
         }
 
         private async Task HubClosed(Exception arg)

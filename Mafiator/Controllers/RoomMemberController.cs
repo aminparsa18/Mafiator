@@ -31,6 +31,7 @@ namespace Mafiator.Api.Controllers
             foreach (var item in data)
             {
                 item.Level = (item.TotalGame / 10) + 1;
+                item.Image = Constants.BlobStorageEndpoint + item.Image;
             }
 
             return Ok(new ApiResult<IEnumerable<RoomMemberDto>>()

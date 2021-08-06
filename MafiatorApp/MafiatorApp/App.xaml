@@ -77,7 +77,6 @@
             </Style>
             <Style TargetType="Button">
                 <Setter Property="CornerRadius" Value="14" />
-                <Setter Property="androidSpecific:Button.UseDefaultPadding" Value="True" />
                 <Setter Property="androidSpecific:Button.UseDefaultShadow" Value="True" />
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="TextColor" Value="White" />

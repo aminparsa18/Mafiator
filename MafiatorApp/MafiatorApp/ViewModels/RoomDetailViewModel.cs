@@ -19,7 +19,7 @@ namespace MafiatorApp.ViewModels
     public class RoomDetailViewModel : ViewModelBase
     {
         private readonly ISubscriber<UpdateRoomEvent> _subscriber;
-      public ObservableRangeCollection<RoomMemberDto> Members { get; set; }
+        public ObservableRangeCollection<RoomMemberDto> Members { get; set; }
         public ObservableRangeCollection<GameRoleDto> Roles { get; set; }
 
         private RoomDto room;
@@ -37,6 +37,7 @@ namespace MafiatorApp.ViewModels
             get => role;
             set => SetProperty(ref role, value);
         }
+
         private bool newGameAvailable;
 
         public bool NewGameAvailable
@@ -101,7 +102,7 @@ namespace MafiatorApp.ViewModels
             LeaveCommand = new AsyncCommand(Leave);
             JoinCommand = new AsyncCommand(Join);
             RoleChangeCommand = new AsyncCommand(RoleChanged);
-            ChatCommand=new AsyncCommand(Chat);
+            ChatCommand = new AsyncCommand(Chat);
             subscriber.Subscribe(async s => await LoadDataCommand.ExecuteAsync());
         }
 
@@ -112,7 +113,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task RoleChanged()
         {
-            await NavigationService.NavigateToPopupAsync<PlayerRoleViewModel>(Tuple.Create(Role.Role,false));
+            await NavigationService.NavigateToPopupAsync<PlayerRoleViewModel>(Tuple.Create(Role.Role, false));
         }
 
         private async Task Join()
@@ -211,7 +212,9 @@ namespace MafiatorApp.ViewModels
                     newGameAvailable = false;
                 if (waiting.Data != null)
                 {
-                    RemainingTime = waiting.Data.Status==GameStatus.NotStarted ? "New game is waiting for members to start":"Game is being played";
+                    RemainingTime = waiting.Data.Status == GameStatus.NotStarted
+                        ? "New game is waiting for members to start"
+                        : "Game is being played";
                     Roles.AddRange(waiting.Data.Roles.Select(s => new GameRoleDto()
                     {
                         Role = s

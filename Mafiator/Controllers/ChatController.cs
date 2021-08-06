@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
+using Mafiator.Data;
 using Mafiator.Data.Dtos;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -23,10 +24,12 @@ namespace Mafiator.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByRoom(string roomId)
         {
+            var chats = await unitOfWork.ChatMessage.GetByRoom(Ulid.Parse(roomId));
+            chats.ForEach(c=>c.Image=Constants.BlobStorageEndpoint+c.Image);
             return Ok(new ApiResult<List<ChatMessageDto>>()
             {
                 IsSuccess = true,
-                Data = await unitOfWork.ChatMessage.GetByRoom(Ulid.Parse(roomId))
+                Data = chats
             });
         }
     }

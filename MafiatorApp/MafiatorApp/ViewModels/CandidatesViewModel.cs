@@ -82,12 +82,6 @@ namespace MafiatorApp.ViewModels
             _timer ??= new Timer(Callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             GameHub.Instance.On("ShowVoteStatus", ShowStatus);
             GameHub.Instance.On("Night", FirstNight);
-            GameHub.Instance.On<string>("GameFinish", GameFinish);
-        }
-
-        private async Task GameFinish(string arg)
-        {
-            await NavigationService.NavigateToPopupAsync<GameFinishViewModel>(arg);
         }
 
         private async Task FirstNight()

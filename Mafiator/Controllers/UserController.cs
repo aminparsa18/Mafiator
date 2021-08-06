@@ -38,7 +38,7 @@ namespace Mafiator.Api.Controllers
                     StatusCode = ApiResultStatusCode.NotFound,
                     Errors = new[] {"User not Found"}
                 });
-           // user.ForAll(u=>u.Image=Constants.BlobStorageEndpoint+u.Image);
+            user.ForAll(u => u.Image = Constants.BlobStorageEndpoint + u.Image);
             return Ok(new ApiResult<ValidateUserDto>()
             {
                 IsSuccess = true,
@@ -48,14 +48,15 @@ namespace Mafiator.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UpdateProfilePicture([FromBody] string name)
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto profile)
         {
             var userId = User.FindFirstValue(ClaimTypes.Name);
-            var res = await identityService.UpdateProfilePicture(userId, name);
+            var res = await identityService.UpdateProfile(userId, profile.Name,profile.Image);
             if (res.IsSuccess)
                 return Ok(res);
             return BadRequest(res);
         }
+
         [HttpPost]
         public IActionResult SendMessage()
         {
@@ -120,15 +121,7 @@ namespace Mafiator.Api.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.Name);
             var res = await identityService.GetUser(userId);
-            return Ok(res);
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetByCode(string code)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.Name);
-            var res = await identityService.GetUser(userId);
+            res.Data.Image = Constants.BlobStorageEndpoint + res.Data.Image;
             return Ok(res);
         }
 
@@ -153,13 +146,13 @@ namespace Mafiator.Api.Controllers
                 // Get parameters to send back to the callback
                 var qs = new Dictionary<string, string>
                 {
-                    { "access_token", auth.Properties.GetTokenValue("access_token") },
-                    { "refresh_token", auth.Properties.GetTokenValue("refresh_token") ?? string.Empty },
-                    { "expires", (auth.Properties.ExpiresUtc?.ToUnixTimeSeconds() ?? -1).ToString() },
-                    { "email", email }
+                    {"access_token", auth.Properties.GetTokenValue("access_token")},
+                    {"refresh_token", auth.Properties.GetTokenValue("refresh_token") ?? string.Empty},
+                    {"expires", (auth.Properties.ExpiresUtc?.ToUnixTimeSeconds() ?? -1).ToString()},
+                    {"email", email}
                 };
                 // Build the result url
-                var url =  "kirekhar://#" + string.Join(
+                var url = "kirekhar://#" + string.Join(
                     "&",
                     qs.Where(kvp => !string.IsNullOrEmpty(kvp.Value) && kvp.Value != "-1")
                         .Select(kvp => $"{WebUtility.UrlEncode(kvp.Key)}={WebUtility.UrlEncode(kvp.Value)}"));

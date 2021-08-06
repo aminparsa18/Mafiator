@@ -12,7 +12,7 @@ namespace Mafiator.Service.Contracts.Identity
         Task<ApiResult> Register(RegisterUserDto registerUser);
         Task<AuthResult> RefreshToken(RefreshTokenRequest refreshTokenRequest);
         Task<AuthResult> ConfirmPhoneNumber(string phoneNo, string token);
-        Task<ApiResult> UpdateProfilePicture(string phone,string name);
+        Task<ApiResult> UpdateProfile(string userId,string name,string image);
         Task<ApiResult<UserDto>> GetUser(string userId);
     }
 }

@@ -5,10 +5,13 @@
     <UserSecretsId>cd45931b-b57d-4098-bcb4-aef3f70acfa2</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+    <ApplicationInsightsResourceId>/subscriptions/23cb6aaa-477e-4b65-b757-7e45ff2549e5/resourceGroups/main/providers/microsoft.insights/components/MafiatorApi</ApplicationInsightsResourceId>
 
   </PropertyGroup>
 
   <ItemGroup>
+    
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
       <PrivateAssets>all</PrivateAssets>

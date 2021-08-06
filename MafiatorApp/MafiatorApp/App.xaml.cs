@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
-using FFImageLoading;
 using MafiatorApp.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Resources.Texts;
-using MafiatorApp.UserControls;
+using MafiatorApp.Services;
+using MafiatorApp.Services.Impl;
 using MafiatorApp.UserControls.ShimmerLayout;
+using MafiatorApp.ViewModels;
+using MafiatorApp.ViewModels.Base;
 using MafiatorApp.Views;
-using MessagePack;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Plugin.SimpleAudioPlayer;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Application = Xamarin.Forms.Application;
 
@@ -59,8 +61,7 @@ namespace MafiatorApp
             // UserAppTheme = OSAppTheme.Dark;
             //else
             //    UserAppTheme = OSAppTheme.Light;
-
-            MainPage = new TransitionNavigationPage(new SplashScreenView(uri));
+             MainPage = new NavigationPage(new SplashScreenView(uri));
         }
 
         private async void InitBarrel()

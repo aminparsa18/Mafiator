@@ -1,38 +1,69 @@
-﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
-             x:Class="MafiatorApp.Views.GameFinishView"
-             BackgroundImageSource="{AppThemeBinding Light=day.png, Dark=night.png}"
-             >
-    <ContentPage.BindingContext>
-        <viewModels:GameFinishViewModel/>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource PopupDayBackground},Dark={StaticResource PopupNightBackground}}">
-          <Grid>
+﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 x:Class="MafiatorApp.Views.GameFinishView"
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:GameFinishViewModel">
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+    <pages:PopupPage.Content>
+        <StackLayout>
+            <Frame
+                CornerRadius="52" Margin="16" Padding="16"
+                VerticalOptions="CenterAndExpand">
+                <StackLayout>
+                        <StackLayout VerticalOptions="EndAndExpand" Margin="24,0,0,0">
+                            <Label Text="Game Over" FontSize="Large" FontAttributes="Bold" />
+                            <Label Text="Get back soon" />
+                        </StackLayout>
+                    <StackLayout>
+                        <Grid>
+                            <userControls:CircularProgressBar Stroke="20" Progress="{Binding ProgressTimer}"
+                                                              VerticalOptions="Center" HorizontalOptions="Center"
+                                                              WidthRequest="120" HeightRequest="120"
+                                                              Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"  />
+                            <forms:CachedImage
+                                x:Name="ProfileImage"
+                                WidthRequest="100"
+                                HeightRequest="100"
+                                DownsampleToViewSize="True"
+                                Margin="8"
+                                Aspect="AspectFit"
+                                Source="god.png"/>
+                        </Grid>
 
-                <Image Source="sug_header_1.png" Aspect="AspectFill"></Image>
-              <Image Source="start_game.png" Margin="24,16" Aspect="AspectFit"></Image>
+                        <Label Text="{Binding Winner}" FontSize="16"
+                               FontFamily="{StaticResource BoldFont}"
+                               HorizontalOptions="CenterAndExpand" />
 
-          <Image Source="sug_header.png" TranslationY="-72"  Aspect="AspectFill"></Image>
-            </Grid>
-                <Label Margin="0,16,0,0" FontFamily="{StaticResource BoldFont}" TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}"
-                        Text="Create New Room" HorizontalOptions="CenterAndExpand" FontSize="Large"></Label>
-                <Label Margin="36,16" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}"
-                       Text="Start your own room and enjoy playing with friends" HorizontalOptions="CenterAndExpand" ></Label>
-            <Button Margin="48,8" Text="Create Room" TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}" BackgroundColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night1}}"  >
-                <Button.Background>
+                    </StackLayout>
+
+                </StackLayout>
+                <Frame.Background>
                     <LinearGradientBrush StartPoint="0,0"
                                          EndPoint="1,1">
-                        <GradientStop Color="{AppThemeBinding Light={StaticResource Night1},Dark={StaticResource Night1}}"
-                                      Offset="0.0" />
-                        <GradientStop Color="{AppThemeBinding Light={StaticResource Night2},Dark={StaticResource Night2}}"
-                                      Offset="0.9" />
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                            Offset="0.0" />
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                            Offset="0.25" />
                     </LinearGradientBrush>
-                </Button.Background>
-            </Button>
-            <!--<Button Margin="48,8" Text="No Thanks" BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night2}}" Command="{Binding SkipCommand}" />-->
-
+                </Frame.Background>
+            </Frame>
         </StackLayout>
-    </ContentPage.Content>
-</ContentPage>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

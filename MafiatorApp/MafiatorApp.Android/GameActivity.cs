@@ -19,15 +19,7 @@ namespace MafiatorApp.Droid
             base.OnCreate(savedInstanceState);
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-            if (Intent.Data != null)
-            {
-                var uri = new Uri(Intent.Data?.ToString());
-                LoadApplication(new App(uri));
-            }
-            else
-            {
-                LoadApplication(new App(new Uri("about:blank")));
-            }
+         
         }
     }
 }

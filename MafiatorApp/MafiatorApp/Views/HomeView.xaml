@@ -12,11 +12,9 @@
              x:Class="MafiatorApp.Views.HomeView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:HomeViewModel">
-    <ContentPage.Resources>
-        <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
-    </ContentPage.Resources>
+
     <Grid>
-        <Grid RowDefinitions="*,64" CompressedLayout.IsHeadless="true">
+        <Grid RowDefinitions="*,80" CompressedLayout.IsHeadless="true">
             <StackLayout>
                 <StackLayout Orientation="Horizontal" x:Name="SettingGrid" Margin="0,36" MinimumHeightRequest="40" HorizontalOptions="CenterAndExpand">
                     <Frame x:Name="SettingBtn" Margin="4,0"  xct:TouchEffect.Command="{Binding SettingsCommand}"
@@ -172,12 +170,12 @@
                     </StackLayout>
                 </Grid>
                 <Grid Grid.Row="2"  Grid.ColumnSpan="2" xct:TouchEffect.Command="{Binding StoreCommand}" xct:TouchEffect.PressedScale="1.05" xct:TouchEffect.PressedOpacity="0.8" xct:TouchEffect.AnimationEasing="Linear">
-                    <Frame Padding="0" CornerRadius="16">
-                        <Image Source="store.png"
-                               Aspect="Fill" />
+                    <Frame Padding="0" CornerRadius="16" BackgroundColor="Transparent">
+                            <Image Source="{AppThemeBinding Light=store_day.png, Dark=store_night.png}"
+                                   Aspect="Fill" />
                         </Frame>
                     
-                        <Label Text="{xct:Translate Store}" Margin="12" VerticalOptions="EndAndExpand" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
+                        <Label Text="{xct:Translate Store}" Margin="24,12" VerticalOptions="EndAndExpand" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
                             <Label.Effects>
                                 <effects:ShadowEffect Radius="5" Color="Black" DistanceX="5" DistanceY="5" />
                             </Label.Effects>
@@ -211,7 +209,7 @@
                                 HeightRequest="80"
                                 Margin="8"
                                 Aspect="AspectFit"
-                                Source="{Binding User.Image,Converter={StaticResource ProfileImageConverter}}"
+                                Source="{Binding User.Image}"
                                 LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                 ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
                                     <forms:CachedImage.Transformations>
@@ -222,7 +220,7 @@
                                 <Label Text="{Binding User.DisplayName}" Margin="12,0,0,0" FontSize="16" FontFamily="{StaticResource BoldFont}" />
                                 <StackLayout Orientation="Horizontal">
                                     <Button BackgroundColor="Transparent" BorderWidth="1" FontSize="10" BorderColor="Transparent"
-                                            Text="{xct:Translate EditProfile}" Padding="8,2" Margin="0" />
+                                            Text="{xct:Translate EditProfile}" Padding="8,2" Margin="0" Command="{Binding EditProfileCommand}"/>
                                     <Frame Margin="8,0" Padding="16,0">
                                         <StackLayout Orientation="Horizontal">
                                             <Image Source="gem.png" WidthRequest="24" />
@@ -327,7 +325,7 @@
             Aspect="Fill"
             HorizontalOptions="CenterAndExpand"
             VerticalOptions="EndAndExpand"
-            Source="{Binding User.Image,Converter={StaticResource ProfileImageConverter}}"
+            Source="{Binding User.Image}"
             LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
             ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
             <forms:CachedImage.Transformations>

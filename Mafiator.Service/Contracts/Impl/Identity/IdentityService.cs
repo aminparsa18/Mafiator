@@ -30,7 +30,8 @@ namespace Mafiator.Service.Contracts.Impl.Identity
         private readonly RoleManager<Role> roleManager;
         private readonly IUnitOfWork unitOfWork;
 
-        public IdentityService(IMapper mapper,IDbConnection dbConnection, ISmsSender smsSender, ITokenService tokenService,
+        public IdentityService(IMapper mapper, IDbConnection dbConnection, ISmsSender smsSender,
+            ITokenService tokenService,
             UserManager<User> userManager, RoleManager<Role> roleManager, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
@@ -44,12 +45,14 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
         public async Task<IEnumerable<ValidateUserDto>> GetByUsername(string username)
         {
-            return await dbConnection.ExecuteQueryAsync<ValidateUserDto>("SELECT TOP 1 [Id],[DisplayName],[Image] FROM [Users] WHERE Username = @username",new {username});
+            return await dbConnection.ExecuteQueryAsync<ValidateUserDto>(
+                "SELECT TOP 1 [Id],[DisplayName],[Image] FROM [Users] WHERE Username = @username", new {username});
         }
 
         public async Task<AuthResult> Login(UserLoginDto userLogin)
         {
-            var users =await dbConnection.ExecuteQueryAsync<User>("SELECT TOP 1 * FROM [Users] WHERE Username = @username",new {username=userLogin.Username});
+            var users = await dbConnection.ExecuteQueryAsync<User>(
+                "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new {username = userLogin.Username});
             if (!users.Any())
             {
                 return new AuthResult()
@@ -58,6 +61,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                     Errors = new[] {"Login data is not correct."}
                 };
             }
+
             var user = users.FirstOrDefault();
             var userHasValidPassword = await userManager.CheckPasswordAsync(user, userLogin.Password);
             if (!userHasValidPassword)
@@ -65,9 +69,10 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.UnAuthorized,
-                    Errors = new[] { "Login data is not correct." }
+                    Errors = new[] {"Login data is not correct."}
                 };
             }
+
             if (!user.PhoneNumberConfirmed)
             {
                 var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
@@ -79,6 +84,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                     Token = user.PhoneNumber
                 };
             }
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, Constants.PlayerRole),
@@ -104,7 +110,8 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
         public async Task<ApiResult> Register(RegisterUserDto registerUser)
         {
-            var users = await dbConnection.ExecuteQueryAsync<User>("SELECT TOP 1 * FROM [Users] WHERE Username = @username", new { username = registerUser.Username});
+            var users = await dbConnection.ExecuteQueryAsync<User>(
+                "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new {username = registerUser.Username});
             if (users.Any())
             {
                 return new AuthResult()
@@ -175,7 +182,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] { "Refresh Token Invalidated" }
+                    Errors = new[] {"Refresh Token Invalidated"}
                 };
             }
 
@@ -184,7 +191,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] { "This refresh token has been used" }
+                    Errors = new[] {"This refresh token has been used"}
                 };
             }
 
@@ -194,7 +201,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] { "This refresh token does not match this JWT" }
+                    Errors = new[] {"This refresh token does not match this JWT"}
                 };
             }
 
@@ -226,7 +233,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
         public async Task<AuthResult> ConfirmPhoneNumber(string phoneNo, string token)
         {
             var existingUser = await userManager.Users.FirstOrDefaultAsync(e => e.PhoneNumber == phoneNo);
-            if (existingUser==null)
+            if (existingUser == null)
             {
                 return new AuthResult()
                 {
@@ -234,6 +241,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                     Errors = new[] {"User does not exist"}
                 };
             }
+
             var result = await userManager.ChangePhoneNumberAsync(existingUser, phoneNo, token);
             if (result.Succeeded)
             {
@@ -260,6 +268,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                         claims.Add(roleClaim);
                     }
                 }
+
                 var tokenResult = tokenService.GenerateAccessToken(existingUser, claims);
                 var refreshToken = new RefreshToken()
                 {
@@ -273,7 +282,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 await userManager.UpdateAsync(existingUser);
                 return new AuthResult()
                 {
-                    IsSuccess = true, 
+                    IsSuccess = true,
                     Token = tokenResult.Token,
                     RefreshToken = refreshToken.Token
                 };
@@ -286,39 +295,43 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             };
         }
 
-        public async Task<ApiResult> UpdateProfilePicture(string userId, string name)
+        public async Task<ApiResult> UpdateProfile(string userId, string name, string image)
         {
             var user = await userManager.FindByIdAsync(userId);
-            if (user==null)
+            if (user == null)
             {
                 return new ApiResult()
                 {
                     StatusCode = ApiResultStatusCode.UnAuthorized,
-                    Errors = new[] { "User does not exist" }
+                    Errors = new[] {"User does not exist"}
                 };
             }
-            user.Image = name;
+
+            user.DisplayName = name;
+            user.Image = image;
             await userManager.UpdateAsync(user);
-            return new ApiResult(){IsSuccess = true};
+            return new ApiResult() {IsSuccess = true};
         }
 
         public async Task<ApiResult<UserDto>> GetUser(string userId)
         {
-            var users = await dbConnection.ExecuteQueryAsync<UserDto>("SELECT TOP 1 [Image],[Score],[DisplayName],[CountryCode] FROM [Users] WHERE Id = @id", new { id = userId });
+            var users = await dbConnection.ExecuteQueryAsync<UserDto>(
+                "SELECT TOP 1 [Image],[Score],[DisplayName],[CountryCode] FROM [Users] WHERE Id = @id",
+                new {id = userId});
             if (!users.Any())
             {
                 return new ApiResult<UserDto>()
                 {
                     StatusCode = ApiResultStatusCode.UnAuthorized,
-                    Errors = new[] { "User does not exist" }
+                    Errors = new[] {"User does not exist"}
                 };
             }
+
             return new ApiResult<UserDto>()
             {
                 IsSuccess = true,
                 Data = users.FirstOrDefault()
             };
         }
-
     }
 }

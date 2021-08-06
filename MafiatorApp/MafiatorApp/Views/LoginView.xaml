@@ -10,6 +10,7 @@
              x:Class="MafiatorApp.Views.LoginView"
              base:ViewModelLocator.AutoWireViewModel="True"
              BackgroundColor="Black"
+             Visual="Material"
              x:DataType="viewModels:LoginViewModel">
     <ContentPage.Resources>
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
@@ -24,9 +25,11 @@
                         <StackLayout x:Name="TitlePanel">
                             <Label Text="{xct:Translate AppTitle}" FontSize="Large" Margin="0,8,0,0"
                                    FontAttributes="Bold"
-                                   HorizontalOptions="CenterAndExpand" />
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}"/>
                             <Label Text="{xct:Translate AppSubTitle}" FontSize="Small"
-                                   HorizontalOptions="CenterAndExpand" />
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}"/>
                         </StackLayout>
                         <StackLayout x:Name="LoginPanel" IsVisible="False" Opacity="0" Margin="24">
                             <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
@@ -106,10 +109,7 @@
                                                         Text="{Binding Username.Value}"
                                                         IsValid="{Binding IsUsernameValid, Mode=TwoWay}"
                                                         Errors="{Binding Username.Errors}" />
-                            <userControls:ExtendedEntry Placeholder="{xct:Translate DisplayName}"
-                                                        Text="{Binding DisplayName.Value}"
-                                                        IsValid="{Binding IsDisplayNameValid, Mode=TwoWay}"
-                                                        Errors="{Binding DisplayName.Errors}" />
+                          
                           <Grid>
                               <userControls:ExtendedEntry x:Name="RegisterPassEntry" Text="{Binding Password.Value,Mode=TwoWay}"
                                                           Placeholder="{xct:Translate Password}"

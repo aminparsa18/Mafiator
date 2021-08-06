@@ -23,7 +23,7 @@ namespace MafiatorApp
         }
         private static HubConnection CreateInstance()
         {
-            return new HubConnectionBuilder().WithUrl("https://api.mafiator.com/chathub", options =>
+            return new HubConnectionBuilder().WithUrl("https://mafiatorapi.azurewebsites.net/chathub", options =>
                 {
                     options.AccessTokenProvider = () => Task.FromResult(Barrel.Current.Get<string>("Token"));
                 }).ConfigureLogging(logging =>

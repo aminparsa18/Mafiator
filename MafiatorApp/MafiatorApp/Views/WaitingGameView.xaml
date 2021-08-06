@@ -13,7 +13,6 @@
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewmodels:WaitingGameViewModel">
     <ContentPage.Resources>
-        <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
         <converters:ToggleConverter x:Key="ToggleConverter"/>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -114,7 +113,7 @@
                                     WidthRequest="80"
                                     HeightRequest="80"
                                     DownsampleToViewSize="true"
-                                    Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}"
+                                    Source="{Binding Image}"
                                     LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
                                     ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}">
                                 <forms:CachedImage.Transformations>
