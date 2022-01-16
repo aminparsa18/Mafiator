@@ -1,35 +1,32 @@
-﻿using System;
+﻿using MessagePack;
+using MessagePack.Resolvers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using MessagePack;
-using MessagePack.Resolvers;
 
 namespace Mafiator.Repository.Cache
 {
     public class Barrel : IBarrel
     {
-        ReaderWriterLockSlim indexLocker;
-        Lazy<string> baseDirectory;
-        private readonly MessagePackSerializerOptions serializerSettings;
+        readonly ReaderWriterLockSlim _indexLocker;
+        readonly Lazy<string> _baseDirectory;
+        private readonly MessagePackSerializerOptions _serializerSettings;
 
-        Barrel(string cacheDirectory = null)
+        private Barrel(string cacheDirectory = null)
         {
-            baseDirectory = new Lazy<string>(() =>
-            {
-                return string.IsNullOrEmpty(cacheDirectory)
-                    ? Path.Combine(BarrelUtils.GetBasePath(ApplicationId), "MonkeyCacheFS")
-                    : cacheDirectory;
-            });
-            serializerSettings =
+            _baseDirectory = new Lazy<string>(() => string.IsNullOrEmpty(cacheDirectory)
+                ? Path.Combine(BarrelUtils.GetBasePath(ApplicationId), "MonkeyCacheFS")
+                : cacheDirectory);
+            _serializerSettings =
                 ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray);
-            indexLocker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            _indexLocker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
 
-            index = new Dictionary<string, Tuple<string, DateTime>>();
+            _index = new Dictionary<string, Tuple<string, DateTime>>();
 
             LoadIndex();
             WriteIndex();
@@ -39,12 +36,12 @@ namespace Mafiator.Repository.Cache
 
         public bool AutoExpire { get; set; }
 
-        static Barrel instance = null;
+        static Barrel _instance = null;
 
         /// <summary>
         /// Gets the instance of the Barrel
         /// </summary>
-        public static IBarrel Current => (instance ?? (instance = new Barrel()));
+        public static IBarrel Current => _instance ??= new Barrel();
 
         public static IBarrel Create(string cacheDirectory) =>
             new Barrel(cacheDirectory);
@@ -56,27 +53,27 @@ namespace Mafiator.Repository.Cache
         /// <param name="data">Data object to store</param>
         /// <param name="expireIn">Time from UtcNow to expire entry in</param>
         /// <param name="eTag">Optional eTag information</param>
-        void Add(string key, string data, TimeSpan expireIn, string eTag = null)
+        private void Add(string key, string data, TimeSpan expireIn, string eTag = null)
         {
-            indexLocker.EnterWriteLock();
+            _indexLocker.EnterWriteLock();
 
             try
             {
                 var hash = Hash(key);
-                var path = Path.Combine(baseDirectory.Value, hash);
+                var path = Path.Combine(_baseDirectory.Value, hash);
 
-                if (!Directory.Exists(baseDirectory.Value))
-                    Directory.CreateDirectory(baseDirectory.Value);
+                if (!Directory.Exists(_baseDirectory.Value))
+                    Directory.CreateDirectory(_baseDirectory.Value);
 
                 File.WriteAllText(path, data);
 
-                index[key] = new Tuple<string, DateTime>(eTag ?? string.Empty, BarrelUtils.GetExpiration(expireIn));
+                _index[key] = new Tuple<string, DateTime>(eTag ?? string.Empty, BarrelUtils.GetExpiration(expireIn));
 
                 WriteIndex();
             }
             finally
             {
-                indexLocker.ExitWriteLock();
+                _indexLocker.ExitWriteLock();
             }
         }
 
@@ -88,7 +85,7 @@ namespace Mafiator.Repository.Cache
         /// <param name="data">Data object to store</param>
         /// <param name="expireIn">Time from UtcNow to expire entry in</param>
         /// <param name="eTag">Optional eTag information</param>
-        /// <param name="jsonSerializationSettings">Custom json serialization settings to use</param>
+        /// <param name="options">Custom MessagePack serialization settings to use</param>
         public void Add<T>(string key,
             T data,
             TimeSpan expireIn,
@@ -101,7 +98,7 @@ namespace Mafiator.Repository.Cache
             if (data == null)
                 throw new ArgumentNullException("Data can not be null.", nameof(data));
 
-            var dataMsgPack = MessagePackSerializer.Serialize(data, options ?? serializerSettings);
+            var dataMsgPack = MessagePackSerializer.Serialize(data, options ?? _serializerSettings);
 
             Add(key, dataMsgPack, expireIn, eTag);
         }
@@ -113,7 +110,7 @@ namespace Mafiator.Repository.Cache
         /// <param name="key">keys to empty</param>
         public void Empty(params string[] key)
         {
-            indexLocker.EnterWriteLock();
+            _indexLocker.EnterWriteLock();
 
             try
             {
@@ -122,18 +119,18 @@ namespace Mafiator.Repository.Cache
                     if (string.IsNullOrWhiteSpace(k))
                         continue;
 
-                    var file = Path.Combine(baseDirectory.Value, Hash(k));
+                    var file = Path.Combine(_baseDirectory.Value, Hash(k));
                     if (File.Exists(file))
                         File.Delete(file);
 
-                    index.Remove(k);
+                    _index.Remove(k);
                 }
 
                 WriteIndex();
             }
             finally
             {
-                indexLocker.ExitWriteLock();
+                _indexLocker.ExitWriteLock();
             }
         }
 
@@ -143,25 +140,24 @@ namespace Mafiator.Repository.Cache
         /// </summary>
         public void EmptyAll()
         {
-            indexLocker.EnterWriteLock();
+            _indexLocker.EnterWriteLock();
 
             try
             {
-                foreach (var item in index)
+                foreach (var file in _index.Select(item => Hash(item.Key))
+                             .Select(hash => Path.Combine(_baseDirectory.Value, hash))
+                             .Where(File.Exists))
                 {
-                    var hash = Hash(item.Key);
-                    var file = Path.Combine(baseDirectory.Value, hash);
-                    if (File.Exists(file))
-                        File.Delete(file);
+                    File.Delete(file);
                 }
 
-                index.Clear();
+                _index.Clear();
 
                 WriteIndex();
             }
             finally
             {
-                indexLocker.ExitWriteLock();
+                _indexLocker.ExitWriteLock();
             }
         }
 
@@ -171,31 +167,31 @@ namespace Mafiator.Repository.Cache
         /// </summary>
         public void EmptyExpired()
         {
-            indexLocker.EnterWriteLock();
+            _indexLocker.EnterWriteLock();
 
             try
             {
-                var expired = index.Where(k => k.Value.Item2 < DateTime.UtcNow);
+                var expired = _index.Where(k => k.Value.Item2 < DateTime.UtcNow);
 
                 var toRem = new List<string>();
 
-                foreach (var item in expired)
+                foreach (var (key, _) in expired)
                 {
-                    var hash = Hash(item.Key);
-                    var file = Path.Combine(baseDirectory.Value, hash);
+                    var hash = Hash(key);
+                    var file = Path.Combine(_baseDirectory.Value, hash);
                     if (File.Exists(file))
                         File.Delete(file);
-                    toRem.Add(item.Key);
+                    toRem.Add(key);
                 }
 
                 foreach (var key in toRem)
-                    index.Remove(key);
+                    _index.Remove(key);
 
                 WriteIndex();
             }
             finally
             {
-                indexLocker.ExitWriteLock();
+                _indexLocker.ExitWriteLock();
             }
         }
 
@@ -211,15 +207,15 @@ namespace Mafiator.Repository.Cache
 
             var exists = false;
 
-            indexLocker.EnterReadLock();
+            _indexLocker.EnterReadLock();
 
             try
             {
-                exists = index.ContainsKey(key);
+                exists = _index.ContainsKey(key);
             }
             finally
             {
-                indexLocker.ExitReadLock();
+                _indexLocker.ExitReadLock();
             }
 
             return exists;
@@ -231,38 +227,35 @@ namespace Mafiator.Repository.Cache
         /// <returns>The IEnumerable of keys</returns>
         public IEnumerable<string> GetKeys(CacheState state = CacheState.Active)
         {
-            indexLocker.EnterReadLock();
+            _indexLocker.EnterReadLock();
 
             try
             {
-                if (index != null)
+                if (_index == null)
+                    return Array.Empty<string>();
+                var bananas = new List<KeyValuePair<string, Tuple<string, DateTime>>>();
+
+                if (state.HasFlag(CacheState.Active))
                 {
-                    var bananas = new List<KeyValuePair<string, Tuple<string, DateTime>>>();
-
-                    if (state.HasFlag(CacheState.Active))
-                    {
-                        bananas = index
-                            .Where(x => x.Value.Item2 >= DateTime.UtcNow)
-                            .ToList();
-                    }
-
-                    if (state.HasFlag(CacheState.Expired))
-                    {
-                        bananas.AddRange(index.Where(x => x.Value.Item2 < DateTime.UtcNow));
-                    }
-
-                    return bananas.Select(x => x.Key);
+                    bananas = _index
+                        .Where(x => x.Value.Item2 >= DateTime.UtcNow)
+                        .ToList();
                 }
 
-                return new string[0];
+                if (state.HasFlag(CacheState.Expired))
+                {
+                    bananas.AddRange(_index.Where(x => x.Value.Item2 < DateTime.UtcNow));
+                }
+
+                return bananas.Select(x => x.Key);
             }
             catch (Exception)
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
             finally
             {
-                indexLocker.ExitReadLock();
+                _indexLocker.ExitReadLock();
             }
         }
 
@@ -270,7 +263,7 @@ namespace Mafiator.Repository.Cache
         /// Gets the data entry for the specified key.
         /// </summary>
         /// <param name="key">Unique identifier for the entry to get</param>
-        /// <param name="jsonSerializationSettings">Custom json serialization settings to use</param>
+        /// <param name="options">Custom MessagePack serialization settings to use</param>
         /// <returns>The data object that was stored if found, else default(T)</returns>
         public T Get<T>(string key, MessagePackSerializerOptions options = null)
         {
@@ -279,14 +272,14 @@ namespace Mafiator.Repository.Cache
 
             var result = default(T);
 
-            indexLocker.EnterReadLock();
+            _indexLocker.EnterReadLock();
 
             try
             {
                 var hash = Hash(key);
-                var path = Path.Combine(baseDirectory.Value, hash);
+                var path = Path.Combine(_baseDirectory.Value, hash);
 
-                if (index.ContainsKey(key) && File.Exists(path) && (!AutoExpire || (AutoExpire && !IsExpired(key))))
+                if (_index.ContainsKey(key) && File.Exists(path) && (!AutoExpire || AutoExpire && !IsExpired(key)))
                 {
                     var contents = File.ReadAllBytes(path);
                     if (BarrelUtils.IsString(result))
@@ -295,12 +288,12 @@ namespace Mafiator.Repository.Cache
                         return (T) final;
                     }
 
-                    result = MessagePackSerializer.Deserialize<T>(contents,options ?? serializerSettings);
+                    result = MessagePackSerializer.Deserialize<T>(contents,options ?? _serializerSettings);
                 }
             }
             finally
             {
-                indexLocker.ExitReadLock();
+                _indexLocker.ExitReadLock();
             }
 
             return result;
@@ -318,16 +311,16 @@ namespace Mafiator.Repository.Cache
 
             DateTime? date = null;
 
-            indexLocker.EnterReadLock();
+            _indexLocker.EnterReadLock();
 
             try
             {
-                if (index.ContainsKey(key))
-                    date = index[key]?.Item2;
+                if (_index.ContainsKey(key))
+                    date = _index[key]?.Item2;
             }
             finally
             {
-                indexLocker.ExitReadLock();
+                _indexLocker.ExitReadLock();
             }
 
             return date;
@@ -345,16 +338,16 @@ namespace Mafiator.Repository.Cache
 
             string etag = null;
 
-            indexLocker.EnterReadLock();
+            _indexLocker.EnterReadLock();
 
             try
             {
-                if (index.ContainsKey(key))
-                    etag = index[key]?.Item1;
+                if (_index.ContainsKey(key))
+                    etag = _index[key]?.Item1;
             }
             finally
             {
-                indexLocker.ExitReadLock();
+                _indexLocker.ExitReadLock();
             }
 
             return etag;
@@ -372,93 +365,87 @@ namespace Mafiator.Repository.Cache
 
             var expired = true;
 
-            indexLocker.EnterReadLock();
+            _indexLocker.EnterReadLock();
 
             try
             {
-                if (index.ContainsKey(key))
-                    expired = index[key].Item2 < DateTime.UtcNow;
+                if (_index.ContainsKey(key))
+                    expired = _index[key].Item2 < DateTime.UtcNow;
             }
             finally
             {
-                indexLocker.ExitReadLock();
+                _indexLocker.ExitReadLock();
             }
 
             return expired;
         }
 
-        Dictionary<string, Tuple<string, DateTime>> index;
+        readonly Dictionary<string, Tuple<string, DateTime>> _index;
 
-        const string INDEX_FILENAME = "idx.dat";
+        private const string IndexFilename = "idx.dat";
 
-        string indexFile;
+        private string _indexFile;
 
-        void WriteIndex()
+        private void WriteIndex()
         {
-            if (string.IsNullOrEmpty(indexFile))
-                indexFile = Path.Combine(baseDirectory.Value, INDEX_FILENAME);
-            if (!Directory.Exists(baseDirectory.Value))
-                Directory.CreateDirectory(baseDirectory.Value);
+            if (string.IsNullOrEmpty(_indexFile))
+                _indexFile = Path.Combine(_baseDirectory.Value, IndexFilename);
+            if (!Directory.Exists(_baseDirectory.Value))
+                Directory.CreateDirectory(_baseDirectory.Value);
 
-            using (var f = File.Open(indexFile, FileMode.Create))
-            using (var sw = new StreamWriter(f))
+            using var f = File.Open(_indexFile, FileMode.Create);
+            using var sw = new StreamWriter(f);
+            foreach (var (key, (item1, item2)) in _index)
             {
-                foreach (var kvp in index)
-                {
-                    var dtEpoch = DateTimeToEpochSeconds(kvp.Value.Item2);
-                    sw.WriteLine($"{kvp.Key}\t{kvp.Value.Item1}\t{dtEpoch.ToString()}");
-                }
+                var dtEpoch = DateTimeToEpochSeconds(item2);
+                sw.WriteLine($"{key}\t{item1}\t{dtEpoch.ToString()}");
             }
         }
 
-        void LoadIndex()
+        private void LoadIndex()
         {
-            if (string.IsNullOrEmpty(indexFile))
-                indexFile = Path.Combine(baseDirectory.Value, INDEX_FILENAME);
+            if (string.IsNullOrEmpty(_indexFile))
+                _indexFile = Path.Combine(_baseDirectory.Value, IndexFilename);
 
-            if (!File.Exists(indexFile))
+            if (!File.Exists(_indexFile))
                 return;
 
-            index.Clear();
+            _index.Clear();
 
-            using (var f = File.OpenRead(indexFile))
-            using (var sw = new StreamReader(f))
+            using var f = File.OpenRead(_indexFile);
+            using var sw = new StreamReader(f);
+            string line;
+            while ((line = sw.ReadLine()) != null)
             {
-                string line = null;
-                while ((line = sw.ReadLine()) != null)
-                {
-                    var parts = line.Split('\t');
-                    if (parts.Length == 3)
-                    {
-                        var key = parts[0];
-                        var etag = parts[1];
-                        var dt = parts[2];
+                var parts = line.Split('\t');
+                if (parts.Length != 3)
+                    continue;
+                var key = parts[0];
+                var etag = parts[1];
+                var dt = parts[2];
 
-                        int secondsSinceEpoch;
-                        if (!string.IsNullOrEmpty(key) && int.TryParse(dt, out secondsSinceEpoch) &&
-                            !index.ContainsKey(key))
-                            index.Add(key,
-                                new Tuple<string, DateTime>(etag, EpochSecondsToDateTime(secondsSinceEpoch)));
-                    }
-                }
+                if (!string.IsNullOrEmpty(key) && int.TryParse(dt, out var secondsSinceEpoch) &&
+                    !_index.ContainsKey(key))
+                    _index.Add(key,
+                        new Tuple<string, DateTime>(etag, EpochSecondsToDateTime(secondsSinceEpoch)));
             }
         }
 
-        static string Hash(string input)
+        private static string Hash(string input)
         {
             var md5Hasher = MD5.Create();
             var data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
             return BitConverter.ToString(data);
         }
 
-        static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime Epoch = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
-        static int DateTimeToEpochSeconds(DateTime date)
+        private static int DateTimeToEpochSeconds(DateTime date)
         {
-            var diff = date - epoch;
+            var diff = date - Epoch;
             return (int) diff.TotalSeconds;
         }
 
-        static DateTime EpochSecondsToDateTime(int seconds) => epoch + TimeSpan.FromSeconds(seconds);
+        static DateTime EpochSecondsToDateTime(int seconds) => Epoch + TimeSpan.FromSeconds(seconds);
     }
 }

@@ -1,15 +1,15 @@
 ﻿using Android.Content;
-using System;
 using MafiatorApp.Droid.Recorder;
 using MafiatorApp.Droid.Renderers;
 using MafiatorApp.UserControls;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(VideoRecorder), typeof(AndroidVideoRecorderRenderer))]
 namespace MafiatorApp.Droid.Renderers
 {
-	public class AndroidVideoRecorderRenderer : ViewRenderer<VideoRecorder, AndroidVideoRecorder>
+    public class AndroidVideoRecorderRenderer : ViewRenderer<VideoRecorder, AndroidVideoRecorder>
 	{
         private AndroidVideoRecorder recorder;
         public AndroidVideoRecorderRenderer(Context context) : base(context)

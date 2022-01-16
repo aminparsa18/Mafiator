@@ -1,20 +1,20 @@
-﻿using System;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Caching.Distributed;
+using System;
 
 namespace Mafiator.Service.Contracts.Impl
 {
     public class MemoryCache : IMemoryCache
     {
-        public IDistributedCache _cache;
-        private readonly MessagePackSerializerOptions serializerSettings;
+        public IDistributedCache Cache;
+        private readonly MessagePackSerializerOptions _serializerSettings;
 
-        public MemoryCache(IDistributedCache _cache)
+        public MemoryCache(IDistributedCache cache)
         {
-            serializerSettings =
+            _serializerSettings =
                 ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray);
-            this._cache = _cache;
+            this.Cache = cache;
         }
 
         public void SetCache<T>(T values, string key)
@@ -24,18 +24,18 @@ namespace Mafiator.Service.Contracts.Impl
                 AbsoluteExpiration = DateTime.Now.AddHours(6),
                 SlidingExpiration = TimeSpan.FromMinutes(3),
             };
-            _cache.Set(key, MessagePackSerializer.Serialize(values, serializerSettings), cacheOptions);
+            Cache.Set(key, MessagePackSerializer.Serialize(values, _serializerSettings), cacheOptions);
         }
 
         public T GetCache<T>(string key) where T : class
         {
-                var values = _cache.Get(key);
-                return values == null ? null : MessagePackSerializer.Deserialize<T>(values, serializerSettings);
+                var values = Cache.Get(key);
+                return values == null ? null : MessagePackSerializer.Deserialize<T>(values, _serializerSettings);
         }
 
         public void RemoveCache(string key)
         {
-                _cache.Remove(key);
+                Cache.Remove(key);
         }
     }
 }

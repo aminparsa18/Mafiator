@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mafiator.Data.Dtos;
+﻿using Mafiator.Data.Dtos.Game;
 using Mafiator.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Contracts
 {

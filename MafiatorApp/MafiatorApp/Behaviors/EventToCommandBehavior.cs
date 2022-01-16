@@ -5,14 +5,14 @@ using Xamarin.Forms;
 
 namespace MafiatorApp.Behaviors
 {
-	public class EventToCommandBehavior : BehaviorBase<View>
+    public class EventToCommandBehavior : BehaviorBase<View>
 	{
         private Delegate eventHandler;
 
-		public static readonly BindableProperty EventNameProperty = BindableProperty.Create ("EventName", typeof(string), typeof(EventToCommandBehavior), null, propertyChanged: OnEventNameChanged);
-		public static readonly BindableProperty CommandProperty = BindableProperty.Create ("Command", typeof(ICommand), typeof(EventToCommandBehavior), null);
-		public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create ("CommandParameter", typeof(object), typeof(EventToCommandBehavior), null);
-		public static readonly BindableProperty InputConverterProperty = BindableProperty.Create ("Converter", typeof(IValueConverter), typeof(EventToCommandBehavior), null);
+		public static readonly BindableProperty EventNameProperty = BindableProperty.Create ("EventName", typeof(string), typeof(EventToCommandBehavior), propertyChanged: OnEventNameChanged);
+		public static readonly BindableProperty CommandProperty = BindableProperty.Create ("Command", typeof(ICommand), typeof(EventToCommandBehavior));
+		public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create ("CommandParameter", typeof(object), typeof(EventToCommandBehavior));
+		public static readonly BindableProperty InputConverterProperty = BindableProperty.Create ("Converter", typeof(IValueConverter), typeof(EventToCommandBehavior));
 
 		public string EventName {
 			get => (string)GetValue (EventNameProperty);
@@ -42,7 +42,7 @@ namespace MafiatorApp.Behaviors
 
 		protected override void OnDetachingFrom (View bindable)
 		{
-			DeregisterEvent (EventName);
+            UnRegisterEvent(EventName);
 			base.OnDetachingFrom (bindable);
 		}
 
@@ -61,7 +61,7 @@ namespace MafiatorApp.Behaviors
 			eventInfo.AddEventHandler (AssociatedObject, eventHandler);
 		}
 
-        private void DeregisterEvent (string name)
+        private void UnRegisterEvent (string name)
 		{
 			if (string.IsNullOrWhiteSpace (name)) {
 				return;
@@ -108,7 +108,7 @@ namespace MafiatorApp.Behaviors
 			var oldEventName = (string)oldValue;
 			var newEventName = (string)newValue;
 
-			behavior.DeregisterEvent (oldEventName);
+			behavior.UnRegisterEvent(oldEventName);
 			behavior.RegisterEvent (newEventName);
 		}
 	}

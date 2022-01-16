@@ -1,5 +1,4 @@
-﻿using Cysharp.Serialization.MessagePack;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 
@@ -10,10 +9,7 @@ namespace Mafiator.Common.Api
         public static readonly IFormatterResolver Instance = new CustomMessagePackResolver();
 
         // configure your custom resolvers.
-        private static readonly IFormatterResolver[] Resolvers = {
-            UlidMessagePackResolver.Instance,
-            ContractlessStandardResolver.Instance
-        };
+        private static readonly IFormatterResolver Resolver = ContractlessStandardResolver.Instance;
 
         private CustomMessagePackResolver()
         {
@@ -30,14 +26,7 @@ namespace Mafiator.Common.Api
 
             static Cache()
             {
-                
-                foreach (var resolver in Resolvers)
-                {
-                    var f = resolver.GetFormatter<T>();
-                    if (f == null) continue;
-                    Formatter = f;
-                    return;
-                }
+              Formatter = Resolver.GetFormatter<T>();
             }
         }
     }

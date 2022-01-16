@@ -1,8 +1,11 @@
-﻿using System;
-using AutoMapper;
-using Mafiator.Data.Dtos;
+﻿using AutoMapper;
+using Mafiator.Data.Dtos.Game;
+using Mafiator.Data.Dtos.GameEvent;
+using Mafiator.Data.Dtos.Room;
+using Mafiator.Data.Dtos.User;
 using Mafiator.Entities;
 using Mafiator.Entities.Identity;
+using System;
 
 namespace Mafiator.Data
 {
@@ -10,7 +13,7 @@ namespace Mafiator.Data
     {
         public AutoMapping()
         {
-            CreateMap<string, Ulid>().ConvertUsing(s => Ulid.Parse(s));
+            CreateMap<string, Guid>().ConvertUsing(s => Guid.Parse(s));
             CreateMap<RegisterUserDto, User>();
             CreateMap<RoomCreateDto,Room>();
             CreateMap<GameCreateDto, Game>();

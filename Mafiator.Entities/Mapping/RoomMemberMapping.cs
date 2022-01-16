@@ -1,5 +1,4 @@
-﻿using Mafiator.Entities.Converters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping
@@ -8,8 +7,6 @@ namespace Mafiator.Entities.Mapping
     {
         public override void Configure(EntityTypeBuilder<RoomMember> builder)
         {
-            builder.Property(p => p.RoomId).HasConversion(new UlidToStringConverter());
-            builder.Property(p => p.UserId).HasConversion(new UlidToStringConverter());
             builder.HasOne(d => d.Room)
                 .WithMany(p => p.RoomMember)
                 .HasForeignKey(d => d.RoomId)

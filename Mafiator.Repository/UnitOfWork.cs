@@ -1,58 +1,58 @@
-﻿using System.Data;
-using System.Threading.Tasks;
-using Mafiator.Data;
+﻿using Mafiator.Data;
 using Mafiator.Repository.Contracts;
 using Mafiator.Repository.Repositories;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository
 {
     public class UnitOfWork:IUnitOfWork
     {
-        private readonly ApplicationDbContext context;
-        private readonly IDbConnection connection;
-        private IAvatarRepository avatar;
-        private IEventJoinRepository eventJoin;
-        private IEventRepository eventt;
-        private IChatMessageRepository chatMessage;
-        private IGameEventRepository gameEvent;
-        private IGameMemberRepository gameMember;
-        private IGameMessageRepository gameMessage;
-        private IGameRepository game;
-        private IGameViolationReportRepository gameViolation;
-        private IGemRepository gem;
-        private IReactionRepository reaction;
-        private IRefreshTokenRepository refreshToken;
-        private IRoomMemberRepository roomMember;
-        private IRoomRepository room;
-        private IVoteRepository vote;
+        private readonly ApplicationDbContext _context;
+        private readonly IDbConnection _connection;
+        private IAvatarRepository _avatar;
+        private IEventJoinRepository _eventJoin;
+        private IEventRepository _event;
+        private IChatMessageRepository _chatMessage;
+        private IGameEventRepository _gameEvent;
+        private IGameMemberRepository _gameMember;
+        private IGameMessageRepository _gameMessage;
+        private IGameRepository _game;
+        private IGameViolationReportRepository _gameViolation;
+        private IGemRepository _gem;
+        private IReactionRepository _reaction;
+        private IRefreshTokenRepository _refreshToken;
+        private IRoomMemberRepository _roomMember;
+        private IRoomRepository _room;
+        private IVoteRepository _vote;
 
         public UnitOfWork(ApplicationDbContext context, IDbConnection connection)
         {
-            this.context = context;
-            this.connection = connection;
+            this._context = context;
+            this._connection = connection;
         }
 
 
-        public IAvatarRepository Avatar => avatar ?? new AvatarRepository(context,connection);
-        public IEventJoinRepository EventJoin => eventJoin ??= new EventJoinRepository(context,connection);
-        public IEventRepository Event => eventt ??= new EventRepository(context,connection);
-        public IChatMessageRepository ChatMessage => chatMessage ??= new ChatMessageRepository(context, connection);
-        public IGameEventRepository GameEvent => gameEvent ??= new GameEventRepository(context,connection);
-        public IGameMemberRepository GameMember => gameMember ??= new GameMemberRepository(context,connection);
-        public IGameMessageRepository GameMessage => gameMessage ??= new GameMessageRepository(context,connection);
-        public IGameRepository Game => game ?? new GameRepository(context,connection);
+        public IAvatarRepository Avatar => _avatar ??= new AvatarRepository(_context,_connection);
+        public IEventJoinRepository EventJoin => _eventJoin ??= new EventJoinRepository(_context,_connection);
+        public IEventRepository Event => _event ??= new EventRepository(_context,_connection);
+        public IChatMessageRepository ChatMessage => _chatMessage ??= new ChatMessageRepository(_context, _connection);
+        public IGameEventRepository GameEvent => _gameEvent ??= new GameEventRepository(_context,_connection);
+        public IGameMemberRepository GameMember => _gameMember ??= new GameMemberRepository(_context,_connection);
+        public IGameMessageRepository GameMessage => _gameMessage ??= new GameMessageRepository(_context,_connection);
+        public IGameRepository Game => _game ??= new GameRepository(_context,_connection);
         public IGameViolationReportRepository GameViolation =>
-            gameViolation ??= new GameViolationReportRepository(context,connection);
-        public IGemRepository Gem => gem ??= new GemRepository(context, connection);
-        public IReactionRepository Reaction => reaction ??= new ReactionRepository(context, connection);
-        public IRefreshTokenRepository RefreshToken => refreshToken ??= new RefreshTokenRepository(context, connection);
-        public IRoomMemberRepository RoomMember => roomMember ?? new RoomMemberRepository(context,connection);
-        public IRoomRepository Room => room ?? new RoomRepository(context,connection);
-        public IVoteRepository Vote => vote ?? new VoteRepository(context, connection);
+            _gameViolation ??= new GameViolationReportRepository(_context,_connection);
+        public IGemRepository Gem => _gem ??= new GemRepository(_context, _connection);
+        public IReactionRepository Reaction => _reaction ??= new ReactionRepository(_context, _connection);
+        public IRefreshTokenRepository RefreshToken => _refreshToken ??= new RefreshTokenRepository(_context, _connection);
+        public IRoomMemberRepository RoomMember => _roomMember ??= new RoomMemberRepository(_context,_connection);
+        public IRoomRepository Room => _room ??= new RoomRepository(_context,_connection);
+        public IVoteRepository Vote => _vote ??= new VoteRepository(_context, _connection);
 
         public Task<int> Commit()
         {
-            return context.SaveChangesAsync();
+            return _context.SaveChangesAsync();
         }
     }
 }

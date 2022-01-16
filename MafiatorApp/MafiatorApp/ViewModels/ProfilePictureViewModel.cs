@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Input;
-using AutoMapper;
+﻿using AutoMapper;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
+using MafiatorApp.Dtos.User;
+using MafiatorApp.Extensions;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
@@ -17,7 +12,11 @@ using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
-using Xamarin.CommunityToolkit.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web;
+using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -104,13 +103,12 @@ namespace MafiatorApp.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            if (navigationData is bool)
-            {
-                isEdit = true;
-                var user = Barrel.Current.Get<UserDto>("User");
-                DisplayName.Value = user.DisplayName;
-               // Image = ImageSource.FromUri(new Uri(user.Image));
-            }
+            if (navigationData is not bool) 
+                return base.InitializeAsync(navigationData);
+            isEdit = true;
+            var user = Barrel.Current.Get<UserDto>("User");
+            DisplayName.Value = user.DisplayName;
+            // Image = ImageSource.FromUri(new Uri(user.Image));
 
             return base.InitializeAsync(navigationData);
         }

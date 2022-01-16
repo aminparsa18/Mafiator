@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
-using MessagePack;
 
 namespace MafiatorApp.Cache
 {
@@ -19,8 +19,8 @@ namespace MafiatorApp.Cache
 		/// <param name="data">Data to store of type T</param>
 		/// <param name="expireIn">How long in the future the item should expire</param>
 		/// <param name="eTag">eTag to use if needed</param>
-		/// <param name="serializerSettings">Specific json serialization to use</param>
-		void Add<T>(string key, T data, TimeSpan expireIn, string eTag = null, MessagePackSerializerOptions serializerSettings = null);
+		/// <param name="options">Specific MessagePack serialization to use</param>
+		void Add<T>(string key, T data, TimeSpan expireIn, string eTag = null, MessagePackSerializerOptions options = null);
 
 		/// <summary>
 		/// Empty a set of keys

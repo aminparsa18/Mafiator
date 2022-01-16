@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MafiatorApp.Enums;
+using System;
 using System.Globalization;
-using MafiatorApp.Enums;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters

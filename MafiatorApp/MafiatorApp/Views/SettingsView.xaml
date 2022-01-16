@@ -7,6 +7,7 @@
                  xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.SettingsView"
                  base:ViewModelLocator.AutoWireViewModel="True"
                  x:DataType="viewModels:SettingsViewModel">
@@ -21,73 +22,57 @@
             HasBackgroundAnimation="True" />
     </pages:PopupPage.Animation>
     <pages:PopupPage.Resources>
-        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter"/>
+        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
-        <Frame
-            CornerRadius="52" Margin="24,36" Padding="0"
-            VerticalOptions="CenterAndExpand">
-            <StackLayout  Margin="24">
-                <StackLayout Orientation="Horizontal"
-                            >
-                    <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                        <Label Text="{xct:Translate Settings}" FontSize="Large" FontAttributes="Bold" />
-                    </StackLayout>
-                    <templates:CloseButton/>
+        <userControls:Popup Margin="24,36">
+            <StackLayout Margin="24">
+                <userControls:PopupHeader TitleText="{xct:Translate Settings}"></userControls:PopupHeader>
+                <StackLayout Orientation="Horizontal" Margin="16,16,16,16">
+                    <templates:CheckBoxView Text="{xct:Translate PlayMusic}"
+                                            IsChecked="{Binding PlayMusic,Mode=TwoWay}" />
 
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" Margin="16,16,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate PlayMusic}" IsChecked="{Binding PlayMusic,Mode=TwoWay}"/>
-                   
-                </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate PlaySound}" IsChecked="{Binding PlaySound}"/>
+                    <templates:CheckBoxView Text="{xct:Translate PlaySound}" IsChecked="{Binding PlaySound}" />
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding PlaySoundCommand}"></TapGestureRecognizer>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate AllowNotifications}" IsChecked="{Binding AllowNotification}"/>
+                    <templates:CheckBoxView Text="{xct:Translate AllowNotifications}"
+                                            IsChecked="{Binding AllowNotification}" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate Autoplay}"  IsChecked="{Binding Autoplay}"/>
+                    <templates:CheckBoxView Text="{xct:Translate Autoplay}" IsChecked="{Binding Autoplay}" />
                 </StackLayout>
-             <StackLayout Orientation="Horizontal">
-                 <Label Text="{xct:Translate LanguageColon} " FontSize="16" VerticalOptions="CenterAndExpand" Margin="0,0,0,8"></Label>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{xct:Translate LanguageColon} " FontSize="16" VerticalOptions="CenterAndExpand"
+                           Margin="0,0,0,8">
+                    </Label>
                     <Frame Margin="16,0,0,0" Padding="4,0"
                            BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
                            HorizontalOptions="StartAndExpand">
-                     <StackLayout Orientation="Horizontal">
-                         <forms1:CachedImage
-                             WidthRequest="60"
-                             HeightRequest="40"
-                             DownsampleToViewSize="True"
-                             Margin="8,8,0,8"
-                             Aspect="AspectFit"
-                             Source="{Binding Country.Code,Converter={StaticResource CountryCodelmageConverter}}">
-                            
-                         </forms1:CachedImage>
-                         <Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
-                                VerticalOptions="CenterAndExpand"
-                                TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
-                     </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <forms1:CachedImage
+                                WidthRequest="60"
+                                HeightRequest="40"
+                                DownsampleToViewSize="True"
+                                Margin="8,8,0,8"
+                                Aspect="AspectFit"
+                                Source="{Binding Country.Code,Converter={StaticResource CountryCodelmageConverter}}">
+
+                            </forms1:CachedImage>
+                            <Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
+                                   VerticalOptions="CenterAndExpand"
+                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                        </StackLayout>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ChangeLangCommand}"></TapGestureRecognizer>
                         </Frame.GestureRecognizers>
-                 </Frame>
+                    </Frame>
                 </StackLayout>
             </StackLayout>
-            <Frame.Background>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,1">
-                    <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
-                        Offset="0.0" />
-                    <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
-                        Offset="0.25" />
-                </LinearGradientBrush>
-            </Frame.Background>
-        </Frame>
+        </userControls:Popup>
     </pages:PopupPage.Content>
 </pages:PopupPage>

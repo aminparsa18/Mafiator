@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 
 namespace Mafiator.Entities.Identity
 {
-    public sealed class Role : IdentityRole<Ulid>
+    public sealed class Role : IdentityRole<Guid>
     {
         public Role()
         {
@@ -13,8 +13,6 @@ namespace Mafiator.Entities.Identity
         {
             Name = name;
         }
-        public string PersianCaption { get; set; }
-
         public ICollection<UserRole> Users { get; set; }
         public ICollection<RoleClaim> Claims { get; set; }
     }

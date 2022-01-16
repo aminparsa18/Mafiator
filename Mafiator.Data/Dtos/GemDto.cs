@@ -1,13 +1,13 @@
-﻿using System;
-using MessagePack;
+﻿using MessagePack;
+using System;
 
 namespace Mafiator.Data.Dtos
 {
-    [MessagePackObject()]
+   [MessagePackObject()]
    public class GemDto
     {
         [Key(0)]
-        public Ulid Id { get; set; }
+        public Guid Id { get; set; }
         [Key(1)]
         public int Count { get; set; }
         [Key(2)]

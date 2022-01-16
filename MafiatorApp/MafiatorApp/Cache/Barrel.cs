@@ -1,47 +1,45 @@
-﻿using System;
+﻿using LiteDB;
+using MessagePack;
+using MessagePack.Resolvers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LiteDB;
-using MessagePack;
-using MessagePack.Resolvers;
 using Xamarin.Forms.Internals;
 
 namespace MafiatorApp.Cache
 {
-   [Preserve(AllMembers = true)]
+    [Preserve(AllMembers = true)]
     public class Barrel : IBarrel
     {
         public static string ApplicationId { get; set; } = string.Empty;
         public static string EncryptionKey { get; set; } = string.Empty;
 
-        private static readonly Lazy<string> baseCacheDir =
-            new Lazy<string>(() => Path.Combine(BarrelUtils.GetBasePath(ApplicationId), "Cache"));
-
-        private readonly LiteDatabase db;
+        private static readonly Lazy<string> BaseCacheDir =
+            new(() => Path.Combine(BarrelUtils.GetBasePath(ApplicationId), "Cache"));
 
         public bool AutoExpire { get; set; }
 
-        private static Barrel instance = null;
-        private static ILiteCollection<Banana> col;
+        private static Barrel _instance = null;
+        private static ILiteCollection<Banana> _col;
 
         /// <summary>
         /// Gets the instance of the Barrel
         /// </summary>
-        public static IBarrel Current => (instance ??= new Barrel());
+        public static IBarrel Current => _instance ??= new Barrel();
 
         public static IBarrel Create(string cacheDirectory, bool cache = false)
         {
             if (!cache)
                 return new Barrel(cacheDirectory);
 
-            return instance ??= new Barrel(cacheDirectory);
+            return _instance ??= new Barrel(cacheDirectory);
         }
 
         private readonly MessagePackSerializerOptions serializerSettings;
         private Barrel(string cacheDirectory = null)
         {
-            var directory = string.IsNullOrEmpty(cacheDirectory) ? baseCacheDir.Value : cacheDirectory;
+            var directory = string.IsNullOrEmpty(cacheDirectory) ? BaseCacheDir.Value : cacheDirectory;
             var path = Path.Combine(directory, "Barrel.db");
             if (!Directory.Exists(directory))
             {
@@ -59,8 +57,8 @@ namespace MafiatorApp.Cache
                 path = $"Filename={path}; Password={EncryptionKey}";
 #endif
 
-            db = new LiteDatabase(path);
-            col = db.GetCollection<Banana>();
+            var db = new LiteDatabase(path);
+            _col = db.GetCollection<Banana>();
 
             serializerSettings =
                 ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray);
@@ -78,7 +76,7 @@ namespace MafiatorApp.Cache
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException("Key can not be null or empty.", nameof(key));
 
-            var ent = col.FindById(key);
+            var ent = _col.FindById(key);
 
             return ent != null;
         }
@@ -93,7 +91,7 @@ namespace MafiatorApp.Cache
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException("Key can not be null or empty.", nameof(key));
 
-            var ent = col.FindById(key);
+            var ent = _col.FindById(key);
 
             if (ent == null)
                 return true;
@@ -111,9 +109,10 @@ namespace MafiatorApp.Cache
         /// <returns>The IEnumerable of keys</returns>
         public IEnumerable<string> GetKeys(CacheState state = CacheState.Active)
         {
-            var allBananas = col.FindAll();
+            var allBananas = _col.FindAll();
 
-            if (allBananas == null) return new string[0];
+            if (allBananas == null) 
+                return Array.Empty<string>();
             var bananas = new List<Banana>();
 
             if (state.HasFlag(CacheState.Active))
@@ -135,7 +134,7 @@ namespace MafiatorApp.Cache
         /// Gets the data entry for the specified key.
         /// </summary>
         /// <param name="key">Unique identifier for the entry to get</param>
-        /// <param name="serializerSettings">Custom json serialization settings to use</param>
+        /// <param name="options">Custom MessagePack serialization settings to use</param>
         /// <returns>The data object that was stored if found, else default(T)</returns>
         public T Get<T>(string key, MessagePackSerializerOptions options = null)
         {
@@ -144,9 +143,9 @@ namespace MafiatorApp.Cache
 
             var result = default(T);
 
-            var ent = col.FindById(key);
+            var ent = _col.FindById(key);
 
-            if (ent == null || (AutoExpire && IsExpired(key)))
+            if (ent == null || AutoExpire && IsExpired(key))
                 return result;
             return MessagePackSerializer.Deserialize<T>(ent.Contents, options ?? serializerSettings);
         }
@@ -162,7 +161,7 @@ namespace MafiatorApp.Cache
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException("Key can not be null or empty.", nameof(key));
 
-            var ent = col.FindById(key);
+            var ent = _col.FindById(key);
 
             return ent?.ETag;
         }
@@ -177,12 +176,9 @@ namespace MafiatorApp.Cache
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException("Key can not be null or empty.", nameof(key));
 
-            var ent = col.FindById(key);
+            var ent = _col.FindById(key);
 
-            if (ent == null)
-                return null;
-
-            return ent.ExpirationDate;
+            return ent?.ExpirationDate;
         }
 
         #endregion
@@ -197,7 +193,7 @@ namespace MafiatorApp.Cache
         /// <param name="data">Data string to store</param>
         /// <param name="expireIn">Time from UtcNow to expire entry in</param>
         /// <param name="eTag">Optional eTag information</param>
-        private void Add(string key, byte[] data, TimeSpan expireIn, string eTag = null)
+        private static void Add(string key, byte[] data, TimeSpan expireIn, string eTag = null)
         {
             if (data == null)
                 return;
@@ -210,7 +206,7 @@ namespace MafiatorApp.Cache
                 Contents = data
             };
 
-            col.Upsert(ent);
+            _col.Upsert(ent);
         }
 
         /// <summary>
@@ -221,7 +217,7 @@ namespace MafiatorApp.Cache
         /// <param name="data">Data object to store</param>
         /// <param name="expireIn">Time from UtcNow to expire entry in</param>
         /// <param name="eTag">Optional eTag information</param>
-        /// <param name="jsonSerializationSettings">Custom json serialization settings to use</param>
+        /// <param name="options">Custom MessagePack serialization settings to use</param>
         public void Add<T>(string key, T data, TimeSpan expireIn, string eTag = null,
             MessagePackSerializerOptions options = null)
         {
@@ -246,14 +242,14 @@ namespace MafiatorApp.Cache
         /// </summary>
         public void EmptyExpired()
         {
-            col.DeleteMany(b => b.ExpirationDate < DateTime.UtcNow);
+            _col.DeleteMany(b => b.ExpirationDate < DateTime.UtcNow);
         }
 
         /// <summary>
         /// Empties all expired entries that are in the Barrel.
         /// Throws an exception if any deletions fail and rolls back changes.
         /// </summary>
-        public void EmptyAll() => col.DeleteMany(b => b.Id != null);
+        public void EmptyAll() => _col.DeleteMany(b => b.Id != null);
 
         /// <summary>
         /// Empties all specified entries regardless if they are expired.
@@ -267,7 +263,7 @@ namespace MafiatorApp.Cache
                 if (string.IsNullOrWhiteSpace(k))
                     continue;
 
-                col.Delete(k);
+                _col.Delete(k);
             }
         }
 

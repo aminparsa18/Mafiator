@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using SkiaSharp.Views.Forms;
+﻿using SkiaSharp.Views.Forms;
+using System.Collections.Generic;
 
 namespace MafiatorApp.UserControls.ShimmerLayout.Models.SkiaHelpers
 {

@@ -1,6 +1,6 @@
-﻿using System.Threading;
+﻿using Mafiator.Service.Models;
+using System.Threading;
 using System.Threading.Tasks;
-using Mafiator.Service.Models;
 
 namespace Mafiator.Service.Contracts
 {

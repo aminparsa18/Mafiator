@@ -1,11 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using MafiatorApp.Dtos;
+﻿using MafiatorApp.Dtos;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using Plugin.InAppBilling;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;

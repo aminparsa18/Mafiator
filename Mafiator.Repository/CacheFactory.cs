@@ -5,22 +5,22 @@ namespace Mafiator.Repository
 {
     public static class CacheFactory
     {
-        private static readonly object syncLock;
-        private static ICache cache = null;
+        private static readonly object SyncLock;
+        private static ICache _cache;
 
         static CacheFactory()
         {
-            syncLock = new object();
+            SyncLock = new object();
         }
 
         public static ICache GetCache()
         {
-            if (cache != null) return cache;
-            lock (syncLock)
+            if (_cache != null) return _cache;
+            lock (SyncLock)
             {
-                cache ??= new MemoryCache();
+                _cache ??= new MemoryCache();
             }
-            return cache;
+            return _cache;
         }
     }
 }

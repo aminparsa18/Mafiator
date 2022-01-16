@@ -1,9 +1,9 @@
-﻿using System;
-using Android.Views;
+﻿using Android.Content;
 using Android.Graphics;
-using Xamarin.Forms.Platform.Android;
-using Android.Content;
 using Android.Util;
+using Android.Views;
+using System;
+using Xamarin.Forms.Platform.Android;
 using ShapeView = MafiatorApp.UserControls.ShapeView;
 
 namespace MafiatorApp.Droid.Controls
@@ -14,7 +14,7 @@ namespace MafiatorApp.Droid.Controls
     public class Shape : View
     {
         private bool isBack = true;
-        private readonly float QuarterTurnCounterClockwise = -90;
+        private const float QuarterTurnCounterClockwise = -90;
 
         public ShapeView ShapeView { get; set; }
 
@@ -22,9 +22,9 @@ namespace MafiatorApp.Droid.Controls
         private readonly float density;
 
         // We need to make sure we account for the padding changes
-        public new int Width => base.Width - (int) (Resize(ShapeView.Padding.HorizontalThickness));
+        public new int Width => base.Width - (int) Resize(ShapeView.Padding.HorizontalThickness);
 
-        public new int Height => base.Height - (int) (Resize(ShapeView.Padding.VerticalThickness));
+        public new int Height => base.Height - (int) Resize(ShapeView.Padding.VerticalThickness);
 
         public Shape(float density, Context context) : base(context)
         {
@@ -82,7 +82,7 @@ namespace MafiatorApp.Droid.Controls
             strokePaint.StrokeJoin = Paint.Join.Round;
             strokePaint.Color = ShapeView.StrokeColor.ToAndroid();
             if(!drawFill)
-            strokePaint.Alpha = 80;
+             strokePaint.Alpha = 80;
             drawShape(strokePaint);
         }
 

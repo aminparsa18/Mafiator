@@ -7,8 +7,8 @@ namespace MafiatorApp.Droid.Helpers
         #region Class Variables
 
         private double mBitmapWidth, mBitmapHeight;
-        private double mFocusWidth, mFocusHeight, mCircleCenterX, mCircleCenterY;
-        private bool mHasFocus;
+        private double mFocusWidth, mFocusHeight;
+        private bool hasFocus;
 
 		#endregion
 
@@ -25,34 +25,34 @@ namespace MafiatorApp.Droid.Helpers
                 view.GetLocationInWindow(viewPoint);
                 mFocusWidth = view.Width;
                 mFocusHeight = view.Height;
-                mCircleCenterX = viewPoint[0] + mFocusWidth / 2;
-                mCircleCenterY = viewPoint[1] + mFocusHeight / 2 - adjustHeight;
-                mHasFocus = true;
+                CircleCenterX = viewPoint[0] + mFocusWidth / 2;
+                CircleCenterY = viewPoint[1] + mFocusHeight / 2 - adjustHeight;
+                hasFocus = true;
             }
             else
             {
-                mHasFocus = false;
+                hasFocus = false;
             }
         }
 
         public void SetRectPosition(int positionX, int positionY, int rectWidth, int rectHeight)
         {
-            mCircleCenterX = positionX;
-            mCircleCenterY = positionY;
+            CircleCenterX = positionX;
+            CircleCenterY = positionY;
             mFocusWidth = rectWidth;
             mFocusHeight = rectHeight;
-            mHasFocus = true;
+            hasFocus = true;
         }
 
 		/**
 		* @return X coordinate of focus circle
 		*/
-		public double CircleCenterX => mCircleCenterX;
+		public double CircleCenterX { get; private set; }
 
         /**
          * @return Y coordinate of focus circle
          */
-		public double CircleCenterY => mCircleCenterY;
+		public double CircleCenterY { get; private set; }
 
         /// <summary>
 		/// Return Bottom position of round rect
@@ -62,7 +62,7 @@ namespace MafiatorApp.Droid.Helpers
 		/// <returns></returns>
 		public float RoundRectLeft(int animCounter, double animMoveFactor)
         {
-            return (float)(mCircleCenterX - mFocusWidth / 2 - animCounter * animMoveFactor);
+            return (float)(CircleCenterX - mFocusWidth / 2 - animCounter * animMoveFactor);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace MafiatorApp.Droid.Helpers
         /// <returns></returns>
         public float RoundRectTop(int animCounter, double animMoveFactor)
         {
-            return (float)(mCircleCenterY - mFocusHeight / 2 - animCounter * animMoveFactor);
+            return (float)(CircleCenterY - mFocusHeight / 2 - animCounter * animMoveFactor);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace MafiatorApp.Droid.Helpers
         /// <returns></returns>
         public float RoundRectRight(int animCounter, double animMoveFactor)
         {
-            return (float)(mCircleCenterX + mFocusWidth / 2 + animCounter * animMoveFactor);
+            return (float)(CircleCenterX + mFocusWidth / 2 + animCounter * animMoveFactor);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace MafiatorApp.Droid.Helpers
         /// <returns></returns>
         public float RoundRectBottom(int animCounter, double animMoveFactor)
         {
-            return (float)(mCircleCenterY + mFocusHeight / 2 + animCounter * animMoveFactor);
+            return (float)(CircleCenterY + mFocusHeight / 2 + animCounter * animMoveFactor);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MafiatorApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "https://www.countryflags.io/" + value + "/flat/64.png";
+            return "https://flagcdn.com/32x24/" + value.ToString().ToLower() + ".png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

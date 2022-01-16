@@ -1,4 +1,8 @@
-﻿using System;
+﻿using FFImageLoading;
+using FFImageLoading.Forms;
+using FFImageLoading.Transformations;
+using FFImageLoading.Work;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -6,10 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FFImageLoading;
-using FFImageLoading.Forms;
-using FFImageLoading.Transformations;
-using FFImageLoading.Work;
 using Xamarin.Forms;
 using ImageSource = Xamarin.Forms.ImageSource;
 
@@ -29,15 +29,15 @@ namespace MafiatorApp.UserControls.ImageCropper
 #pragma warning restore 0219
         }
 
-        readonly Grid _root;
-        readonly CustomCachedImage _image;
-        readonly CropTransformation _crop;
-        readonly PinchGestureRecognizer _pinchGesture;
-        readonly PanGestureRecognizer _panGesture;
+        private readonly Grid _root;
+        private readonly CustomCachedImage _image;
+        private readonly CropTransformation _crop;
+        private readonly PinchGestureRecognizer _pinchGesture;
+        private readonly PanGestureRecognizer _panGesture;
 
-        View _frame;
-        const double MIN_SCALE = 1;
-        IntervalThrottle _intervalThrottle;
+        private View _frame;
+        private const double MinScale = 1;
+        private readonly IntervalThrottle _intervalThrottle;
 
         public ImageCropView()
         {
@@ -227,24 +227,24 @@ namespace MafiatorApp.UserControls.ImageCropper
             set => SetValue(ImageRotationProperty, value);
         }
 
-        private void SetupImageView(CachedImage image)
+        private static void SetupImageView(CachedImage image)
         {
         }
 
-        void PinchGesture_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
+        private void PinchGesture_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
         {
             switch (e.Status)
             {
                 case GestureStatus.Running:
-                    double current = (e.Scale - 1) / 2 * ZoomSpeed;
-                    _crop.ZoomFactor = Clamp(_crop.ZoomFactor + current, MIN_SCALE, MaxZoom);
+                    var current = (e.Scale - 1) / 2 * ZoomSpeed;
+                    _crop.ZoomFactor = Clamp(_crop.ZoomFactor + current, MinScale, MaxZoom);
 
                     _intervalThrottle.Handle();
                     break;
             }
         }
 
-        void PanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
+        private void PanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
         {
             switch (e.StatusType)
             {
@@ -260,7 +260,7 @@ namespace MafiatorApp.UserControls.ImageCropper
             }
         }
 
-        void ResetCrop()
+        private void ResetCrop()
         {
             _crop.ZoomFactor = 1d;
             _crop.XOffset = 0d;
@@ -276,12 +276,12 @@ namespace MafiatorApp.UserControls.ImageCropper
                 newNotify.CollectionChanged += NotifyCollectionChanged;
         }
 
-        void NotifyCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void NotifyCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             SetPreviewTransformations();
         }
 
-        void SetPreviewTransformations()
+        private void SetPreviewTransformations()
         {
             var currentTransformations = PreviewTransformations?.ToList() ?? new List<ITransformation>();
             currentTransformations.Insert(0, _crop);
@@ -333,15 +333,14 @@ namespace MafiatorApp.UserControls.ImageCropper
             {
                 GestureRecognizers.Clear();
 
-                if (TouchGesturesEnabled)
-                {
-                    GestureRecognizers.Add(_pinchGesture);
-                    GestureRecognizers.Add(_panGesture);
-                }
+                if (!TouchGesturesEnabled) 
+                    return;
+                GestureRecognizers.Add(_pinchGesture);
+                GestureRecognizers.Add(_panGesture);
             }
             else if (propertyName == ManualZoomProperty.PropertyName)
             {
-                _crop.ZoomFactor = Clamp(ManualZoom, MIN_SCALE, MaxZoom);
+                _crop.ZoomFactor = Clamp(ManualZoom, MinScale, MaxZoom);
                 _intervalThrottle.Handle();
             }
             else if (propertyName == ManualOffsetXProperty.PropertyName)
@@ -365,21 +364,20 @@ namespace MafiatorApp.UserControls.ImageCropper
             }
         }
 
-        double _width = -1;
-        double _height = -1;
+        private double _width = -1;
+        private double _height = -1;
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
 
-            if (width > 0 && height > 0 && (Math.Abs(_width - width) > double.Epsilon || Math.Abs(_height - height) > double.Epsilon))
-            {
-                _width = width;
-                _height = height;
-                ResetCrop();
-                _crop.CropWidthRatio = width;
-                _crop.CropHeightRatio = height;
-                _image.LoadRefinedImage();
-            }
+            if (!(width > 0) || !(height > 0) || !(Math.Abs(_width - width) > double.Epsilon) &&
+                !(Math.Abs(_height - height) > double.Epsilon)) return;
+            _width = width;
+            _height = height;
+            ResetCrop();
+            _crop.CropWidthRatio = width;
+            _crop.CropHeightRatio = height;
+            _image.LoadRefinedImage();
         }
 
         /// <summary>
@@ -392,33 +390,23 @@ namespace MafiatorApp.UserControls.ImageCropper
         /// <param name="framePadding">Frame padding.</param>
         public Task<Stream> GetImageAsJpegAsync(int quality = 90, int maxWidth = 0, int maxHeight = 0, double framePadding = 0d)
         {
-            TaskParameter task = null;
-
-            switch (_image.SourceType)
+            var task = _image.SourceType switch
             {
-                case FFImageLoading.Work.ImageSource.Url:
-                    task = ImageService.Instance.LoadUrl(_image.Path);
-                    break;
-                case FFImageLoading.Work.ImageSource.Filepath:
-                    task = ImageService.Instance.LoadFile(_image.Path);
-                    break;
-                case FFImageLoading.Work.ImageSource.ApplicationBundle:
-                    task = ImageService.Instance.LoadFileFromApplicationBundle(_image.Path);
-                    break;
-                case FFImageLoading.Work.ImageSource.CompiledResource:
-                    task = ImageService.Instance.LoadCompiledResource(_image.Path);
-                    break;
-                case FFImageLoading.Work.ImageSource.EmbeddedResource:
-                    task = ImageService.Instance.LoadEmbeddedResource(_image.Path);
-                    break;
-                case FFImageLoading.Work.ImageSource.Stream:
-                    task = ImageService.Instance.LoadStream(_image.Stream);
-                    break;
-            }
+                FFImageLoading.Work.ImageSource.Url => ImageService.Instance.LoadUrl(_image.Path),
+                FFImageLoading.Work.ImageSource.Filepath => ImageService.Instance.LoadFile(_image.Path),
+                FFImageLoading.Work.ImageSource.ApplicationBundle =>
+                    ImageService.Instance.LoadFileFromApplicationBundle(_image.Path),
+                FFImageLoading.Work.ImageSource.CompiledResource => ImageService.Instance.LoadCompiledResource(
+                    _image.Path),
+                FFImageLoading.Work.ImageSource.EmbeddedResource => ImageService.Instance.LoadEmbeddedResource(
+                    _image.Path),
+                FFImageLoading.Work.ImageSource.Stream => ImageService.Instance.LoadStream(_image.Stream),
+                _ => null
+            };
 
-            var applied = (1 + (2 * (framePadding / _crop.CropHeightRatio)));
+            var applied = 1 + 2 * (framePadding / _crop.CropHeightRatio);
 
-            var transformations = (Transformations?.ToList() ?? new List<ITransformation>());
+            var transformations = Transformations?.ToList() ?? new List<ITransformation>();
             transformations.Insert(0, new CropTransformation()
             {
                 XOffset = _crop.XOffset,
@@ -438,7 +426,7 @@ namespace MafiatorApp.UserControls.ImageCropper
                 .AsJPGStreamAsync(quality);
         }
 
-        T Clamp<T>(T value, T minimum, T maximum) where T : IComparable
+        private static T Clamp<T>(T value, T minimum, T maximum) where T : IComparable
         {
             if (value.CompareTo(minimum) < 0)
                 return minimum;
@@ -448,40 +436,40 @@ namespace MafiatorApp.UserControls.ImageCropper
             return value;
         }
 
-        double MinMoreThan(double value, double than)
+        private double MinMoreThan(double value, double than)
         {
-            if (value.CompareTo(0) < 0)
-                return Math.Min(value, -than);
-            if (value.CompareTo(0) > 0)
-                return Math.Max(value, than);
-
-            return value;
+            return value.CompareTo(0) switch
+            {
+                < 0 => Math.Min(value, -than),
+                > 0 => Math.Max(value, than),
+                _ => value
+            };
         }
 
-        class CustomCachedImage : CachedImage
+        private class CustomCachedImage : CachedImage
         {
-            readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+            private readonly SemaphoreSlim _lock = new(1, 1);
 
-            string _cacheKey;
-            string _refinedCacheKey;
-            bool _isRefined;
-            ImageSource _source;
-            ImageSource _refinedSource;
-            ImageSource _originalSource;
+            private string _cacheKey;
+            private string _refinedCacheKey;
+            private bool _isRefined;
+            private ImageSource _source;
+            private ImageSource _refinedSource;
+            private ImageSource _originalSource;
 
             public Func<CancellationToken, Task<Stream>> Stream { get; private set; }
             public string Path { get; private set; }
             public FFImageLoading.Work.ImageSource SourceType { get; private set; }
 
-            int _previewResolution = 200;
+            private int _previewResolution = 200;
             public int PreviewResolution { get => _previewResolution;
                 set { _previewResolution = value; SetSource(_originalSource); } }
 
-            int _refinedResolution = 1024;
+            private int _refinedResolution = 1024;
             public int RefinedResolution { get => _refinedResolution;
                 set { _refinedResolution = value; SetSource(_originalSource); } }
 
-            int _rotation;
+            private int _rotation;
             public int ImageRotation { get => _rotation;
                 set { _rotation = value; SetSource(_originalSource); } }
 
@@ -522,41 +510,44 @@ namespace MafiatorApp.UserControls.ImageCropper
                     TaskParameter task = null;
                     TaskParameter taskRefined = null;
 
-                    if (source is FileImageSource fileSource)
+                    switch (source)
                     {
-                        var isPath = fileSource.File.ToCharArray().Count(f => f == '/') > 2;
-                        if (!isPath)
+                        case FileImageSource fileSource:
                         {
-                            task = ImageService.Instance.LoadEmbeddedResource(fileSource.File);
-                            taskRefined = ImageService.Instance.LoadEmbeddedResource(fileSource.File);
-                            Stream = null;
-                            Path = fileSource.File;
-                            SourceType = FFImageLoading.Work.ImageSource.EmbeddedResource;
+                            var isPath = fileSource.File.ToCharArray().Count(f => f == '/') > 2;
+                            if (!isPath)
+                            {
+                                task = ImageService.Instance.LoadEmbeddedResource(fileSource.File);
+                                taskRefined = ImageService.Instance.LoadEmbeddedResource(fileSource.File);
+                                Stream = null;
+                                Path = fileSource.File;
+                                SourceType = FFImageLoading.Work.ImageSource.EmbeddedResource;
+                            }
+                            else
+                            {
+                                task = ImageService.Instance.LoadFile(fileSource.File);
+                                taskRefined = ImageService.Instance.LoadFile(fileSource.File);
+                                Stream = null;
+                                Path = fileSource.File;
+                                SourceType = FFImageLoading.Work.ImageSource.Filepath;
+                            }
+
+                            break;
                         }
-                        else
-                        {
-                            task = ImageService.Instance.LoadFile(fileSource.File);
-                            taskRefined = ImageService.Instance.LoadFile(fileSource.File);
+                        case UriImageSource urlSource:
+                            task = ImageService.Instance.LoadUrl(urlSource.Uri?.OriginalString);
+                            taskRefined = ImageService.Instance.LoadUrl(urlSource.Uri?.OriginalString);
                             Stream = null;
-                            Path = fileSource.File;
-                            SourceType = FFImageLoading.Work.ImageSource.Filepath;
-                        }
-                    }
-                    else if (source is UriImageSource urlSource)
-                    {
-                        task = ImageService.Instance.LoadUrl(urlSource.Uri?.OriginalString);
-                        taskRefined = ImageService.Instance.LoadUrl(urlSource.Uri?.OriginalString);
-                        Stream = null;
-                        Path = urlSource.Uri?.OriginalString;
-                        SourceType = FFImageLoading.Work.ImageSource.Url;
-                    }
-                    else if (source is StreamImageSource streamSource)
-                    {
-                        task = ImageService.Instance.LoadStream(streamSource.Stream);
-                        taskRefined = ImageService.Instance.LoadStream(streamSource.Stream);
-                        Stream = streamSource.Stream;
-                        Path = null;
-                        SourceType = FFImageLoading.Work.ImageSource.Stream;
+                            Path = urlSource.Uri?.OriginalString;
+                            SourceType = FFImageLoading.Work.ImageSource.Url;
+                            break;
+                        case StreamImageSource streamSource:
+                            task = ImageService.Instance.LoadStream(streamSource.Stream);
+                            taskRefined = ImageService.Instance.LoadStream(streamSource.Stream);
+                            Stream = streamSource.Stream;
+                            Path = null;
+                            SourceType = FFImageLoading.Work.ImageSource.Stream;
+                            break;
                     }
 
                     if (ImageRotation != 0)
@@ -567,15 +558,15 @@ namespace MafiatorApp.UserControls.ImageCropper
                         taskRefined.Transform(rotateTransformation);
                     }
 
-                    using (var stream = await task.DownSample(PreviewResolution, PreviewResolution).AsJPGStreamAsync(90))
+                    await using (var stream = await task.DownSample(PreviewResolution, PreviewResolution).AsJPGStreamAsync(90))
                     {
-                        byte[] bytes = StreamToByteArray(stream);
+                        var bytes = StreamToByteArray(stream);
                         _source = ImageSource.FromStream(() => new MemoryStream(bytes));
                     }
 
-                    using (var streamRefined = await taskRefined.DownSample(RefinedResolution, RefinedResolution).AsJPGStreamAsync(90))
+                    await using (var streamRefined = await taskRefined.DownSample(RefinedResolution, RefinedResolution).AsJPGStreamAsync(90))
                     {
-                        byte[] bytes = StreamToByteArray(streamRefined);
+                        var bytes = StreamToByteArray(streamRefined);
                         _refinedSource = ImageSource.FromStream(() => new MemoryStream(bytes));
                     }
 
@@ -591,13 +582,12 @@ namespace MafiatorApp.UserControls.ImageCropper
                 }
             }
 
-            static byte[] StreamToByteArray(Stream stream)
+            private static byte[] StreamToByteArray(Stream stream)
             {
                 if (stream is MemoryStream ms) return ms.ToArray();
                 using var ms1 = new MemoryStream();
                 stream.CopyTo(ms1);
                 return ms1.ToArray();
-
             }
 
             public void LoadImage()
@@ -620,19 +610,5 @@ namespace MafiatorApp.UserControls.ImageCropper
                     Source = _refinedSource;
             }
         }
-
-        //class CustomFrame : Frame
-        //{
-        //    public CustomFrame()
-        //    {
-        //        HasShadow = false;
-        //        Margin = 50d;
-        //        OutlineColor = Color.White;
-        //        BackgroundColor = Color.Transparent;
-        //        InputTransparent = true;
-        //        HorizontalOptions = LayoutOptions.FillAndExpand;
-        //        VerticalOptions = LayoutOptions.FillAndExpand;
-        //    }
-        //}
     }
 }

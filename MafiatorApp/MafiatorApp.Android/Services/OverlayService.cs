@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Android.Views.Animations;
+﻿using Android.Views.Animations;
 using Android.Widget;
 using Com.Takusemba.Spotlight;
 using Com.Takusemba.Spotlight.Effet;
@@ -7,6 +6,7 @@ using Com.Takusemba.Spotlight.Shape;
 using MafiatorApp.Droid.Services;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Button = Android.Widget.Button;
@@ -33,7 +33,7 @@ namespace MafiatorApp.Droid.Services
 
             foreach (var target in targets)
             {
-                FrameLayout root = new FrameLayout(Xamarin.Essentials.Platform.CurrentActivity);
+                var root = new FrameLayout(Xamarin.Essentials.Platform.CurrentActivity);
                 var view = Xamarin.Essentials.Platform.CurrentActivity.LayoutInflater.Inflate(Resource.Layout.targ, root);
                 var next = view?.FindViewById<Button>(Resource.Id.spotlight_next);
                 var text = view?.FindViewById<TextView>(Resource.Id.spotlight_text);

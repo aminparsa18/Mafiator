@@ -26,14 +26,14 @@ namespace MafiatorApp.Behaviors
 			AssociatedObject = null;
 		}
 
-		void OnBindingContextChanged (object sender, EventArgs e)
+        private void OnBindingContextChanged (object sender, EventArgs e)
 		{
-			OnBindingContextChanged ();
+			OnBindingContextChanged();
 		}
 
 		protected override void OnBindingContextChanged ()
 		{
-			base.OnBindingContextChanged ();
+			base.OnBindingContextChanged();
 			BindingContext = AssociatedObject.BindingContext;
 		}
 	}

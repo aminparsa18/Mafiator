@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MafiatorApp.UserControls.ShimmerLayout.Models.SkiaHelpers;
+using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MafiatorApp.UserControls.ShimmerLayout.Models.SkiaHelpers;
-using SkiaSharp;
 using Xamarin.Forms;
 
 namespace MafiatorApp.UserControls.ShimmerLayout.Extensions
@@ -12,15 +12,12 @@ namespace MafiatorApp.UserControls.ShimmerLayout.Extensions
         public static SKVisualElement ToSKVisualElement(this View element)
         {
             var visualElement = new SKVisualElement((float)element.X, (float)element.Y, (float)element.Width, (float)element.Height, element.Margin, element);
-            switch (element)
+            visualElement.CornerRadius = element switch
             {
-                case BoxView boxView:
-                    visualElement.CornerRadius = boxView.CornerRadius;
-                    break;
-                case Frame frame:
-                    visualElement.CornerRadius = new CornerRadius(frame.CornerRadius);
-                    break;
-            }
+                BoxView boxView => boxView.CornerRadius,
+                Frame frame => new CornerRadius(frame.CornerRadius),
+                _ => visualElement.CornerRadius
+            };
 
             return visualElement;
         }

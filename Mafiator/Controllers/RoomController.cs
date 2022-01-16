@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
 using Mafiator.Common.Helpers;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.Room;
 using Mafiator.Entities;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
 {
-     [Authorize(Roles = "Player")]
+    [Authorize(Roles = "Player")]
     public class RoomController : ApiBaseController
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -51,7 +51,7 @@ namespace Mafiator.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMyRooms()
         {
-            var userId = Ulid.Parse(User.FindFirstValue(ClaimTypes.Name));
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
             var data = await _unitOfWork.Room.GetMyRoomsFast(userId);
             return Ok(new ApiResult<IEnumerable<RoomDto>>()
             {
@@ -75,19 +75,19 @@ namespace Mafiator.Api.Controllers
         public async Task<IActionResult> Add([FromBody] RoomCreateDto roomCreateDto)
         {
             var room = _mapper.Map<RoomCreateDto, Room>(roomCreateDto);
-            room.UserId = Ulid.Parse(User.FindFirstValue(ClaimTypes.Name));
+            room.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
             room.Code = RandomHelper.RandomStr(8);
             var roomId = await _unitOfWork.Room.AddFast(room);
             await _unitOfWork.RoomMember.AddFast(new RoomMember()
             {
-                RoomId = Ulid.Parse(roomId.ToString()),
+                RoomId = Guid.Parse(roomId.ToString()),
                 UserId = room.UserId,
             });
             foreach (var user in roomCreateDto.Users)
             {
                 await _unitOfWork.RoomMember.AddFast(new RoomMember()
                 {
-                    RoomId = Ulid.Parse(roomId.ToString()),
+                    RoomId = Guid.Parse(roomId.ToString()),
                     UserId = user,
                 });
             }
@@ -124,7 +124,7 @@ namespace Mafiator.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Join([FromBody] string code)
         {
-            var userId = Ulid.Parse(User.FindFirstValue(ClaimTypes.Name));
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
             var roomId = await _unitOfWork.Room.GetByCode(code);
             if (string.IsNullOrEmpty(roomId))
             {
@@ -146,7 +146,7 @@ namespace Mafiator.Api.Controllers
                 });
             await _unitOfWork.RoomMember.AddFast(new RoomMember()
             {
-                RoomId = Ulid.Parse(roomId),
+                RoomId = Guid.Parse(roomId),
                 UserId = userId
             });
             return Ok(new ApiResult<string>()
@@ -159,7 +159,7 @@ namespace Mafiator.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Leave([FromBody] string code)
         {
-            var userId = Ulid.Parse(User.FindFirstValue(ClaimTypes.Name));
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
             var roomId = await _unitOfWork.Room.GetByCode(code);
             if (string.IsNullOrEmpty(roomId))
             {
@@ -170,7 +170,7 @@ namespace Mafiator.Api.Controllers
                     StatusCode = ApiResultStatusCode.NotFound
                 });
             }
-            var member = await _unitOfWork.RoomMember.Get(r => r.UserId == userId && r.RoomId == Ulid.Parse(roomId));
+            var member = await _unitOfWork.RoomMember.Get(r => r.UserId == userId && r.RoomId == Guid.Parse(roomId));
             if (member==null)
                 return Ok(new ApiResult<string>()
                 {
@@ -193,7 +193,7 @@ namespace Mafiator.Api.Controllers
         public async Task<IActionResult> UpdateRoomImage([FromBody] UpdateRoomImageDto roomImage)
         {
             var room = await _unitOfWork.Room.Get(roomImage.RoomId);
-            var userId = Ulid.Parse(User.FindFirstValue(ClaimTypes.Name));
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
             if (room.UserId != userId)
                 return BadRequest(new ApiResult()
                 {

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Mafiator.Api.Controllers.Base;
+﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
 using Mafiator.Data;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.Room;
 using Mafiator.Entities;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
-{ 
+{
     [Authorize]
     public class RoomMemberController : ApiBaseController
     {
@@ -63,12 +63,12 @@ namespace Mafiator.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> JoinRoom([FromBody] Ulid roomId)
+        public async Task<IActionResult> JoinRoom([FromBody] Guid roomId)
         {
             var userId = User.FindFirstValue(ClaimTypes.Name);
             await _unitOfWork.RoomMember.AddFast(new RoomMember()
             {
-                UserId = Ulid.Parse(userId),
+                UserId = Guid.Parse(userId),
                 RoomId = roomId
             });
             return Ok(new ApiResult()
@@ -80,8 +80,8 @@ namespace Mafiator.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Leave([FromBody] string roomId)
         {
-            var userId = Ulid.Parse(User.FindFirstValue(ClaimTypes.Name));
-            var members = await _unitOfWork.RoomMember.GetFast(r => r.UserId == userId && r.RoomId == Ulid.Parse(roomId));
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
+            var members = await _unitOfWork.RoomMember.GetFast(r => r.UserId == userId && r.RoomId == Guid.Parse(roomId));
             if (!members.Any())
                 return Ok(new ApiResult()
                 {

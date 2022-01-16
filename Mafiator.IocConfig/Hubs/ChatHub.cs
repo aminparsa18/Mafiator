@@ -1,35 +1,35 @@
-﻿using System;
-using System.Threading.Tasks;
-using Mafiator.Entities;
+﻿using Mafiator.Entities;
 using Mafiator.Entities.Enums;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Threading.Tasks;
 
 namespace Mafiator.IocConfig.Hubs
 {
     public class ChatHub:Hub
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ChatHub(IUnitOfWork unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
         }
 
         public async Task SendMessage(string groupName, string msg, string type, string sender)
         {
             await Clients.OthersInGroup(groupName).SendAsync("MessageReceived", msg, type, sender);
-            await unitOfWork.ChatMessage.AddFast(new ChatMessage()
+            await _unitOfWork.ChatMessage.AddFast(new ChatMessage()
             {
                 Content = msg,
-                RoomId = Ulid.Parse(groupName),
+                RoomId = Guid.Parse(groupName),
                 MessageType = type switch
                 {
                     "text" => GameMessageType.Text,
                     "voice" => GameMessageType.Voice,
                     _ => GameMessageType.Video
                 },
-                UserId = Ulid.Parse(sender)
+                UserId = Guid.Parse(sender)
             });
         }
     }

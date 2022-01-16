@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
+             xmlns:room="clr-namespace:MafiatorApp.Dtos.Room;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.RoomDetailView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:RoomDetailViewModel">
@@ -263,7 +264,7 @@
                         <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="dtos:RoomMemberDto">
+                        <DataTemplate x:DataType="room:RoomMemberDto">
                             <StackLayout>
                                 <forms:CachedImage
                                     x:Name="CachedImage"

@@ -4,31 +4,31 @@ namespace Mafiator.Common.Api
 {
     public enum ApiResultStatusCode
     {
-        [Display(Name = "عملیات با موفقیت انجام شد")]
+        [Display(Name = "Succeeded")]
         Success = 0,
 
-        [Display(Name = "خطایی در سرور رخ داده است")]
+        [Display(Name = "Internal server error occurred")]
         ServerError = 1,
 
-        [Display(Name = "پارامتر های ارسالی معتبر نیستند")]
+        [Display(Name = "The submitted parameters are not valid")]
         BadRequest = 2,
 
-        [Display(Name = "یافت نشد")]
+        [Display(Name = "Result not found")]
         NotFound = 3,
 
-        [Display(Name = "لیست خالی است")]
+        [Display(Name = "List is empty")]
         ListEmpty = 4,
 
-        [Display(Name = "خطایی در پردازش رخ داد")]
+        [Display(Name = "An error occurred while processing")]
         LogicError = 5,
 
-        [Display(Name = "خطای احراز هویت")]
+        [Display(Name = "Authentication error occurred")]
         UnAuthorized = 6,
-        [Display(Name = "اجازه دسترسی صادر نشده است")]
+
+        [Display(Name = "Access permission has not been issued")]
         Forbidden=7,
 
+        [Display(Name = "Confliction has occurred")]
         Conflict=8,
-
-        Gone=9
     }
 }

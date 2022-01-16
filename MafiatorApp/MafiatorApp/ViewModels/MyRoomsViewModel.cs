@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
+﻿using MafiatorApp.Dtos.Room;
+using MafiatorApp.Extensions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;

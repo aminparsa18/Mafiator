@@ -1,6 +1,5 @@
 ﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
-using Mafiator.Service;
 //using MafiatorML.Model;
 using Microsoft.AspNetCore.Mvc;
 

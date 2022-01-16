@@ -1,11 +1,16 @@
-﻿using System;
+﻿using MafiatorApp.Dtos;
+using MafiatorApp.Dtos.Game;
+using MafiatorApp.Dtos.GameEvent;
+using MafiatorApp.Dtos.Room;
+using MafiatorApp.Dtos.User;
+using MafiatorApp.Dtos.Vote;
+using MafiatorApp.Enums;
+using MafiatorApp.Extensions;
+using MafiatorApp.Models.Api;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using MafiatorApp.Dtos;
-using MafiatorApp.Enums;
-using MafiatorApp.Extentions;
-using MafiatorApp.Models.Api;
 using Xamarin.Forms.Internals;
 
 namespace MafiatorApp.Services.Impl
@@ -208,7 +213,7 @@ namespace MafiatorApp.Services.Impl
                 new Uri(Constants.BaseUrl + "api/Room/Leave"), code);
         }
 
-        public async Task<ApiResult<IEnumerable<RoomMemberDto>>> GetMembersByRoom(Ulid roomId)
+        public async Task<ApiResult<IEnumerable<RoomMemberDto>>> GetMembersByRoom(Guid roomId)
         {
             return await BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomMemberDto>>>(
                 new Uri(Constants.BaseUrl + "api/RoomMember/GetByRoom?roomId=" + roomId));

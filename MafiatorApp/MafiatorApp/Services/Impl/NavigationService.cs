@@ -1,13 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Reflection;
-using System.Threading.Tasks;
-using MafiatorApp.ViewModels.Base;
+﻿using MafiatorApp.ViewModels.Base;
 using MafiatorApp.Views;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Pages;
+using System;
+using System.Globalization;
+using System.Reflection;
+using System.Threading.Tasks;
 using Xamarin.Forms;
-using NavigationPage = Xamarin.Forms.NavigationPage;
 
 namespace MafiatorApp.Services.Impl
 {
@@ -32,7 +31,6 @@ namespace MafiatorApp.Services.Impl
                 return previousPage.ToString();
             }
         }
-
 
         public Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase
         {
@@ -162,8 +160,7 @@ namespace MafiatorApp.Services.Impl
         {
             var viewName = viewModelType.FullName?.Replace("Model", string.Empty);
             var viewModelAssemblyName = viewModelType.GetTypeInfo().Assembly.FullName;
-            var viewAssemblyName =
-                string.Format(CultureInfo.InvariantCulture, "{0}, {1}", viewName, viewModelAssemblyName);
+            var viewAssemblyName = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", viewName, viewModelAssemblyName);
             var viewType = Type.GetType(viewAssemblyName);
             return viewType;
         }

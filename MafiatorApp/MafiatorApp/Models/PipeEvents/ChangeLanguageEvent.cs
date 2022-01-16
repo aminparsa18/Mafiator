@@ -1,5 +1,4 @@
-﻿
-namespace MafiatorApp.Models.PipeEvents
+﻿namespace MafiatorApp.Models.PipeEvents
 {
     public struct ChangeLanguageEvent
     {

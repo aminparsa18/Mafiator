@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MafiatorApp.Dtos;
+﻿using MafiatorApp.Dtos;
+using MafiatorApp.Dtos.Room;
 using MafiatorApp.Enums;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
@@ -109,8 +108,8 @@ namespace MafiatorApp.ViewModels
             var message = new ChatMessageDto()
             {
                 Content = msg,
-                Image = Members.FirstOrDefault(m => m.UserId == Ulid.Parse(sender))?.Image,
-                DisplayName = Members.FirstOrDefault(m => m.UserId == Ulid.Parse(sender))?.Name,
+                Image = Members.FirstOrDefault(m => m.UserId == Guid.Parse(sender))?.Image,
+                DisplayName = Members.FirstOrDefault(m => m.UserId == Guid.Parse(sender))?.Name,
             };
             message.Type = type switch
             {

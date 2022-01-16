@@ -1,10 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using Android.Content;
+﻿using Android.Content;
 using Android.Content.Res;
 using MafiatorApp.Droid.Renderers;
 using MafiatorApp.UserControls;
+using System;
+using System.ComponentModel;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Material.Android;
 using Xamarin.Forms.Platform.Android;

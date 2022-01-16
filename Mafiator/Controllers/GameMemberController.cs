@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Mafiator.Api.Controllers.Base;
+﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
 using Mafiator.Data;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.Game;
+using Mafiator.Data.Dtos.User;
 using Mafiator.Entities.Enums;
 using Mafiator.Entities.Extensions;
 using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
 {
-   // [Authorize]
+    // [Authorize]
     public class GameMemberController : ApiBaseController
     {
         private readonly IUnitOfWork unitOfWork;

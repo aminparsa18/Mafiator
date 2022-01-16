@@ -1,31 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Mafiator.Data;
-using Mafiator.Data.Dtos;
+﻿using Mafiator.Data;
+using Mafiator.Data.Dtos.Room;
 using Mafiator.Entities;
 using Mafiator.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using RepoDb;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Repositories
 {
-   public class RoomMemberRepository:Repository<RoomMember>,IRoomMemberRepository
+    public class RoomMemberRepository:Repository<RoomMember>,IRoomMemberRepository
     {
         public RoomMemberRepository(ApplicationDbContext context,IDbConnection connection) : base(context,connection)
         {
         }
 
-        public Task<IEnumerable<Ulid>> FindInRoom(Ulid roomId,Ulid userId)
+        public Task<IEnumerable<Guid>> FindInRoom(Guid roomId, Guid userId)
         {
-            return connection.ExecuteQueryAsync<Ulid>(@"SELECT TOP 1 [Id] FROM [RoomMember] Where [RoomId]=@RoomId AND [UserId]=@UserId ", new { RoomId = roomId.ToString(),UserId=userId.ToString() });
+            return Connection.ExecuteQueryAsync<Guid>(@"SELECT TOP 1 [Id] FROM [RoomMember] Where [RoomId]=@RoomId AND [UserId]=@UserId ", new { RoomId = roomId.ToString(),UserId=userId.ToString() });
 
         }
-        public Task<List<RoomMemberDto>> GetByRoom(Ulid roomId)
+        public Task<List<RoomMemberDto>> GetByRoom(Guid roomId)
         {
-            return _context.RoomMember.AsNoTracking().Where(r => r.RoomId == roomId)
+            return Context.RoomMember.AsNoTracking().Where(r => r.RoomId == roomId)
                 .OrderByDescending(o => o.CreatedDate)
                 .Select(s => new RoomMemberDto()
                 {
@@ -37,7 +37,7 @@ namespace Mafiator.Repository.Repositories
         }
         public Task<IEnumerable<RoomMemberDto>> GetByRoomFast(string roomId)
         {
-           return connection.ExecuteQueryAsync<RoomMemberDto>(@"SELECT [r].[UserId], [u].[DisplayName] AS [Name], [u].[Image], (
+           return Connection.ExecuteQueryAsync<RoomMemberDto>(@"SELECT [r].[UserId], [u].[DisplayName] AS [Name], [u].[Image], (
            SELECT COUNT(*)
            FROM[dbo].[GameMember] AS[g]
            WHERE[u].[Id] = [g].[UserId]) AS[TotalGame]

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
 
 namespace Mafiator.Common.Extensions
 {
@@ -51,7 +51,7 @@ namespace Mafiator.Common.Extensions
             var firstValue = identity?.GetUserClaimValue(ClaimTypes.NameIdentifier);
             return firstValue != null
                 ? (T)Convert.ChangeType(firstValue, typeof(T), CultureInfo.InvariantCulture)
-                : default(T);
+                : default;
         }
 
         public static string GetUserId(this IIdentity identity)

@@ -14,6 +14,5 @@ namespace MafiatorApp.Dtos
         public string DisplayName { get; set; }
         [Key(3)]
         public GameMessageType Type { get; set; }
-
     }
 }

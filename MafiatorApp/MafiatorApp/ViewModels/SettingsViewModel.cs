@@ -1,12 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using MafiatorApp.Cache;
+﻿using MafiatorApp.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
+using MediaManager;
 using MessagePipe;
-using Plugin.SimpleAudioPlayer;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -81,25 +82,24 @@ namespace MafiatorApp.ViewModels
             Autoplay = !Barrel.Current.Exists("Autoplay") || Barrel.Current.Get<bool>("Autoplay");
             var culture = Barrel.Current.Get<string>("Culture");
             if (culture == "RU")
-                Country = new Country() {Code = culture, Name = "Russian"};
+                Country = new Country() { Code = culture, Name = "Russian" };
             else
-                Country = new Country() {Code = culture, Name = "English"};
+                Country = new Country() { Code = culture, Name = "English" };
             PopCommand = new AsyncCommand(Pop);
             PlaySoundCommand = new Command(TogglePlaySound);
             PlayMusicCommand = new Command(TogglePlayMusic);
             AllowNotificationCommand = new Command(ToggleAllowNotification);
             AutoplayCommand = new Command(ToggleAutoplay);
             ChangeLangCommand = new AsyncCommand(ChangeLang);
-
         }
 
         private void LangChanged()
         {
             var culture = Barrel.Current.Get<string>("Culture");
             if (culture == "RU")
-                Country = new Country() {Code = culture, Name = "Russian"};
+                Country = new Country() { Code = culture, Name = "Russian" };
             else
-                Country = new Country() {Code = culture, Name = "English"};
+                Country = new Country() { Code = culture, Name = "English" };
         }
 
         private async Task ChangeLang()
@@ -112,21 +112,22 @@ namespace MafiatorApp.ViewModels
             Autoplay = !Autoplay;
         }
 
-        private void TogglePlayMusic()
+        private async void TogglePlayMusic()
         {
             if (Initial) return;
             //make it reverse
             if (!PlayMusic)
             {
-                if (CrossSimpleAudioPlayer.Current.Load("mafia1.mp3"))
-                    CrossSimpleAudioPlayer.Current.Play();
+                if (CrossMediaManager.Current.IsPrepared())
+                    await CrossMediaManager.Current.Play();
+                else
+                    await CrossMediaManager.Current.PlayFromAssembly("mafia1.mp3", Assembly.GetExecutingAssembly());
             }
             else
             {
-                if (CrossSimpleAudioPlayer.Current.IsPlaying)
-                    CrossSimpleAudioPlayer.Current.Pause();
+                if (CrossMediaManager.Current.IsPlaying())
+                    await CrossMediaManager.Current.Pause();
             }
-
         }
 
         private void ToggleAllowNotification()

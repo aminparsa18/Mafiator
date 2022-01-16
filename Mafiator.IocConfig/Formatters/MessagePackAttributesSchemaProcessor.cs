@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Namotion.Reflection;
+using NJsonSchema.Generation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Namotion.Reflection;
-using NJsonSchema.Generation;
 
 namespace Mafiator.IocConfig.Formatters
 {
@@ -23,7 +23,7 @@ namespace Mafiator.IocConfig.Formatters
             // loop through types
             foreach (var properties in context.Type.GetProperties())
             {
-                var name = context.Generator.GetPropertyName(null, properties.ToContextualMember());
+                var name = context.Generator.GetPropertyName(null, properties.ToContextualAccessor());
 
                 var (_, schemaProp) = context.Schema.Properties
                     .FirstOrDefault(p => p.Key.Equals(name, StringComparison.InvariantCultureIgnoreCase));

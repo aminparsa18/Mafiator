@@ -1,5 +1,4 @@
-﻿
-namespace Mafiator.Data
+﻿namespace Mafiator.Data
 {
     public class ConstantPolicies
     {

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Mafiator.Common.Api;
 using Mafiator.Common.Helpers;
 using Mafiator.Data;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.User;
 using Mafiator.Entities;
 using Mafiator.Entities.Identity;
 using Mafiator.Repository;
@@ -17,6 +10,13 @@ using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RepoDb;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Mafiator.Service.Contracts.Impl.Identity
 {
@@ -87,9 +87,9 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, Constants.PlayerRole),
-                new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                new(ClaimTypes.Role, Constants.PlayerRole),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Name, user.Id.ToString())
             };
             var tokenResult = tokenService.GenerateAccessToken(user, claims);
             var refreshToken = new RefreshToken()
@@ -122,7 +122,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             }
 
             var user = mapper.Map<RegisterUserDto, User>(registerUser);
-            user.Id = Ulid.NewUlid();
+            user.Id = Guid.NewGuid();;
             user.Code = RandomHelper.RandomStr(10);
             user.Score = 100;
             var createdUser = await userManager.CreateAsync(user, registerUser.Password);
@@ -172,7 +172,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 return new AuthResult()
                 {
-                    StatusCode = ApiResultStatusCode.Gone,
+                    StatusCode = ApiResultStatusCode.LogicError,
                     Errors = new[] {"Refresh Token has expired"}
                 };
             }
@@ -209,9 +209,9 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             var user = await userManager.FindByIdAsync(principle.FindFirstValue(ClaimTypes.Name));
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, Constants.PlayerRole),
-                new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                new(ClaimTypes.Role, Constants.PlayerRole),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Name, user.Id.ToString())
             };
             var tokenResult = tokenService.GenerateAccessToken(user, claims);
             var refreshToken = new RefreshToken()
@@ -243,56 +243,55 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             }
 
             var result = await userManager.ChangePhoneNumberAsync(existingUser, phoneNo, token);
-            if (result.Succeeded)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Role, Constants.PlayerRole),
-                    new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
-                    new Claim(ClaimTypes.Name, existingUser.Id.ToString())
-                };
-
-                var userClaims = await userManager.GetClaimsAsync(existingUser);
-                claims.AddRange(userClaims);
-                var userRoles = await userManager.GetRolesAsync(existingUser);
-                foreach (var userRole in userRoles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, userRole));
-                    var role = await roleManager.FindByNameAsync(userRole);
-                    if (role == null) continue;
-                    var roleClaims = await roleManager.GetClaimsAsync(role);
-                    foreach (var roleClaim in roleClaims)
-                    {
-                        if (claims.Contains(roleClaim))
-                            continue;
-                        claims.Add(roleClaim);
-                    }
-                }
-
-                var tokenResult = tokenService.GenerateAccessToken(existingUser, claims);
-                var refreshToken = new RefreshToken()
-                {
-                    JwtId = tokenResult.JwtId,
-                    UserId = existingUser.Id,
-                    ExpirationDate = DateTime.UtcNow.AddMonths(6),
-                    Token = tokenService.GenerateRefreshToken()
-                };
-                await unitOfWork.RefreshToken.AddFast(refreshToken);
-                existingUser.PhoneNumberConfirmed = true;
-                await userManager.UpdateAsync(existingUser);
+            if (!result.Succeeded)
                 return new AuthResult()
                 {
-                    IsSuccess = true,
-                    Token = tokenResult.Token,
-                    RefreshToken = refreshToken.Token
+                    StatusCode = ApiResultStatusCode.BadRequest,
+                    Errors = result.Errors.Select(s => s.Description)
                 };
+
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Role, Constants.PlayerRole),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Name, existingUser.Id.ToString())
+            };
+
+            var userClaims = await userManager.GetClaimsAsync(existingUser);
+            claims.AddRange(userClaims);
+            var userRoles = await userManager.GetRolesAsync(existingUser);
+            foreach (var userRole in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+                var role = await roleManager.FindByNameAsync(userRole);
+                if (role == null) continue;
+                var roleClaims = await roleManager.GetClaimsAsync(role);
+                foreach (var roleClaim in roleClaims)
+                {
+                    if (claims.Contains(roleClaim))
+                        continue;
+                    claims.Add(roleClaim);
+                }
             }
 
+            var tokenResult = tokenService.GenerateAccessToken(existingUser, claims);
+            var refreshToken = new RefreshToken()
+            {
+                JwtId = tokenResult.JwtId,
+                UserId = existingUser.Id,
+                ExpirationDate = DateTime.UtcNow.AddMonths(6),
+                Token = tokenService.GenerateRefreshToken()
+            };
+            await unitOfWork.RefreshToken.AddFast(refreshToken);
+            existingUser.PhoneNumberConfirmed = true;
+            await userManager.UpdateAsync(existingUser);
             return new AuthResult()
             {
-                StatusCode = ApiResultStatusCode.BadRequest,
-                Errors = result.Errors.Select(s => s.Description)
+                IsSuccess = true,
+                Token = tokenResult.Token,
+                RefreshToken = refreshToken.Token
             };
+
         }
 
         public async Task<ApiResult> UpdateProfile(string userId, string name, string image)

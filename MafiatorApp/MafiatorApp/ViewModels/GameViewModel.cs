@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Authentication;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
-using AutoMapper;
+﻿using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using FluentFTP;
 using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
+using MafiatorApp.Dtos.Game;
 using MafiatorApp.Enums;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
@@ -23,7 +14,14 @@ using MediaManager.Player;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
 using Plugin.AudioRecorder;
-using Plugin.SimpleAudioPlayer;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Security.Authentication;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -153,6 +151,7 @@ namespace MafiatorApp.ViewModels
             PlayVoiceCommand = new AsyncCommand<string>(PlayVoice);
             CrossMediaManager.Current.StateChanged += MediaStateChanged;
             CrossMediaManager.Current.PositionChanged += MediaPositionChanged;
+            CrossMediaManager.Current.Volume.CurrentVolume = 3;
             subscriber.Subscribe(async c => { await UpdateMembers(); });
         }
 
@@ -251,7 +250,7 @@ namespace MafiatorApp.ViewModels
                 return;
             isRecording = false;
             await DependencyService.Get<IAudioRecorder>().StopRecording();
-            CrossSimpleAudioPlayer.Current.Play();
+           // CrossSimpleAudioPlayer.Current.Play();
             // DependencyService.Get<IAudioRecorder>().ConvertToFlac(recordPath);
             if (RecordingTimer.TotalMilliseconds < 1000)
             {
@@ -264,7 +263,7 @@ namespace MafiatorApp.ViewModels
 
         private async void SendVoice()
         {
-            var id = Ulid.NewUlid();
+            var id = Guid.NewGuid();
             var path = "https://mftorblob.azureedge.net/voices/" + id + ".aac";
             var message = new GameMessageDto()
             {
@@ -288,16 +287,16 @@ namespace MafiatorApp.ViewModels
 
         private Task PlayVoice(string path)
         {
-            if (CrossSimpleAudioPlayer.Current.Load(path))
-                CrossSimpleAudioPlayer.Current.Play();
+            //if (CrossSimpleAudioPlayer.Current.Load(path))
+           //     CrossSimpleAudioPlayer.Current.Play();
             return Task.CompletedTask;
         }
 
         private Task RecordAudio()
         {
             isRecording = true;
-            if(CrossSimpleAudioPlayer.Current.IsPlaying)
-                CrossSimpleAudioPlayer.Current.Pause();
+           // if(CrossSimpleAudioPlayer.Current.IsPlaying)
+             //   CrossSimpleAudioPlayer.Current.Pause();
             DependencyService.Get<IAudioRecorder>().Init();
             DependencyService.Get<IAudioRecorder>().StartRecording();
             //DependencyService.Get<IAudioStream>().Start();
@@ -384,11 +383,10 @@ namespace MafiatorApp.ViewModels
             totalTime += 100;
             ProgressTimer = 100 * (double) totalTime / 30000;
             ProgressString = TimeSpan.FromMilliseconds(30000 - totalTime).ToString(@"mm\:ss");
-            if (totalTime == 30000)
-            {
-                _timer?.Dispose();
-                _timer = null;
-            }
+            if (totalTime != 30000) 
+                return;
+            _timer?.Dispose();
+            _timer = null;
         }
         private void SetAdvocacyTurn(string memberId)
         {
@@ -404,11 +402,10 @@ namespace MafiatorApp.ViewModels
             totalTime += 100;
             ProgressTimer = 100 * (double)totalTime / 45000;
             ProgressString = TimeSpan.FromMilliseconds(45000 - totalTime).ToString(@"mm\:ss");
-            if (totalTime == 45000)
-            {
-                _timer?.Dispose();
-                _timer = null;
-            }
+            if (totalTime != 45000)
+                return;
+            _timer?.Dispose();
+            _timer = null;
         }
         private async Task HubReconnected(string arg)
         {
@@ -477,7 +474,7 @@ namespace MafiatorApp.ViewModels
         private void MediaPositionChanged(object sender, PositionChangedEventArgs e)
         {
             var playing = Messages.FirstOrDefault(m => m.Content == SystemConstant.PlayingVoice);
-            if (playing != null && playing.IsPlaying)
+            if (playing is { IsPlaying: true })
                 playing.CurrentPosition = e.Position.TotalMilliseconds;
         }
 
@@ -517,7 +514,7 @@ namespace MafiatorApp.ViewModels
 
         public async Task SendVideo(string recordPath)
         {
-            var id = Ulid.NewUlid();
+            var id = Guid.NewGuid();
             var path = "http://vault.mafiator.com/videos/" + id + ".mp4";
             using var client = new FtpClient(Constants.FtpUrl)
             {
@@ -530,7 +527,7 @@ namespace MafiatorApp.ViewModels
             };
             await client.ConnectAsync();
             await using var fs2 = File.OpenRead(recordPath);
-            var sts2 = await client.UploadAsync(fs2, "/vault.mafiator.com/videos/" + id + ".mp4", FtpRemoteExists.Append, true);
+            var sts2 = await client.UploadAsync(fs2, "/vault.mafiator.com/videos/" + id + ".mp4", FtpRemoteExists.Resume, true);
             if (sts2 == FtpStatus.Success)
             {
                 var message = new GameMessageDto()

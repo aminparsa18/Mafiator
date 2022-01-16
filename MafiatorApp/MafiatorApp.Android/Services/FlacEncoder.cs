@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Java.Nio;
-using Net.Sourceforge.Javaflacencoder;
+//using Net.Sourceforge.Javaflacencoder;
 using File = Java.IO.File;
 using IOException = Java.IO.IOException;
 
@@ -36,37 +36,36 @@ namespace MafiatorApp.Droid.Services
                     file.CreateNewFile();
                 }
 
-                var inputStream = new FileStream(recordedPath, FileMode.Open, FileAccess.Read);
-                var flacEncoder = new FLACEncoder();
-                var streamConfiguration = new StreamConfiguration();
-                streamConfiguration.SetSampleRate(8000);
-                streamConfiguration.SetBitsPerSample(16);
-                streamConfiguration.SetChannelCount(1);
-                var flacOut = new FLACFileOutputStream(file);
-                flacEncoder.SetStreamConfiguration(streamConfiguration);
-                flacEncoder.SetOutputStream(flacOut);
-                flacEncoder.OpenFLACStream();
-                var sampleData = new int[inputStream.Length];
-                var samplesIn = new byte[2];
-                var i = 0;
-                while (inputStream.Read(samplesIn, 0, 2) > 0)
-                {
-                    var bb = ByteBuffer.Wrap(samplesIn);
-                    bb.Order(ByteOrder.LittleEndian);
-                    var shortVal = bb.Short;
-                    sampleData[i] = shortVal;
+                //var inputStream = new FileStream(recordedPath, FileMode.Open, FileAccess.Read);
+                //var flacEncoder = new FLACEncoder();
+                //var streamConfiguration = new StreamConfiguration();
+                //streamConfiguration.SetSampleRate(8000);
+                //streamConfiguration.SetBitsPerSample(16);
+                //streamConfiguration.SetChannelCount(1);
+                //var flacOut = new FLACFileOutputStream(file);
+                //flacEncoder.SetStreamConfiguration(streamConfiguration);
+                //flacEncoder.SetOutputStream(flacOut);
+                //flacEncoder.OpenFLACStream();
+                //var sampleData = new int[inputStream.Length];
+                //var samplesIn = new byte[2];
+                //var i = 0;
+                //while (inputStream.Read(samplesIn, 0, 2) > 0)
+                //{
+                //    var bb = ByteBuffer.Wrap(samplesIn);
+                //    bb.Order(ByteOrder.LittleEndian);
+                //    var shortVal = bb.Short;
+                //    sampleData[i] = shortVal;
 
-                    i++;
-                }
+                //    i++;
+                //}
 
-                sampleData = TruncateNullDataInts(sampleData, i);
-                flacEncoder.AddSamples(sampleData, i);
-                flacEncoder.EncodeSamples(i, false);
-                flacEncoder.EncodeSamples(flacEncoder.SamplesAvailableToEncode(), true);
+                //sampleData = TruncateNullDataInts(sampleData, i);
+                //flacEncoder.AddSamples(sampleData, i);
+                //flacEncoder.EncodeSamples(i, false);
+                //flacEncoder.EncodeSamples(flacEncoder.SamplesAvailableToEncode(), true);
 
-                inputStream.Close();
-                flacOut.Close();
-                //var totalSamples = 0;
+                //inputStream.Close();
+                //flacOut.Close();
             }
             catch (Java.Lang.Exception ex)
             {

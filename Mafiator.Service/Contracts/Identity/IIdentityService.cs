@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Mafiator.Common.Api;
+using Mafiator.Data.Dtos.User;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mafiator.Common.Api;
-using Mafiator.Data.Dtos;
 
 namespace Mafiator.Service.Contracts.Identity
 {

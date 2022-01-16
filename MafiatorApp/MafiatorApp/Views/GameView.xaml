@@ -10,6 +10,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
+             xmlns:game="clr-namespace:MafiatorApp.Dtos.Game;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.GameView"
              BackgroundColor="{StaticResource Day4}"
              base:ViewModelLocator.AutoWireViewModel="true"
@@ -245,7 +246,7 @@
                     <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="dtos:PlayerDto">
+                    <DataTemplate x:DataType="game:PlayerDto">
                         <StackLayout Margin="8,4">
                             <Grid>
                                 <userControls:TintedCachedImage

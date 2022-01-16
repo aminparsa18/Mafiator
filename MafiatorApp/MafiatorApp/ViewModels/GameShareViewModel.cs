@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MafiatorApp.ViewModels.Base;
+using System;
 using System.Threading.Tasks;
-using MafiatorApp.ViewModels.Base;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 
@@ -14,8 +14,8 @@ namespace MafiatorApp.ViewModels
             get => date;
             set => SetProperty(ref date, value);
         }
-        private Ulid gameId;
-        public Ulid GameId
+        private Guid gameId;
+        public Guid GameId
         {
             get => gameId;
             set => SetProperty(ref gameId, value);
@@ -39,11 +39,10 @@ namespace MafiatorApp.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            if (navigationData is Tuple<DateTime, Ulid> data)
-            {
-                Date = data.Item1.ToString();
-                GameId = data.Item2;
-            }
+            if (navigationData is not Tuple<DateTime, Guid>(var item1, var item2))
+                return base.InitializeAsync(navigationData);
+            Date = item1.ToString();
+            GameId = item2;
             return base.InitializeAsync(navigationData);
         }
     }

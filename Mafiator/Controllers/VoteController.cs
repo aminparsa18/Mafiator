@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Mafiator.Api.Controllers.Base;
+﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.Vote;
 using Mafiator.Entities;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
 {
@@ -24,7 +24,7 @@ namespace Mafiator.Api.Controllers
         {
             await _unitOfWork.Vote.AddRangeFast(dto.Targets.Select(s => new Vote()
             {
-                Id = Ulid.NewUlid(),
+                Id = Guid.NewGuid(),
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
                 GameId = dto.GameId,

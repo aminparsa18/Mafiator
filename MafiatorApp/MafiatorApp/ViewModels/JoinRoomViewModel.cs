@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MafiatorApp.Extentions;
+﻿using MafiatorApp.Extensions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -41,7 +41,7 @@ namespace MafiatorApp.ViewModels
                 {
                     await NavigationService.RemovePopupAsync();
                     await NavigationService.RemovePopupAsync();
-                    await NavigationService.NavigateToAsync<RoomDetailViewModel>(Ulid.Parse(result.Data));
+                    await NavigationService.NavigateToAsync<RoomDetailViewModel>(Guid.Parse(result.Data));
                 }
                 else
                 {

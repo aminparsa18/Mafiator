@@ -1,5 +1,4 @@
-﻿
-namespace Mafiator.Service.Models
+﻿namespace Mafiator.Service.Models
 {
     public class PushTemplates
     {

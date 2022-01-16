@@ -2,7 +2,7 @@
 
 namespace MafiatorApp.Models.Api
 {
-    [MessagePackObject]
+   [MessagePackObject]
    public class RefreshTokenRequest
     {
         [Key(0)]

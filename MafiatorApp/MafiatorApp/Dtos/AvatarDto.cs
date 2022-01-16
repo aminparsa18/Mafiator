@@ -3,10 +3,9 @@
 namespace MafiatorApp.Dtos
 {
     [MessagePackObject()]
-   public class AvatarDto
+    public class AvatarDto
     {
-        [Key(0)]
+        [Key(0)] 
         public string Name { get; set; }
-       
     }
 }

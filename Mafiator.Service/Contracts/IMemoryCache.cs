@@ -1,5 +1,4 @@
-﻿
-namespace Mafiator.Service.Contracts
+﻿namespace Mafiator.Service.Contracts
 {
     public interface IMemoryCache
     {

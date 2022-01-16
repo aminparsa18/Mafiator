@@ -1,6 +1,6 @@
 ﻿namespace MafiatorApp.Models
 {
-   public class PhoneStateModel
+    public class PhoneStateModel
     {
     }
 }

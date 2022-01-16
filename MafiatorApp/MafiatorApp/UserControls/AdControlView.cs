@@ -2,7 +2,7 @@
 
 namespace MafiatorApp.UserControls
 {
-   public class AdControlView:View
+    public class AdControlView : View
     {
     }
 }

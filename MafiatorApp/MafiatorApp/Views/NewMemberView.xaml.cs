@@ -17,7 +17,7 @@ namespace MafiatorApp.Views
         private void ImageButton_OnClicked(object sender, EventArgs e)
         {
             var userId = ((ImageButton) sender).CommandParameter;
-            ((NewMemberViewModel) BindingContext).RemoveMember(Ulid.Parse(userId.ToString()));
+            ((NewMemberViewModel) BindingContext).RemoveMember(Guid.Parse(userId.ToString()));
         }
     }
 }

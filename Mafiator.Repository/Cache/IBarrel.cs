@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
-using MessagePack;
 
 namespace Mafiator.Repository.Cache
 {

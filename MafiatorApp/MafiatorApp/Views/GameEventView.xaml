@@ -1,13 +1,13 @@
 ﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:pages="http://rotorgames.com"
-                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-                 xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
                  xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+                 xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.GameEventView"
                  base:ViewModelLocator.AutoWireViewModel="True"
@@ -28,9 +28,7 @@
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
         <StackLayout>
-            <Frame
-               
-                CornerRadius="52" Margin="16,36" Padding="0">
+            <userControls:Popup Margin="16,36">
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16">
                         <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
@@ -326,18 +324,7 @@
                         </xct:StateLayout.StateViews>
                     </Grid>
                 </StackLayout>
-                <Frame.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,1">
-                        <GradientStop
-                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
-                            Offset="0.0" />
-                        <GradientStop
-                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
-                            Offset="0.25" />
-                    </LinearGradientBrush>
-                </Frame.Background>
-            </Frame>
+            </userControls:Popup>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using MafiatorApp.Models;
+using MafiatorApp.ViewModels.Base;
+using MessagePipe;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using MafiatorApp.Models;
-using MafiatorApp.ViewModels.Base;
-using MessagePipe;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels

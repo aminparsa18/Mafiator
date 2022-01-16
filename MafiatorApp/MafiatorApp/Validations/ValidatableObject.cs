@@ -1,20 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using MafiatorApp.ViewModels.Base;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
 
 namespace MafiatorApp.Validations
 {
     public class ValidatableObject<T> : ObservableObject, IValidity
     {
-        private readonly List<IValidationRule<T>> _validations;
         private List<string> _errors;
         private T _value;
         private bool _isValid;
 
-        public List<IValidationRule<T>> Validations => _validations;
+        public List<IValidationRule<T>> Validations { get; }
 
         public List<string> Errors
         {
@@ -38,13 +34,13 @@ namespace MafiatorApp.Validations
         {
             _isValid = true;
             _errors = new List<string>();
-            _validations = new List<IValidationRule<T>>();
+            Validations = new List<IValidationRule<T>>();
         }
 
         public bool Validate()
         {
             Errors.Clear();
-            var errors = _validations.Where(v => !v.Check(Value))
+            var errors = Validations.Where(v => !v.Check(Value))
                                                      .Select(v => v.ValidationMessage);
             foreach (var error in errors)
             {

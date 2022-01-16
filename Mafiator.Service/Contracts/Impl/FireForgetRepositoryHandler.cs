@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Mafiator.Repository;
+﻿using Mafiator.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 
 namespace Mafiator.Service.Contracts.Impl
 {

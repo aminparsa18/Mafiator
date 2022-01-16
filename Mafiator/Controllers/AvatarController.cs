@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper.Internal;
-using Mafiator.Api.Controllers.Base;
+﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
 using Mafiator.Data;
 using Mafiator.Data.Dtos;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
 {
@@ -40,7 +39,7 @@ namespace Mafiator.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> TestSetting()
         {
-            await _liveEventManager.CreateLiveEvent(Ulid.NewUlid().ToString());
+            await _liveEventManager.CreateLiveEvent(Guid.NewGuid().ToString());
             return Ok();
         }
         [HttpGet]

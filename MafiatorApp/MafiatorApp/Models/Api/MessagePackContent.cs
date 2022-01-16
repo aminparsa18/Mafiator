@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using MessagePack;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using MessagePack;
 
 namespace MafiatorApp.Models.Api
 {
@@ -31,7 +31,6 @@ namespace MafiatorApp.Models.Api
     /// <summary>
     /// Implementation of <see cref="System.Net.Http.HttpContent"/> for MessagePack
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class MessagePackContent : System.Net.Http.HttpContent
     {
         private readonly object _value;

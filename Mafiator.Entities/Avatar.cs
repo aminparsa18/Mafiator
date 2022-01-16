@@ -1,5 +1,4 @@
-﻿
-namespace Mafiator.Entities
+﻿namespace Mafiator.Entities
 {
     public class Avatar:BaseEntity
     {

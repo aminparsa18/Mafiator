@@ -1,5 +1,4 @@
-﻿using Mafiator.Entities.Converters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping
@@ -8,9 +7,6 @@ namespace Mafiator.Entities.Mapping
     {
         public override void Configure(EntityTypeBuilder<Vote> builder)
         {
-            builder.Property(e => e.GameId).HasConversion(new UlidToStringConverter());
-            builder.Property(e => e.VoterId).HasConversion(new UlidToStringConverter());
-            builder.Property(e => e.TargetId).HasConversion(new UlidToStringConverter());
 
             builder.HasOne(d => d.Game)
                 .WithMany(p => p.Vote)

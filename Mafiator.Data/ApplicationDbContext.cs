@@ -1,14 +1,14 @@
-﻿using System;
-using Mafiator.Entities;
+﻿using Mafiator.Entities;
 using Mafiator.Entities.Identity;
 using Mafiator.Entities.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Mafiator.Data
 {
-   public class ApplicationDbContext:IdentityDbContext<User, Role, Ulid, UserClaim, UserRole, IdentityUserLogin<Ulid>, RoleClaim, IdentityUserToken<Ulid>>
+    public class ApplicationDbContext:IdentityDbContext<User, Role, Guid, UserClaim, UserRole, IdentityUserLogin<Guid>, RoleClaim, IdentityUserToken<Guid>>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

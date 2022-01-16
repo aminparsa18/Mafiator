@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
+             xmlns:room="clr-namespace:MafiatorApp.Dtos.Room;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.MyRoomsView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:MyRoomsViewModel">
@@ -74,7 +75,7 @@
 
                         </CollectionView.Header>
                         <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="dtos:RoomDto">
+                                    <DataTemplate x:DataType="room:RoomDto">
                                 <StackLayout >
                                     <Grid Margin="16,8" >
                                         <Image Source="history.png" Aspect="Fill"/>

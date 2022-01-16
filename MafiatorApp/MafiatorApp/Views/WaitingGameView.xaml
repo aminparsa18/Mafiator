@@ -9,6 +9,7 @@
              xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob" 
              xmlns:viewmodels="clr-namespace:MafiatorApp.ViewModels"
              xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
+             xmlns:game="clr-namespace:MafiatorApp.Dtos.Game;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.WaitingGameView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewmodels:WaitingGameViewModel">
@@ -103,7 +104,7 @@
                     <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="8" VerticalItemSpacing="8" Span="2"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="dtos:WaitingPlayerDto">
+                    <DataTemplate x:DataType="game:WaitingPlayerDto">
                         <Frame CornerRadius="45" Padding="12" BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night2}}" CompressedLayout.IsHeadless="true">
                         <StackLayout>
                             <forms:CachedImage

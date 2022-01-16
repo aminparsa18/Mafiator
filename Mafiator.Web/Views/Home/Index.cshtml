@@ -6,13 +6,38 @@
     body{
         background-color: #2b2d42 
     }
+    .responsive-iframe {
+   
+        width: 80%;
+        height: 480px;
+        border-radius: 16px;
+    }
 </style>
 <div class="text-center">
-    <img src="img/logo.png"  style="margin-top: 128px; width: 256px; "/>
-    <h1 style="color: #fafafa;margin-top: 16px; font-size: 56px;">Mafiator</h1>
-    <h5 style="color: #fafafa; margin-top: 36px; font-size: medium;">Everybody has a power</h5>
-    
-    <a href="#">
-        <img src="img/google.png" width="160" style="margin: 48px;"/>
+    <img src="img/logo.png" style="margin-top: 64px; width: 128px; " />
+    <h1 style="color: #fafafa;margin-top: 12px; font-size: 56px;">Mafiator</h1>
+    <h5 style="color: #fafafa; margin-top: 24px; font-size: medium;">Everybody has a power</h5>
+    @*<video style="border-radius: 15px; max-width: 100%; margin-top: 16px;" id="player" playsinline controls>
+        <source src="https://mftorblob.azureedge.net/videos/Main-1.mp4" type="video/mp4" />
+    </video>*@
+<iframe class="responsive-iframe" src="https://www.youtube.com/embed/E_OgvziY5S4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <a href="#" onclick="showModal()">
+        <img src="img/google.png" width="160" style="margin: 48px;" />
+    </a>
+    <a href="#" onclick="showModal()">
+        <img src="img/apple.svg" width="160" style="margin: 48px;" />
+    </a>
+    <a href="https://mftorblob.azureedge.net/downloads/mafiator-arm64-v8a.apk">
+        <img src="img/apk.png" width="160" style="margin: 48px;" />
     </a>
 </div>
+<script>
+    function showModal() {
+        Swal.fire({
+            title: '',
+            text: 'Mafiator will be available on stores in October!',
+            icon: 'info',
+            confirmButtonText: 'Cool'
+        })
+    }
+</script>

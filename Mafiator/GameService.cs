@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hangfire;
-using Mafiator.Data.Dtos;
+﻿using Hangfire;
+using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Entities.Enums;
 using Mafiator.Entities.Extensions;
 using Mafiator.IocConfig.Hubs;
@@ -11,32 +7,36 @@ using Mafiator.Repository;
 using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.SignalR;
 using RepoDb.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api
 {
     public class GameService : IGameService
     {
         //distributed Cache
-        private readonly IMemoryCache cache;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMemoryCache _cache;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IHubContext<GameHub> _gameHub;
 
         public GameService(IMemoryCache cache, IUnitOfWork unitOfWork, IHubContext<GameHub> gameHub)
         {
-            this.cache = cache;
-            this.unitOfWork = unitOfWork;
+            this._cache = cache;
+            this._unitOfWork = unitOfWork;
             this._gameHub = gameHub;
         }
 
         //turn change every 45 seconds
         public async Task SetTurn(string gameId, int index)
         {
-            var _members = await unitOfWork.GameMember.GetPlayerByGame(gameId);
-            await _gameHub.Clients.Group(gameId).SendAsync("Turn", _members.ElementAt(index).MemberId);
+            var members = await _unitOfWork.GameMember.GetPlayerByGame(gameId);
+            await _gameHub.Clients.Group(gameId).SendAsync("Turn", members.ElementAt(index).MemberId);
             index++;
             string jobId;
             //reach last player in group
-            if (index == _members.Count())
+            if (index == members.Count())
             {
                 //wait 45 second until last mother fucker talks then start voting
                 jobId = BackgroundJob.Schedule(() => SendTargets(gameId), TimeSpan.FromSeconds(30));
@@ -46,7 +46,7 @@ namespace Mafiator.Api
                 jobId = BackgroundJob.Schedule(() => SetTurn(gameId, index), TimeSpan.FromSeconds(30));
             }
 
-            cache.SetCache(jobId, "JobId" + gameId);
+            _cache.SetCache(jobId, "JobId" + gameId);
         }
 
         //sends list of targets to each user
@@ -66,7 +66,7 @@ namespace Mafiator.Api
 
         public async Task InitVotes(string gameId)
         {
-            var votes = await unitOfWork.Vote.GetNonValidatedTargets(gameId);
+            var votes = await _unitOfWork.Vote.GetNonValidatedTargets(gameId);
             // take the most voted to advocacy
             var candidates = votes.GroupBy(i => i.TargetId).OrderByDescending(s => s.Count())
                 .Select(grp => grp.Key).Take(2);
@@ -84,7 +84,7 @@ namespace Mafiator.Api
         //turn change every 45 seconds
         public async Task SetAdvocacyTurn(string gameId, int index)
         {
-            var votes = await unitOfWork.Vote.GetNonValidatedTargets(gameId);
+            var votes = await _unitOfWork.Vote.GetNonValidatedTargets(gameId);
             // take the most voted to advocacy
             var candidates = votes.GroupBy(i => i.TargetId).OrderByDescending(s => s.Count())
                 .Select(grp => grp.Key).Take(2);
@@ -97,8 +97,8 @@ namespace Mafiator.Api
                 //wait 45 second until last mother fucker talks then start voting
                 jobId = BackgroundJob.Schedule(() => SendAdvocacyTargets(gameId), TimeSpan.FromSeconds(45));
                 //cache candidates for second voting
-                cache.SetCache(candidates, $"Targets-{gameId}");
-                await unitOfWork.Vote.Validate(gameId);
+                _cache.SetCache(candidates, $"Targets-{gameId}");
+                await _unitOfWork.Vote.Validate(gameId);
                 CacheFactory.GetCache().Remove($"Targets-{gameId}");
             }
             else
@@ -106,7 +106,7 @@ namespace Mafiator.Api
                 jobId = BackgroundJob.Schedule(() => SetAdvocacyTurn(gameId, index), TimeSpan.FromSeconds(45));
             }
 
-            cache.SetCache(jobId, "JobId" + gameId);
+            _cache.SetCache(jobId, "JobId" + gameId);
         }
 
         //sends list of target to each user
@@ -122,7 +122,7 @@ namespace Mafiator.Api
         public async Task FinalizeVote(string gameId)
         {
             var finish = false;
-            var votes = await unitOfWork.Vote.GetNonValidatedTargets(gameId);
+            var votes = await _unitOfWork.Vote.GetNonValidatedTargets(gameId);
             // take the most voted to advocacy
             var candidates = votes.GroupBy(i => i.TargetId).OrderByDescending(s => s.Count())
                 .Select(grp => grp.Key).Take(2);
@@ -130,9 +130,9 @@ namespace Mafiator.Api
             {
                 foreach (var candidate in candidates)
                 {
-                    var statuses = await unitOfWork.GameMember.GetPlayerStatusFast(candidate);
+                    var statuses = await _unitOfWork.GameMember.GetPlayerStatusFast(candidate);
                     var status = statuses.FirstOrDefault();
-                    await unitOfWork.GameMember.KickMember(candidate);
+                    await _unitOfWork.GameMember.KickMember(candidate);
                     if (status.GameRole == GameRole.Terrorist)
                         await _gameHub.Clients.Group(gameId).SendAsync("KickWithTerrorist");
                 }
@@ -150,7 +150,7 @@ namespace Mafiator.Api
 
         public async Task Night(string gameId)
         {
-            await unitOfWork.Vote.Validate(gameId);
+            await _unitOfWork.Vote.Validate(gameId);
             await _gameHub.Clients.Group(gameId).SendAsync("Night");
             BackgroundJob.Schedule(() => ShowNightResult(gameId), TimeSpan.FromSeconds(45));
         }
@@ -159,8 +159,8 @@ namespace Mafiator.Api
         {
             var finish = false;
             var results = new List<GameEventResultDto>();
-            var events = await unitOfWork.GameEvent.GetByGame(gameId);
-            var _members = await unitOfWork.GameMember.GetPlayerByGame(gameId);
+            var events = await _unitOfWork.GameEvent.GetByGame(gameId);
+            var members = await _unitOfWork.GameMember.GetPlayerByGame(gameId);
             if (events.Any())
             {
                 var killed = events.FirstOrDefault(e => e.EventType == GameEventType.Killed);
@@ -173,7 +173,7 @@ namespace Mafiator.Api
                 //i think it has priority over all
                 if (poisoned != null)
                 {
-                    var fuckedUp = _members.FirstOrDefault(m => m.MemberId == poisoned.MemberId);
+                    var fuckedUp = members.FirstOrDefault(m => m.MemberId == poisoned.MemberId);
                     if (fuckedUp.Role == GameRole.GodFather)
                         killed = null;
                     else if (fuckedUp.Role == GameRole.Sniper)
@@ -206,9 +206,9 @@ namespace Mafiator.Api
 
                 if (killed != null && killed.MemberId != cured?.MemberId)
                 {
-                    var fuckedUp = _members.FirstOrDefault(m => m.MemberId == killed.MemberId);
+                    var fuckedUp = members.FirstOrDefault(m => m.MemberId == killed.MemberId);
                     if (fuckedUp?.Role != GameRole.Immortal)
-                        await unitOfWork.GameMember.KillMember(killed.MemberId);
+                        await _unitOfWork.GameMember.KillMember(killed.MemberId);
                     results.Add(new GameEventResultDto()
                     {
                         MemberId = killed.MemberId,
@@ -238,7 +238,7 @@ namespace Mafiator.Api
 
                 if (silenced != null)
                 {
-                    await unitOfWork.GameMember.SilenceMember(silenced.MemberId);
+                    await _unitOfWork.GameMember.SilenceMember(silenced.MemberId);
                     results.Add(new GameEventResultDto()
                     {
                         MemberId = silenced.MemberId,
@@ -251,7 +251,7 @@ namespace Mafiator.Api
 
                 if (sniped != null)
                 {
-                    var targets = await unitOfWork.GameMember.GetPlayerStatusFast(sniped.MemberId);
+                    var targets = await _unitOfWork.GameMember.GetPlayerStatusFast(sniped.MemberId);
                     if (targets.Any())
                     {
                         var target = targets.FirstOrDefault();
@@ -260,11 +260,11 @@ namespace Mafiator.Api
                             target.GameRole == GameRole.Terrorist)
                         {
                             var snipers =
-                                await unitOfWork.GameMember.GetPlayerByRoleFast(gameId, (short) GameRole.Sniper);
+                                await _unitOfWork.GameMember.GetPlayerByRoleFast(gameId, (short) GameRole.Sniper);
                             if (snipers.Any())
                             {
                                 var sniper = snipers.FirstOrDefault();
-                                await unitOfWork.GameMember.KillMember(sniper.MemberId);
+                                await _unitOfWork.GameMember.KillMember(sniper.MemberId);
                                 results.Add(new GameEventResultDto()
                                 {
                                     MemberId = sniper.MemberId,
@@ -277,7 +277,7 @@ namespace Mafiator.Api
                         }
                         else
                         {
-                            await unitOfWork.GameMember.KillMember(sniped.MemberId);
+                            await _unitOfWork.GameMember.KillMember(sniped.MemberId);
                             results.Add(new GameEventResultDto()
                             {
                                 MemberId = sniped.MemberId,
@@ -290,7 +290,7 @@ namespace Mafiator.Api
                     }
                 }
 
-                cache.SetCache(results, $"NightResults-{gameId}");
+                _cache.SetCache(results, $"NightResults-{gameId}");
                 try
                 {
                     await _gameHub.Clients.Group(gameId).SendAsync("NightResult");
@@ -312,46 +312,43 @@ namespace Mafiator.Api
 
         public async Task<bool> CheckFinish(string gameId)
         {
-            var _members = await unitOfWork.GameMember.GetPlayerByGame(gameId);
-            var mafia = _members.Where(m =>
+            var members = await _unitOfWork.GameMember.GetPlayerByGame(gameId);
+            var mafia = members.Where(m =>
                 m.Role.IsMafia() && m.Status != PlayerStatus.Killed && m.Status != PlayerStatus.Kicked);
-            var citizen = _members.Where(m =>
+            var citizen = members.Where(m =>
                 m.Role.IsCitizen() && m.Status != PlayerStatus.Killed && m.Status != PlayerStatus.Kicked);
             if (mafia.Count() >= citizen.Count())
             {
                 //mafia wins
-                await unitOfWork.Game.MafiaWin(gameId);
+                await _unitOfWork.Game.MafiaWin(gameId);
                 await _gameHub.Clients.Group(gameId).SendAsync("GameFinish", "mafia");
                 return true;
             }
 
-            if (!mafia.Any())
-            {
-                //citizen wins
-                await unitOfWork.Game.CitizenWin(gameId);
-                await _gameHub.Clients.Group(gameId).SendAsync("GameFinish", "citizen");
-                return true;
-            }
+            if (mafia.Any()) 
+                return false;
+            //citizen wins
+            await _unitOfWork.Game.CitizenWin(gameId);
+            await _gameHub.Clients.Group(gameId).SendAsync("GameFinish", "citizen");
+            return true;
 
-            return false;
         }
 
         public async void Inquiry(string gameId, string memberId, bool isToggled)
         {
-            var targets = await unitOfWork.GameMember.GetPlayerStatusFast(memberId);
-            if (targets.Any())
-            {
-                var target = targets.FirstOrDefault();
-                if (target.GameRole == GameRole.Mafia || target.GameRole == GameRole.Terrorist)
-                    await _gameHub.Clients.Group(gameId).SendAsync("Inquiry", !isToggled);
-                else
-                    await _gameHub.Clients.Group(gameId).SendAsync("Inquiry", isToggled);
-            }
+            var targets = await _unitOfWork.GameMember.GetPlayerStatusFast(memberId);
+            if (!targets.Any())
+                return;
+            var target = targets.FirstOrDefault();
+            if (target.GameRole is GameRole.Mafia or GameRole.Terrorist)
+                await _gameHub.Clients.Group(gameId).SendAsync("Inquiry", !isToggled);
+            else
+                await _gameHub.Clients.Group(gameId).SendAsync("Inquiry", isToggled);
         }
 
         public async Task ValidateGameEvents(string gameId)
         {
-            await unitOfWork.GameEvent.Validate(gameId);
+            await _unitOfWork.GameEvent.Validate(gameId);
             BackgroundJob.Enqueue(() => SetTurn(gameId, 0));
         }
     }

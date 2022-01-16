@@ -1,9 +1,9 @@
 ﻿using MafiatorApp.Enums;
+using MafiatorApp.Models;
+using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using System.Linq;
 using System.Threading.Tasks;
-using MafiatorApp.Models;
-using MafiatorApp.Services;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -134,7 +134,7 @@ namespace MafiatorApp.ViewModels
                     SelectedCount = SystemConstant.SelectedRoles.Sum(s => s.Count);
                 }
             }
-           // return base.InitializeAsync(navigationData);
+            // return base.InitializeAsync(navigationData);
         }
 
         internal void Increment(GameRole role)

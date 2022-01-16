@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Mafiator.Data.Dtos.User;
+using Mafiator.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mafiator.Data.Dtos;
-using Mafiator.Entities.Identity;
-using Microsoft.AspNetCore.Identity;
 
 namespace Mafiator.Service.Contracts.Identity
 {
@@ -19,7 +19,7 @@ namespace Mafiator.Service.Contracts.Identity
         bool SupportsRoleClaims { get; }
         Task<IdentityResult> CreateAsync(Role role);
         Task<IdentityResult> DeleteAsync(Role role);
-        Task<Role> FindByIdAsync(Ulid roleId);
+        Task<Role> FindByIdAsync(Guid roleId);
         Task<Role> FindByNameAsync(string roleName);
         string NormalizeKey(string key);
         Task<bool> RoleExistsAsync(string roleName);
@@ -33,8 +33,8 @@ namespace Mafiator.Service.Contracts.Identity
         #region CustomMethod
         List<Role> GetAllRoles();
         Task<IEnumerable<Role>> GetAllRolesAsync();
-        Task<Role> FindClaimsInRole(Ulid RoleId);
-        Task<IdentityResult> AddOrUpdateClaimsAsync(Ulid RoleId, string RoleClaimType, IList<string> SelectedRoleClaimValues);
+        Task<Role> FindClaimsInRole(Guid roleId);
+        Task<IdentityResult> AddOrUpdateClaimsAsync(Guid roleId, string roleClaimType, IList<string> selectedRoleClaimValues);
         #endregion
 
         #region Methods For Dto

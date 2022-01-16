@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using MafiatorApp.Effects;
+﻿using MafiatorApp.Effects;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Behaviors
@@ -35,7 +35,7 @@ namespace MafiatorApp.Behaviors
 
         private static void OnApplyLineColorChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (!(bindable is View view))
+            if (bindable is not View view)
             {
                 return;
             }

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using MafiatorApp.Models;
+﻿using MafiatorApp.Models;
 using MafiatorApp.Services;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace MafiatorApp.UserControls
 {
-	public class Overlay
+    public class Overlay
     {
 		public Overlay()
 		{
@@ -18,7 +18,6 @@ namespace MafiatorApp.UserControls
 		{
 			OverlayService.AddOverlay(targets, config);
 		}
-
 		
 	}
 }

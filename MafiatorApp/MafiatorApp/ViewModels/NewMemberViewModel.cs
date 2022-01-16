@@ -1,17 +1,18 @@
-﻿using MafiatorApp.Services;
+﻿using GoogleVisionBarCodeScanner;
+using MafiatorApp.Dtos.Game;
+using MafiatorApp.Dtos.User;
+using MafiatorApp.Extensions;
+using MafiatorApp.Models.Api;
+using MafiatorApp.Models.PipeEvents;
+using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
+using MessagePack;
+using MessagePipe;
 using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using GoogleVisionBarCodeScanner;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
-using MafiatorApp.Models.Api;
-using MafiatorApp.Models.PipeEvents;
-using MessagePack;
-using MessagePipe;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -42,7 +43,7 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand ScanQrCommand { get; set; }
         public IAsyncCommand SearchMemberCommand { get; set; }
 
-        private Ulid roomId;
+        private Guid roomId;
 
 
         public NewMemberViewModel(IPublisher<UpdateRoomEvent> publisher)
@@ -61,7 +62,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task SearchMember()
         {
-            //  if (Ulid.TryParse(Name.Value, out var id))
+            //  if (Guid.TryParse(Name.Value, out var id))
             //{
             try
             {
@@ -100,7 +101,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task AddMember()
         {
-            if (roomId == Ulid.Empty)
+            if (roomId == Guid.Empty)
             {
                 SystemConstant.Members = Members.ToList();
                 await Pop();
@@ -127,8 +128,7 @@ namespace MafiatorApp.ViewModels
                     await NavigationService.RemovePopupAsync();
                     await NavigationService.RemovePopupAsync();
                     DependencyService.Get<IAlert>().ShortAlert("Member(s) joined room", MessageType.Success);
-                   // MessagingCenter.Send(this, "RefreshMembers");
-                   publisher.Publish(new UpdateRoomEvent());
+                    publisher.Publish(new UpdateRoomEvent());
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace MafiatorApp.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            if (navigationData is Ulid id)
+            if (navigationData is Guid id)
                 roomId = id;
             return base.InitializeAsync(navigationData);
         }
@@ -173,7 +173,7 @@ namespace MafiatorApp.ViewModels
             return IsNameValid;
         }
 
-        public void RemoveMember(Ulid userId)
+        public void RemoveMember(Guid userId)
         {
             Members.Remove(Members.FirstOrDefault(m => m.Id == userId));
         }

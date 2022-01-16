@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Mafiator.Common.Helpers;
-using Mafiator.Entities.Enums;
+﻿using Mafiator.Entities.Enums;
 using Mafiator.Entities.Identity;
-using RepoDb.Attributes;
+using System;
+using System.Collections.Generic;
 
 namespace Mafiator.Entities
 {
-   public class GameMember:BaseEntity
+    public class GameMember:BaseEntity
     {
-        [PropertyHandler(typeof(UlidPropertyHandler))]
-        public Ulid GameId { get; set; }
-        [PropertyHandler(typeof(NullableUlidPropertyHandler))]
-        public Ulid? UserId { get; set; }
+        public Guid GameId { get; set; }
+        public Guid? UserId { get; set; }
         public GameRole Role { get; set; } 
         public PlayerStatus Status{ get; set; } 
         public virtual Game Game { get; set; }

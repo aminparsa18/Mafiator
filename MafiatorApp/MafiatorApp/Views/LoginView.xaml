@@ -1,12 +1,12 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+             xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.LoginView"
              base:ViewModelLocator.AutoWireViewModel="True"
              BackgroundColor="Black"
@@ -26,58 +26,34 @@
                             <Label Text="{xct:Translate AppTitle}" FontSize="Large" Margin="0,8,0,0"
                                    FontAttributes="Bold"
                                    HorizontalOptions="CenterAndExpand"
-                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}"/>
+                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}" />
                             <Label Text="{xct:Translate AppSubTitle}" FontSize="Small"
                                    HorizontalOptions="CenterAndExpand"
-                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}"/>
+                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}" />
                         </StackLayout>
                         <StackLayout x:Name="LoginPanel" IsVisible="False" Opacity="0" Margin="24">
                             <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
                                                         Text="{Binding LoginUsername.Value}"
                                                         IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
                                                         Errors="{Binding LoginUsername.Errors}" />
-                               <Grid>
-                                   <userControls:ExtendedEntry x:Name="LoginPassEntry" Placeholder="{xct:Translate Password}" 
-                                                               Text="{Binding LoginPassword.Value}"
-                                                               IsValid="{Binding IsLoginPasswordValid, Mode=TwoWay}"
-                                                               Errors="{Binding LoginPassword.Errors}" IsPassword="True" />
-                                <Path x:Name="LoginPassVis" Data="M299.907,483.651l-.647-.379h0Zm16.186,0,.647-.379h0Zm0,6.7-.648-.379Zm-16.186,0,.648-.379Zm.648-6.319a8.615,8.615,0,0,1,14.89,0l1.295-.758a10.116,10.116,0,0,0-17.48,0Zm14.89,0a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.615,8.615,0,0,1-14.89,0l-1.295.758a10.116,10.116,0,0,0,17.48,0Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm10.252-2.909A2.835,2.835,0,0,1,308,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362ZM308,489.923a2.834,2.834,0,0,1-2.806-2.862h-1.5A4.334,4.334,0,0,0,308,491.423Zm-2.806-2.862A2.835,2.835,0,0,1,308,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM308,484.2a2.836,2.836,0,0,1,2.808,2.864h1.5A4.336,4.336,0,0,0,308,482.7Z"
-                                      Stroke="#363853"
-                                      Fill="#363853"
-                                      StrokeThickness="1"
-                                      Margin="0,0,8,8"
-                                      Aspect="Uniform"
-                                      WidthRequest="30"
-                                      HeightRequest="30"
-                                      HorizontalOptions="EndAndExpand"
-                                      VerticalOptions="CenterAndExpand">
-                                       <Path.RenderTransform>
-                                        <TranslateTransform X="-298.25" Y="-478.25"></TranslateTransform>
-                                       </Path.RenderTransform>
-                                    <Path.GestureRecognizers>
-                                        <TapGestureRecognizer  Tapped="LoginPassVis_OnTapped"></TapGestureRecognizer>
-                                    </Path.GestureRecognizers>
-                                   </Path>
-                                <Path x:Name="LoginPassInvis" Data="M390.74,483.272a.75.75,0,0,0-1.295.758Zm-.647,7.077-.648-.379Zm-10.928,3.429a.75.75,0,1,0-.489,1.418Zm-5.258-3.429.648-.379Zm0-6.7.648.379Zm10.009,1.317a.75.75,0,1,0,1.035-1.085Zm-5.173,4.948a.75.75,0,0,0,1.14-.975Zm7.564-2.855a.75.75,0,0,0-1.5,0ZM382,489.923a.75.75,0,0,0,0,1.5Zm8.41-10.4a.75.75,0,1,0-1.068-1.052ZM374.153,493.9a.75.75,0,1,0,1.069,1.053Zm15.292-9.872a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.607,8.607,0,0,1-10.28,3.808l-.489,1.418a10.109,10.109,0,0,0,12.064-4.468Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm1.9,2.269a8.72,8.72,0,0,1-1.9-2.269l-1.295.758a10.233,10.233,0,0,0,2.224,2.656Zm-1.9-8.209a8.626,8.626,0,0,1,12.568-2.605l.893-1.2a10.127,10.127,0,0,0-14.756,3.052Zm4.638,3.031A2.835,2.835,0,0,1,382,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM382,484.2a2.766,2.766,0,0,1,1.917.771l1.035-1.085A4.262,4.262,0,0,0,382,482.7Zm-2.116,4.744a2.884,2.884,0,0,1-.69-1.88h-1.5a4.385,4.385,0,0,0,1.05,2.855Zm4.924-1.88A2.835,2.835,0,0,1,382,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362Zm4.534-8.587L374.153,493.9l1.069,1.053,15.187-15.429Z"
-                                      Stroke="#363853"
-                                      Fill="#363853"
-                                      IsVisible="False"
-                                      StrokeThickness="1"
-                                      Margin="0,0,8,8"
-                                      Aspect="Uniform"
-                                      WidthRequest="30"
-                                      HeightRequest="30"
-                                      HorizontalOptions="EndAndExpand"
-                                      VerticalOptions="CenterAndExpand">
-                                       <Path.RenderTransform>
-                                        <TranslateTransform X="-372.25" Y="-478.25"></TranslateTransform>
-                                       </Path.RenderTransform>
-                                       <Path.GestureRecognizers>
-                                           <TapGestureRecognizer  Tapped="LoginPassInvis_OnTapped"></TapGestureRecognizer>
-                                       </Path.GestureRecognizers>
-                                   </Path>
+                            <Grid>
+                                <userControls:ExtendedEntry x:Name="LoginPassEntry"
+                                                            Placeholder="{xct:Translate Password}"
+                                                            Text="{Binding LoginPassword.Value}"
+                                                            IsValid="{Binding IsLoginPasswordValid, Mode=TwoWay}"
+                                                            Errors="{Binding LoginPassword.Errors}" IsPassword="True" />
+                                <userControls:ShowPasswordButton x:Name="ShowLoginPass">
+                                    <userControls:ShowPasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="LoginPassVis_OnTapped"></TapGestureRecognizer>
+                                    </userControls:ShowPasswordButton.GestureRecognizers>
+                                </userControls:ShowPasswordButton>
+                                <userControls:HidePasswordButton x:Name="HideLoginPass" IsVisible="False">
+                                    <userControls:HidePasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="LoginPassInvis_OnTapped"></TapGestureRecognizer>
+                                    </userControls:HidePasswordButton.GestureRecognizers>
+                                </userControls:HidePasswordButton>
                             </Grid>
-                           
+
                             <Button Margin="48,8" Text="{xct:Translate Continue}" Command="{Binding LoginCommand}" />
                             <Label Text="{xct:Translate PrivacyPolicy}" HorizontalOptions="CenterAndExpand"
                                    Margin="0,16" FontSize="Small" />
@@ -85,127 +61,80 @@
                         </StackLayout>
                         <StackLayout x:Name="RegisterPanel" IsVisible="False" Opacity="0" Margin="24">
                             <Grid>
-                                <userControls:ExtendedEntry 
-                                                            Text="{Binding PhoneNo.Value}"
-                                                            HorizontalTextAlignment="Center"
-                                                            IsValid="{Binding IsPhoneNoValid, Mode=TwoWay}"
-                                                            Errors="{Binding PhoneNo.Errors}" Keyboard="Telephone"
-                                                            MaxLength="11" />
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" xct:TouchEffect.Command="{Binding ShowCountriesCommand}">
+                                <userControls:ExtendedEntry
+                                    Text="{Binding PhoneNo.Value}"
+                                    HorizontalTextAlignment="Center"
+                                    IsValid="{Binding IsPhoneNoValid, Mode=TwoWay}"
+                                    Errors="{Binding PhoneNo.Errors}" Keyboard="Telephone"
+                                    MaxLength="11" />
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand"
+                                             xct:TouchEffect.Command="{Binding ShowCountriesCommand}">
                                     <forms:CachedImage
                                         HorizontalOptions="StartAndExpand"
                                         VerticalOptions="CenterAndExpand"
-                                        WidthRequest="48"
-                                        HeightRequest="40"
+                                        WidthRequest="36"
+                                        HeightRequest="30"
                                         Margin="8,0,0,16"
                                         DownsampleToViewSize="True"
                                         Aspect="AspectFit"
                                         Source="{Binding Country.Code,Converter={StaticResource CountryCodelmageConverter}}">
                                     </forms:CachedImage>
-                                    <Label Text="{Binding Country.DialCode}" FontSize="Medium" FontAttributes="Bold"  Margin="0,0,0,16" VerticalOptions="CenterAndExpand" TextColor="Black"></Label>
+                                    <Label Text="{Binding Country.DialCode}" FontSize="Medium" FontAttributes="Bold"
+                                           Margin="0,0,0,16" VerticalOptions="CenterAndExpand" TextColor="Black">
+                                    </Label>
                                 </StackLayout>
                             </Grid>
                             <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
                                                         Text="{Binding Username.Value}"
                                                         IsValid="{Binding IsUsernameValid, Mode=TwoWay}"
                                                         Errors="{Binding Username.Errors}" />
-                          
-                          <Grid>
-                              <userControls:ExtendedEntry x:Name="RegisterPassEntry" Text="{Binding Password.Value,Mode=TwoWay}"
-                                                          Placeholder="{xct:Translate Password}"
-                                                          Errors="{Binding Password.Errors}" IsPassword="True"
-                                                          IsValid="{Binding IsPasswordValid,Mode=TwoWay}"
-                                                          HorizontalTextAlignment="Center" />
-                                <Path x:Name="RegisterPassVis" Data="M299.907,483.651l-.647-.379h0Zm16.186,0,.647-.379h0Zm0,6.7-.648-.379Zm-16.186,0,.648-.379Zm.648-6.319a8.615,8.615,0,0,1,14.89,0l1.295-.758a10.116,10.116,0,0,0-17.48,0Zm14.89,0a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.615,8.615,0,0,1-14.89,0l-1.295.758a10.116,10.116,0,0,0,17.48,0Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm10.252-2.909A2.835,2.835,0,0,1,308,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362ZM308,489.923a2.834,2.834,0,0,1-2.806-2.862h-1.5A4.334,4.334,0,0,0,308,491.423Zm-2.806-2.862A2.835,2.835,0,0,1,308,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM308,484.2a2.836,2.836,0,0,1,2.808,2.864h1.5A4.336,4.336,0,0,0,308,482.7Z"
-                                    Stroke="#363853"
-                                    Fill="#363853"
-                                    StrokeThickness="1"
-                                    Margin="0,0,8,8"
-                                    Aspect="Uniform"
-                                    WidthRequest="30"
-                                    HeightRequest="30"
-                                    HorizontalOptions="EndAndExpand"
-                                    VerticalOptions="CenterAndExpand">
-                                  <Path.RenderTransform>
-                                      <TranslateTransform X="-298.25" Y="-478.25"></TranslateTransform>
-                                  </Path.RenderTransform>
-                                    <Path.GestureRecognizers>
-                                        <TapGestureRecognizer  Tapped="RegisterPassVis_OnTapped"></TapGestureRecognizer>
-                                    </Path.GestureRecognizers>
-                                </Path>
 
-                                <Path x:Name="RegisterPassInvis" Data="M390.74,483.272a.75.75,0,0,0-1.295.758Zm-.647,7.077-.648-.379Zm-10.928,3.429a.75.75,0,1,0-.489,1.418Zm-5.258-3.429.648-.379Zm0-6.7.648.379Zm10.009,1.317a.75.75,0,1,0,1.035-1.085Zm-5.173,4.948a.75.75,0,0,0,1.14-.975Zm7.564-2.855a.75.75,0,0,0-1.5,0ZM382,489.923a.75.75,0,0,0,0,1.5Zm8.41-10.4a.75.75,0,1,0-1.068-1.052ZM374.153,493.9a.75.75,0,1,0,1.069,1.053Zm15.292-9.872a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.607,8.607,0,0,1-10.28,3.808l-.489,1.418a10.109,10.109,0,0,0,12.064-4.468Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm1.9,2.269a8.72,8.72,0,0,1-1.9-2.269l-1.295.758a10.233,10.233,0,0,0,2.224,2.656Zm-1.9-8.209a8.626,8.626,0,0,1,12.568-2.605l.893-1.2a10.127,10.127,0,0,0-14.756,3.052Zm4.638,3.031A2.835,2.835,0,0,1,382,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM382,484.2a2.766,2.766,0,0,1,1.917.771l1.035-1.085A4.262,4.262,0,0,0,382,482.7Zm-2.116,4.744a2.884,2.884,0,0,1-.69-1.88h-1.5a4.385,4.385,0,0,0,1.05,2.855Zm4.924-1.88A2.835,2.835,0,0,1,382,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362Zm4.534-8.587L374.153,493.9l1.069,1.053,15.187-15.429Z"
-                                      Stroke="#363853"
-                                      Fill="#363853"
-                                      IsVisible="False"
-                                      StrokeThickness="1"
-                                      Margin="0,0,8,8"
-                                      Aspect="Uniform"
-                                      WidthRequest="30"
-                                      HeightRequest="30"
-                                      HorizontalOptions="EndAndExpand"
-                                      VerticalOptions="CenterAndExpand">
-                                    <Path.RenderTransform>
-                                        <TranslateTransform X="-372.25" Y="-478.25"></TranslateTransform>
-                                    </Path.RenderTransform>
-                                    <Path.GestureRecognizers>
-                                        <TapGestureRecognizer  Tapped="RegisterPassInvis_OnTapped"></TapGestureRecognizer>
-                                    </Path.GestureRecognizers>
-                                </Path>
+                            <Grid>
+                                <userControls:ExtendedEntry x:Name="RegisterPassEntry"
+                                                            Text="{Binding Password.Value,Mode=TwoWay}"
+                                                            Placeholder="{xct:Translate Password}"
+                                                            Errors="{Binding Password.Errors}" IsPassword="True"
+                                                            IsValid="{Binding IsPasswordValid,Mode=TwoWay}"
+                                                            HorizontalTextAlignment="Center" />
+                                <userControls:ShowPasswordButton x:Name="ShowRegisterPass">
+                                    <userControls:ShowPasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="RegisterPassVis_OnTapped"></TapGestureRecognizer>
+                                    </userControls:ShowPasswordButton.GestureRecognizers>
+                                </userControls:ShowPasswordButton>
+                                <userControls:HidePasswordButton x:Name="HideRegisterPass" IsVisible="False">
+                                    <userControls:HidePasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="RegisterPassInvis_OnTapped"></TapGestureRecognizer>
+                                    </userControls:HidePasswordButton.GestureRecognizers>
+                                </userControls:HidePasswordButton>
                             </Grid>
-                           <Grid>
-                               <userControls:ExtendedEntry x:Name="ConfPassEntry" Text="{Binding ConfirmPassword.Value,Mode=TwoWay}"
-                                                           Placeholder="{xct:Translate ConfirmPassword}"
-                                                           IsPassword="True"
-                                                           IsValid="{Binding IsConfirmPasswordValid,Mode=TwoWay}"
-                                                           Errors="{Binding ConfirmPassword.Errors}"
-                                                           HorizontalTextAlignment="Center" />
-                                <Path x:Name="ConfPassVis" Data="M299.907,483.651l-.647-.379h0Zm16.186,0,.647-.379h0Zm0,6.7-.648-.379Zm-16.186,0,.648-.379Zm.648-6.319a8.615,8.615,0,0,1,14.89,0l1.295-.758a10.116,10.116,0,0,0-17.48,0Zm14.89,0a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.615,8.615,0,0,1-14.89,0l-1.295.758a10.116,10.116,0,0,0,17.48,0Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm10.252-2.909A2.835,2.835,0,0,1,308,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362ZM308,489.923a2.834,2.834,0,0,1-2.806-2.862h-1.5A4.334,4.334,0,0,0,308,491.423Zm-2.806-2.862A2.835,2.835,0,0,1,308,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM308,484.2a2.836,2.836,0,0,1,2.808,2.864h1.5A4.336,4.336,0,0,0,308,482.7Z"
-                                     Stroke="#363853"
-                                     Fill="#363853"
-                                     StrokeThickness="1"
-                                     Margin="0,0,8,8"
-                                     Aspect="Uniform"
-                                     WidthRequest="30"
-                                     HeightRequest="30"
-                                     HorizontalOptions="EndAndExpand"
-                                     VerticalOptions="CenterAndExpand">
-                                   <Path.RenderTransform>
-                                       <TranslateTransform X="-298.25" Y="-478.25"></TranslateTransform>
-                                    </Path.RenderTransform>
-                                    <Path.GestureRecognizers>
-                                        <TapGestureRecognizer  Tapped="ConfRegisterPassVis_OnTapped"></TapGestureRecognizer>
-                                    </Path.GestureRecognizers>
-                                </Path>
-                                <Path x:Name="ConfPassInvis" Data="M390.74,483.272a.75.75,0,0,0-1.295.758Zm-.647,7.077-.648-.379Zm-10.928,3.429a.75.75,0,1,0-.489,1.418Zm-5.258-3.429.648-.379Zm0-6.7.648.379Zm10.009,1.317a.75.75,0,1,0,1.035-1.085Zm-5.173,4.948a.75.75,0,0,0,1.14-.975Zm7.564-2.855a.75.75,0,0,0-1.5,0ZM382,489.923a.75.75,0,0,0,0,1.5Zm8.41-10.4a.75.75,0,1,0-1.068-1.052ZM374.153,493.9a.75.75,0,1,0,1.069,1.053Zm15.292-9.872a5.883,5.883,0,0,1,0,5.94l1.295.758a7.384,7.384,0,0,0,0-7.456Zm0,5.94a8.607,8.607,0,0,1-10.28,3.808l-.489,1.418a10.109,10.109,0,0,0,12.064-4.468Zm-14.89,0a5.883,5.883,0,0,1,0-5.94l-1.295-.758a7.384,7.384,0,0,0,0,7.456Zm1.9,2.269a8.72,8.72,0,0,1-1.9-2.269l-1.295.758a10.233,10.233,0,0,0,2.224,2.656Zm-1.9-8.209a8.626,8.626,0,0,1,12.568-2.605l.893-1.2a10.127,10.127,0,0,0-14.756,3.052Zm4.638,3.031A2.835,2.835,0,0,1,382,484.2v-1.5a4.335,4.335,0,0,0-4.306,4.364ZM382,484.2a2.766,2.766,0,0,1,1.917.771l1.035-1.085A4.262,4.262,0,0,0,382,482.7Zm-2.116,4.744a2.884,2.884,0,0,1-.69-1.88h-1.5a4.385,4.385,0,0,0,1.05,2.855Zm4.924-1.88A2.835,2.835,0,0,1,382,489.923v1.5a4.335,4.335,0,0,0,4.308-4.362Zm4.534-8.587L374.153,493.9l1.069,1.053,15.187-15.429Z"
-                                      Stroke="#363853"
-                                      Fill="#363853"
-                                      IsVisible="False"
-                                      StrokeThickness="1"
-                                      Margin="0,0,8,8"
-                                      Aspect="Uniform"
-                                      WidthRequest="30"
-                                      HeightRequest="30"
-                                      HorizontalOptions="EndAndExpand"
-                                      VerticalOptions="CenterAndExpand">
-                                    <Path.RenderTransform>
-                                        <TranslateTransform X="-372.25" Y="-478.25"></TranslateTransform>
-                                    </Path.RenderTransform>
-                                    <Path.GestureRecognizers>
-                                        <TapGestureRecognizer  Tapped="ConfRegisterPassInvis_OnTapped"></TapGestureRecognizer>
-                                    </Path.GestureRecognizers>
-                                </Path>
+                            <Grid>
+                                <userControls:ExtendedEntry x:Name="ConfPassEntry"
+                                                            Text="{Binding ConfirmPassword.Value,Mode=TwoWay}"
+                                                            Placeholder="{xct:Translate ConfirmPassword}"
+                                                            IsPassword="True"
+                                                            IsValid="{Binding IsConfirmPasswordValid,Mode=TwoWay}"
+                                                            Errors="{Binding ConfirmPassword.Errors}"
+                                                            HorizontalTextAlignment="Center" />
+                                <userControls:ShowPasswordButton x:Name="ShowRegisterConfirmPass">
+                                    <userControls:ShowPasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ConfRegisterPassVis_OnTapped"></TapGestureRecognizer>
+                                    </userControls:ShowPasswordButton.GestureRecognizers>
+                                </userControls:ShowPasswordButton>
+                                <userControls:HidePasswordButton x:Name="HideRegisterConfirmPass" IsVisible="False">
+                                    <userControls:HidePasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ConfRegisterPassInvis_OnTapped"></TapGestureRecognizer>
+                                    </userControls:HidePasswordButton.GestureRecognizers>
+                                </userControls:HidePasswordButton>
                             </Grid>
-                          
                             <Button Margin="48,8" Text="{xct:Translate Continue}" Command="{Binding RegisterCommand}" />
                         </StackLayout>
                     </Grid>
 
-
                     <Grid VerticalOptions="EndAndExpand" ColumnDefinitions="*,*" Margin="48,16">
-                        <Button x:Name="LoginBtn" Text="{xct:Translate Login}" Grid.Column="1" Margin="-16,0,16,0" BackgroundColor="#232228"
+                        <Button x:Name="LoginBtn" Text="{xct:Translate Login}" Grid.Column="1" Margin="-16,0,16,0"
+                                BackgroundColor="#232228"
                                 Clicked="LoginBtn_OnClicked" />
-                        <Button x:Name="RegisterBtn" Text="{xct:Translate Register}" Margin="16,0,-16,0" 
+                        <Button x:Name="RegisterBtn" Text="{xct:Translate Register}" Margin="16,0,-16,0"
                                 BackgroundColor="#707070" Clicked="RegisterBtn_OnClicked" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto,*" Margin="48,0">
@@ -215,31 +144,37 @@
                         <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
                                  HeightRequest="1" BackgroundColor="#707070" />
                     </Grid>
-                    <Button x:Name="GoogleBtn" Margin="48,16" Text="{xct:Translate GoogleSignIn}" Command="{Binding GoogleCommand}">
+                    <Button x:Name="GoogleBtn" Margin="48,16" Text="{xct:Translate GoogleSignIn}"
+                            Command="{Binding GoogleCommand}">
                         <Button.Background>
                             <LinearGradientBrush StartPoint="0,0"
                                                  EndPoint="1,1">
-                                <GradientStop Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
-                                              Offset="0.0" />
-                                <GradientStop Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
-                                              Offset="0.25" />
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
+                                    Offset="0.0" />
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                    Offset="0.25" />
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Button x:Name="FacebookBtn" Margin="48,0,48,16" Text="{xct:Translate FacebookSignIn}" Command="{Binding FacebookCommand}">
+                    <Button x:Name="FacebookBtn" Margin="48,0,48,16" Text="{xct:Translate FacebookSignIn}"
+                            Command="{Binding FacebookCommand}">
                         <Button.Background>
                             <LinearGradientBrush StartPoint="0,0"
                                                  EndPoint="1,1">
-                                <GradientStop Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
-                                              Offset="0.0" />
-                                <GradientStop Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
-                                              Offset="0.25" />
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
+                                    Offset="0.0" />
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                    Offset="0.25" />
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
                 </StackLayout>
             </ScrollView>
-           
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

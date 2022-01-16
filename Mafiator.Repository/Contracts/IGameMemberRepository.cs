@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Mafiator.Data.Dtos.Game;
+using Mafiator.Data.Dtos.User;
+using Mafiator.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mafiator.Data.Dtos;
-using Mafiator.Entities;
 
 namespace Mafiator.Repository.Contracts
 {
     public interface IGameMemberRepository:IRepository<GameMember>
     {
-        Task<List<UserGameStatusDto>> GetUserStatus(Ulid userId);
+        Task<List<UserGameStatusDto>> GetUserStatus(Guid userId);
         Task<IEnumerable<UserGameStatusDto>> GetUserStatusFast(string userId);
-        Task<List<GameMemberDto>> GetByGame(Ulid gameId);
+        Task<List<GameMemberDto>> GetByGame(Guid gameId);
         Task<IEnumerable<GameMemberDto>> GetByGameFast(string gameId);
         Task<IEnumerable<WaitingPlayerDto>> GetWaitingPlayersByGame(string gameId);
         Task<IEnumerable<PlayerRoleDto>> GetRoleOfPlayer(string userId, string gameId);

@@ -1,5 +1,3 @@
-using System.Data;
-using System.Threading.Tasks;
 using Hangfire;
 using Mafiator.Data;
 using Mafiator.IocConfig.Middleware;
@@ -11,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RepoDb;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api
 {

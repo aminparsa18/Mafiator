@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MafiatorApp.UserControls.ShimmerLayout.Extensions;
+﻿using MafiatorApp.UserControls.ShimmerLayout.Extensions;
 using MafiatorApp.UserControls.ShimmerLayout.Models.SkiaHelpers;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -377,7 +377,7 @@ namespace MafiatorApp.UserControls.ShimmerLayout
         {
             _childVisualElements = new List<SKVisualElement>();
 
-            if (!(baseElement is Layout<View> baseLayout))
+            if (baseElement is not Layout<View> baseLayout)
             {
                 _childVisualElements.Add(baseElement.ToSKVisualElement());
                 return;
@@ -398,33 +398,31 @@ namespace MafiatorApp.UserControls.ShimmerLayout
         {
             args.Surface.Canvas.Clear();
 
-            using (var paint = new SKPaint { IsAntialias = true, IsDither = true })
+            using var paint = new SKPaint { IsAntialias = true, IsDither = true };
+            /* Generate the Gradient Shader */
+            paint.Shader = GetGradientShader();
+
+            /* Draw every VisualElement in our layout tree to the SKCanvas */
+            foreach (var skElement in _childVisualElements)
             {
-                /* Generate the Gradient Shader */
-                paint.Shader = GetGradientShader();
+                //Set cornerRadius and padding for every view
+                var corner = GetCornerRadiusOverlay(skElement.OriginalView);
+                var padding = GetPaddingOverlay(skElement.OriginalView);
 
-                /* Draw every VisualElement in our layout tree to the SKCanvas */
-                foreach (var skElement in _childVisualElements)
-                {
-                    //Set cornerRadius and padding for every view
-                    var corner = GetCornerRadiusOverlay(skElement.OriginalView);
-                    var padding = GetPaddingOverlay(skElement.OriginalView);
+                //If not set - set default value
+                if (corner == default)
+                    corner = CornerRadiusOverlayDefault;
 
-                    //If not set - set default value
-                    if (corner == default)
-                        corner = CornerRadiusOverlayDefault;
+                if (padding == default)
+                    padding = PaddingOverlayDefault;
 
-                    if (padding == default)
-                        padding = PaddingOverlayDefault;
-
-                    //If default and specific not set, use box or frame cornerRadius
-                    if(corner != default || CornerRadiusOverlayDefault != default)
-                        skElement.CornerRadius = corner;
+                //If default and specific not set, use box or frame cornerRadius
+                if(corner != default || CornerRadiusOverlayDefault != default)
+                    skElement.CornerRadius = corner;
                     
-                    skElement.Padding = padding;
+                skElement.Padding = padding;
 
-                    DrawSKVisualElement(skElement, args.Surface.Canvas, paint);
-                }
+                DrawSKVisualElement(skElement, args.Surface.Canvas, paint);
             }
         }
 
@@ -437,7 +435,8 @@ namespace MafiatorApp.UserControls.ShimmerLayout
         private SKShader GetGradientShader()
         {
             /* Try get the Width Argument from the maskCanvasView from the Animation */
-            if (!(_maskCanvasView.GetArgument("Width") is double currentWidth)) return null;
+            if (_maskCanvasView.GetArgument("Width") is not double currentWidth) 
+                return null;
 
             var widthPixels = Width * _density;
             var heightPixels = Height * _density;

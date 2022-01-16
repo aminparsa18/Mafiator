@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Mafiator.Entities;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mafiator.Entities;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Mafiator.Repository.Contracts
 {
@@ -25,7 +25,7 @@ namespace Mafiator.Repository.Contracts
         Task<long> CountFast();
         ValueTask<TEntity> Find(string id);
         Task<List<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
-        Task<TEntity> Get(Ulid id);
+        Task<TEntity> Get(Guid id);
         Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
         Task<IEnumerable<TEntity>> GetFast(Expression<Func<TEntity, bool>> predicate);
         Task<List<TEntity>> GetAll();

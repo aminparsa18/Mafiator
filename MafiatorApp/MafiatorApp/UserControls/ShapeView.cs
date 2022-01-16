@@ -5,13 +5,13 @@ namespace MafiatorApp.UserControls
 	public class ShapeView : BoxView
 	{
 
-		public static readonly BindableProperty StrokeColorProperty = BindableProperty.Create<ShapeView, Color>(s => s.StrokeColor, Color.Default);
+		public static readonly BindableProperty StrokeColorProperty = BindableProperty.Create("StrokeColor", typeof(Color), typeof(ShapeView), Color.Default);
 
-		public static readonly BindableProperty StrokeWidthProperty = BindableProperty.Create<ShapeView, float>(s => s.StrokeWidth, 1f);
+		public static readonly BindableProperty StrokeWidthProperty = BindableProperty.Create("StrokeWidth", typeof(float), typeof(ShapeView), 1f);
 
-		public static readonly BindableProperty IndicatorPercentageProperty = BindableProperty.Create<ShapeView, float>(s => s.IndicatorPercentage, 0f);
+		public static readonly BindableProperty IndicatorPercentageProperty = BindableProperty.Create("IndicatorPercentage", typeof(float), typeof(ShapeView), 0f);
 
-		public static readonly BindableProperty PaddingProperty = BindableProperty.Create<ShapeView, Thickness>(s => s.Padding, default(Thickness));
+		public static readonly BindableProperty PaddingProperty = BindableProperty.Create("Padding", typeof(Thickness), typeof(ShapeView), default(Thickness));
 
 	
 		public Color StrokeColor
@@ -37,10 +37,5 @@ namespace MafiatorApp.UserControls
 			get => (Thickness)GetValue(PaddingProperty);
             set => SetValue(PaddingProperty, value);
         }
-
-		public ShapeView()
-		{
-		}
 	}
-
 }

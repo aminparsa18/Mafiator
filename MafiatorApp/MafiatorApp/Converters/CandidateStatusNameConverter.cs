@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using MafiatorApp.Enums;
+﻿using MafiatorApp.Enums;
 using MafiatorApp.Helpers;
+using System;
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters

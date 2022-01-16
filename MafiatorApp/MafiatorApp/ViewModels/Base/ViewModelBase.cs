@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using MafiatorApp.Services;
+﻿using MafiatorApp.Services;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels.Base

@@ -1,8 +1,8 @@
 ﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:pages="http://rotorgames.com"
-                 xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.InquiryStatusView"
@@ -24,24 +24,9 @@
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
         <StackLayout>
-            <Frame
-                BackgroundColor="{AppThemeBinding Light={StaticResource PopupDayBackground},Dark={StaticResource PopupNightBackground}}"
-                CornerRadius="52" Margin="16" Padding="0"
-                VerticalOptions="CenterAndExpand">
-                <StackLayout >
-                    <StackLayout Orientation="Horizontal" Margin="16">
-                        <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                            <Label Text="Result" FontSize="Large" FontAttributes="Bold" />
-                            <Label Text="Roles of Inquiry" />
-                        </StackLayout>
-                        <forms:SvgCachedImage x:Name="CloseBtn" Source="close.svg" Aspect="AspectFit" 
-                                              WidthRequest="36" HeightRequest="36" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" >
-                            <forms:SvgCachedImage.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding PopCommand}"></TapGestureRecognizer>
-                            </forms:SvgCachedImage.GestureRecognizers>
-                        </forms:SvgCachedImage>
-                    </StackLayout>
-                    
+            <userControls:Popup Margin="16">
+                <StackLayout>
+                    <userControls:PopupHeader TitleText="Result" SubTitleText="Roles of inquiry"/>
                     <Image HorizontalOptions="CenterAndExpand"  Source="{Binding Inquiry,Converter={StaticResource InquiryStatusImageConverter}}"></Image>
                     <Label HorizontalOptions="CenterAndExpand">
                         <Label.FormattedText>
@@ -51,7 +36,7 @@
                         </Label.FormattedText>
                     </Label>
                 </StackLayout>
-            </Frame>
+            </userControls:Popup>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

@@ -4,6 +4,6 @@
              x:Class="MafiatorApp.Views.LazyViews.LazyVideoView">
     <ContentView.Content>
         <views:MediaElement x:Name="VideoElement" Aspect="AspectFill"
-                            ShowsPlaybackControls="False" AutoPlay="True" IsLooping="True"/>
+                            ShowsPlaybackControls="False" AutoPlay="True"  MediaOpened="VideoElement_OnMediaOpened" IsLooping="True"/>
     </ContentView.Content>
 </ContentView>

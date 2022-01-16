@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Mafiator.Repository;
+using System;
 using System.Threading.Tasks;
-using Mafiator.Repository;
-using Mafiator.Repository.Contracts;
 
 namespace Mafiator.Service.Contracts
 {

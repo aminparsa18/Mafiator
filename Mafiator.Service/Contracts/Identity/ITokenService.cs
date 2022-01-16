@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using Mafiator.Common.Api;
+﻿using Mafiator.Common.Api;
 using Mafiator.Entities.Identity;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Mafiator.Service.Contracts.Identity
 {
-   public interface ITokenService
+    public interface ITokenService
     {
         GenerateTokenResult GenerateAccessToken(User user,List<Claim> claims);
         string GenerateRefreshToken();

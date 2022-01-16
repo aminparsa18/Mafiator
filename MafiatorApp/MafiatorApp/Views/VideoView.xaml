@@ -1,9 +1,15 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
-             x:Class="MafiatorApp.Views.VideoView">
+             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             x:Class="MafiatorApp.Views.VideoView"
+             BackgroundColor="Red">
     <ContentPage.Content>
         <StackLayout>
+            <userControls:LiveRecorder x:Name="RtmpLiveRecorder" VerticalOptions="FillAndExpand" />
+            <StackLayout Orientation="Horizontal">
+                   <Button Text="Record" Clicked="Button_OnClicked"></Button>
+                   <Button Text="Publish" Clicked="Button_OnClicked2"></Button>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

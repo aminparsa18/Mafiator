@@ -1,6 +1,4 @@
-﻿using Android.Net;
-using Java.IO;
-using MafiatorApp.Droid.Helpers;
+﻿using MafiatorApp.Droid.Helpers;
 using MafiatorApp.Services;
 
 [assembly: Xamarin.Forms.Dependency(typeof(CropperHelper))]

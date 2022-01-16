@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
+﻿using MafiatorApp.Cache;
+using MafiatorApp.Dtos.Room;
+using MafiatorApp.Dtos.User;
+using MafiatorApp.Extensions;
 using MafiatorApp.Helpers;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 

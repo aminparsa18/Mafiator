@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using MafiatorApp.Models;
+﻿using MafiatorApp.Models;
 using MafiatorApp.ViewModels.Base;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 
@@ -23,13 +23,13 @@ namespace MafiatorApp.ViewModels
         {
             MenuItems = new ObservableCollection<HomeMenuItem>
             {
-                new HomeMenuItem {Id = MenuItemType.Profile, Title = "پروفایل", ImageUrl = "user.png"},
-                new HomeMenuItem {Id = MenuItemType.Wallet, Title = "کیف پول", ImageUrl = "wallet.png"},
-                new HomeMenuItem {Id = MenuItemType.Instruction, Title = "راهنمای بازی", ImageUrl = "instruction.png"},
-                new HomeMenuItem {Id = MenuItemType.Events, Title = "رویداد ها", ImageUrl = "events.png"},
-                new HomeMenuItem {Id = MenuItemType.Invitation, Title = "دعوت از دوستان", ImageUrl = "invitation.png"},
-                new HomeMenuItem {Id = MenuItemType.Rule, Title = "قوانین و مقررات", ImageUrl = "rules.png"},
-                new HomeMenuItem {Id = MenuItemType.About, Title = "درباره ما", ImageUrl = "about.png"},
+                new() {Id = MenuItemType.Profile, Title = "پروفایل", ImageUrl = "user.png"},
+                new() {Id = MenuItemType.Wallet, Title = "کیف پول", ImageUrl = "wallet.png"},
+                new() {Id = MenuItemType.Instruction, Title = "راهنمای بازی", ImageUrl = "instruction.png"},
+                new() {Id = MenuItemType.Events, Title = "رویداد ها", ImageUrl = "events.png"},
+                new() {Id = MenuItemType.Invitation, Title = "دعوت از دوستان", ImageUrl = "invitation.png"},
+                new() {Id = MenuItemType.Rule, Title = "قوانین و مقررات", ImageUrl = "rules.png"},
+                new() {Id = MenuItemType.About, Title = "درباره ما", ImageUrl = "about.png"},
             };
             SelectionChangedCommand = new AsyncCommand(SelectionChanged);
         }

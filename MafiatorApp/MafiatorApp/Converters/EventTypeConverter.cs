@@ -1,20 +1,15 @@
-﻿using System;
+﻿using MafiatorApp.Enums;
+using System;
 using System.Globalization;
-using MafiatorApp.Enums;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
 {
-   public class EventTypeConverter:IValueConverter
+    public class EventTypeConverter:IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is GameEventType type)
-            {
-                if (type == GameEventType.Killed)
-                    return "#CC000000";
-            }
-            return "";
+            return value is GameEventType.Killed ? "#CC000000" : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,7 +1,5 @@
-﻿using System;
-using Mafiator.Common.Helpers;
-using Mafiator.Entities.Identity;
-using RepoDb.Attributes;
+﻿using Mafiator.Entities.Identity;
+using System;
 
 namespace Mafiator.Entities
 {
@@ -12,8 +10,7 @@ namespace Mafiator.Entities
         public DateTime ExpirationDate { get; set; }
         public bool IsUsed { get; set; }
         public bool IsInvalidated { get; set; }
-        [PropertyHandler(typeof(UlidPropertyHandler))]
-        public Ulid UserId { get; set; }
+        public Guid UserId { get; set; }
         public virtual User User { get; set; }
     }
 }

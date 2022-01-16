@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MafiatorApp.Services
+﻿namespace MafiatorApp.Services
 {
     public interface ICropperService
     {

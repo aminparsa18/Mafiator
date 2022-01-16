@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Android.Views;
 using MafiatorApp.Droid.Effects;
 using MafiatorApp.Effects.EventArgs;
 using MafiatorApp.Enums;
+using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -13,18 +13,16 @@ namespace MafiatorApp.Droid.Effects
 {
     public class TouchEffect : PlatformEffect
     {
-        Android.Views.View view;
-        Element formsElement;
-        MafiatorApp.Effects.TouchEffect libTouchEffect;
-        bool capture;
-        Func<double, double> fromPixels;
-        int[] twoIntArray = new int[2];
+        private Android.Views.View view;
+        private Element formsElement;
+        private MafiatorApp.Effects.TouchEffect libTouchEffect;
+        private bool capture;
+        private Func<double, double> fromPixels;
+        private readonly int[] twoIntArray = new int[2];
 
-        static Dictionary<Android.Views.View, TouchEffect> viewDictionary = 
-            new Dictionary<Android.Views.View, TouchEffect>();
+        private static readonly Dictionary<Android.Views.View, TouchEffect> viewDictionary = new();
 
-        static Dictionary<int, TouchEffect> idToEffectDictionary = 
-            new Dictionary<int, TouchEffect>();
+        private static readonly Dictionary<int, TouchEffect> idToEffectDictionary = new();
 
         protected override void OnAttached()
         {
@@ -32,49 +30,47 @@ namespace MafiatorApp.Droid.Effects
             view = Control ?? Container;
 
             // Get access to the TouchEffect class in the .NET Standard library
-            MafiatorApp.Effects.TouchEffect touchEffect = 
+            var touchEffect = 
                 (MafiatorApp.Effects.TouchEffect)Element.Effects[0];
 
-            if (touchEffect != null && view != null)
-            {
-                viewDictionary.Add(view, this);
+            if (touchEffect == null || view == null) 
+                return;
+            viewDictionary.Add(view, this);
 
-                formsElement = Element;
+            formsElement = Element;
 
-                libTouchEffect = touchEffect;
+            libTouchEffect = touchEffect;
 
-                // Save fromPixels function
-                fromPixels = view.Context.FromPixels;
+            // Save fromPixels function
+            fromPixels = view.Context.FromPixels;
 
-                // Set event handler on View
-                view.Touch += OnTouch;
-            }
+            // Set event handler on View
+            view.Touch += OnTouch;
         }
 
         protected override void OnDetached()
         {
-            if (viewDictionary.ContainsKey(view))
-            {
-                viewDictionary.Remove(view);
-                view.Touch -= OnTouch;
-            }
+            if (!viewDictionary.ContainsKey(view)) 
+                return;
+            viewDictionary.Remove(view);
+            view.Touch -= OnTouch;
         }
 
-        void OnTouch(object sender, Android.Views.View.TouchEventArgs args)
+        private void OnTouch(object sender, Android.Views.View.TouchEventArgs args)
         {
             // Two object common to all the events
-            Android.Views.View senderView = sender as Android.Views.View;
-            MotionEvent motionEvent = args.Event;
+            var senderView = sender as Android.Views.View;
+            var motionEvent = args.Event;
 
             // Get the pointer index
-            int pointerIndex = motionEvent.ActionIndex;
+            var pointerIndex = motionEvent.ActionIndex;
 
             // Get the id that identifies a finger over the course of its progress
-            int id = motionEvent.GetPointerId(pointerIndex);
+            var id = motionEvent.GetPointerId(pointerIndex);
 
 
             senderView.GetLocationOnScreen(twoIntArray);
-            Point screenPointerCoords = new Point(twoIntArray[0] + motionEvent.GetX(pointerIndex),
+            var screenPointerCoords = new Point(twoIntArray[0] + motionEvent.GetX(pointerIndex),
                                                   twoIntArray[1] + motionEvent.GetY(pointerIndex));
 
 
@@ -152,11 +148,11 @@ namespace MafiatorApp.Droid.Effects
             }
         }
 
-        void CheckForBoundaryHop(int id, Point pointerLocation)
+        private void CheckForBoundaryHop(int id, Point pointerLocation)
         { 
             TouchEffect touchEffectHit = null;
 
-            foreach (Android.Views.View view in viewDictionary.Keys)
+            foreach (var view in viewDictionary.Keys)
             {
                 // Get the view rectangle
                 try
@@ -167,7 +163,7 @@ namespace MafiatorApp.Droid.Effects
                 {
                     continue;
                 }
-                Rectangle viewRect = new Rectangle(twoIntArray[0], twoIntArray[1], view.Width, view.Height);
+                var viewRect = new Rectangle(twoIntArray[0], twoIntArray[1], view.Width, view.Height);
 
                 if (viewRect.Contains(pointerLocation))
                 {
@@ -175,30 +171,29 @@ namespace MafiatorApp.Droid.Effects
                 }
             }
 
-            if (touchEffectHit != idToEffectDictionary[id])
+            if (touchEffectHit == idToEffectDictionary[id]) 
+                return;
+            if (idToEffectDictionary[id] != null)
             {
-                if (idToEffectDictionary[id] != null)
-                {
-                    FireEvent(idToEffectDictionary[id], id, TouchActionType.Exited, pointerLocation, true);
-                }
-                if (touchEffectHit != null)
-                {
-                    FireEvent(touchEffectHit, id, TouchActionType.Entered, pointerLocation, true);
-                }
-                idToEffectDictionary[id] = touchEffectHit;
+                FireEvent(idToEffectDictionary[id], id, TouchActionType.Exited, pointerLocation, true);
             }
+            if (touchEffectHit != null)
+            {
+                FireEvent(touchEffectHit, id, TouchActionType.Entered, pointerLocation, true);
+            }
+            idToEffectDictionary[id] = touchEffectHit;
         }
 
-        void FireEvent(TouchEffect touchEffect, int id, TouchActionType actionType, Point pointerLocation, bool isInContact)
+        private void FireEvent(TouchEffect touchEffect, int id, TouchActionType actionType, Point pointerLocation, bool isInContact)
         {
             // Get the method to call for firing events
-            Action<Element, TouchActionEventArgs> onTouchAction = touchEffect.libTouchEffect.OnTouchAction;
+            var onTouchAction = touchEffect.libTouchEffect.OnTouchAction;
 
             // Get the location of the pointer within the view
             touchEffect.view.GetLocationOnScreen(twoIntArray);
-            double x = pointerLocation.X - twoIntArray[0];
-            double y = pointerLocation.Y - twoIntArray[1];
-            Point point = new Point(fromPixels(x), fromPixels(y));
+            var x = pointerLocation.X - twoIntArray[0];
+            var y = pointerLocation.Y - twoIntArray[1];
+            var point = new Point(fromPixels(x), fromPixels(y));
 
             // Call the method
             onTouchAction(touchEffect.formsElement,

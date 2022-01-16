@@ -1,14 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using MafiatorApp.Dtos;
+﻿using MafiatorApp.Dtos.Game;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
+using System;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
 {
-   public class RandomViewModel:ViewModelBase
+    public class RandomViewModel:ViewModelBase
     {
         public ObservableRangeCollection<GameDto> Games { get; set; }
         public IAsyncCommand LoadGamesCommand { get; set; }
@@ -21,7 +21,7 @@ namespace MafiatorApp.ViewModels
             //OpenRoomCommand=new AsyncCommand(OpenRoom);
         }
 
-        public async Task OpenRoom(Ulid roomId)
+        public async Task OpenRoom(Guid roomId)
         {
             await NavigationService.NavigateToAsync<RoomDetailViewModel>(roomId);
         }

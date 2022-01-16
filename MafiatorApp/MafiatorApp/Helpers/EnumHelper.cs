@@ -4,12 +4,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace MafiatorApp.Helpers
 {
-    public static class EnumHelper<T>
-     where T : struct, Enum // This constraint requires C# 7.3 or later.
+    public static class EnumHelper<T> where T : struct, Enum
     {
         public static IList<T> GetValues(Enum value)
         {
@@ -56,6 +54,7 @@ namespace MafiatorApp.Helpers
             if (descriptionAttributes == null) return string.Empty;
             return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
         }
+
         public static string GetDescriptionValue(T source)
         {
             var fi = source.GetType().GetField(source.ToString());

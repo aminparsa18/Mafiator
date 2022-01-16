@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Mafiator.Common.Extensions;
+﻿using Mafiator.Common.Extensions;
 using Mafiator.Common.SiteSetting;
 using Mafiator.Data;
 using Mafiator.Entities.Identity;
@@ -10,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Threading.Tasks;
 
 namespace Mafiator.Service.Contracts.Impl.Identity
 {
@@ -89,7 +89,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 adminRole = new Role()
                 {
-                    Id = Ulid.NewUlid(),
+                    Id = Guid.NewGuid(),
                     Name = Constants.AdminRole
                 };
                 var adminRoleResult = await _roleManager.CreateAsync(adminRole);
@@ -104,7 +104,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 playerRole = new Role()
                 {
-                    Id = Ulid.NewUlid(),
+                    Id = Guid.NewGuid(),
                     Name = Constants.PlayerRole
                 };
                 var playerRoleResult = await _roleManager.CreateAsync(playerRole);

@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Mafiator.Repository.Contracts;
+﻿using Mafiator.Repository.Contracts;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository
 {

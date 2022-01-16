@@ -1,16 +1,16 @@
 ﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
-                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-                 xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                 xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
-                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  x:Class="MafiatorApp.Views.NewRoomView"
                  CloseWhenBackgroundIsClicked="True"
                  base:ViewModelLocator.AutoWireViewModel="true"
@@ -29,17 +29,9 @@
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
-        <Frame
-            CornerRadius="52" Margin="16" Padding="0"
-            VerticalOptions="CenterAndExpand">
+        <userControls:Popup Margin="16">
             <StackLayout>
-                <StackLayout Orientation="Horizontal" Margin="16">
-                    <StackLayout CompressedLayout.IsHeadless="true" VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                        <Label Text="{xct:Translate Create}" FontSize="Large" FontAttributes="Bold" />
-                        <Label Text="{xct:Translate NewRoom}" />
-                    </StackLayout>
-                    <templates:CloseButton />
-                </StackLayout>
+                <userControls:PopupHeader TitleText="{xct:Translate Create}" SubTitleText="{xct:Translate NewRoom}"/>
                 <Frame Margin="16,0,8,8" Padding="4,0"
                        BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
                        HorizontalOptions="StartAndExpand">
@@ -169,20 +161,7 @@
                         </StackLayout>
                     </Frame>
                 </Grid>
-
             </StackLayout>
-            <Frame.Background>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,1">
-                    <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
-                        Offset="0.0" />
-                    <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
-                        Offset="0.25" />
-                </LinearGradientBrush>
-            </Frame.Background>
-        </Frame>
-
+        </userControls:Popup>
     </pages:PopupPage.Content>
 </pages:PopupPage>

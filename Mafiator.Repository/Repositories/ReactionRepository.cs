@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using Mafiator.Data;
-using Mafiator.Data.Dtos;
+﻿using Mafiator.Data;
+using Mafiator.Data.Dtos.Game;
 using Mafiator.Entities;
 using Mafiator.Repository.Contracts;
 using RepoDb;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Repositories
 {
@@ -17,7 +17,7 @@ namespace Mafiator.Repository.Repositories
 
         public Task<IEnumerable<ReactionDto>> GetAllDtos()
         {
-            return connection.ExecuteQueryAsync<ReactionDto>(@"SELECT [r].[Id], [r].[Title],[r].[Image]
+            return Connection.ExecuteQueryAsync<ReactionDto>(@"SELECT [r].[Id], [r].[Title],[r].[Image]
             FROM [Reaction] AS [r]");
         }
     }

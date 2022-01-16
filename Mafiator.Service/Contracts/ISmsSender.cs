@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Mafiator.Service.Contracts
+﻿namespace Mafiator.Service.Contracts
 {
     public interface ISmsSender
     {

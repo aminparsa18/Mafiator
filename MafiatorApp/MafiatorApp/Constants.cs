@@ -4,7 +4,7 @@ using Xamarin.Essentials;
 
 namespace MafiatorApp
 {
-   public class Constants
+    public class Constants
     {
         public static string BaseUrl { get; } = "https://mafiatorapi.azurewebsites.net/";
         public static string VaultUrl { get; } = "https://mftor.blob.core.windows.net/mftor/";

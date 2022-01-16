@@ -6,16 +6,12 @@ using System.Text.Json;
 using MafiatorApp.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Resources.Texts;
-using MafiatorApp.Services;
-using MafiatorApp.Services.Impl;
 using MafiatorApp.UserControls.ShimmerLayout;
-using MafiatorApp.ViewModels;
-using MafiatorApp.ViewModels.Base;
 using MafiatorApp.Views;
+using MediaManager;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Plugin.SimpleAudioPlayer;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -61,7 +57,8 @@ namespace MafiatorApp
             // UserAppTheme = OSAppTheme.Dark;
             //else
             //    UserAppTheme = OSAppTheme.Light;
-             MainPage = new NavigationPage(new SplashScreenView(uri));
+
+            MainPage = new NavigationPage(new SplashScreenView(uri));
         }
 
         private async void InitBarrel()
@@ -78,15 +75,16 @@ namespace MafiatorApp
         {
         }
 
-        protected override void OnSleep()
+        protected override async void OnSleep()
         {
-            CrossSimpleAudioPlayer.Current.Pause();
+            if (CrossMediaManager.Current.IsPlaying())
+                await CrossMediaManager.Current.Pause();
         }
 
-        protected override void OnResume()
+        protected override async void OnResume()
         {
-            if (CrossSimpleAudioPlayer.Current.CanSeek)
-                CrossSimpleAudioPlayer.Current.Play();
+            if (CrossMediaManager.Current.IsPrepared())
+               await CrossMediaManager.Current.Play();
         }
     }
 }

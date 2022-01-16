@@ -1,5 +1,4 @@
-﻿using Mafiator.Entities.Converters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping
@@ -9,9 +8,6 @@ namespace Mafiator.Entities.Mapping
         public override void Configure(EntityTypeBuilder<ChatMessage> builder)
         {
             base.Configure(builder);
-            builder.Property(p => p.UserId).HasConversion(new UlidToStringConverter());
-
-            builder.Property(p => p.RoomId).HasConversion(new UlidToStringConverter());
             builder.Property(p => p.MessageType).HasColumnType("smallint");
             builder.Property(p => p.Content).IsRequired().HasMaxLength(500);
 

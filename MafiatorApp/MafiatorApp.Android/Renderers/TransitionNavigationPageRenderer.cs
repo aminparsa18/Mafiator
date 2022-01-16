@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using Android.Content;
+﻿using Android.Content;
 using MafiatorApp.Droid.Renderers;
 using MafiatorApp.Enums;
 using MafiatorApp.UserControls;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android.AppCompat;
 

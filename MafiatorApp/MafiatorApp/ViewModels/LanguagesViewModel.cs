@@ -1,19 +1,19 @@
-﻿using System;
-using System.Globalization;
-using System.Threading.Tasks;
-using MafiatorApp.Cache;
+﻿using MafiatorApp.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
-using Xamarin.CommunityToolkit.ObjectModel;
+using System;
+using System.Globalization;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Helpers;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels
 {
     public class LanguagesViewModel : ViewModelBase
     {
-        private readonly IPublisher<ChangeLanguageEvent> _publisher;
+        private readonly IAsyncPublisher<ChangeLanguageEvent> _publisher;
         public ObservableRangeCollection<Country> Countries { get; set; }
         public IAsyncCommand PopCommand { get; set; }
         public IAsyncCommand CountrySelectedCommand { get; set; }
@@ -24,13 +24,13 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref country, value);
         }
 
-        public LanguagesViewModel(IPublisher<ChangeLanguageEvent> publisher)
+        public LanguagesViewModel(IAsyncPublisher<ChangeLanguageEvent> publisher)
         {
             this._publisher = publisher;
-            Countries = new Xamarin.CommunityToolkit.ObjectModel.ObservableRangeCollection<Country>()
+            Countries = new ObservableRangeCollection<Country>()
             {
-                new Country() {Code = "US", Name = "English"},
-                new Country() {Code = "RU", Name = "Russian"}
+                new() {Code = "US", Name = "English"},
+                new() {Code = "RU", Name = "Russian"}
             };
             PopCommand = new AsyncCommand(Pop);
             CountrySelectedCommand = new AsyncCommand(CountrySelected);
@@ -38,6 +38,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task CountrySelected()
         {
+            await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Setting Language");
             Barrel.Current.Add("Culture", Country.Code, TimeSpan.MaxValue);
             if (Country.Code == "RU")
             {
@@ -47,7 +48,8 @@ namespace MafiatorApp.ViewModels
             {
                 LocalizationResourceManager.Current.CurrentCulture = new CultureInfo("en-US", false);
             }
-            _publisher.Publish(new ChangeLanguageEvent());
+            await _publisher.PublishAsync(new ChangeLanguageEvent());
+            await NavigationService.RemovePopupAsync();
             await NavigationService.RemovePopupAsync();
         }
 
@@ -55,6 +57,5 @@ namespace MafiatorApp.ViewModels
         {
             await NavigationService.RemovePopupAsync();
         }
-
     }
 }

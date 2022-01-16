@@ -6,7 +6,7 @@ namespace MafiatorApp.UserControls
 	public class GetVideoFileNameArgs : EventArgs
 	{
 		public string Name { get; internal set; }
-		public GetVideoFileNameArgs(string Name) { this.Name = Name; }
+		public GetVideoFileNameArgs(string name) { this.Name = name; }
 		public GetVideoFileNameArgs() { }
 	}
 
@@ -52,31 +52,31 @@ namespace MafiatorApp.UserControls
 		//Start recording
 		public void StartRecording()
         {
-            OnStartRecording?.Invoke(this, new EventArgs());
+            OnStartRecording?.Invoke(this, EventArgs.Empty);
         }
 
 		//Stop recording
 		public void StopRecording()
         {
-            OnStopRecording?.Invoke(this, new EventArgs());
+            OnStopRecording?.Invoke(this, EventArgs.Empty);
         }
 
 		//Start previewing
 		public void StartPreviewing()
         {
-            OnStartPreviewing?.Invoke(this, new EventArgs());
+            OnStartPreviewing?.Invoke(this, EventArgs.Empty);
         }
 
 		//Stop previewing
 		public void StopPreviewing()
         {
-            OnStopPreviewing?.Invoke(this, new EventArgs());
+            OnStopPreviewing?.Invoke(this, EventArgs.Empty);
         }
 
 		//Do cleanup
 		public void DoCleanup()
         {
-            OnDoCleanup?.Invoke(this, new EventArgs());
+            OnDoCleanup?.Invoke(this, EventArgs.Empty);
         }
 	}
 }

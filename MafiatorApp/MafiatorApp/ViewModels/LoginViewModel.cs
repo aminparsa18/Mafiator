@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
+﻿using MafiatorApp.Cache;
+using MafiatorApp.Dtos.User;
+using MafiatorApp.Extensions;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
@@ -12,10 +8,14 @@ using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AppCenter.Crashes;
+using System;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
 {
@@ -44,8 +44,6 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref _phoneNo, value);
         }
 
-       
-
         private ValidatableObject<string> _username;
         public ValidatableObject<string> Username
         {
@@ -61,7 +59,6 @@ namespace MafiatorApp.ViewModels
         }
 
         private ValidatableObject<string> _confirmPassword;
-
         public ValidatableObject<string> ConfirmPassword
         {
             get => _confirmPassword;
@@ -103,8 +100,6 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref _isConfirmPasswordValid, value);
         }
 
-       
-
         private bool _isUsernameValid = true;
         public bool IsUsernameValid
         {
@@ -112,7 +107,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref _isUsernameValid, value);
         }
 
-        private Country country=new Country()
+        private Country country=new()
         {
             Name = "United States",
             Code = "US",
@@ -153,7 +148,7 @@ namespace MafiatorApp.ViewModels
             await NavigationService.NavigateToPopupAsync<CountriesViewModel>();
         }
 
-        private async Task Google()
+        private static async Task Google()
         {
             try
             {
@@ -165,10 +160,9 @@ namespace MafiatorApp.ViewModels
             catch (TaskCanceledException)
             {
             }
-            
         }
 
-        private async Task Facebook()
+        private static async Task Facebook()
         {
             try
             {

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Hangfire;
+﻿using Hangfire;
 using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 namespace Mafiator.IocConfig.Hubs
 {

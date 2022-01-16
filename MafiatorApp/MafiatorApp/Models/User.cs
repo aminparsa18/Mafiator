@@ -1,5 +1,4 @@
-﻿
-namespace MafiatorApp.Models
+﻿namespace MafiatorApp.Models
 {
     public class User
     {

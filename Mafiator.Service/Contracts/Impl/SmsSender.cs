@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Kavenegar;
-using SmsIrRestfulNetCore;
+﻿using SmsIrRestfulNetCore;
 
 namespace Mafiator.Service.Contracts.Impl
 {

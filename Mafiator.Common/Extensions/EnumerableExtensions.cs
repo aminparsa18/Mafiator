@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace Mafiator.Common.Extensions
 {
     public static class EnumerableExtensions
     {
-        private static readonly Random random = new Random();
+        private static readonly Random Random = new();
 
         public static T SelectRandom<T>(this IEnumerable<T> sequence)
         {
@@ -22,9 +21,7 @@ namespace Mafiator.Common.Extensions
             }
 
             //optimization for ICollection<T>
-                return sequence.ElementAt(random.Next(sequence.Count()));
-           
+            return sequence.ElementAt(Random.Next(sequence.Count()));
         }
-
     }
 }

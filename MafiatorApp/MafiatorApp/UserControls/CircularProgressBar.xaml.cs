@@ -1,7 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using System;
+using System.Diagnostics;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -191,7 +191,7 @@ namespace MafiatorApp.UserControls
         private float _easing;
         private float _rotate;
         const int padding = 2;
-        private readonly Stopwatch time = new Stopwatch();
+        private readonly Stopwatch time = new();
         private readonly TimeSpan drawInterval = TimeSpan.FromMilliseconds(30);
         private double currentProgress;
         private double value;
@@ -225,7 +225,7 @@ namespace MafiatorApp.UserControls
                 _rotate += 8f * a;
 
                 if (_rotate > 360)
-                    _rotate = _rotate - 360;
+                    _rotate -= 360;
             }
             else
             {
@@ -233,7 +233,7 @@ namespace MafiatorApp.UserControls
             }
 
 
-            if (Progress != value || (Spin && Progress > 0 && Progress < 100) || (Easing && _easing > 0 && _easing < 1))
+            if (Progress != value || Spin && Progress is > 0 and < 100 || Easing && _easing is > 0 and < 1)
             {
                 Device.StartTimer(drawInterval, () =>
                 {
@@ -257,10 +257,9 @@ namespace MafiatorApp.UserControls
             var _angle = value / 100d * 360d;
 
             double _startAngle = _rotate + 270;
-            var _sweepAngle = _angle;
 
             var path = new SKPath();
-            path.AddArc(rect, (float)_startAngle, (float)_sweepAngle);
+            path.AddArc(rect, (float)_startAngle, (float)_angle);
 
             var pathBackground = new SKPath();
             pathBackground.AddArc(rect, 0, 360);

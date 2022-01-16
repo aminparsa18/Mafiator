@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MafiatorApp.Enums;
+using System;
 using System.Globalization;
-using MafiatorApp.Enums;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
@@ -9,14 +9,14 @@ namespace MafiatorApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is PlayerStatus status)
+            if (value is not PlayerStatus status)
+                return "";
+            return status switch
             {
-                if (status == PlayerStatus.Playing)
-                    return "#00000000";
-                if (status == PlayerStatus.Killed)
-                    return "#CC000000";
-            }
-            return "";
+                PlayerStatus.Playing => "#00000000",
+                PlayerStatus.Killed => "#CC000000",
+                _ => ""
+            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

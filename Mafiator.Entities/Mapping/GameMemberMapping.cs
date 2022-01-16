@@ -1,15 +1,12 @@
-﻿using Mafiator.Entities.Converters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping
 {
-   public class GameMemberMapping:BaseEntityTypeConfiguration<GameMember>
+    public class GameMemberMapping:BaseEntityTypeConfiguration<GameMember>
     {
         public override void Configure(EntityTypeBuilder<GameMember> builder)
         {
-            builder.Property(p => p.UserId).IsRequired(false).HasConversion(new NullableUlidToStringConverter());
-            builder.Property(p => p.GameId).HasConversion(new UlidToStringConverter());
             builder.Property(p => p.Role).HasColumnType("smallint");
 
             builder.HasOne(d => d.Game)

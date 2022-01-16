@@ -1,15 +1,15 @@
 ﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
-                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-                 xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-                 xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
-                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+                 xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
+                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  x:Class="MafiatorApp.Views.SetRolesView"
                  base:ViewModelLocator.AutoWireViewModel="True"
                  x:DataType="viewModels:SetRolesViewModel">
@@ -30,18 +30,9 @@
     </pages:PopupPage.Animation>
     <pages:PopupPage.Content>
         <StackLayout>
-            <Frame
-
-                CornerRadius="52" Margin="24,36" Padding="0"
-                VerticalOptions="CenterAndExpand">
+            <userControls:Popup Margin="24,36">
                 <StackLayout>
-                    <StackLayout Orientation="Horizontal" Margin="16">
-                        <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
-                            <Label Text="Select" FontSize="Large" FontAttributes="Bold" />
-                            <Label Text="Roles of Game" />
-                        </StackLayout>
-                        <templates:CloseButton />
-                    </StackLayout>
+                    <userControls:PopupHeader TitleText="Select" SubTitleText="Roles of game" />
                     <CollectionView
                         ItemsSource="{Binding Roles}"
                         SelectedItem="{Binding Role}"
@@ -79,10 +70,12 @@
                                             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand"
                                                          IsVisible="{Binding AllowInc}">
                                                 <!--<templates:IncButton effects:TouchEffect.CommandParameter="{Binding Role}"  effects:TouchEffect.Command="{Binding Source={x:Reference SetRolesPopup} , Path=BindingContext.IncCommand}"/>-->
-                                                <forms1:SvgCachedImage  Source="plus.svg" WidthRequest="30"
-                                                                        x:Name="IncBtn">
+                                                <forms1:SvgCachedImage Source="plus.svg" WidthRequest="30"
+                                                                       x:Name="IncBtn">
                                                     <forms1:SvgCachedImage.GestureRecognizers>
-                                                        <TapGestureRecognizer Tapped="IncBtn_OnClicked" CommandParameter="{Binding Role}"></TapGestureRecognizer>
+                                                        <TapGestureRecognizer Tapped="IncBtn_OnClicked"
+                                                                              CommandParameter="{Binding Role}">
+                                                        </TapGestureRecognizer>
                                                     </forms1:SvgCachedImage.GestureRecognizers>
                                                 </forms1:SvgCachedImage>
                                                 <Label Text="{Binding Count,Mode=TwoWay}"
@@ -125,18 +118,7 @@
                     </Label>
                     <Button Text="Save" Command="{Binding SetRolesCommand}" HorizontalOptions="CenterAndExpand" />
                 </StackLayout>
-                <Frame.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,1">
-                        <GradientStop
-                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
-                            Offset="0.0" />
-                        <GradientStop
-                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
-                            Offset="0.25" />
-                    </LinearGradientBrush>
-                </Frame.Background>
-            </Frame>
+            </userControls:Popup>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

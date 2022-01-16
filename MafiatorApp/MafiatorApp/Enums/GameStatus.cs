@@ -1,5 +1,4 @@
-﻿
-namespace MafiatorApp.Enums
+﻿namespace MafiatorApp.Enums
 {
     public enum GameStatus
     {

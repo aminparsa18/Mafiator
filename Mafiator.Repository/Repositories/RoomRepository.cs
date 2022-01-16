@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Mafiator.Data;
-using Mafiator.Data.Dtos;
+﻿using Mafiator.Data;
+using Mafiator.Data.Dtos.Room;
 using Mafiator.Entities;
 using Mafiator.Entities.Enums;
 using Mafiator.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using RepoDb;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Repositories
 {
@@ -21,7 +21,7 @@ namespace Mafiator.Repository.Repositories
 
         public Task<List<RoomDto>> GetDtoPage(int skip)
         {
-            return _context.Room.AsNoTracking().Where(r => !r.IsPrivate)
+            return Context.Room.AsNoTracking().Where(r => !r.IsPrivate)
                 .Skip(skip).Take(20).OrderByDescending(o => o.CreatedDate).Select(s => new RoomDto()
                 {
                     Id = s.Id,
@@ -33,7 +33,7 @@ namespace Mafiator.Repository.Repositories
 
         public Task<IEnumerable<RoomDto>> GetDtoPageFast(int skip)
         {
-            return connection.ExecuteQueryAsync<RoomDto>(@"SELECT [t].[Id], [t].[Image], CAST((
+            return Connection.ExecuteQueryAsync<RoomDto>(@"SELECT [t].[Id], [t].[Image], CAST((
     SELECT COUNT(*) FROM [RoomMember] AS [r]
     WHERE [t].[Id] = [r].[RoomId]) AS smallint) AS [MemberCount], (
     SELECT COUNT(*) FROM [Game] AS [g]
@@ -47,8 +47,8 @@ namespace Mafiator.Repository.Repositories
 
         public Task<RoomDto> GetRoom(string roomId)
         {
-            var parsed = Ulid.Parse(roomId);
-            return _context.Room.AsNoTracking().Where(r => r.Id == parsed)
+            var parsed = Guid.Parse(roomId);
+            return Context.Room.AsNoTracking().Where(r => r.Id == parsed)
                 .Select(s => new RoomDto()
                 {
                     Id = s.Id,
@@ -60,7 +60,7 @@ namespace Mafiator.Repository.Repositories
 
         public Task<IEnumerable<RoomDto>> GetRoomFast(string roomId)
         {
-            return connection.ExecuteQueryAsync<RoomDto>(@"SELECT TOP(1) CAST((
+            return Connection.ExecuteQueryAsync<RoomDto>(@"SELECT TOP(1) CAST((
             SELECT COUNT(*)
             FROM[dbo].[RoomMember] AS[r]
             WHERE[r0].[Id] = [r].[RoomId]) AS smallint) AS[MemberCount], (
@@ -71,9 +71,9 @@ namespace Mafiator.Repository.Repositories
             WHERE[r0].[Id] = @roomId", new {roomId});
         }
 
-        public Task<List<RoomDto>> GetMyRooms(Ulid userId)
+        public Task<List<RoomDto>> GetMyRooms(Guid userId)
         {
-            return _context.RoomMember.AsNoTracking().Where(r => r.UserId == userId)
+            return Context.RoomMember.AsNoTracking().Where(r => r.UserId == userId)
                 .Select(s => new RoomDto()
                 {
                     Id = s.RoomId,
@@ -84,9 +84,9 @@ namespace Mafiator.Repository.Repositories
                 }).ToListAsync();
         }
 
-        public Task<IEnumerable<RoomDto>> GetMyRoomsFast(Ulid userId)
+        public Task<IEnumerable<RoomDto>> GetMyRoomsFast(Guid userId)
         {
-            return connection.ExecuteQueryAsync<RoomDto>(@"SELECT [r0].[RoomId] AS [Id], CAST((
+            return Connection.ExecuteQueryAsync<RoomDto>(@"SELECT [r0].[RoomId] AS [Id], CAST((
     SELECT COUNT(*)
     FROM [dbo].[RoomMember] AS [r]
     WHERE [r1].[Id] = [r].[RoomId]) AS smallint) AS [MemberCount], (
@@ -101,21 +101,21 @@ namespace Mafiator.Repository.Repositories
     WHERE [r0].[UserId] = @userId ", new {userId = userId.ToString()});
         }
 
-        public Task<RoomMember> IsJoined(Ulid userId, Ulid roomId)
+        public Task<RoomMember> IsJoined(Guid userId, Guid roomId)
         {
-            return _context.RoomMember.FirstOrDefaultAsync(m => m.UserId == userId && m.RoomId == roomId);
+            return Context.RoomMember.FirstOrDefaultAsync(m => m.UserId == userId && m.RoomId == roomId);
         }
 
         public Task<string> IsJoinedFast(string userId, string roomId)
         {
-            return connection.ExecuteScalarAsync<string>(
+            return Connection.ExecuteScalarAsync<string>(
                 @"SELECT TOP(1) [r].[Id]
                   FROM [dbo].[RoomMember] AS [r]
                   WHERE ([r].[UserId] = @userId) AND ([r].[RoomId] = @roomId)", new {userId, roomId});
         }
         public Task<string> GetByCode(string code)
         {
-            return connection.ExecuteScalarAsync<string>(
+            return Connection.ExecuteScalarAsync<string>(
                 @"SELECT TOP(1) [r].[Id]
                   FROM [dbo].[Room] AS [r]
                   WHERE ([r].[Code] = @code)", new { code });

@@ -1,7 +1,7 @@
 ﻿using Android.Content;
-using Android.Views;
 using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.Views;
 using AndroidX.AppCompat.Content.Res;
 using AndroidX.Core.Content;
 

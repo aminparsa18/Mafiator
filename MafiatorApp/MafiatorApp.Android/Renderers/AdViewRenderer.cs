@@ -1,7 +1,7 @@
 ﻿using Android.Content;
-using Android.Widget;
 using Android.Gms.Ads;
 using Android.Util;
+using Android.Widget;
 using MafiatorApp.Droid.Renderers;
 using MafiatorApp.UserControls;
 using Xamarin.Forms;
@@ -13,14 +13,15 @@ namespace MafiatorApp.Droid.Renderers
 {
     public class AdViewRenderer : ViewRenderer<AdControlView, AdView>
     {
-        string adUnitId = string.Empty;
+        private string adUnitId = string.Empty;
         //Note you may want to adjust this, see further down.
-        readonly AdSize adSize = GetFullWidthAdaptiveSize();
-        AdView adView;
+        private readonly AdSize adSize = GetFullWidthAdaptiveSize();
+        private AdView adView;
         public AdViewRenderer(Context context) : base(context)
         {
         }
-        AdView CreateNativeAdControl()
+
+        private AdView CreateNativeAdControl()
         {
             if (adView != null)
                 return adView;

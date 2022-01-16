@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper.Internal;
-using Mafiator.Api.Controllers.Base;
+﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
 using Mafiator.Data;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.User;
 using Mafiator.Service.Contracts;
 using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
 {
@@ -38,7 +37,7 @@ namespace Mafiator.Api.Controllers
                     StatusCode = ApiResultStatusCode.NotFound,
                     Errors = new[] {"User not Found"}
                 });
-            user.ForAll(u => u.Image = Constants.BlobStorageEndpoint + u.Image);
+            user.FirstOrDefault().Image = Constants.BlobStorageEndpoint + user.FirstOrDefault().Image;
             return Ok(new ApiResult<ValidateUserDto>()
             {
                 IsSuccess = true,
@@ -60,7 +59,7 @@ namespace Mafiator.Api.Controllers
         [HttpPost]
         public IActionResult SendMessage()
         {
-            smsSender.SendAuthSmsAsync("52005", "+989919002102");
+            smsSender.SendAuthSmsAsync("52005", "+905316335119");
             return Ok();
         }
 

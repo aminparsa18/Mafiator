@@ -16,7 +16,7 @@ namespace MafiatorApp.Views
 
         private async void Button_OnClicked(object sender, EventArgs e)
         {
-            var roomId= (Ulid)((Button)sender).CommandParameter;
+            var roomId= (Guid)((Button)sender).CommandParameter;
             await ((RandomViewModel) BindingContext).OpenRoom(roomId);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Graphics;
-using Android.Media;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
@@ -8,15 +7,18 @@ using MafiatorApp.Droid.Helpers;
 
 namespace MafiatorApp.Droid.Controls
 {
-	public class ShowCaseImageView : AppCompatImageView
+    public class ShowCaseImageView : AppCompatImageView
     {
         #region CLASS LEVEL VARIABLES
 
         private Bitmap mBitmap;
-        private Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
-        private Color mBackgroundColor = Color.Transparent;
-        private Color mFocusBorderColor = Color.Transparent;
-        private int mFocusBorderSize, mAnimCounter = 20, mFocusAnimationMaxValue = 20, mStep, mFocusAnimationStep = 1;
+        private Paint backgroundPaint, mErasePaint, mCircleBorderPaint;
+        private Color backgroundColor = Color.Transparent;
+        private readonly Color focusBorderColor = Color.Transparent;
+        private int focusBorderSize, animCounter = 20;
+        private const int FocusAnimationMaxValue = 20;
+        private const int FocusAnimationStep = 1;
+        private int mStep;
         private Calculator mCalculator;
         private RectF rectF;
 		private Path mPath;
@@ -45,10 +47,12 @@ namespace MafiatorApp.Droid.Controls
 
             SetWillNotDraw(false);
             SetBackgroundColor(Color.Transparent);
-            mBackgroundPaint = new Paint();
-            mBackgroundPaint.AntiAlias = true;
-            mBackgroundPaint.Color = mBackgroundColor;
-            mBackgroundPaint.Alpha = 0xFF;
+            backgroundPaint = new Paint
+            {
+                AntiAlias = true,
+                Color = backgroundColor,
+                Alpha = 0xFF
+            };
 
             mErasePaint = new Paint();
             mErasePaint.SetXfermode(new PorterDuffXfermode(PorterDuff.Mode.Clear));
@@ -56,11 +60,13 @@ namespace MafiatorApp.Droid.Controls
             mErasePaint.AntiAlias = true;
 
 			mPath = new Path();
-			mCircleBorderPaint = new Paint();
-			mCircleBorderPaint.AntiAlias = true;
-			mCircleBorderPaint.Color = mFocusBorderColor;
-			mCircleBorderPaint.StrokeWidth = mFocusBorderSize;
-			mCircleBorderPaint.SetStyle(Paint.Style.Stroke);
+            mCircleBorderPaint = new Paint
+            {
+                AntiAlias = true,
+                Color = focusBorderColor,
+                StrokeWidth = focusBorderSize
+            };
+            mCircleBorderPaint.SetStyle(Paint.Style.Stroke);
 
 			rectF = new RectF();
         }
@@ -72,13 +78,13 @@ namespace MafiatorApp.Droid.Controls
         /// <param name="calculator"></param>
         public void SetParameters(Color backgroundColor, Calculator calculator)
         {
-            mBackgroundColor = backgroundColor;
+            this.backgroundColor = backgroundColor;
             mCalculator = calculator;
         }
 
 		public void SetBorderParameters(Color focusBorderColor, int focusBorderSize)
 		{
-			mFocusBorderSize = focusBorderSize;
+			this.focusBorderSize = focusBorderSize;
 			mCircleBorderPaint.Color = focusBorderColor;
 		}
 
@@ -93,19 +99,19 @@ namespace MafiatorApp.Droid.Controls
 			if (mBitmap == null)
 			{
 				mBitmap = Bitmap.CreateBitmap(Width, Height, Bitmap.Config.Argb8888);
-				mBitmap.EraseColor(mBackgroundColor);
+				mBitmap.EraseColor(backgroundColor);
 			}
-			canvas.DrawBitmap(mBitmap, 0, 0, mBackgroundPaint);
+			canvas.DrawBitmap(mBitmap, 0, 0, backgroundPaint);
 			DrawRectangle(canvas);
-			if (mAnimCounter == mFocusAnimationMaxValue)
+			if (animCounter == FocusAnimationMaxValue)
 			{
-				mStep = -1 * mFocusAnimationStep;
+				mStep = -1 * FocusAnimationStep;
 			}
-			else if (mAnimCounter == 0)
+			else if (animCounter == 0)
 			{
-				mStep = mFocusAnimationStep;
+				mStep = FocusAnimationStep;
 			}
-			mAnimCounter = mAnimCounter + mStep;
+			animCounter += mStep;
 			PostInvalidate();
 		}
 
@@ -115,14 +121,14 @@ namespace MafiatorApp.Droid.Controls
         /// <param name="canvas"></param>
         private void DrawRectangle(Canvas canvas)
         {
-            float left = mCalculator.RoundRectLeft(mAnimCounter, 1);
-            float top = mCalculator.RoundRectTop(mAnimCounter, 1);
-            float right = mCalculator.RoundRectRight(mAnimCounter, 1);
-            float bottom = mCalculator.RoundRectBottom(mAnimCounter, 1);
+            var left = mCalculator.RoundRectLeft(animCounter, 1);
+            var top = mCalculator.RoundRectTop(animCounter, 1);
+            var right = mCalculator.RoundRectRight(animCounter, 1);
+            var bottom = mCalculator.RoundRectBottom(animCounter, 1);
             rectF.Set(left, top, right, bottom);
             canvas.DrawRect(rectF, mErasePaint);
 
-			if (mFocusBorderSize > 0)
+			if (focusBorderSize > 0)
 			{
 				mPath.Reset();
 				mPath.MoveTo((float)mCalculator.CircleCenterX, (float)mCalculator.CircleCenterY);

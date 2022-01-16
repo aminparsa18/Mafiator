@@ -1,18 +1,19 @@
-﻿using System;
+﻿using AutoMapper;
+using MafiatorApp.Cache;
+using MafiatorApp.Dtos.Game;
+using MafiatorApp.Dtos.GameEvent;
+using MafiatorApp.Enums;
+using MafiatorApp.Models.PipeEvents;
+using MafiatorApp.ViewModels.Base;
+using MessagePipe;
+using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AutoMapper;
-using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
-using MafiatorApp.Enums;
-using MafiatorApp.Models.PipeEvents;
-using MafiatorApp.ViewModels.Base;
-using MessagePipe;
-using Microsoft.AspNetCore.SignalR.Client;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
@@ -117,7 +118,6 @@ namespace MafiatorApp.ViewModels
             GameHub.Instance.On("NightResult", ShowStatus);
             GameHub.Instance.On<bool>("Inqiry", ShowInquiryResult);
             GameHub.Instance.On<string>("GameFinish", GameFinish);
-
         }
 
         private async Task GameFinish(string arg)
@@ -142,24 +142,22 @@ namespace MafiatorApp.ViewModels
         {
             totalTime += 100;
             ProgressTimer = 100 * (double) totalTime / 45000;
-            if (totalTime == 45000)
-            {
-                totalTime = 0;
-                _timer?.Dispose();
-                _timer = null;
-            }
+            if (totalTime != 45000) 
+                return;
+            totalTime = 0;
+            _timer?.Dispose();
+            _timer = null;
         }
 
         private void Callback2(object state)
         {
             totalTime += 100;
             ProgressTimer = 100 * (double) totalTime / 20000;
-            if (totalTime == 20000)
-            {
-                totalTime = 0;
-                _timer?.Dispose();
-                _timer = null;
-            }
+            if (totalTime != 20000) 
+                return;
+            totalTime = 0;
+            _timer?.Dispose();
+            _timer = null;
         }
 
         private async Task ShowStatus()
@@ -209,8 +207,8 @@ namespace MafiatorApp.ViewModels
             {
                 request = await WebApiService.Inquiry(new GameEventDto()
                 {
-                    MemberId = Ulid.Parse(Candidate.Id),
-                    GameId = Ulid.Parse(gameId),
+                    MemberId = Guid.Parse(Candidate.Id),
+                    GameId = Guid.Parse(gameId),
                     EventType = GameEventType.Inquired
                 });
             }
@@ -218,8 +216,8 @@ namespace MafiatorApp.ViewModels
             {
                 request = await WebApiService.Cure(new GameEventDto()
                 {
-                    MemberId = Ulid.Parse(Candidate.Id),
-                    GameId = Ulid.Parse(gameId),
+                    MemberId = Guid.Parse(Candidate.Id),
+                    GameId = Guid.Parse(gameId),
                     EventType = GameEventType.Cured
                 });
             }
@@ -227,8 +225,8 @@ namespace MafiatorApp.ViewModels
             {
                 request = await WebApiService.FireGameEvent(new GameEventDto()
                 {
-                    MemberId = Ulid.Parse(Candidate.Id),
-                    GameId = Ulid.Parse(gameId),
+                    MemberId = Guid.Parse(Candidate.Id),
+                    GameId = Guid.Parse(gameId),
                     EventType = GameEventType.Killed
                 });
             }
@@ -280,36 +278,36 @@ namespace MafiatorApp.ViewModels
             return base.InitializeAsync(navigationData);
         }
 
-        private string ShowPlayerTask()
+        private static string ShowPlayerTask()
         {
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
-            switch (player.Role)
+            return player.Role switch
             {
-                case GameRole.GodFather: return LocalizationResourceManager.Current.GetValue("KillDesc");
-                case GameRole.Mafia: return LocalizationResourceManager.Current.GetValue("MafiaDesc");
-                case GameRole.Doctor: return LocalizationResourceManager.Current.GetValue("CureDesc");
-                case GameRole.Detective: return LocalizationResourceManager.Current.GetValue("InquiryDesc");
-                case GameRole.Sniper: return LocalizationResourceManager.Current.GetValue("ShootDesc");
-                case GameRole.Natasha: return LocalizationResourceManager.Current.GetValue("SilenceDesc");
-                case GameRole.Priest: return LocalizationResourceManager.Current.GetValue("GiveSpeechDesc");
-                default: return LocalizationResourceManager.Current.GetValue("DefaultActionDesc");
-            }
+                GameRole.GodFather => LocalizationResourceManager.Current.GetValue("KillDesc"),
+                GameRole.Mafia => LocalizationResourceManager.Current.GetValue("MafiaDesc"),
+                GameRole.Doctor => LocalizationResourceManager.Current.GetValue("CureDesc"),
+                GameRole.Detective => LocalizationResourceManager.Current.GetValue("InquiryDesc"),
+                GameRole.Sniper => LocalizationResourceManager.Current.GetValue("ShootDesc"),
+                GameRole.Natasha => LocalizationResourceManager.Current.GetValue("SilenceDesc"),
+                GameRole.Priest => LocalizationResourceManager.Current.GetValue("GiveSpeechDesc"),
+                _ => LocalizationResourceManager.Current.GetValue("DefaultActionDesc")
+            };
         }
 
-        private string ShowPlayerAction()
+        private static string ShowPlayerAction()
         {
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
-            switch (player.Role)
+            return player.Role switch
             {
-                case GameRole.GodFather: return LocalizationResourceManager.Current.GetValue("Kill");
-                case GameRole.Mafia: return LocalizationResourceManager.Current.GetValue("Select");
-                case GameRole.Doctor: return LocalizationResourceManager.Current.GetValue("Cure");
-                case GameRole.Detective: return LocalizationResourceManager.Current.GetValue("Inquiry");
-                case GameRole.Sniper: return LocalizationResourceManager.Current.GetValue("Shoot");
-                case GameRole.Natasha: return LocalizationResourceManager.Current.GetValue("Silence");
-                case GameRole.Priest: return LocalizationResourceManager.Current.GetValue("GiveSpeech");
-                default: return LocalizationResourceManager.Current.GetValue("Action");
-            }
+                GameRole.GodFather => LocalizationResourceManager.Current.GetValue("Kill"),
+                GameRole.Mafia => LocalizationResourceManager.Current.GetValue("Select"),
+                GameRole.Doctor => LocalizationResourceManager.Current.GetValue("Cure"),
+                GameRole.Detective => LocalizationResourceManager.Current.GetValue("Inquiry"),
+                GameRole.Sniper => LocalizationResourceManager.Current.GetValue("Shoot"),
+                GameRole.Natasha => LocalizationResourceManager.Current.GetValue("Silence"),
+                GameRole.Priest => LocalizationResourceManager.Current.GetValue("GiveSpeech"),
+                _ => LocalizationResourceManager.Current.GetValue("Action")
+            };
         }
 
         private void CandidateSelected()

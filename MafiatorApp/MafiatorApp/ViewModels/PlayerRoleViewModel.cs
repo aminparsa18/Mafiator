@@ -1,11 +1,11 @@
-﻿using System;
+﻿using MafiatorApp.Cache;
+using MafiatorApp.Dtos.Game;
+using MafiatorApp.Enums;
+using MafiatorApp.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
-using MafiatorApp.Enums;
-using MafiatorApp.ViewModels.Base;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -66,18 +66,16 @@ namespace MafiatorApp.ViewModels
                 {
                     timer += 100;
                     ProgressTimer = 100 * (double)timer / 40000;
-                    if (timer == 40000)
-                    {
-                        CanClose = true;
-                        return false;
-                    }
-                    return true;
+                    if (timer != 40000) 
+                        return true;
+                    CanClose = true;
+                    return false;
                 });
             else
                 CanClose = true;
             
             if(fromDetail)return;
-            IsMafia = Role == GameRole.Mafia || Role == GameRole.GodFather;
+            IsMafia = Role is GameRole.Mafia or GameRole.GodFather;
                 if (IsMafia)
                 {
                     var partners = await WebApiService.GetMafiaPartners(gameId);
@@ -109,7 +107,5 @@ namespace MafiatorApp.ViewModels
                 await LoadRole();
             }
         }
-
-        
     }
 }

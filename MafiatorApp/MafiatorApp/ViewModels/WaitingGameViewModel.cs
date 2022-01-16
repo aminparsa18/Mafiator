@@ -1,14 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MafiatorApp.Dtos;
+﻿using MafiatorApp.Cache;
+using MafiatorApp.Dtos.Game;
 using MafiatorApp.Enums;
-using MafiatorApp.Extentions;
+using MafiatorApp.Extensions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
@@ -96,8 +97,10 @@ namespace MafiatorApp.ViewModels
         private async Task LeaveGame()
         {
             if (waiting.Status == GameStatus.Playing)
-            { 
-                StartGame();
+            {
+                await NavigationService.NavigateToAsync<GameViewModel>(waiting.Id.ToString());
+                GameHub.Instance.Remove("Join");
+                GameHub.Instance.Remove("StartGame");
                 return;
             }
 
@@ -167,7 +170,7 @@ namespace MafiatorApp.ViewModels
                     GameHub.Instance.Reconnected += HubReconnected;
                     await GameHub.Instance.InvokeAsync("Subscribe", waiting.Id.ToString());
                     GameHub.Instance.On<string>("Join", SomebodyJoined);
-                    GameHub.Instance.On("StartGame", StartGame);
+                    GameHub.Instance.On<string,string>("StartGame", StartGame);
                 }
                 catch when (cts.IsCancellationRequested)
                 {
@@ -176,15 +179,16 @@ namespace MafiatorApp.ViewModels
             }
         }
 
-        private void StartGame()
+        private void StartGame(string ingestUrl,string previewUrl)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
+                Barrel.Current.Add("IngestUrl",ingestUrl,TimeSpan.FromHours(3));
+                Barrel.Current.Add("PreviewUrl",previewUrl,TimeSpan.FromHours(3));
                 await NavigationService.NavigateToAsync<GameViewModel>(waiting.Id.ToString());
                 GameHub.Instance.Remove("Join");
                 GameHub.Instance.Remove("StartGame");
             });
-        
         }
 
         private async Task SomebodyJoined(string user)
@@ -241,9 +245,9 @@ namespace MafiatorApp.ViewModels
                 }));
                 Total = waiting.Roles.Count;
                 CapacityPercentage = (double) Members.Count / Total;
-                Task.Run(LoadData);
+                await Task.Run(LoadData);
             }
-            else if (navigationData is Ulid gameId)
+            else if (navigationData is Guid gameId)
             {
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Loading Game Status...");
                 var request = await WebApiService.GetWaitingGameByGame(gameId.ToString());
@@ -259,7 +263,7 @@ namespace MafiatorApp.ViewModels
                     }));
                     Total = this.waiting.Roles.Count;
                     CapacityPercentage = (double) Members.Count / Total;
-                    Task.Run(LoadData);
+                    await Task.Run(LoadData);
                 }
 
                 await NavigationService.RemovePopupAsync();

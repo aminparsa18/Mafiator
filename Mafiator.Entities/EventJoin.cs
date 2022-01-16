@@ -1,18 +1,12 @@
-﻿using System;
-using Mafiator.Common.Helpers;
-using Mafiator.Entities.Identity;
-using RepoDb.Attributes;
+﻿using Mafiator.Entities.Identity;
+using System;
 
 namespace Mafiator.Entities
 {
-   public class EventJoin:BaseEntity
+    public class EventJoin:BaseEntity
     {
-        [PropertyHandler(typeof(UlidPropertyHandler))]
-
-        public Ulid EventId { get; set; }
-        [PropertyHandler(typeof(UlidPropertyHandler))]
-
-        public Ulid UserId { get; set; }
+        public Guid EventId { get; set; }
+        public Guid UserId { get; set; }
         public virtual Event Event { get; set; }
         public virtual User User { get; set; }
     }

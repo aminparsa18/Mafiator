@@ -1,5 +1,4 @@
 ﻿using MafiatorApp.Enums;
-using MafiatorApp.ViewModels.Base;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.Models

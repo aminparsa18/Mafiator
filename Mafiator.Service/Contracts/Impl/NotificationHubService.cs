@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Mafiator.Service.Models;
+using Microsoft.Azure.NotificationHubs;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Mafiator.Service.Models;
-using Microsoft.Azure.NotificationHubs;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Mafiator.Service.Contracts.Impl
 {
     public class NotificationHubService : INotificationService
     {
-        readonly NotificationHubClient _hub;
-        readonly Dictionary<string, NotificationPlatform> _installationPlatform;
-        readonly ILogger<NotificationHubService> _logger;
+        private readonly NotificationHubClient _hub;
+        private readonly Dictionary<string, NotificationPlatform> _installationPlatform;
+        private readonly ILogger<NotificationHubService> _logger;
 
         public NotificationHubService(IOptions<NotificationHubOptions> options, ILogger<NotificationHubService> logger)
         {
@@ -80,11 +80,9 @@ namespace Mafiator.Service.Contracts.Impl
 
         public async Task<bool> RequestNotificationAsync(NotificationRequest notificationRequest, CancellationToken token)
         {
-            if ((notificationRequest.Silent &&
-                string.IsNullOrWhiteSpace(notificationRequest?.Action)) ||
-                (!notificationRequest.Silent &&
-                (string.IsNullOrWhiteSpace(notificationRequest?.Text)) ||
-                string.IsNullOrWhiteSpace(notificationRequest?.Action)))
+            if (notificationRequest.Silent &&
+                string.IsNullOrWhiteSpace(notificationRequest.Action) || !notificationRequest.Silent &&
+                string.IsNullOrWhiteSpace(notificationRequest.Text) || string.IsNullOrWhiteSpace(notificationRequest.Action))
                 return false;
 
             var androidPushTemplate = notificationRequest.Silent ?
@@ -107,23 +105,25 @@ namespace Mafiator.Service.Contracts.Impl
 
             try
             {
-                if (notificationRequest.Tags.Length == 0)
+                switch (notificationRequest.Tags.Length)
                 {
-                    // This will broadcast to all users registered in the notification hub
-                    await SendPlatformNotificationsAsync(androidPayload, iOSPayload, token);
-                }
-                else if (notificationRequest.Tags.Length <= 20)
-                {
-                    await SendPlatformNotificationsAsync(androidPayload, iOSPayload, notificationRequest.Tags, token);
-                }
-                else
-                {
-                    var notificationTasks = notificationRequest.Tags
-                        .Select((value, index) => (value, index))
-                        .GroupBy(g => g.index / 20, i => i.value)
-                        .Select(tags => SendPlatformNotificationsAsync(androidPayload, iOSPayload, tags, token));
+                    case 0:
+                        // This will broadcast to all users registered in the notification hub
+                        await SendPlatformNotificationsAsync(androidPayload, iOSPayload, token);
+                        break;
+                    case <= 20:
+                        await SendPlatformNotificationsAsync(androidPayload, iOSPayload, notificationRequest.Tags, token);
+                        break;
+                    default:
+                    {
+                        var notificationTasks = notificationRequest.Tags
+                            .Select((value, index) => (value, index))
+                            .GroupBy(g => g.index / 20, i => i.value)
+                            .Select(tags => SendPlatformNotificationsAsync(androidPayload, iOSPayload, tags, token));
 
-                    await Task.WhenAll(notificationTasks);
+                        await Task.WhenAll(notificationTasks);
+                        break;
+                    }
                 }
 
                 return true;
@@ -135,11 +135,11 @@ namespace Mafiator.Service.Contracts.Impl
             }
         }
 
-        string PrepareNotificationPayload(string template, string text, string action) => template
+        private static string PrepareNotificationPayload(string template, string text, string action) => template
             .Replace("$(alertMessage)", text, StringComparison.InvariantCulture)
             .Replace("$(alertAction)", action, StringComparison.InvariantCulture);
 
-        Task SendPlatformNotificationsAsync(string androidPayload, string iOSPayload, CancellationToken token)
+        private Task SendPlatformNotificationsAsync(string androidPayload, string iOSPayload, CancellationToken token)
         {
             var sendTasks = new Task[]
             {
@@ -150,7 +150,7 @@ namespace Mafiator.Service.Contracts.Impl
             return Task.WhenAll(sendTasks);
         }
 
-        Task SendPlatformNotificationsAsync(string androidPayload, string iOSPayload, IEnumerable<string> tags, CancellationToken token)
+        private Task SendPlatformNotificationsAsync(string androidPayload, string iOSPayload, IEnumerable<string> tags, CancellationToken token)
         {
             var sendTasks = new Task[]
             {

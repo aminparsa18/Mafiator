@@ -6,6 +6,5 @@ namespace Mafiator.Data
     {
         public string Secret { get; set; }
         public TimeSpan TokenLifeTime{get; set; }
-
     }
 }

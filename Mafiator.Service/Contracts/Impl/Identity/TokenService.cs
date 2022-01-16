@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Mafiator.Common.Api;
+using Mafiator.Entities.Identity;
+using Mafiator.Service.Contracts.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Mafiator.Common.Api;
-using Mafiator.Entities.Identity;
-using Mafiator.Service.Contracts.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Jwt = Mafiator.Data.Jwt;
 
 namespace Mafiator.Service.Contracts.Impl.Identity
@@ -44,7 +44,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
         public string GenerateRefreshToken()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            using var rngCryptoServiceProvider = RandomNumberGenerator.Create();
             var randomBytes = new byte[64];
             rngCryptoServiceProvider.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);

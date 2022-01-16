@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Dtos;
+﻿using MafiatorApp.Dtos.Game;
 using MafiatorApp.Enums;
 using MafiatorApp.Views.Templates;
 using Xamarin.Forms;
@@ -7,16 +7,16 @@ namespace MafiatorApp.Helpers
 {
     public class ChatTemplateSelector : DataTemplateSelector
     {
-        readonly DataTemplate incomingTextDataTemplate;
-        readonly DataTemplate outgoingTextDataTemplate;
-        readonly DataTemplate incomingVoiceDataTemplate;
-        readonly DataTemplate outgoingVoiceDataTemplate;
-        readonly DataTemplate incomingVideoDataTemplate;
-        readonly DataTemplate outgoingVideoDataTemplate;
-        readonly DataTemplate incomingLikeDataTemplate;
-        readonly DataTemplate outgoingLikeDataTemplate;
-        readonly DataTemplate incomingDissLikeDataTemplate;
-        readonly DataTemplate outgoingDissLikeDataTemplate;
+        private readonly DataTemplate incomingTextDataTemplate;
+        private readonly DataTemplate outgoingTextDataTemplate;
+        private readonly DataTemplate incomingVoiceDataTemplate;
+        private readonly DataTemplate outgoingVoiceDataTemplate;
+        private readonly DataTemplate incomingVideoDataTemplate;
+        private readonly DataTemplate outgoingVideoDataTemplate;
+        private readonly DataTemplate incomingLikeDataTemplate;
+        private readonly DataTemplate outgoingLikeDataTemplate;
+        private readonly DataTemplate incomingDissLikeDataTemplate;
+        private readonly DataTemplate outgoingDissLikeDataTemplate;
 
         public ChatTemplateSelector()
         {
@@ -34,40 +34,30 @@ namespace MafiatorApp.Helpers
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (!(item is GameMessageDto message))
+            if (item is not GameMessageDto message)
                 return null;
             if (message.Sender)
             {
-                switch (message.Type)
+                return message.Type switch
                 {
-                    case GameMessageType.Text:
-                        return outgoingTextDataTemplate;
-                    case GameMessageType.Voice:
-                        return outgoingVoiceDataTemplate;
-                    case GameMessageType.Video:
-                        return outgoingVideoDataTemplate;
-                    case GameMessageType.Like:
-                        return outgoingLikeDataTemplate;
-                    case GameMessageType.DissLike:
-                        return outgoingDissLikeDataTemplate;
-                    default: return null;
-                }
+                    GameMessageType.Text => outgoingTextDataTemplate,
+                    GameMessageType.Voice => outgoingVoiceDataTemplate,
+                    GameMessageType.Video => outgoingVideoDataTemplate,
+                    GameMessageType.Like => outgoingLikeDataTemplate,
+                    GameMessageType.DissLike => outgoingDissLikeDataTemplate,
+                    _ => null
+                };
             }
 
-            switch (message.Type)
+            return message.Type switch
             {
-                case GameMessageType.Text:
-                    return incomingTextDataTemplate;
-                case GameMessageType.Voice:
-                    return incomingVoiceDataTemplate;
-                case GameMessageType.Video:
-                    return incomingVideoDataTemplate;
-                case GameMessageType.Like:
-                    return incomingLikeDataTemplate;
-                case GameMessageType.DissLike:
-                    return incomingDissLikeDataTemplate;
-                default: return null;
-            }
+                GameMessageType.Text => incomingTextDataTemplate,
+                GameMessageType.Voice => incomingVoiceDataTemplate,
+                GameMessageType.Video => incomingVideoDataTemplate,
+                GameMessageType.Like => incomingLikeDataTemplate,
+                GameMessageType.DissLike => incomingDissLikeDataTemplate,
+                _ => null
+            };
         }
 
     }

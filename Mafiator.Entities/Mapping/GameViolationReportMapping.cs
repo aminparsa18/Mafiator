@@ -1,5 +1,4 @@
-﻿using Mafiator.Entities.Converters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping
@@ -8,10 +7,6 @@ namespace Mafiator.Entities.Mapping
     {
         public override void Configure(EntityTypeBuilder<GameViolationReport> builder)
         {
-            builder.Property(p => p.ReportedId).HasConversion(new UlidToStringConverter());
-            builder.Property(p => p.ReporterId).HasConversion(new UlidToStringConverter());
-
-            builder.Property(p => p.GameId).HasConversion(new UlidToStringConverter());
             builder.Property(p => p.ViolationType).HasColumnType("smallint");
 
             builder.HasOne(d => d.Reporter)

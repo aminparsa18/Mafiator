@@ -1,8 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using Android.Widget;
+﻿using Android.Widget;
 using MafiatorApp.Behaviors;
 using MafiatorApp.Droid.Effects;
+using System;
+using System.ComponentModel;
+using Android.Graphics;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -12,7 +13,7 @@ namespace MafiatorApp.Droid.Effects
 {
     public class EntryLineColorEffect:PlatformEffect
     {
-        EditText control;
+        private EditText control;
 
         protected override void OnAttached()
         {
@@ -44,7 +45,7 @@ namespace MafiatorApp.Droid.Effects
         {
             try
             {
-                control?.Background.SetColorFilter(LineColorBehavior.GetLineColor(Element).ToAndroid(), Android.Graphics.PorterDuff.Mode.SrcAtop);
+                control?.Background.SetColorFilter(new PorterDuffColorFilter(LineColorBehavior.GetLineColor(Element).ToAndroid(),PorterDuff.Mode.SrcAtop));
             }
             catch (Exception ex)
             {

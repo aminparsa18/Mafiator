@@ -8,15 +8,16 @@ namespace MafiatorApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is string timer)) return Color.White;
+            if (value is not string timer) 
+                return Color.White;
             var span = TimeSpan.ParseExact(timer, @"mm\:ss", CultureInfo.InvariantCulture, TimeSpanStyles.None);
-            if (span.Seconds <= 15 && span.Seconds > 10)
-                return Color.Yellow;
-            if (span.Seconds <= 10 && span.Seconds > 5)
-                return Color.DarkOrange;
-            if (span.Seconds <= 5 && span.Seconds > 0)
-                return Color.Red;
-            return Color.White;
+            return span.Seconds switch
+            {
+                <= 15 and > 10 => Color.Yellow,
+                <= 10 and > 5 => Color.DarkOrange,
+                <= 5 and > 0 => Color.Red,
+                _ => Color.White
+            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

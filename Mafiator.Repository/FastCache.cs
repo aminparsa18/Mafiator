@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
-using Mafiator.Repository.Cache;
+﻿using Mafiator.Repository.Cache;
 using RepoDb;
 using RepoDb.Interfaces;
+using System;
+using System.Collections;
 
 namespace Mafiator.Repository
 {

@@ -1,5 +1,4 @@
-﻿
-namespace MafiatorApp.Services
+﻿namespace MafiatorApp.Services
 {
     public interface IAdInterstitial
     {

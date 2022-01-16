@@ -1,31 +1,31 @@
 ﻿using Android.Content;
+using Android.Hardware;
+using Android.Media;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using MafiatorApp.UserControls;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Android.Hardware;
-using Android.Media;
-using MafiatorApp.UserControls;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Droid.Recorder
 {
-	public sealed class AndroidVideoRecorder : ViewGroup, ISurfaceHolderCallback
+    public sealed class AndroidVideoRecorder : ViewGroup, ISurfaceHolderCallback
 	{
-		CameraOptions CameraOption;
-		OrientationOptions OrientationOption;
-		VideoRecorder XamRecorder;
-		SurfaceView surfaceView;
-		ISurfaceHolder holder;
-		Camera.Size previewSize;
-		IList<Camera.Size> supportedPreviewSizes;
+        private readonly CameraOptions CameraOption;
+        private readonly OrientationOptions OrientationOption;
+        private readonly VideoRecorder XamRecorder;
+        private SurfaceView surfaceView;
+        private ISurfaceHolder holder;
+        private Camera.Size previewSize;
+        private IList<Camera.Size> supportedPreviewSizes;
 		public Camera camera;
-		MediaRecorder recorder;
-		IWindowManager windowManager;
-		int cameraId = 1;
-		bool SurfacePrepared = false;
+        private MediaRecorder recorder;
+        private IWindowManager windowManager;
+        private int cameraId = 1;
+        private bool SurfacePrepared = false;
 
 
 		public bool IsCameraAvailable
@@ -36,12 +36,7 @@ namespace MafiatorApp.Droid.Recorder
 				var fing = Build.Fingerprint;
 				if (fing != null)
                 {
-                    if (fing.Contains("vbox") || fing.Contains("generic"))
-					{
-						return false;
-					}
-
-                    return true;
+                    return !fing.Contains("vbox") && !fing.Contains("generic");
                 }
 
                 return true;
@@ -57,24 +52,22 @@ namespace MafiatorApp.Droid.Recorder
 			CameraOption = cameraOption;
 			OrientationOption = orientationOption;
 
-			if (IsCameraAvailable)
-			{
+            if (!IsCameraAvailable) 
+                return;
+            //Create the surface for drawing on
+            surfaceView = new SurfaceView(context);
+            AddView(surfaceView);
+            holder = surfaceView.Holder;
+            holder?.AddCallback(this);
 
-				//Create the surface for drawing on
-				surfaceView = new SurfaceView(context);
-				AddView(surfaceView);
-				holder = surfaceView.Holder;
-                holder?.AddCallback(this);
+            windowManager = Context?.GetSystemService(Context.WindowService).JavaCast<IWindowManager>();
 
-                windowManager = Context?.GetSystemService(Context.WindowService).JavaCast<IWindowManager>();
+            InitCamera();
 
-				InitCamera();
+            XamRecorder.IsPreviewing = false;
+            XamRecorder.IsRecording = false;
 
-				XamRecorder.IsPreviewing = false;
-				XamRecorder.IsRecording = false;
-			}
-
-		}
+        }
 
 
 		private bool OpenCamera(int id)
@@ -343,7 +336,7 @@ namespace MafiatorApp.Droid.Recorder
 			}
         }
 
-		Camera.Size GetOptimalPreviewSize(IList<Camera.Size> sizes, int w, int h)
+        private Camera.Size GetOptimalPreviewSize(IList<Camera.Size> sizes, int w, int h)
 		{
 			const double AspectTolerance = 0.1;
 			var targetRatio = (double)w / h;

@@ -1,15 +1,16 @@
 ﻿namespace MafiatorApp.Services
 {
-   public interface IAlert
+    public interface IAlert
     {
         void ShortAlert(string message, MessageType type);
     }
-   public enum MessageType
-   {
-       None,
-       Success,
-       Warning,
-       Error,
-       Info
-   }
+
+    public enum MessageType
+    {
+        None,
+        Success,
+        Warning,
+        Error,
+        Info
+    }
 }

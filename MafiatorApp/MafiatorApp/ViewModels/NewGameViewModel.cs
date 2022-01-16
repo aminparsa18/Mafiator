@@ -1,17 +1,17 @@
-﻿using System;
-using System.Linq;
-using MafiatorApp.Validations;
-using MafiatorApp.ViewModels.Base;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
+﻿using MafiatorApp.Dtos.Game;
+using MafiatorApp.Extensions;
 using MafiatorApp.Helpers;
 using MafiatorApp.Models;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
+using MafiatorApp.Validations;
+using MafiatorApp.ViewModels.Base;
 using MessagePipe;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -63,7 +63,7 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand SaveGameCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
         public ICommand PublicHelpCommand { get; set; }
-        private Ulid _roomId;
+        private Guid _roomId;
         public NewGameViewModel(IPublisher<UpdateRoomEvent> publisher)
         {
             this.publisher = publisher;
@@ -75,7 +75,7 @@ namespace MafiatorApp.ViewModels
             PopCommand = new AsyncCommand(Pop);
         }
 
-        private void PublicHelp()
+        private static void PublicHelp()
         {
             DependencyService.Get<IAlert>().ShortAlert("Everyone can observe your game live as guests",MessageType.Info);
         }
@@ -88,7 +88,7 @@ namespace MafiatorApp.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            if (navigationData is Ulid roomId)
+            if (navigationData is Guid roomId)
             {
                 _roomId = roomId;
             }

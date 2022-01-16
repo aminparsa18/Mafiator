@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping
 {
-   public class BaseMapping:IEntityTypeConfiguration<BaseEntity>
+    public class BaseMapping:IEntityTypeConfiguration<BaseEntity>
     {
         public void Configure(EntityTypeBuilder<BaseEntity> builder)
         {

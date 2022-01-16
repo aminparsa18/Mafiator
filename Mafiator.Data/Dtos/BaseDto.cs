@@ -5,7 +5,7 @@ namespace Mafiator.Data.Dtos
 {
     public class BaseDto
     {
-        public Ulid Id { get; set; }
+        public Guid Id { get; set; }
 
         [DisplayName("تاریخ ایجاد")]
         public DateTime? DateCreated { get; set; }

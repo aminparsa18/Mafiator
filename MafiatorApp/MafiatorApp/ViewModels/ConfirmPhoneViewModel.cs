@@ -1,14 +1,14 @@
-﻿using System;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
-using MafiatorApp.Extentions;
+﻿using MafiatorApp.Cache;
+using MafiatorApp.Dtos.User;
+using MafiatorApp.Extensions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
 using Rg.Plugins.Popup.Services;
+using System;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 

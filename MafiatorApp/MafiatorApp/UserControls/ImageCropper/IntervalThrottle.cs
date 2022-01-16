@@ -5,13 +5,13 @@ namespace MafiatorApp.UserControls.ImageCropper
 {
     internal class IntervalThrottle
     {
-        readonly Action _onStart;
-        readonly Action _onInterval;
-        readonly Action _onFinish;
-        readonly object _lock = new object();
+        private readonly Action _onStart;
+        private readonly Action _onInterval;
+        private readonly Action _onFinish;
+        private readonly object _lock = new();
 
-        bool _isThrottling;
-        int _count;
+        private bool _isThrottling;
+        private int _count;
 
         public IntervalThrottle(int initialDelay, Action onStart, Action onInterval, Action onFinish)
         {
@@ -31,9 +31,9 @@ namespace MafiatorApp.UserControls.ImageCropper
             }
         }
 
-        void InternalHandle()
+        private void InternalHandle()
         {
-            _count = _count + 1;
+            _count += 1;
 
             if (_isThrottling) return;
             _isThrottling = true;
@@ -41,7 +41,7 @@ namespace MafiatorApp.UserControls.ImageCropper
             RunTimer();
         }
 
-        async void RunTimer()
+        private async void RunTimer()
         {
             _onStart.Invoke();
 

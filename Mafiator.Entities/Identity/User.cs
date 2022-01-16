@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
-using Mafiator.Common.Helpers;
-using Microsoft.AspNetCore.Identity;
-using RepoDb.Attributes;
 
 namespace Mafiator.Entities.Identity
 {
-    public class User : IdentityUser<Ulid>
+    public class User : IdentityUser<Guid>
     {
-        [PropertyHandler(typeof(UlidPropertyHandler))]
-        public override Ulid Id { get; set; }
+        public override Guid Id { get; set; }
         public string CountryCode { get; set; }
         public string Code { get; set; }
         public string DisplayName { get; set; }
@@ -29,11 +26,5 @@ namespace Mafiator.Entities.Identity
         public virtual ICollection<RoomMember> RoomMember { get; set; }
         public virtual ICollection<UserRole> Roles { get; set; }
         public virtual ICollection<UserClaim> Claims { get; set; }
-
-        public User WithoutPassword()
-        {
-            this.PasswordHash = "";
-            return this;
-        }
     }
 }

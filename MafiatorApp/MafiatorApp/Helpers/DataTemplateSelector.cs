@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace MafiatorApp.Helpers
 {
@@ -12,17 +9,12 @@ namespace MafiatorApp.Helpers
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            switch ((int)item)
+            return (int)item switch
             {
-                case 1:
-                    return Login;
-                case 2:
-                    return Register;
-                default:
-                    return Login;
-
-            }
-
+                1 => Login,
+                2 => Register,
+                _ => Login
+            };
         }
     }
 }

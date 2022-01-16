@@ -1,12 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Reflection;
-using MafiatorApp.Dtos;
+﻿using MafiatorApp.Dtos;
+using MafiatorApp.Dtos.Game;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
 using MafiatorApp.Services.Impl;
 using MessagePipe;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Globalization;
+using System.Reflection;
 using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels.Base
@@ -31,33 +32,12 @@ namespace MafiatorApp.ViewModels.Base
         static ViewModelLocator()
         {
             var services = new ServiceCollection();
-            services.AddMessagePipe();
-            services.AddTransient<SplashScreenViewModel>();
-            services.AddTransient<LanguagesViewModel>();
-            services.AddTransient<HomeViewModel>();
-            services.AddTransient<LoginViewModel>();
-            services.AddTransient<ChatViewModel>();
-            services.AddTransient<ConfirmPhoneViewModel>();
-            services.AddTransient<CountriesViewModel>();
-            services.AddTransient<ProfilePictureViewModel>();
-            services.AddTransient<SettingsViewModel>();
-            services.AddTransient<MyRoomsViewModel>();
-            services.AddTransient<RoomDetailViewModel>();
-            services.AddTransient<JoinRoomViewModel>();
-            services.AddTransient<NewRoomViewModel>();
-            services.AddTransient<NewMemberViewModel>();
-            services.AddTransient<NewGameViewModel>();
-            services.AddTransient<SetRolesViewModel>();
-            services.AddTransient<WaitingGameViewModel>();
-            services.AddTransient<GameViewModel>();
-            services.AddTransient<PlayerRoleViewModel>();
-            services.AddTransient<CandidatesViewModel>();
-            services.AddTransient<GameEventViewModel>();
-            services.AddTransient<InquiryStatusViewModel>();
-            services.AddTransient<WaitingViewModel>();
-            services.AddTransient<StoreViewModel>();
-            services.AddTransient<BarcodeScannerViewModel>();
-            services.AddTransient<GameFinishViewModel>();
+            services.AddMessagePipe(e =>
+            {
+                e.EnableAutoRegistration = true;
+            });
+            services.Scan(scan => scan.FromAssemblyOf<SplashScreenViewModel>()
+                .AddClasses().AsSelf().WithTransientLifetime());
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService,NavigationService>();
             services.AddSingleton<IWebApiService,WebApiService>();
@@ -77,7 +57,7 @@ namespace MafiatorApp.ViewModels.Base
 
         private static void OnAutoWireViewModelChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (!(bindable is Element view))
+            if (bindable is not Element view)
             {
                 return;
             }

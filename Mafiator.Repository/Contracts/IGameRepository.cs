@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Mafiator.Data.Dtos.Game;
+using Mafiator.Data.Dtos.Room;
+using Mafiator.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mafiator.Data.Dtos;
-using Mafiator.Entities;
 
 namespace Mafiator.Repository.Contracts
 {
     public interface IGameRepository:IRepository<Game>
     {
         Task<IEnumerable<RoomGameDto>> GetByRoom(string roomId);
-        Task<WaitingGameDto> GetWaitingGameByGame(Ulid gameId);
-        Task<WaitingGameDto> GetWaitingGameByRoom(Ulid roomId);
+        Task<WaitingGameDto> GetWaitingGameByGame(Guid gameId);
+        Task<WaitingGameDto> GetWaitingGameByRoom(Guid roomId);
         Task<List<GameDto>> GetAvailables();
         Task<string> IsJoinedFast(string userId, string gameId);
         Task<string> IsAlreadyPlaying(string roomId);

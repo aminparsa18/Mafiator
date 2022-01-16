@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Azure.Storage.Blobs.Models;
-using Plugin.SimpleAudioPlayer;
-using Xamarin.CommunityToolkit.Core;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -106,43 +102,43 @@ namespace MafiatorApp.Views
         private void LoginPassVis_OnTapped(object sender, EventArgs e)
         {
             LoginPassEntry.IsPassword =false;
-            LoginPassVis.IsVisible = false;
-            LoginPassInvis.IsVisible = true;
+            ShowLoginPass.IsVisible = false;
+            HideLoginPass.IsVisible = true;
         }
 
         private void LoginPassInvis_OnTapped(object sender, EventArgs e)
         {
             LoginPassEntry.IsPassword = true;
-            LoginPassVis.IsVisible = true;
-            LoginPassInvis.IsVisible = false;
+            ShowLoginPass.IsVisible = true;
+            HideLoginPass.IsVisible = false;
         }
 
         private void RegisterPassInvis_OnTapped(object sender, EventArgs e)
         {
             RegisterPassEntry.IsPassword = true;
-            RegisterPassVis.IsVisible = true;
-            RegisterPassInvis.IsVisible = false;
+            ShowRegisterPass.IsVisible = true;
+            HideRegisterPass.IsVisible = false;
         }
 
         private void RegisterPassVis_OnTapped(object sender, EventArgs e)
         {
             RegisterPassEntry.IsPassword = false;
-            RegisterPassVis.IsVisible = false;
-            RegisterPassInvis.IsVisible = true;
+            ShowRegisterPass.IsVisible = false;
+            HideRegisterPass.IsVisible = true;
         }
 
         private void ConfRegisterPassInvis_OnTapped(object sender, EventArgs e)
         {
             ConfPassEntry.IsPassword = true;
-            ConfPassVis.IsVisible = true;
-            ConfPassInvis.IsVisible = false;
+            ShowRegisterConfirmPass.IsVisible = true;
+            HideRegisterConfirmPass.IsVisible = false;
         }
 
         private void ConfRegisterPassVis_OnTapped(object sender, EventArgs e)
         {
             ConfPassEntry.IsPassword = false;
-            ConfPassVis.IsVisible = false;
-            ConfPassInvis.IsVisible = true;
+            ShowRegisterConfirmPass.IsVisible = false;
+            HideRegisterConfirmPass.IsVisible = true;
         }
     }
 }

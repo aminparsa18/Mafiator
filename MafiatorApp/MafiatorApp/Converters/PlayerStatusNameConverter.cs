@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using MafiatorApp.Enums;
+﻿using MafiatorApp.Enums;
 using MafiatorApp.Helpers;
+using System;
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
@@ -10,11 +10,12 @@ namespace MafiatorApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is PlayerStatus status)
-                return EnumHelper<PlayerStatus>.GetDescriptionValue(status);
-            if(value is GameEventType eventType)
-                return EnumHelper<GameEventType>.GetDescriptionValue(eventType);
-            return "Unknown";
+            return value switch
+            {
+                PlayerStatus status => EnumHelper<PlayerStatus>.GetDescriptionValue(status),
+                GameEventType eventType => EnumHelper<GameEventType>.GetDescriptionValue(eventType),
+                _ => "Unknown"
+            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

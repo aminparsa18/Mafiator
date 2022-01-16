@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
-using Mafiator.Data.Dtos;
+using Mafiator.Data.Dtos.Game;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Controllers
 {

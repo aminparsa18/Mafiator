@@ -1,164 +1,164 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Mafiator.Data;
+﻿using Mafiator.Data;
 using Mafiator.Entities;
 using Mafiator.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RepoDb;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly ApplicationDbContext _context;
-        protected readonly DbSet<TEntity> _entities;
-        protected readonly IDbConnection connection;
+        protected readonly ApplicationDbContext Context;
+        protected readonly DbSet<TEntity> Entities;
+        protected readonly IDbConnection Connection;
 
         public Repository(ApplicationDbContext context, IDbConnection connection)
         {
-            _context = context;
-            this.connection = connection;
-            _entities = context.Set<TEntity>();
+            Context = context;
+            this.Connection = connection;
+            Entities = context.Set<TEntity>();
         }
 
         public virtual ValueTask<EntityEntry<TEntity>> Add(TEntity entity)
         {
-            entity.Id = Ulid.NewUlid();
-            return _entities.AddAsync(entity);
+            entity.Id = Guid.NewGuid();
+            return Entities.AddAsync(entity);
         }
 
         public virtual Task<object> AddFast(TEntity entity)
         {
-            entity.Id = Ulid.NewUlid();
+            entity.Id = Guid.NewGuid();
             entity.CreatedDate=DateTime.Now;
             entity.ModifiedDate=DateTime.Now;
-            return connection.InsertAsync(entity);
+            return Connection.InsertAsync(ClassMappedNameCache.Get<TEntity>(), entity);
         }
 
         public virtual Task AddRange(IEnumerable<TEntity> entities)
         {
             foreach (var item in entities)
             {
-                item.Id = Ulid.NewUlid();
+                item.Id = Guid.NewGuid();
             }
 
-            return _entities.AddRangeAsync(entities);
+            return Entities.AddRangeAsync(entities);
         }
 
         public virtual Task<int> AddRangeFast(IEnumerable<TEntity> entities)
         {
-            return connection.InsertAllAsync(entities);
+            return Connection.InsertAllAsync(entities);
         }
 
         public virtual void Update(TEntity entity)
         {
-            _entities.Update(entity);
+            Entities.Update(entity);
         }
 
         public virtual Task<int> UpdateFast(TEntity entity)
         {
             entity.ModifiedDate = DateTime.Now;
-            return connection.UpdateAsync(entity);
+            return Connection.UpdateAsync(entity);
         }
 
         public virtual void UpdateRange(IEnumerable<TEntity> entities)
         {
-            _entities.UpdateRange(entities);
+            Entities.UpdateRange(entities);
         }
 
         public virtual Task<int> UpdateRangeFast(IEnumerable<TEntity> entities)
         {
-            return connection.UpdateAllAsync(entities);
+            return Connection.UpdateAllAsync(entities);
         }
 
         public virtual void Remove(TEntity entity)
         {
-            _entities.Remove(entity);
+            Entities.Remove(entity);
         }
 
         public virtual Task<int> RemoveFast(TEntity entity)
         {
-            return connection.DeleteAsync(entity);
+            return Connection.DeleteAsync(entity);
         }
 
         public virtual void RemoveRange(IEnumerable<TEntity> entities)
         {
-            _entities.RemoveRange(entities);
+            Entities.RemoveRange(entities);
         }
 
         public virtual Task<int> RemoveRangeFast(IEnumerable<TEntity> entities)
         {
-            return connection.DeleteAllAsync(entities);
+            return Connection.DeleteAllAsync(entities);
         }
 
         public virtual Task<int> Count()
         {
-            return _entities.CountAsync();
+            return Entities.CountAsync();
         }
 
         public virtual Task<long> CountFast()
         {
-            return connection.CountAllAsync<TEntity>();
+            return Connection.CountAllAsync<TEntity>();
         }
 
         public virtual Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
         {
-            return _entities.Where(predicate).FirstOrDefaultAsync();
+            return Entities.Where(predicate).FirstOrDefaultAsync();
         }
 
         public virtual Task<IEnumerable<TEntity>> GetFast(Expression<Func<TEntity, bool>> predicate)
         {
-            return connection.QueryAsync(predicate);
+            return Connection.QueryAsync(predicate);
         }
 
         public Task<List<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return _entities.Where(predicate).ToListAsync();
+            return Entities.Where(predicate).ToListAsync();
         }
 
-        public virtual Task<TEntity> Get(Ulid id)
+        public virtual Task<TEntity> Get(Guid id)
         {
-            return _entities.FirstOrDefaultAsync(e => e.Id == id);
+            return Entities.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public ValueTask<TEntity> Find(string id)
         {
-            return _entities.FindAsync(id);
+            return Entities.FindAsync(id);
         }
 
         public virtual Task<List<TEntity>> GetAll()
         {
-            return _entities.AsNoTracking().OrderByDescending(o => o.Id).ToListAsync();
+            return Entities.AsNoTracking().OrderByDescending(o => o.Id).ToListAsync();
         }
 
         public virtual Task<IEnumerable<TEntity>> GetAllFast()
         {
-            return connection.QueryAllAsync<TEntity>();
+            return Connection.QueryAllAsync<TEntity>();
         }
 
         public Task<List<TEntity>> GetPage(int skip, int offset)
         {
-            return _entities.AsNoTracking().Skip(skip).Take(offset).OrderByDescending(o => o.Id).ToListAsync();
+            return Entities.AsNoTracking().Skip(skip).Take(offset).OrderByDescending(o => o.Id).ToListAsync();
         }
 
         public Task<List<TEntity>> GetPage(Expression<Func<TEntity, bool>> expression, int skip, int offset)
         {
-            return _entities.AsNoTracking().Where(expression).Skip(skip).Take(offset).OrderByDescending(o => o.Id)
+            return Entities.AsNoTracking().Where(expression).Skip(skip).Take(offset).OrderByDescending(o => o.Id)
                 .ToListAsync();
         }
 
         public virtual Task<bool> Exists(TEntity entity)
         {
-            return connection.ExistsAsync<TEntity>(entity);
+            return Connection.ExistsAsync<TEntity>(entity);
         }
         public virtual Task<bool> Exists(Expression<Func<TEntity, bool>> expression)
         {
-            return connection.ExistsAsync(expression);
+            return Connection.ExistsAsync(expression);
         }
     }
 }

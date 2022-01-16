@@ -1,8 +1,8 @@
 ﻿<Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-             xmlns:androidSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+             xmlns:androidSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              x:Class="MafiatorApp.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -71,9 +71,26 @@
                 <Setter Property="TextColor" Value="White" />
             </Style>
             <Style TargetType="Frame">
-                <Setter Property="CornerRadius" Value="15" />
+                <Setter Property="CornerRadius" Value="16" />
                 <Setter Property="HasShadow" Value="True" />
                 <Setter Property="Padding" Value="8" />
+            </Style>
+            <Style TargetType="userControls:Popup">
+                <Setter Property="CornerRadius" Value="52" />
+                <Setter Property="HasShadow" Value="True" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="Background" >
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                            Offset="0.0" />
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                            Offset="0.25" />
+                    </LinearGradientBrush>
+                </Setter>
             </Style>
             <Style TargetType="Button">
                 <Setter Property="CornerRadius" Value="14" />

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Mafiator.Common.Extensions;
-using Mafiator.Data.Dtos;
+﻿using Mafiator.Common.Extensions;
+using Mafiator.Data.Dtos.User;
 using Mafiator.Entities.Identity;
 using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Service.Contracts.Impl.Identity
 {
@@ -50,7 +50,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
         }
 
 
-        public Task<Role> FindByIdAsync(Ulid roleId)
+        public Task<Role> FindByIdAsync(Guid roleId)
         {
             throw new NotImplementedException();
         }
@@ -66,13 +66,13 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
 
 
-        public Task<Role> FindClaimsInRole(Ulid roleId)
+        public Task<Role> FindClaimsInRole(Guid roleId)
         {
             return Roles.Include(c => c.Claims).FirstOrDefaultAsync(c => c.Id == roleId);
         }
 
 
-        public async Task<IdentityResult> AddOrUpdateClaimsAsync(Ulid roleId, string roleClaimType, IList<string> selectedRoleClaimValues)
+        public async Task<IdentityResult> AddOrUpdateClaimsAsync(Guid roleId, string roleClaimType, IList<string> selectedRoleClaimValues)
         {
             var role = await FindClaimsInRole(roleId);
             if (role == null)
@@ -80,7 +80,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return IdentityResult.Failed(new IdentityError
                 {
                     Code = "NotFound",
-                    Description = "نقش مورد نظر یافت نشد.",
+                    Description = "Role not found.",
                 });
             }
 
@@ -99,11 +99,10 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             }
 
             var removedClaimValues = currentRoleClaimValues.Except(selectedRoleClaimValues).ToList();
-            foreach (var claim in removedClaimValues)
+            foreach (var roleClaim in removedClaimValues.Select(claim => role.Claims.SingleOrDefault(r => r.ClaimValue == claim && r.ClaimType == roleClaimType))
+                         .Where(roleClaim => roleClaim != null))
             {
-                var roleClaim = role.Claims.SingleOrDefault(r => r.ClaimValue == claim && r.ClaimType == roleClaimType);
-                if (roleClaim != null)
-                    role.Claims.Remove(roleClaim);
+                role.Claims.Remove(roleClaim);
             }
 
             return await UpdateAsync(role);
@@ -115,7 +114,6 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 Id = role.Id,
                 Name = role.Name,
-                CaptionPersian = role.PersianCaption,
                 UsersCount = role.Users.Count()
             }).ToListAsync();
         }

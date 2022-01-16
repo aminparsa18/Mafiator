@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MafiatorApp.UserControls
@@ -19,13 +17,6 @@ namespace MafiatorApp.UserControls
                 return true;
 
             });
-            //var smoothAnimation = new Animation();
-
-            //smoothAnimation.WithConcurrent((f) => this.Opacity = f, 0.2, 1, Xamarin.Forms.Easing.Linear);
-            //smoothAnimation.WithConcurrent((f) => this.Opacity = f, 1, 0.2, Xamarin.Forms.Easing.Linear);
-
-            //this.Animate("FadeInOut", smoothAnimation, 2, 2000, Easing.Linear, null, () => true);
         }
-
     }
 }

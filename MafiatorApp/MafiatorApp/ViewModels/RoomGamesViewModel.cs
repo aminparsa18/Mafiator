@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MafiatorApp.Enums;
+using MafiatorApp.ViewModels.Base;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MafiatorApp.Enums;
-using MafiatorApp.ViewModels.Base;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.ViewModels
@@ -17,7 +17,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref noGame, value);
         }
 
-        private Ulid _roomId;
+        private Guid _roomId;
         public IAsyncCommand AddGameCommand { get; set; }
         public RoomGamesViewModel()
         {
@@ -43,7 +43,7 @@ namespace MafiatorApp.ViewModels
 
         public override async Task InitializeAsync(object navigationData)
         {
-            if (navigationData is Ulid roomId)
+            if (navigationData is Guid roomId)
             {
                 _roomId = roomId;
                 await LoadGames(roomId.ToString());

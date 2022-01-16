@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using MafiatorApp.ViewModels.Base;
+﻿using MafiatorApp.ViewModels.Base;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Services
@@ -8,7 +8,6 @@ namespace MafiatorApp.Services
     {
         ViewModelBase PreviousPageViewModel { get; }
         string PreviousPage{ get;}
-        //Task InitializeAsync();
         Task RemoveModalAsync();
         Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase;
         Task NavigateToPageAsync(Page page, object parameter);

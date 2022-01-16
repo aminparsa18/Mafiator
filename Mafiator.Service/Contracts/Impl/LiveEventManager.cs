@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Mafiator.Common.SiteSetting;
+﻿using Mafiator.Common.SiteSetting;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using Microsoft.Rest;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Service.Contracts.Impl
 {
@@ -28,7 +28,6 @@ namespace Mafiator.Service.Contracts.Impl
         /// Creates the AzureMediaServicesClient object based on the credentials
         /// supplied in local configuration file.
         /// </summary>
-        /// <param name="config">The param is of type ConfigWrapper, which reads values from local configuration file.</param>
         /// <returns>A task.</returns>
         // <CreateMediaServicesClientAsync>
         public async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync()
@@ -61,7 +60,7 @@ namespace Mafiator.Service.Contracts.Impl
         {
             var client = await CreateMediaServicesClientAsync();
             var mediaService = await client.Mediaservices.GetAsync(_credential.ResourceGroup, _credential.AccountName);
-            IPRange allAllowIPRange = new(
+            IPRange allAllowIpRange = new(
                 "AllowAll",
                 "0.0.0.0",
                 0
@@ -71,7 +70,7 @@ namespace Mafiator.Service.Contracts.Impl
                 Ip = new IPAccessControl(
                     new[]
                     {
-                        allAllowIPRange
+                        allAllowIpRange
                     }
                 )
             };
@@ -82,7 +81,7 @@ namespace Mafiator.Service.Contracts.Impl
                     new IPAccessControl(
                         new[]
                         {
-                            allAllowIPRange
+                            allAllowIpRange
                         }
                     )
                 )
@@ -135,7 +134,7 @@ namespace Mafiator.Service.Contracts.Impl
             //#endregion
 
             #region CreateLiveOutput
-            string manifestName = "output";
+            var manifestName = "output";
             Console.WriteLine($"Creating a live output named mftorliveoutput");
             Console.WriteLine();
 
@@ -169,8 +168,8 @@ namespace Mafiator.Service.Contracts.Impl
 
             // Refresh the liveEvent object's settings after starting it...
             liveEvent = await client.LiveEvents.GetAsync(_credential.ResourceGroup, _credential.AccountName, liveEventName);
-            string ingestUrl = liveEvent.Input.Endpoints.First().Url;
-            string previewUrl = liveEvent.Preview.Endpoints.First().Url;
+            var ingestUrl = liveEvent.Input.Endpoints.First().Url;
+            var previewUrl = liveEvent.Preview.Endpoints.First().Url;
             _cache.SetCache(ingestUrl,"Ingest-"+liveEventName);
             _cache.SetCache(previewUrl,"Preview-"+liveEventName);
             return Tuple.Create(ingestUrl,previewUrl);

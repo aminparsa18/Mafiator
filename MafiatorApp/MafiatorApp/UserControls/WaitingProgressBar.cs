@@ -1,17 +1,16 @@
-﻿using System;
-
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using System;
 using Xamarin.Forms;
 
 namespace MafiatorApp.UserControls
 {
-   public class WaitingProgressBar:SKCanvasView
+    public class WaitingProgressBar:SKCanvasView
     {
         public static BindableProperty PercentageProperty = BindableProperty.Create(nameof(Percentage), typeof(float),
             typeof(WaitingProgressBar), 0f, BindingMode.OneWay,
-            validateValue: (_, value) => value != null,
-            propertyChanged: OnPropertyChangedInvalidate);
+            (_, value) => value != null,
+            OnPropertyChangedInvalidate);
 
         public float Percentage
         {
@@ -21,8 +20,8 @@ namespace MafiatorApp.UserControls
 
         public static BindableProperty CornerRadiusProperty = BindableProperty.Create(nameof(Percentage), typeof(float),
             typeof(WaitingProgressBar), 5f, BindingMode.OneWay,
-            validateValue: (_, value) => value != null && (float)value >= 0,
-            propertyChanged: OnPropertyChangedInvalidate);
+            (_, value) => value != null && (float)value >= 0,
+            OnPropertyChangedInvalidate);
 
         public float CornerRadius
         {
@@ -32,7 +31,7 @@ namespace MafiatorApp.UserControls
 
         public static BindableProperty BarBackgroundColorProperty = BindableProperty.Create(nameof(BarBackgroundColor), typeof(Color),
             typeof(WaitingProgressBar), Color.White, BindingMode.OneWay,
-            validateValue: (_, value) => value != null, propertyChanged: OnPropertyChangedInvalidate);
+            (_, value) => value != null, OnPropertyChangedInvalidate);
 
         public Color BarBackgroundColor
         {
@@ -43,7 +42,7 @@ namespace MafiatorApp.UserControls
       
         public static BindableProperty GradientStartColorProperty = BindableProperty.Create(nameof(GradientStartColor), typeof(Color),
             typeof(WaitingProgressBar), Color.Purple, BindingMode.OneWay,
-            validateValue: (_, value) => value != null, propertyChanged: OnPropertyChangedInvalidate);
+            (_, value) => value != null, OnPropertyChangedInvalidate);
 
         public Color GradientStartColor
         {
@@ -53,15 +52,13 @@ namespace MafiatorApp.UserControls
 
         public static BindableProperty GradientEndColorProperty = BindableProperty.Create(nameof(GradientEndColor), typeof(Color),
             typeof(WaitingProgressBar), Color.Blue, BindingMode.OneWay,
-            validateValue: (_, value) => value != null, propertyChanged: OnPropertyChangedInvalidate);
+            (_, value) => value != null, OnPropertyChangedInvalidate);
 
         public Color GradientEndColor
         {
             get => (Color)GetValue(GradientEndColorProperty);
             set => SetValue(GradientEndColorProperty, value);
         }
-
-    
 
         private static void OnPropertyChangedInvalidate(BindableObject bindable, object oldvalue, object newvalue)
         {
@@ -76,7 +73,7 @@ namespace MafiatorApp.UserControls
             var info = e.Info;
             var canvas = e.Surface.Canvas;
 
-            float width = (float)Width;
+            var width = (float)Width;
             var scale = CanvasSize.Width / width;
 
             var percentage = Percentage;

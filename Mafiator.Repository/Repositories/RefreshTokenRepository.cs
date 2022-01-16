@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using Mafiator.Data;
-using Mafiator.Data.Dtos;
+﻿using Mafiator.Data;
+using Mafiator.Data.Dtos.User;
 using Mafiator.Entities;
 using Mafiator.Repository.Contracts;
 using RepoDb;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Repositories
 {
@@ -17,14 +17,14 @@ namespace Mafiator.Repository.Repositories
 
         public Task<IEnumerable<RefreshTokenDto>> GetByToken(string refreshToken)
         {
-            return connection.ExecuteQueryAsync<RefreshTokenDto>(@"SELECT [r].[Id], [r].[ExpirationDate], [r].[IsInvalidated], [r].[IsUsed], [r].[JwtId]
+            return Connection.ExecuteQueryAsync<RefreshTokenDto>(@"SELECT [r].[Id], [r].[ExpirationDate], [r].[IsInvalidated], [r].[IsUsed], [r].[JwtId]
             FROM[dbo].[RefreshToken] AS[r]
             WHERE [r].[Token] = @refreshToken", new{refreshToken});
         }
 
         public Task<int> SetUsed(string id)
         {
-           return connection.ExecuteNonQueryAsync("UPDATE [RefreshToken] SET [IsUsed] = 1 WHERE [Id] = @id", new {id});
+           return Connection.ExecuteNonQueryAsync("UPDATE [RefreshToken] SET [IsUsed] = 1 WHERE [Id] = @id", new {id});
         }
     }
 }

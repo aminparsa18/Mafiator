@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel;
-
-namespace MafiatorApp.Enums
+﻿namespace MafiatorApp.Enums
 {
     public enum GameRole
     {

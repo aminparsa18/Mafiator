@@ -1,7 +1,6 @@
-﻿
-namespace Mafiator.Entities
+﻿namespace Mafiator.Entities
 {
-    public class Reaction:BaseEntity
+    public class Reaction : BaseEntity
     {
         public string Title { get; set; }
         public string Image { get; set; }

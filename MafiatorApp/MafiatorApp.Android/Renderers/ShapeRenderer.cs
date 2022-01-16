@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using Android.Content;
+﻿using Android.Content;
 using MafiatorApp.Droid.Renderers;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -8,7 +8,7 @@ using Xamarin.Forms.Platform.Android;
 namespace MafiatorApp.Droid.Renderers
 {
 
-	public class ShapeRenderer : ViewRenderer<UserControls.ShapeView,Controls.Shape>
+    public class ShapeRenderer : ViewRenderer<UserControls.ShapeView,Controls.Shape>
     {
         public ShapeRenderer(Context context) : base(context)
         {

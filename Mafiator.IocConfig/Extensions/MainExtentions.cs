@@ -1,30 +1,24 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Cysharp.Serialization.MessagePack;
-using Mafiator.Common.Api;
+﻿using Mafiator.Common.Api;
 using Mafiator.Common.Extensions;
 using Mafiator.Common.SiteSetting;
 using Mafiator.Data;
 using Mafiator.IocConfig.Formatters;
 using Mafiator.IocConfig.Hubs;
+using Mafiator.Repository;
 using Mafiator.Service.Contracts;
 using Mafiator.Service.Contracts.Impl;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mafiator.Repository;
 using Mafiator.Service.Models;
 using MessagePack;
 using MessagePack.AspNetCoreMvcFormatter;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.Azure.Management.Media;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Microsoft.Rest;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
-using MessagePackOutputFormatter = MessagePack.AspNetCoreMvcFormatter.MessagePackOutputFormatter;
+using System.Net;
 
 namespace Mafiator.IocConfig.Extensions
 {
@@ -33,7 +27,7 @@ namespace Mafiator.IocConfig.Extensions
         public static IServiceCollection AddMainServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAntiforgery();
-            var resolver = CompositeResolver.Create(UlidMessagePackResolver.Instance, StandardResolver.Instance);
+            var resolver =StandardResolver.Instance;
             var messagePackOption = MessagePackSerializerOptions.Standard.WithResolver(resolver);
             services.AddControllers(option =>
             {

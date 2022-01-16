@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Mafiator.Entities.Identity
 {
-    public class RoleClaim : IdentityRoleClaim<Ulid>
+    public class RoleClaim : IdentityRoleClaim<Guid>
     {
         public virtual Role Role { get; set; }
     }

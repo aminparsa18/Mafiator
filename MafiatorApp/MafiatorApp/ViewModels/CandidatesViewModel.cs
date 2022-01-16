@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using AutoMapper;
+﻿using AutoMapper;
 using MafiatorApp.Cache;
-using MafiatorApp.Dtos;
+using MafiatorApp.Dtos.Game;
+using MafiatorApp.Dtos.Vote;
 using MafiatorApp.Enums;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
-using Xamarin.CommunityToolkit.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
@@ -95,24 +95,22 @@ namespace MafiatorApp.ViewModels
         {
             totalTime += 100;
             ProgressTimer = 100 * (double) totalTime / 45000;
-            if (totalTime == 45000)
-            {
-                totalTime = 0;
-                _timer?.Dispose();
-                _timer = null;
-            }
+            if (totalTime != 45000)
+                return;
+            totalTime = 0;
+            _timer?.Dispose();
+            _timer = null;
         }
 
         private void Callback2(object state)
         {
             totalTime += 100;
             ProgressTimer = 100 * (double) totalTime / 20000;
-            if (totalTime == 20000)
-            {
-                totalTime = 0;
-                _timer?.Dispose();
-                _timer = null;
-            }
+            if (totalTime != 20000) 
+                return;
+            totalTime = 0;
+            _timer?.Dispose();
+            _timer = null;
         }
 
         private async Task ShowStatus()
@@ -190,18 +188,11 @@ namespace MafiatorApp.ViewModels
             var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
             var request = await WebApiService.SendVotes(new VoteDto()
             {
-                Targets = Candidates.Where(c => c.Selected).Select(s => Ulid.Parse(s.Id)).ToList(),
-                VoterId = Ulid.Parse(player.MemberId),
-                GameId = Ulid.Parse(gameId)
+                Targets = Candidates.Where(c => c.Selected).Select(s => Guid.Parse(s.Id)).ToList(),
+                VoterId = Guid.Parse(player.MemberId),
+                GameId = Guid.Parse(gameId)
             });
-            if (request.IsSuccessStatusCode)
-            {
-                CurrentState = LayoutState.Success;
-            }
-            else
-            {
-                CurrentState = LayoutState.Error;
-            }
+            CurrentState = request.IsSuccessStatusCode ? LayoutState.Success : LayoutState.Error;
             Title = LocalizationResourceManager.Current.GetValue("VoteSentTitle");
             SubTitle = LocalizationResourceManager.Current.GetValue("VoteSentSubTitle");
             await NavigationService.RemovePopupAsync();
@@ -209,22 +200,21 @@ namespace MafiatorApp.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            if (navigationData is Tuple<List<PlayerDto>, string, bool> data)
+            if (navigationData is not Tuple<List<PlayerDto>, string, bool> data)
+                return base.InitializeAsync(navigationData);
+            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var players = mapper.Map<List<CandidateDto>>(data.Item1.Where(p=>p.Status!=PlayerStatus.Killed && p.Status!=PlayerStatus.Kicked).ToList());
+            players.RemoveAll(p => p.Id == player?.MemberId);
+            gameId = data.Item2;
+            advocacy = data.Item3;
+            //if its advocay voting just vote previous candidates
+            if (data.Item3)
             {
-                var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
-                var players = mapper.Map<List<CandidateDto>>(data.Item1.Where(p=>p.Status!=PlayerStatus.Killed && p.Status!=PlayerStatus.Kicked).ToList());
-                players.RemoveAll(p => p.Id == player?.MemberId);
-                gameId = data.Item2;
-                advocacy = data.Item3;
-                //if its advocay voting just vote previous candidates
-                if (data.Item3)
-                {
-                    var candidates = Barrel.Current.Get<IEnumerable<string>>("AdvocacyCandidates");
-                    Candidates.AddRange(players.Where(p => candidates.Contains(p.Id)));
-                }
-                else
-                    Candidates.AddRange(players);
+                var candidates = Barrel.Current.Get<IEnumerable<string>>("AdvocacyCandidates");
+                Candidates.AddRange(players.Where(p => candidates.Contains(p.Id)));
             }
+            else
+                Candidates.AddRange(players);
 
             return base.InitializeAsync(navigationData);
         }
@@ -235,6 +225,5 @@ namespace MafiatorApp.ViewModels
             Candidate.Selected = !Candidate.Selected;
             Candidate = null;
         }
-
     }
 }

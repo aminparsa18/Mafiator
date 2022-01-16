@@ -7,7 +7,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace MafiatorApp.Droid.Renderers
 {
-   public class CustomSearchBarRenderer:SearchBarRenderer
+    public class CustomSearchBarRenderer:SearchBarRenderer
     {
         public CustomSearchBarRenderer(Context context) : base(context)
         {

@@ -12,6 +12,7 @@ using Android.Views;
 using MafiatorApp.Droid.Recorder;
 using MafiatorApp.Services;
 using MediaManager;
+using Xamarin.Essentials;
 
 //using Xamarin.Auth;
 
@@ -32,7 +33,7 @@ namespace MafiatorApp.Droid
         DataHost = "callback.mftor")]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             RequestWindowFeature(WindowFeatures.NoTitle);
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -41,14 +42,18 @@ namespace MafiatorApp.Droid
             base.OnCreate(savedInstanceState);
             CachedImageRenderer.Init(true);
             Rg.Plugins.Popup.Popup.Init(this);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Platform.Init(this, savedInstanceState);
             GoogleVisionBarCodeScanner.Droid.RendererInitializer.Init();
             Forms.Init(this, savedInstanceState);
             FormsMaterial.Init(this, savedInstanceState);
             DependencyService.RegisterSingleton<IAudioRecorder>(new AudioRecorder());
             DependencyService.RegisterSingleton<IAudioStream>(new AudioStream(44100, 48));
-            CrossMediaManager.Current.Init(this);
+            CrossMediaManager.Current.Init();
+          
             MobileAds.Initialize(this);
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            if(status!=PermissionStatus.Granted)
+             status = await Permissions.RequestAsync<Permissions.Camera>();
             if (Intent?.Data != null)
             {
                 var uri = new Uri(Intent.Data.ToString() ?? string.Empty);

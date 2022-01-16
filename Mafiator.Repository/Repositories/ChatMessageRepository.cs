@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Mafiator.Data;
+﻿using Mafiator.Data;
 using Mafiator.Data.Dtos;
 using Mafiator.Entities;
 using Mafiator.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mafiator.Repository.Repositories
 {
@@ -17,9 +17,9 @@ namespace Mafiator.Repository.Repositories
         {
         }
 
-        public Task<List<ChatMessageDto>> GetByRoom(Ulid roomId)
+        public Task<List<ChatMessageDto>> GetByRoom(Guid roomId)
         {
-            return _context.ChatMessage.AsNoTracking().Where(c => c.RoomId == roomId)
+            return Context.ChatMessage.AsNoTracking().Where(c => c.RoomId == roomId)
                 .Select(s => new ChatMessageDto()
                 {
                     Type = s.MessageType,

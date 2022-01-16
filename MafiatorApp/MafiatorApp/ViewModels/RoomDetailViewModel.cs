@@ -1,14 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MafiatorApp.Dtos;
+﻿using MafiatorApp.Dtos.Game;
+using MafiatorApp.Dtos.Room;
 using MafiatorApp.Enums;
-using MafiatorApp.Extentions;
+using MafiatorApp.Extensions;
 using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
@@ -244,7 +245,7 @@ namespace MafiatorApp.ViewModels
 
         public override async Task InitializeAsync(object navigationData)
         {
-            if (navigationData is Ulid roomId)
+            if (navigationData is Guid roomId)
             {
                 var response = await WebApiService.GetRoom(roomId.ToString());
                 if (response.IsSuccess)

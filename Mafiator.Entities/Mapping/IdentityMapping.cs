@@ -1,5 +1,4 @@
-﻿using Mafiator.Entities.Converters;
-using Mafiator.Entities.Identity;
+﻿using Mafiator.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mafiator.Entities.Mapping
@@ -10,16 +9,16 @@ namespace Mafiator.Entities.Mapping
         {
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<User>().HasIndex(e => e.Code).IsUnique();
-            modelBuilder.Entity<Role>().ToTable("Roles");
-            modelBuilder.Entity<UserRole>().ToTable("UserRole");
-            modelBuilder.Entity<RoleClaim>().ToTable("RoleClaim");
-            modelBuilder.Entity<UserClaim>().ToTable("UserClaim");
-            modelBuilder.Entity<User>().Property(e => e.Id).HasConversion(new UlidToStringConverter());
-            modelBuilder.Entity<Role>().Property(e => e.Id).HasConversion(new UlidToStringConverter());
             modelBuilder.Entity<User>().Property(e => e.Code).IsRequired();
             modelBuilder.Entity<User>().HasIndex(e => e.CountryCode);
-           // modelBuilder.Entity<RoleClaim>().Property(e => e.Id).HasConversion(new UlidToStringConverter());
-           // modelBuilder.Entity<UserClaim>().Property(e => e.Id).HasConversion(new UlidToStringConverter());
+
+            modelBuilder.Entity<Role>().ToTable("Roles");
+            
+            modelBuilder.Entity<RoleClaim>().ToTable("RoleClaim");
+            
+            modelBuilder.Entity<UserClaim>().ToTable("UserClaim");
+
+            modelBuilder.Entity<UserRole>().ToTable("UserRole");
             modelBuilder.Entity<UserRole>()
                 .HasOne(userRole => userRole.Role)
                 .WithMany(role => role.Users).HasForeignKey(r => r.RoleId);
@@ -29,7 +28,7 @@ namespace Mafiator.Entities.Mapping
                .WithMany(role => role.Roles).HasForeignKey(r => r.UserId);
 
             modelBuilder.Entity<RoleClaim>()
-                 .HasOne(roleclaim => roleclaim.Role)
+                 .HasOne(roleClaim => roleClaim.Role)
                  .WithMany(claim => claim.Claims).HasForeignKey(c => c.RoleId);
 
             modelBuilder.Entity<UserClaim>()
