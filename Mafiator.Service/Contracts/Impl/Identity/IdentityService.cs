@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Mafiator.Common.Api;
+using Mafiator.Common.Api.Auth;
 using Mafiator.Common.Helpers;
 using Mafiator.Data;
 using Mafiator.Data.Dtos.User;
@@ -57,7 +58,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 return new AuthResult()
                 {
-                    StatusCode = ApiResultStatusCode.UnAuthorized,
+                    StatusCode = ApiResultStatusCode.Unauthorized,
                     Errors = new[] {"Login data is not correct."}
                 };
             }
@@ -68,7 +69,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 return new AuthResult()
                 {
-                    StatusCode = ApiResultStatusCode.UnAuthorized,
+                    StatusCode = ApiResultStatusCode.Unauthorized,
                     Errors = new[] {"Login data is not correct."}
                 };
             }
@@ -123,7 +124,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
             var user = mapper.Map<RegisterUserDto, User>(registerUser);
             user.Id = Guid.NewGuid();;
-            user.Code = RandomHelper.RandomStr(10);
+            user.Code = RandomHelper.CreateRandomText(10);
             user.Score = 100;
             var createdUser = await userManager.CreateAsync(user, registerUser.Password);
             if (!createdUser.Succeeded)
@@ -237,7 +238,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 return new AuthResult()
                 {
-                    StatusCode = ApiResultStatusCode.UnAuthorized,
+                    StatusCode = ApiResultStatusCode.Unauthorized,
                     Errors = new[] {"User does not exist"}
                 };
             }
@@ -301,7 +302,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 return new ApiResult()
                 {
-                    StatusCode = ApiResultStatusCode.UnAuthorized,
+                    StatusCode = ApiResultStatusCode.Unauthorized,
                     Errors = new[] {"User does not exist"}
                 };
             }
@@ -321,7 +322,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             {
                 return new ApiResult<UserDto>()
                 {
-                    StatusCode = ApiResultStatusCode.UnAuthorized,
+                    StatusCode = ApiResultStatusCode.Unauthorized,
                     Errors = new[] {"User does not exist"}
                 };
             }

@@ -1,4 +1,4 @@
-﻿using Mafiator.Common.SiteSetting;
+﻿using Mafiator.Common.Server.Media;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
 using Microsoft.Extensions.Options;

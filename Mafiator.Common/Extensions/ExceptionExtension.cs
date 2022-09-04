@@ -1,12 +1,17 @@
 ﻿using System;
 
-namespace Mafiator.Common.Extensions
+namespace Mafiator.Common.Extensions;
+
+/// <summary>
+/// Extension class for Exceptions.
+/// </summary>
+public static class ExceptionExtension
 {
-    public static class ExceptionExtension
-    {
-        public static string DetailedMessage(this Exception exception)
-        {
-            return exception.InnerException != null ? exception.InnerException.Message : exception.Message;
-        }
-    }
+    /// <summary>
+    /// Retrieves message detail of an exception.
+    /// </summary>
+    /// <param name="exception"></param>
+    /// <returns>Exception message.</returns>
+    public static string DetailedMessage(this Exception exception) =>
+        exception.InnerException != null ? exception.InnerException.Message : exception.Message;
 }

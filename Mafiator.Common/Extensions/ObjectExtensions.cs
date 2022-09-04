@@ -1,13 +1,21 @@
 ﻿using System;
 
-namespace Mafiator.Common.Extensions
+namespace Mafiator.Common.Extensions;
+
+/// <summary>
+/// Extension class for objects.
+/// </summary>
+public static class ObjectExtensions
 {
-    public static class ObjectExtensions
+    /// <summary>
+    /// Check if object instance is null.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <param name="name"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static void CheckArgumentIsNull(this object obj, string name)
     {
-        public static void CheckArgumentIsNull(this object o, string name)
-        {
-            if (o == null)
-                throw new ArgumentNullException(name);
-        }
+        if (obj == null)
+            throw new ArgumentNullException(name);
     }
 }

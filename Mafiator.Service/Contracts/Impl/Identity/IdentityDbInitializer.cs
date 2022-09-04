@@ -1,5 +1,4 @@
 ﻿using Mafiator.Common.Extensions;
-using Mafiator.Common.SiteSetting;
 using Mafiator.Data;
 using Mafiator.Entities.Identity;
 using Mafiator.Service.Contracts.Identity;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -16,7 +14,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
     public class IdentityDbInitializer : IIdentityDbInitializer
     {
-        private readonly IOptionsSnapshot<SiteSettings> _adminUserSeedOptions;
+       // private readonly IOptionsSnapshot<SiteSettings> _adminUserSeedOptions;
         private readonly IIdentityService _applicationUserManager;
         private readonly ILogger<IdentityDbInitializer> _logger;
         private readonly IApplicationRoleManager _roleManager;
@@ -26,14 +24,14 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             IIdentityService applicationUserManager,
             IServiceScopeFactory scopeFactory,
             IApplicationRoleManager roleManager,
-            IOptionsSnapshot<SiteSettings> adminUserSeedOptions,
+            //IOptionsSnapshot<SiteSettings> adminUserSeedOptions,
             ILogger<IdentityDbInitializer> logger
             )
         {
             _applicationUserManager = applicationUserManager;
             _scopeFactory = scopeFactory;
             _roleManager = roleManager;
-            _adminUserSeedOptions = adminUserSeedOptions;
+            //_adminUserSeedOptions = adminUserSeedOptions;
             _logger = logger;
         }
 
@@ -65,7 +63,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
         public async Task<IdentityResult> SeedDatabaseWithAdminUserAsync()
         {
-            var adminUserSeed = _adminUserSeedOptions.Value.AdminUserSeed;
+           // var adminUserSeed = _adminUserSeedOptions.Value.AdminUserSeed;
 
             // var name = adminUserSeed.Username;
             //var password = adminUserSeed.Password;

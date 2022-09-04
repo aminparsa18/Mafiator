@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mafiator.Common.Server\Mafiator.Common.Server.csproj" />
     <ProjectReference Include="..\Mafiator.Repository\Mafiator.Repository.csproj" />
   </ItemGroup>
 

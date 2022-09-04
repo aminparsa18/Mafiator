@@ -13,8 +13,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Mafiator.Common\Mafiator.Common.csproj" />
-  </ItemGroup>
-
 </Project>

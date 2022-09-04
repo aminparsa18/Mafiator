@@ -76,7 +76,7 @@ namespace Mafiator.Api.Controllers
         {
             var room = _mapper.Map<RoomCreateDto, Room>(roomCreateDto);
             room.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
-            room.Code = RandomHelper.RandomStr(8);
+            room.Code = RandomHelper.CreateRandomText(8);
             var roomId = await _unitOfWork.Room.AddFast(room);
             await _unitOfWork.RoomMember.AddFast(new RoomMember()
             {

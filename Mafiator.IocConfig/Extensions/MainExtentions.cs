@@ -1,6 +1,6 @@
 ﻿using Mafiator.Common.Api;
 using Mafiator.Common.Extensions;
-using Mafiator.Common.SiteSetting;
+using Mafiator.Common.Server.Media;
 using Mafiator.Data;
 using Mafiator.IocConfig.Formatters;
 using Mafiator.IocConfig.Hubs;
@@ -27,7 +27,7 @@ namespace Mafiator.IocConfig.Extensions
         public static IServiceCollection AddMainServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAntiforgery();
-            var resolver =StandardResolver.Instance;
+            var resolver = StandardResolver.Instance;
             var messagePackOption = MessagePackSerializerOptions.Standard.WithResolver(resolver);
             services.AddControllers(option =>
             {
@@ -89,7 +89,7 @@ namespace Mafiator.IocConfig.Extensions
                     await context.HttpContext.Response.WriteAsync(new ApiResult()
                     {
                         Errors = new[] {"Token not validated"},
-                        StatusCode = ApiResultStatusCode.UnAuthorized
+                        StatusCode = ApiResultStatusCode.Unauthorized
                     }.ToString());
                 }
                 else

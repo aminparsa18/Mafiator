@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mafiator.Common\Mafiator.Common.csproj" />
-    <ProjectReference Include="..\Mafiator.Entities\Mafiator.Entities.csproj" />
   </ItemGroup>
 
 </Project>

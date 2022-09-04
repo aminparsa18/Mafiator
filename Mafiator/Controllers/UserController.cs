@@ -1,5 +1,6 @@
 ﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
+using Mafiator.Common.Api.Auth;
 using Mafiator.Data;
 using Mafiator.Data.Dtos.User;
 using Mafiator.Service.Contracts;

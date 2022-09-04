@@ -1,4 +1,5 @@
 ﻿using Mafiator.Common.Api;
+using Mafiator.Common.Api.Auth;
 using Mafiator.Data.Dtos.User;
 using System.Collections.Generic;
 using System.Threading.Tasks;
