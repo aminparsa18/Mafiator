@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mafiator.Common\Mafiator.Common.csproj" />
     <ProjectReference Include="..\Mafiator.Entities\Mafiator.Entities.csproj" />
   </ItemGroup>
 

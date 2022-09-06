@@ -1,5 +1,5 @@
-﻿using Mafiator.Data.Dtos.Game;
-using Mafiator.Data.Dtos.Room;
+﻿using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Data.Dtos.Game;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ public interface IGameRepository : IBaseRepository<Game>
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>List of games.</returns>
-    Task<IEnumerable<RoomGameDto>> GetByRoom(string roomId);
+    Task<IEnumerable<RoomGameResult>> GetByRoom(string roomId);
 
     /// <summary>
     /// Retrieves informations of a waiting game.
@@ -35,7 +35,7 @@ public interface IGameRepository : IBaseRepository<Game>
     /// Retrieves available games to play.
     /// </summary>
     /// <returns>List of available games.</returns>
-    Task<List<GameDto>> GetAvailables();
+    Task<List<AvailableGameResult>> GetAvailables();
 
     /// <summary>
     /// Rertieves game member key identifier if is joined.

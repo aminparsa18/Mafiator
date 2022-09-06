@@ -24,6 +24,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Mafiator.IocConfig\Mafiator.IocConfig.csproj" />
   </ItemGroup>
+ 
+  <ItemGroup>
+    <Folder Include="Endpoints\GameMembers\" />
+    <Folder Include="logs\" />
+  </ItemGroup>
 
 
 </Project>

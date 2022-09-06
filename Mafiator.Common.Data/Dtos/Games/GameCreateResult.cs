@@ -1,0 +1,14 @@
+﻿namespace Mafiator.Common.Data.Dtos.Games;
+
+/// <summary>
+/// Game creation result dto.
+/// </summary>
+[MessagePackObject]
+public class GameCreateResult
+{
+    /// <summary>
+    /// Game key identifier.
+    /// </summary>
+    [Key(0)]
+    public Guid Id { get; set; }
+}

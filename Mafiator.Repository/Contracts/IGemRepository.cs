@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mafiator.Common.Data.Dtos.Gems;
+using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 
@@ -11,5 +12,5 @@ public interface IGemRepository : IBaseRepository<Gem>
     /// Retrieves all gems.
     /// </summary>
     /// <returns>List of gems.</returns>
-    Task<IEnumerable<GemDto>> GetAllDto();
+    Task<IEnumerable<GemResult>> GetAllDto();
 }

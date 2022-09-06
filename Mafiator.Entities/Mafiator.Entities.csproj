@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mafiator.Common\Mafiator.Common.csproj" />
+    <ProjectReference Include="..\Mafiator.Common.Data\Mafiator.Common.Data.csproj" />
   </ItemGroup>
 
 </Project>

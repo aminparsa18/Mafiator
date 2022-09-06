@@ -1,10 +1,10 @@
 ﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
-using Mafiator.Common.Enums;
-using Mafiator.Common.Extensions;
+using Mafiator.Common.Data.Enums;
 using Mafiator.Data;
 using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.User;
+using Mafiator.Data.Extensions;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -18,6 +18,7 @@ namespace Mafiator.Api.Controllers
     public class GameMemberController : ApiBaseController
     {
         private readonly IUnitOfWork unitOfWork;
+
         public GameMemberController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
@@ -51,6 +52,8 @@ namespace Mafiator.Api.Controllers
                 Data = members
             });
         }
+
+        //TODO: move to user endpoint (this is user status) 
         [HttpGet]
         public async Task<IActionResult> GetMemberStatus()
         {

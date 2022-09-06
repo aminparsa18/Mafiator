@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mafiator.Common.Data.Dtos.Avatars;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Mafiator.Repository.Repositories;
@@ -14,9 +15,9 @@ public class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<AvatarDto>> GetAllDto()
+    public async Task<IEnumerable<AvatarResult>> GetAllDto()
     {
         //return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]",cacheKey:"ActiveAvatars",cache:CacheFactory.GetCache());
-        return await Connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]");
+        return await Connection.ExecuteQueryAsync<AvatarResult>("SELECT Name FROM [Avatar]");
     }
 }

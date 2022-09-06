@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mafiator.Common.Data.Dtos.Gems;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Mafiator.Repository.Repositories;
@@ -14,8 +15,8 @@ public class GemRepository : BaseRepository<Gem>, IGemRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<GemDto>> GetAllDto()
+    public Task<IEnumerable<GemResult>> GetAllDto()
     {
-        return Connection.ExecuteQueryAsync<GemDto>("SELECT Id,Count,Price,Image FROM [Gem] ORDER BY Count");
+        return Connection.ExecuteQueryAsync<GemResult>("SELECT Id,Count,Price,Image FROM [Gem] ORDER BY Count");
     }
 }

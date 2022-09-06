@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Mafiator.Data.Dtos.Game;
+using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Data.Dtos.GameEvent;
-using Mafiator.Data.Dtos.Room;
 using Mafiator.Data.Dtos.User;
 using Mafiator.Entities;
 using Mafiator.Entities.Identity;
@@ -18,8 +18,8 @@ public class AutoMapping : Profile
     {
         CreateMap<string, Guid>().ConvertUsing(s => Guid.Parse(s));
         CreateMap<RegisterUserDto, User>();
-        CreateMap<RoomCreateDto,Room>();
-        CreateMap<GameCreateDto, Game>();
+        CreateMap<RoomCreateRequest,Room>();
+        CreateMap<GameCreateRequest, Game>();
         CreateMap<RefreshTokenDto, RefreshToken>();
         CreateMap<GameEventDto,GameEvent>();
     }

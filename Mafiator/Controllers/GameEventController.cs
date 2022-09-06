@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
-using Mafiator.Common.Enums;
+using Mafiator.Common.Data.Enums;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Entities;
 using Mafiator.Repository;
@@ -22,9 +22,9 @@ namespace Mafiator.Api.Controllers
 
         public GameEventController(IMapper mapper,IMemoryCache memoryCache, IUnitOfWork unitOfWork)
         {
-            this._mapper = mapper;
-            this._cache = memoryCache;
-            this._unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _cache = memoryCache;
+            _unitOfWork = unitOfWork;
         }
 
 

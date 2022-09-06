@@ -1,4 +1,4 @@
-﻿using Mafiator.Data.Dtos.Game;
+﻿using Mafiator.Common.Data.Dtos.Reactions;
 using System.Collections.Generic;
 using System.Data;
 
@@ -15,9 +15,9 @@ public class ReactionRepository : BaseRepository<Reaction>, IReactionRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<ReactionDto>> GetAllDtos()
+    public Task<IEnumerable<ReactionResult>> GetAllDtos()
     {
-        return Connection.ExecuteQueryAsync<ReactionDto>(@"SELECT [r].[Id], [r].[Title],[r].[Image]
+        return Connection.ExecuteQueryAsync<ReactionResult>(@"SELECT [r].[Id], [r].[Title],[r].[Image]
             FROM [Reaction] AS [r]");
     }
 }

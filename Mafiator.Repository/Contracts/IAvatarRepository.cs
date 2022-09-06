@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mafiator.Common.Data.Dtos.Avatars;
+using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 
@@ -11,5 +12,5 @@ public interface IAvatarRepository : IBaseRepository<Avatar>
     /// Retrieves all avatars data.
     /// </summary>
     /// <returns>List of avatars</returns>
-    Task<IEnumerable<AvatarDto>> GetAllDto();
+    Task<IEnumerable<AvatarResult>> GetAllDto();
 }

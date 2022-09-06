@@ -1,52 +1,56 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+using Hangfire;
+using Mafiator.Api;
+using Mafiator.Common.Extensions;
+using Mafiator.IocConfig.Extensions;
+using Mafiator.IocConfig.Middleware;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.IO;
 
-namespace Mafiator.Api
+try
 {
-    public class Program
+    WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+    Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(builder.Configuration)
+                    .Enrich.FromLogContext()
+                    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour)
+                    .WriteTo.Console(
+                        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+                    .CreateLogger();
+
+    builder.Host.UseSerilog();
+
+    builder.Services.ConfigureDatabaseConnection(builder.Configuration)
+        .ConfigureController()
+        .ConfigureSwagger()
+        .ConfigureCustomServices(builder.Configuration)
+        .ConfigureCustomIdentityServices(builder.Configuration, builder.Environment);
+
+    builder.Services.AddScoped<IGameService, GameService>();
+    builder.Services.AddApplicationInsightsTelemetry(options =>
     {
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-            .AddEnvironmentVariables()
-            .Build();
-        public static void Main(string[] args)
+        options.ConnectionString = builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"];
+    });
+
+    WebApplication app = builder.Build();
+
+    app.AddCustomMiddleware();
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[]
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
-                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour)
-                .WriteTo.Console(
-                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
-                .CreateLogger();
-
-            try
-            {
-                Log.Information("Starting web host");
-                Log.Information(Directory.GetCurrentDirectory());
-                CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder
-                        .UseStartup<Startup>();
-                }).UseSerilog();
+        new HangfireAuthorizationFilter()
     }
+    });
+    app.Run();
+}
+catch(Exception ex)
+{
+    Log.Fatal(ex, $"Host terminated unexpectedly: {ex.DetailedMessage()}");
+}
+finally
+{
+    Log.CloseAndFlush();
 }

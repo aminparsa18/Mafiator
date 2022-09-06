@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mafiator.Common.Data.Dtos.ChatMessages;
+using System;
 using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
@@ -13,5 +14,5 @@ public interface IChatMessageRepository : IBaseRepository<ChatMessage>
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>List of chat messages.</returns>
-    Task<List<ChatMessageDto>> GetByRoom(Guid roomId);
+    Task<List<ChatMessageResult>> GetByRoom(Guid roomId);
 }

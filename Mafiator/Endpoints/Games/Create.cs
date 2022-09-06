@@ -1,0 +1,73 @@
+﻿using Ardalis.ApiEndpoints;
+using AutoMapper;
+using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Common.Data.Enums;
+using Mafiator.Entities;
+using Mafiator.Repository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Mafiator.Api.Endpoints.Games;
+
+public class Create : EndpointBaseAsync
+    .WithRequest<GameCreateRequest>
+    .WithActionResult<ApiResult<GameCreateResult>>
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+
+    public Create(IUnitOfWork unitOfWork, IMapper mapper)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
+
+    [ApiVersion("1.0")]
+    [HttpPost("api/v{version:apiVersion}/games")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [OpenApiOperation("Games.Create", "", "Creates a new game.")]
+    [OpenApiTag("Games Endpoints")]
+    public override async Task<ActionResult<ApiResult<GameCreateResult>>> HandleAsync(GameCreateRequest request, CancellationToken cancellationToken = default)
+    {
+        var already = await _unitOfWork.Game.IsAlreadyPlaying(request.RoomId.ToString());
+        if (!string.IsNullOrEmpty(already))
+            return Ok(new ApiResult<GameCreateResult>()
+            {
+                IsSuccess = false,
+                StatusCode = ApiResultStatusCode.Conflict,
+                Errors = new[] { "Another game is already playing" }
+            });
+        var game = _mapper.Map<GameCreateRequest, Game>(request);
+        game.Status = GameStatus.NotStarted;
+        game.Capacity = (short)request.Roles.Sum(r => r.Count);
+        await _unitOfWork.Game.AddFast(game);
+        var members = new List<GameMember>();
+        foreach (var member in request.Roles)
+        {
+            for (int i = 0; i < member.Count; i++)
+                members.Add(new GameMember()
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                    Role = member.Role,
+                    GameId = game.Id,
+                    Status = PlayerStatus.Playing
+                });
+        }
+
+        await _unitOfWork.GameMember.AddRangeFast(members);
+        return Ok(new ApiResult<GameCreateResult>()
+        {
+            Data = new GameCreateResult() { Id = game.Id },
+            IsSuccess = true
+        });
+    }
+}

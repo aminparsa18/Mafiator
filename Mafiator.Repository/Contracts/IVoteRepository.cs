@@ -1,4 +1,5 @@
-﻿using Mafiator.Data.Dtos.Vote;
+﻿using Mafiator.Common.Data.Dtos.Votes;
+using Mafiator.Data.Dtos.Vote;
 using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
@@ -27,5 +28,5 @@ public interface IVoteRepository : IBaseRepository<Vote>
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of votes.</returns>
-    Task<IEnumerable<VoteStatusDto>> GetVoteStatus(string gameId);
+    Task<IEnumerable<VoteDetailsResult>> GetVoteStatus(string gameId);
 }

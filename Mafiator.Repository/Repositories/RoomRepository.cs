@@ -1,5 +1,5 @@
-﻿using Mafiator.Common.Enums;
-using Mafiator.Data.Dtos.Room;
+﻿using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Common.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,10 +18,10 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<RoomDto>> GetDtoPage(int skip)
+    public Task<List<RoomDetailsResult>> GetDtoPage(int skip)
     {
         return Context.Room.AsNoTracking().Where(r => !r.IsPrivate)
-            .Skip(skip).Take(20).OrderByDescending(o => o.CreatedDate).Select(s => new RoomDto()
+            .Skip(skip).Take(20).OrderByDescending(o => o.CreatedDate).Select(s => new RoomDetailsResult()
             {
                 Id = s.Id,
                 MemberCount = (short) s.RoomMember.Count,
@@ -31,9 +31,9 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<RoomDto>> GetDtoPageFast(int skip)
+    public Task<IEnumerable<RoomDetailsResult>> GetDtoPageFast(int skip)
     {
-        return Connection.ExecuteQueryAsync<RoomDto>(@"SELECT [t].[Id], [t].[Image], CAST((
+        return Connection.ExecuteQueryAsync<RoomDetailsResult>(@"SELECT [t].[Id], [t].[Image], CAST((
     SELECT COUNT(*) FROM [RoomMember] AS [r]
     WHERE [t].[Id] = [r].[RoomId]) AS smallint) AS [MemberCount], (
     SELECT COUNT(*) FROM [Game] AS [g]
@@ -46,11 +46,11 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<RoomDto> GetRoom(string roomId)
+    public Task<RoomDetailsResult> GetRoom(string roomId)
     {
         var parsed = Guid.Parse(roomId);
         return Context.Room.AsNoTracking().Where(r => r.Id == parsed)
-            .Select(s => new RoomDto()
+            .Select(s => new RoomDetailsResult()
             {
                 Id = s.Id,
                 MemberCount = (short) s.RoomMember.Count,
@@ -60,9 +60,9 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<RoomDto>> GetRoomFast(string roomId)
+    public Task<IEnumerable<RoomDetailsResult>> GetRoomFast(string roomId)
     {
-        return Connection.ExecuteQueryAsync<RoomDto>(@"SELECT TOP(1) CAST((
+        return Connection.ExecuteQueryAsync<RoomDetailsResult>(@"SELECT TOP(1) CAST((
             SELECT COUNT(*)
             FROM[dbo].[RoomMember] AS[r]
             WHERE[r0].[Id] = [r].[RoomId]) AS smallint) AS[MemberCount], (
@@ -74,10 +74,10 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<RoomDto>> GetMyRooms(Guid userId)
+    public Task<List<RoomDetailsResult>> GetMyRooms(Guid userId)
     {
         return Context.RoomMember.AsNoTracking().Where(r => r.UserId == userId)
-            .Select(s => new RoomDto()
+            .Select(s => new RoomDetailsResult()
             {
                 Id = s.RoomId,
                 MemberCount = (short) s.Room.RoomMember.Count,
@@ -88,9 +88,9 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<RoomDto>> GetMyRoomsFast(Guid userId)
+    public Task<IEnumerable<RoomDetailsResult>> GetMyRoomsFast(Guid userId)
     {
-        return Connection.ExecuteQueryAsync<RoomDto>(@"SELECT [r0].[RoomId] AS [Id], CAST((
+        return Connection.ExecuteQueryAsync<RoomDetailsResult>(@"SELECT [r0].[RoomId] AS [Id], CAST((
     SELECT COUNT(*)
     FROM [dbo].[RoomMember] AS [r]
     WHERE [r1].[Id] = [r].[RoomId]) AS smallint) AS [MemberCount], (

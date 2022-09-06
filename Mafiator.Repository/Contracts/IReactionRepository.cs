@@ -1,4 +1,4 @@
-﻿using Mafiator.Data.Dtos.Game;
+﻿using Mafiator.Common.Data.Dtos.Reactions;
 using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
@@ -12,5 +12,5 @@ public interface IReactionRepository : IBaseRepository<Reaction>
     /// Retrieves all reactions.
     /// </summary>
     /// <returns>List of reactions.</returns>
-    Task<IEnumerable<ReactionDto>> GetAllDtos();
+    Task<IEnumerable<ReactionResult>> GetAllDtos();
 }

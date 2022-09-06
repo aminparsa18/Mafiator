@@ -1,6 +1,4 @@
-﻿using Mafiator.Common.Helpers;
-using RepoDb.Attributes;
-using System;
+﻿using System;
 
 namespace Mafiator.Data.Dtos.Room;
 
@@ -14,7 +12,6 @@ public class RoomMemberDto
     /// Room member user key identifier.
     /// </summary>
     [Key(0)]
-    [PropertyHandler(typeof(GuidPropertyHandler))]
     public Guid UserId { get; set; }
     
     /// <summary>

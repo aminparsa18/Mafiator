@@ -1,4 +1,4 @@
-﻿using Mafiator.Data.Dtos.Room;
+﻿using Mafiator.Common.Data.Dtos.Rooms;
 using System;
 using System.Collections.Generic;
 
@@ -14,42 +14,42 @@ public interface IRoomRepository : IBaseRepository<Room>
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>Room details.</returns>
-    Task<IEnumerable<RoomDto>> GetRoomFast(string roomId);
+    Task<IEnumerable<RoomDetailsResult>> GetRoomFast(string roomId);
 
     /// <summary>
     /// Retrieves list of rooms by pagination.
     /// </summary>
     /// <param name="skip">Skip.</param>
     /// <returns>List of rooms.</returns>
-    Task<List<RoomDto>> GetDtoPage(int skip);
+    Task<List<RoomDetailsResult>> GetDtoPage(int skip);
 
     /// <summary>
     /// Retrieves list of rooms by pagination.
     /// </summary>
     /// <param name="skip">Skip.</param>
     /// <returns>List of rooms.</returns>
-    Task<IEnumerable<RoomDto>> GetDtoPageFast(int skip);
+    Task<IEnumerable<RoomDetailsResult>> GetDtoPageFast(int skip);
 
     /// <summary>
     /// Retrieves room details.
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>Room details.</returns>
-    Task<RoomDto> GetRoom(string roomId);
+    Task<RoomDetailsResult> GetRoom(string roomId);
 
     /// <summary>
     /// Retrieves all rooms by user.
     /// </summary>
     /// <param name="userId">User key identifier.</param>
     /// <returns>List of user rooms.</returns>
-    Task<List<RoomDto>> GetMyRooms(Guid userId);
+    Task<List<RoomDetailsResult>> GetMyRooms(Guid userId);
 
     /// <summary>
     /// Retrieves all rooms by user.
     /// </summary>
     /// <param name="userId">User key identifier.</param>
     /// <returns>List of user rooms.</returns>
-    Task<IEnumerable<RoomDto>> GetMyRoomsFast(Guid userId);
+    Task<IEnumerable<RoomDetailsResult>> GetMyRoomsFast(Guid userId);
 
     /// <summary>
     /// Retrievs room member if is joined in room.

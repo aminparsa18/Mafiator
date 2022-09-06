@@ -2,12 +2,10 @@
 using Hangfire;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
-using Mafiator.Common.Enums;
+using Mafiator.Common.Data.Enums;
 using Mafiator.Common.Extensions;
 using Mafiator.Data;
 using Mafiator.Data.Dtos.Game;
-using Mafiator.Data.Dtos.Room;
-using Mafiator.Entities;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
@@ -54,66 +52,6 @@ namespace Mafiator.Api.Controllers
             //}
 
             return Ok();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] GameCreateDto gameCreateDto)
-        {
-            var already = await _unitOfWork.Game.IsAlreadyPlaying(gameCreateDto.RoomId.ToString());
-            if (!string.IsNullOrEmpty(already))
-                return Ok(new ApiResult<GameResultDto>()
-                {
-                    IsSuccess = false,
-                    StatusCode = ApiResultStatusCode.Conflict,
-                    Errors = new[] {"Another game is already playing"}
-                });
-            var game = _mapper.Map<GameCreateDto, Game>(gameCreateDto);
-            game.Status = GameStatus.NotStarted;
-            game.Capacity = (short) gameCreateDto.Roles.Sum(r => r.Count);
-            await _unitOfWork.Game.AddFast(game);
-            var members = new List<GameMember>();
-            foreach (var member in gameCreateDto.Roles)
-            {
-                for (int i = 0; i < member.Count; i++)
-                    members.Add(new GameMember()
-                    {
-                        Id = Guid.NewGuid(),
-                        CreatedDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now,
-                        Role = member.Role,
-                        GameId = game.Id,
-                        Status = PlayerStatus.Playing
-                    });
-            }
-
-            await _unitOfWork.GameMember.AddRangeFast(members);
-            return Ok(new ApiResult<GameResultDto>()
-            {
-                Data = new GameResultDto() {Id = game.Id},
-                IsSuccess = true
-            });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetByRoom(string roomId)
-        {
-            var data = await _unitOfWork.Game.GetByRoom(roomId);
-            return Ok(new ApiResult<IEnumerable<RoomGameDto>>
-            {
-                IsSuccess = true,
-                Data = data
-            });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAvailable()
-        {
-            var data = await _unitOfWork.Game.GetAvailables();
-            return Ok(new ApiResult<IEnumerable<GameDto>>
-            {
-                IsSuccess = true,
-                Data = data
-            });
         }
 
         [HttpGet]

@@ -1,7 +1,7 @@
 ﻿using Hangfire;
-using Mafiator.Common.Enums;
-using Mafiator.Common.Extensions;
+using Mafiator.Common.Data.Enums;
 using Mafiator.Data.Dtos.GameEvent;
+using Mafiator.Data.Extensions;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
@@ -23,9 +23,9 @@ namespace Mafiator.Api
 
         public GameService(IMemoryCache cache, IUnitOfWork unitOfWork, IHubContext<GameHub> gameHub)
         {
-            this._cache = cache;
-            this._unitOfWork = unitOfWork;
-            this._gameHub = gameHub;
+            _cache = cache;
+            _unitOfWork = unitOfWork;
+            _gameHub = gameHub;
         }
 
         //turn change every 45 seconds

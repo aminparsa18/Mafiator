@@ -1,6 +1,6 @@
-﻿using Mafiator.Common.Enums;
+﻿using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Common.Data.Enums;
 using Mafiator.Data.Dtos.Game;
-using Mafiator.Data.Dtos.Room;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,9 +20,9 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<RoomGameDto>> GetByRoom(string roomId)
+    public Task<IEnumerable<RoomGameResult>> GetByRoom(string roomId)
     {
-        return Connection.ExecuteQueryAsync<RoomGameDto>(@"SELECT [g].[Status], [g].[StartDate]
+        return Connection.ExecuteQueryAsync<RoomGameResult>(@"SELECT [g].[Status], [g].[StartDate]
             FROM[Game] AS[g]
             WHERE[g].[RoomId] = @RoomId
             ORDER BY[g].[StartDate] DESC", new { RoomId = roomId });
@@ -70,7 +70,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<GameDto>> GetAvailables()
+    public Task<List<AvailableGameResult>> GetAvailables()
     {
         //            return connection.ExecuteQueryAsync<GameDto>(@"SELECT CAST((
         //    SELECT COUNT(*)
@@ -86,7 +86,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
         //    FROM [dbo].[GameMember] AS [g2]
         //    WHERE [g0].[Id] = [g2].[GameId])) ");
         return Context.Game.Where(g => g.Status == GameStatus.NotStarted && g.GameMember.Count(m => m.UserId != null) < g.GameMember.Count)
-            .Select(s => new GameDto()
+            .Select(s => new AvailableGameResult()
             {
                 Capacity = (short)s.GameMember.Count(m => !m.UserId.HasValue),
                 MemberCount = (short)s.GameMember.Count,

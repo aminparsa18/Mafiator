@@ -1,4 +1,5 @@
-﻿using Mafiator.Data.Dtos.Vote;
+﻿using Mafiator.Common.Data.Dtos.Votes;
+using Mafiator.Data.Dtos.Vote;
 using System.Collections.Generic;
 using System.Data;
 
@@ -28,8 +29,8 @@ public class VoteRepository : BaseRepository<Vote>, IVoteRepository
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<VoteStatusDto>> GetVoteStatus(string gameId)
+    public Task<IEnumerable<VoteDetailsResult>> GetVoteStatus(string gameId)
     {
-        return Connection.ExecuteQueryAsync<VoteStatusDto>("SELECT v.[TargetId],v.[VoterId] FROM [Vote] v WHERE v.[GameId] = @gameId AND v.[IsValidated] = 0", new { gameId }, cacheKey: $"Votes-{gameId}", cache: CacheFactory.GetCache(), cacheItemExpiration: 1);
+        return Connection.ExecuteQueryAsync<VoteDetailsResult>("SELECT v.[TargetId],v.[VoterId] FROM [Vote] v WHERE v.[GameId] = @gameId AND v.[IsValidated] = 0", new { gameId }, cacheKey: $"Votes-{gameId}", cache: CacheFactory.GetCache(), cacheItemExpiration: 1);
     }
 }

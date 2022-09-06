@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mafiator.Common.Data.Dtos.ChatMessages;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -16,10 +17,10 @@ public class ChatMessageRepository : BaseRepository<ChatMessage>, IChatMessageRe
     }
 
     /// <inheritdoc/>
-    public Task<List<ChatMessageDto>> GetByRoom(Guid roomId)
+    public Task<List<ChatMessageResult>> GetByRoom(Guid roomId)
     {
         return Context.ChatMessage.AsNoTracking().Where(c => c.RoomId == roomId)
-            .Select(s => new ChatMessageDto()
+            .Select(s => new ChatMessageResult()
             {
                 Type = s.MessageType,
                 Image = s.User.Image,

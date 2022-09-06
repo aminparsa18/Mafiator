@@ -1,4 +1,4 @@
-﻿using Mafiator.Common.Enums;
+﻿using Mafiator.Common.Data.Enums;
 using System;
 
 namespace Mafiator.Entities;
