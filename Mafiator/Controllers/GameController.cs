@@ -2,12 +2,12 @@
 using Hangfire;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
+using Mafiator.Common.Enums;
 using Mafiator.Common.Extensions;
 using Mafiator.Data;
 using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.Room;
 using Mafiator.Entities;
-using Mafiator.Entities.Enums;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
@@ -131,7 +131,7 @@ namespace Mafiator.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetWaitingGameByGame(string gameId)
         {
-            var data = await _unitOfWork.Game.GetWaitingGameByGame(Guid.Parse(gameId));
+            var data = await _unitOfWork.Game.GetWaitingGameInformations(Guid.Parse(gameId));
             data?.Members.ForEach(m => m.Image = Constants.BlobStorageEndpoint + m.Image);
             return Ok(new ApiResult<WaitingGameDto>
             {

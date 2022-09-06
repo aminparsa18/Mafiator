@@ -1,14 +1,14 @@
-﻿using Mafiator.Data;
-using Mafiator.Entities;
-using Mafiator.Repository.Contracts;
-using System.Data;
+﻿using System.Data;
 
-namespace Mafiator.Repository.Repositories
+namespace Mafiator.Repository.Repositories;
+
+/// <inheritdoc/>
+public class EventJoinRepository : BaseRepository<EventJoin>, IEventJoinRepository
 {
-    public class EventJoinRepository:Repository<EventJoin>,IEventJoinRepository
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EventJoinRepository"/> class.
+    /// </summary>
+    public EventJoinRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
     {
-        public EventJoinRepository(ApplicationDbContext context,IDbConnection connection) : base(context,connection)
-        {
-        }
     }
 }

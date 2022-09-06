@@ -1,11 +1,8 @@
-﻿using MessagePack;
+﻿namespace Mafiator.Data.Dtos;
 
-namespace Mafiator.Data.Dtos
+[MessagePackObject()]
+public class AvatarDto
 {
-   [MessagePackObject()]
-   public class AvatarDto
-    {
-        [Key(0)]
-        public string Name { get; set; }
-    }
+    [Key(0)]
+    public string Name { get; set; }
 }

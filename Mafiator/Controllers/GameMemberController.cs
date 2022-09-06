@@ -1,10 +1,10 @@
 ﻿using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
+using Mafiator.Common.Enums;
+using Mafiator.Common.Extensions;
 using Mafiator.Data;
 using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.User;
-using Mafiator.Entities.Enums;
-using Mafiator.Entities.Extensions;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

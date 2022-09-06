@@ -1,23 +1,21 @@
-﻿using Mafiator.Data;
-using Mafiator.Data.Dtos;
-using Mafiator.Entities;
-using Mafiator.Repository.Contracts;
-using RepoDb;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 
-namespace Mafiator.Repository.Repositories
+namespace Mafiator.Repository.Repositories;
+
+/// <inheritdoc/>
+public class GemRepository : BaseRepository<Gem>, IGemRepository
 {
-    public class GemRepository:Repository<Gem>,IGemRepository
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GemRepository"/> class.
+    /// </summary>
+    public GemRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
     {
-        public GemRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
-        {
-        }
+    }
 
-        public Task<IEnumerable<GemDto>> GetAllDto()
-        {
-            return Connection.ExecuteQueryAsync<GemDto>("SELECT Id,Count,Price,Image FROM [Gem] ORDER BY Count");
-        }
+    /// <inheritdoc/>
+    public Task<IEnumerable<GemDto>> GetAllDto()
+    {
+        return Connection.ExecuteQueryAsync<GemDto>("SELECT Id,Count,Price,Image FROM [Gem] ORDER BY Count");
     }
 }

@@ -1,9 +1,22 @@
-﻿namespace Mafiator.Entities
+﻿namespace Mafiator.Entities;
+
+/// <summary>
+/// Gem.
+/// </summary>
+public class Gem:BaseEntity
 {
-    public class Gem:BaseEntity
-    {
-        public int Count { get; set; }
-        public int Price { get; set; }
-        public string Image { get; set; }
-    }
+    /// <summary>
+    /// Count.
+    /// </summary>
+    public int Count { get; set; }
+
+    /// <summary>
+    /// Price.
+    /// </summary>
+    public int Price { get; set; }
+
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
 }

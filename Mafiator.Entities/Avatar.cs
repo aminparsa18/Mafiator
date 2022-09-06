@@ -1,7 +1,12 @@
-﻿namespace Mafiator.Entities
+﻿namespace Mafiator.Entities;
+
+/// <summary>
+/// Avatar picture of user.
+/// </summary>
+public class Avatar:BaseEntity
 {
-    public class Avatar:BaseEntity
-    {
-        public string Name { get; set; }
-    }
+    /// <summary>
+    /// Avatar file name.
+    /// </summary>
+    public string Name { get; set; }
 }

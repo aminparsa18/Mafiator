@@ -1,6 +1,8 @@
-﻿namespace Mafiator.Entities.Mapping
+﻿namespace Mafiator.Entities.Mapping;
+
+/// <summary>
+/// Table mapping for gem.
+/// </summary>
+public class GemMapping : BaseEntityTypeConfiguration<Gem>
 {
-    public class GemMapping:BaseEntityTypeConfiguration<Gem>
-    {
-    }
 }

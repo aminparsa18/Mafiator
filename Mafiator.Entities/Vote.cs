@@ -1,15 +1,44 @@
 ﻿using System;
 
-namespace Mafiator.Entities
+namespace Mafiator.Entities;
+
+/// <summary>
+/// Vote.
+/// </summary>
+public class Vote:BaseEntity
 {
-    public class Vote:BaseEntity
-    {
-        public Guid GameId { get; set; }
-        public Guid VoterId { get; set; }
-        public Guid TargetId { get; set; }
-        public bool IsValidated { get; set; }
-        public virtual Game Game { get; set; }
-        public virtual GameMember Voter { get; set; }
-        public virtual GameMember Target { get; set; }
-    }
+    /// <summary>
+    /// Game key identifier.
+    /// </summary>
+    public Guid GameId { get; set; }
+
+    /// <summary>
+    /// Voter key identifier.
+    /// </summary>
+    public Guid VoterId { get; set; }
+
+    /// <summary>
+    /// Target key identifier.
+    /// </summary>
+    public Guid TargetId { get; set; }
+
+    /// <summary>
+    /// Indicates vote is validated.
+    /// </summary>
+    public bool IsValidated { get; set; }
+
+    /// <summary>
+    /// Game.
+    /// </summary>
+    public virtual Game Game { get; set; }
+
+    /// <summary>
+    /// Voter.
+    /// </summary>
+    public virtual GameMember Voter { get; set; }
+
+    /// <summary>
+    /// Target.
+    /// </summary>
+    public virtual GameMember Target { get; set; }
 }

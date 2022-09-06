@@ -1,5 +1,5 @@
-﻿using Mafiator.Entities;
-using Mafiator.Entities.Enums;
+﻿using Mafiator.Common.Enums;
+using Mafiator.Entities;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.SignalR;
 using System;

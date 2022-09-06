@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Mafiator.Api.Controllers.Base;
 using Mafiator.Common.Api;
+using Mafiator.Common.Enums;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Entities;
-using Mafiator.Entities.Enums;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.Mvc;

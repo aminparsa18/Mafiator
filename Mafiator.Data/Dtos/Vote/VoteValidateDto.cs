@@ -1,7 +1,12 @@
-﻿namespace Mafiator.Data.Dtos.Vote
+﻿namespace Mafiator.Data.Dtos.Vote;
+
+/// <summary>
+/// Vote validate dto.
+/// </summary>
+public class VoteValidateDto
 {
-    public class VoteValidateDto
-    {
-        public string TargetId { get; set; }
-    }
+    /// <summary>
+    /// Target key identifier.
+    /// </summary>
+    public string TargetId { get; set; }
 }

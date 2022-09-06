@@ -1,30 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Mafiator.Entities.Mapping
+namespace Mafiator.Entities.Mapping;
+
+/// <summary>
+/// Table mapping for game member.
+/// </summary>
+public class GameMemberMapping : BaseEntityTypeConfiguration<GameMember>
 {
-    public class GameMemberMapping:BaseEntityTypeConfiguration<GameMember>
+    public override void Configure(EntityTypeBuilder<GameMember> builder)
     {
-        public override void Configure(EntityTypeBuilder<GameMember> builder)
-        {
-            builder.Property(p => p.Role).HasColumnType("smallint");
+        builder.Property(p => p.Role).HasColumnType("smallint");
 
-            builder.HasOne(d => d.Game)
-                .WithMany(p => p.GameMember)
-                .HasForeignKey(d => d.GameId)
-                .HasConstraintName("FK_GameMember_Game");
+        builder.HasOne(d => d.Game)
+            .WithMany(p => p.GameMember)
+            .HasForeignKey(d => d.GameId)
+            .HasConstraintName("FK_GameMember_Game");
 
-            builder.HasOne(d => d.User)
-                .WithMany(p => p.GameMember)
-                .IsRequired(false)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_GameMember_User");
+        builder.HasOne(d => d.User)
+            .WithMany(p => p.GameMember)
+            .IsRequired(false)
+            .HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_GameMember_User");
 
-            builder.HasIndex(p => p.GameId);
-            builder.HasIndex(p => p.UserId);
+        builder.HasIndex(p => p.GameId);
+        builder.HasIndex(p => p.UserId);
 
-            base.Configure(builder);
-        }
+        base.Configure(builder);
     }
 }

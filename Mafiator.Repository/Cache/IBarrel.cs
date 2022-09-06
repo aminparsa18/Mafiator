@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mafiator.Repository.Cache
+namespace Mafiator.Repository.Cache;
+
+public interface IBarrel
 {
-    public interface IBarrel
-    {
-        /// <summary>
+    /// <summary>
 		/// Enable / Disable auto expiring of items in the barrel
 		/// </summary>
 		bool AutoExpire { get; set; }
@@ -84,5 +84,4 @@ namespace Mafiator.Repository.Cache
 		/// <param name="key">The key to check</param>
 		/// <returns>The date if exists, else null</returns>
 		DateTime? GetExpiration(string key);
-    }
 }

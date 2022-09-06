@@ -7,1146 +7,1145 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Mafiator.Data.Migrations
+namespace Mafiator.Data.Migrations;
+
+[DbContext(typeof(ApplicationDbContext))]
+[Migration("20210909071245_Initial")]
+partial class Initial
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210909071245_Initial")]
-    partial class Initial
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasDefaultSchema("dbo")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.9")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Mafiator.Entities.Avatar", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder
+            .HasDefaultSchema("dbo")
+            .HasAnnotation("Relational:MaxIdentifierLength", 128)
+            .HasAnnotation("ProductVersion", "5.0.9")
+            .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+        modelBuilder.Entity("Mafiator.Entities.Avatar", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("Id");
 
-                    b.ToTable("Avatar");
-                });
-
-            modelBuilder.Entity("Mafiator.Entities.ChatMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                b.ToTable("Avatar");
+            });
+
+        modelBuilder.Entity("Mafiator.Entities.ChatMessage", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                b.Property<string>("Content")
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<short>("MessageType")
-                        .HasColumnType("smallint");
+                b.Property<short>("MessageType")
+                    .HasColumnType("smallint");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("RoomId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessage");
-                });
+                b.ToTable("ChatMessage");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Event", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Event", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CityId")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("CityId")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasMaxLength(1000)
+                    .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Image")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .HasColumnType("nvarchar(150)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("Event");
-                });
+                b.ToTable("Event");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.EventJoin", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.EventJoin", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("EventId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                b.HasIndex("EventId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("EventJoin");
-                });
+                b.ToTable("EventJoin");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Game", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Game", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("Capacity")
-                        .HasColumnType("smallint");
+                b.Property<short>("Capacity")
+                    .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("RoomId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("StartDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<short>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasDefaultValueSql("((0))");
+                b.Property<short>("Status")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("smallint")
+                    .HasDefaultValueSql("((0))");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                b.HasIndex("RoomId");
 
-                    b.ToTable("Game");
-                });
+                b.ToTable("Game");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameEvent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.GameEvent", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<short>("EventType")
-                        .HasColumnType("smallint");
+                b.Property<short>("EventType")
+                    .HasColumnType("smallint");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("GameId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsValidated")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsValidated")
+                    .HasColumnType("bit");
 
-                    b.Property<Guid>("MemberId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("MemberId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                b.HasIndex("GameId");
 
-                    b.HasIndex("MemberId");
+                b.HasIndex("MemberId");
 
-                    b.ToTable("GameEvent");
-                });
+                b.ToTable("GameEvent");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameMember", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.GameMember", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("GameId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<short>("Role")
-                        .HasColumnType("smallint");
+                b.Property<short>("Role")
+                    .HasColumnType("smallint");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                b.Property<int>("Status")
+                    .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid?>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                b.HasIndex("GameId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("GameMember");
-                });
+                b.ToTable("GameMember");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.GameMessage", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                b.Property<string>("Content")
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("GameId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("MessageType")
-                        .HasColumnType("smallint");
+                b.Property<short>("MessageType")
+                    .HasColumnType("smallint");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                b.HasIndex("GameId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("GameMessage");
-                });
+                b.ToTable("GameMessage");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameViolationReport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.GameViolationReport", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("GameId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("ReportedId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("ReportedId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReporterId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("ReporterId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("ViolationType")
-                        .HasColumnType("smallint");
+                b.Property<short>("ViolationType")
+                    .HasColumnType("smallint");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                b.HasIndex("GameId");
 
-                    b.HasIndex("ReportedId");
+                b.HasIndex("ReportedId");
 
-                    b.HasIndex("ReporterId");
+                b.HasIndex("ReporterId");
 
-                    b.ToTable("GameViolationReport");
-                });
+                b.ToTable("GameViolationReport");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Gem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Gem", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
+                b.Property<int>("Count")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Image")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                b.Property<int>("Price")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Gem");
-                });
+                b.ToTable("Gem");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Identity.Role", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("PersianCaption")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PersianCaption")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex")
+                    .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Roles");
-                });
+                b.ToTable("Roles");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.RoleClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+        modelBuilder.Entity("Mafiator.Entities.Identity.RoleClaim", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaim");
-                });
+                b.ToTable("RoleClaim");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Identity.User", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("Code")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CountryCode")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("CountryCode")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("DisplayName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Image")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSuspended")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsSuspended")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                b.Property<int>("Score")
+                    .HasColumnType("int");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Token")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
+                b.HasIndex("Code")
+                    .IsUnique();
 
-                    b.HasIndex("CountryCode");
+                b.HasIndex("CountryCode");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex")
+                    .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users");
-                });
+                b.ToTable("Users");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.UserClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+        modelBuilder.Entity("Mafiator.Entities.Identity.UserClaim", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("UserClaim");
-                });
+                b.ToTable("UserClaim");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.UserRole", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Identity.UserRole", b =>
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleId");
+                b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("UserRole");
-                });
+                b.ToTable("UserRole");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Reaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Reaction", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Image")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("Price")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Reaction");
-                });
+                b.ToTable("Reaction");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.RefreshToken", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("ExpirationDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsInvalidated")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsInvalidated")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsUsed")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("JwtId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("JwtId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Token")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("RefreshToken");
-                });
+                b.ToTable("RefreshToken");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Room", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Room", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Code")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("Country")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<bool>("IsPrivate")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsPrivate")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Country");
+                b.HasIndex("Country");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("Room");
-                });
+                b.ToTable("Room");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.RoomMember", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.RoomMember", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("RoomId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("RoomMember");
-                });
+                b.ToTable("RoomMember");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Vote", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Mafiator.Entities.Vote", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("CreatedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("GameId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsValidated")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsValidated")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getDate())");
+                b.Property<DateTime>("ModifiedDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("(getDate())");
 
-                    b.Property<Guid>("TargetId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("TargetId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VoterId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("VoterId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("GameId");
+                b.HasIndex("GameId");
 
-                    b.HasIndex("TargetId");
+                b.HasIndex("TargetId");
 
-                    b.HasIndex("VoterId");
+                b.HasIndex("VoterId");
 
-                    b.ToTable("Vote");
-                });
+                b.ToTable("Vote");
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            {
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("ProviderKey")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
-                });
+                b.ToTable("AspNetUserLogins");
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Value")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
-                });
+                b.ToTable("AspNetUserTokens");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.ChatMessage", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Room", "Room")
-                        .WithMany("ChatMessage")
-                        .HasForeignKey("RoomId")
-                        .HasConstraintName("FK_ChatMessage_Room")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.ChatMessage", b =>
+            {
+                b.HasOne("Mafiator.Entities.Room", "Room")
+                    .WithMany("ChatMessage")
+                    .HasForeignKey("RoomId")
+                    .HasConstraintName("FK_ChatMessage_Room")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("ChatMessage")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_ChatMessage_User")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("ChatMessage")
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_ChatMessage_User")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Room");
+                b.Navigation("Room");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Event", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Event", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.EventJoin", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Event", "Event")
-                        .WithMany("EventJoin")
-                        .HasForeignKey("EventId")
-                        .HasConstraintName("FK_EventJoin_Event")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.EventJoin", b =>
+            {
+                b.HasOne("Mafiator.Entities.Event", "Event")
+                    .WithMany("EventJoin")
+                    .HasForeignKey("EventId")
+                    .HasConstraintName("FK_EventJoin_Event")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("EventJoin")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_EventJoin_User")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("EventJoin")
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_EventJoin_User")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Event");
+                b.Navigation("Event");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Game", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Room", "Room")
-                        .WithMany("Game")
-                        .HasForeignKey("RoomId")
-                        .HasConstraintName("FK_Room_Game")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Game", b =>
+            {
+                b.HasOne("Mafiator.Entities.Room", "Room")
+                    .WithMany("Game")
+                    .HasForeignKey("RoomId")
+                    .HasConstraintName("FK_Room_Game")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Room");
-                });
+                b.Navigation("Room");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameEvent", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Game", "Game")
-                        .WithMany("GameEvent")
-                        .HasForeignKey("GameId")
-                        .HasConstraintName("FK_GameEvent_Game")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.GameEvent", b =>
+            {
+                b.HasOne("Mafiator.Entities.Game", "Game")
+                    .WithMany("GameEvent")
+                    .HasForeignKey("GameId")
+                    .HasConstraintName("FK_GameEvent_Game")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.GameMember", "Member")
-                        .WithMany("GameEvent")
-                        .HasForeignKey("MemberId")
-                        .HasConstraintName("FK_GameEvent_Member")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.GameMember", "Member")
+                    .WithMany("GameEvent")
+                    .HasForeignKey("MemberId")
+                    .HasConstraintName("FK_GameEvent_Member")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Game");
+                b.Navigation("Game");
 
-                    b.Navigation("Member");
-                });
+                b.Navigation("Member");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameMember", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Game", "Game")
-                        .WithMany("GameMember")
-                        .HasForeignKey("GameId")
-                        .HasConstraintName("FK_GameMember_Game")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.GameMember", b =>
+            {
+                b.HasOne("Mafiator.Entities.Game", "Game")
+                    .WithMany("GameMember")
+                    .HasForeignKey("GameId")
+                    .HasConstraintName("FK_GameMember_Game")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("GameMember")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_GameMember_User")
-                        .OnDelete(DeleteBehavior.Restrict);
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("GameMember")
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_GameMember_User")
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Game");
+                b.Navigation("Game");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameMessage", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Game", "Game")
-                        .WithMany("GameMessage")
-                        .HasForeignKey("GameId")
-                        .HasConstraintName("FK_GameMessage_Game")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.GameMessage", b =>
+            {
+                b.HasOne("Mafiator.Entities.Game", "Game")
+                    .WithMany("GameMessage")
+                    .HasForeignKey("GameId")
+                    .HasConstraintName("FK_GameMessage_Game")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("GameMessage")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_GameMessage_User")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("GameMessage")
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_GameMessage_User")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Game");
+                b.Navigation("Game");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameViolationReport", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Game", "Game")
-                        .WithMany("Report")
-                        .HasForeignKey("GameId")
-                        .HasConstraintName("FK_GameViolationReport_Game")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.GameViolationReport", b =>
+            {
+                b.HasOne("Mafiator.Entities.Game", "Game")
+                    .WithMany("Report")
+                    .HasForeignKey("GameId")
+                    .HasConstraintName("FK_GameViolationReport_Game")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "Reported")
-                        .WithMany("Reported")
-                        .HasForeignKey("ReportedId")
-                        .HasConstraintName("FK_GameViolationReport_Reported")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "Reported")
+                    .WithMany("Reported")
+                    .HasForeignKey("ReportedId")
+                    .HasConstraintName("FK_GameViolationReport_Reported")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "Reporter")
-                        .WithMany("Reporter")
-                        .HasForeignKey("ReporterId")
-                        .HasConstraintName("FK_GameViolationReport_Reporter")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "Reporter")
+                    .WithMany("Reporter")
+                    .HasForeignKey("ReporterId")
+                    .HasConstraintName("FK_GameViolationReport_Reporter")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Game");
+                b.Navigation("Game");
 
-                    b.Navigation("Reported");
+                b.Navigation("Reported");
 
-                    b.Navigation("Reporter");
-                });
+                b.Navigation("Reporter");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.RoleClaim", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.Role", "Role")
-                        .WithMany("Claims")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Identity.RoleClaim", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.Role", "Role")
+                    .WithMany("Claims")
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Role");
-                });
+                b.Navigation("Role");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.UserClaim", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("Claims")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Identity.UserClaim", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("Claims")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.UserRole", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Identity.UserRole", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.Role", "Role")
+                    .WithMany("Users")
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("Roles")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Role");
+                b.Navigation("Role");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("RefreshToken")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.RefreshToken", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("RefreshToken")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Room", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("Room")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Room_User")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Room", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("Room")
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_Room_User")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.RoomMember", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Room", "Room")
-                        .WithMany("RoomMember")
-                        .HasForeignKey("RoomId")
-                        .HasConstraintName("FK_RoomMember_Room")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.RoomMember", b =>
+            {
+                b.HasOne("Mafiator.Entities.Room", "Room")
+                    .WithMany("RoomMember")
+                    .HasForeignKey("RoomId")
+                    .HasConstraintName("FK_RoomMember_Room")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.Identity.User", "User")
-                        .WithMany("RoomMember")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_RoomMember_User")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.Identity.User", "User")
+                    .WithMany("RoomMember")
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_RoomMember_User")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.Navigation("Room");
+                b.Navigation("Room");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Vote", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Game", "Game")
-                        .WithMany("Vote")
-                        .HasForeignKey("GameId")
-                        .HasConstraintName("FK_Vote_Game")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+        modelBuilder.Entity("Mafiator.Entities.Vote", b =>
+            {
+                b.HasOne("Mafiator.Entities.Game", "Game")
+                    .WithMany("Vote")
+                    .HasForeignKey("GameId")
+                    .HasConstraintName("FK_Vote_Game")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.GameMember", "Target")
-                        .WithMany("Target")
-                        .HasForeignKey("TargetId")
-                        .HasConstraintName("FK_Target_Target")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.GameMember", "Target")
+                    .WithMany("Target")
+                    .HasForeignKey("TargetId")
+                    .HasConstraintName("FK_Target_Target")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("Mafiator.Entities.GameMember", "Voter")
-                        .WithMany("Voter")
-                        .HasForeignKey("VoterId")
-                        .HasConstraintName("FK_Voter_Voter")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("Mafiator.Entities.GameMember", "Voter")
+                    .WithMany("Voter")
+                    .HasForeignKey("VoterId")
+                    .HasConstraintName("FK_Voter_Voter")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.Navigation("Game");
+                b.Navigation("Game");
 
-                    b.Navigation("Target");
+                b.Navigation("Target");
 
-                    b.Navigation("Voter");
-                });
+                b.Navigation("Voter");
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.HasOne("Mafiator.Entities.Identity.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            {
+                b.HasOne("Mafiator.Entities.Identity.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Event", b =>
-                {
-                    b.Navigation("EventJoin");
-                });
+        modelBuilder.Entity("Mafiator.Entities.Event", b =>
+            {
+                b.Navigation("EventJoin");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Game", b =>
-                {
-                    b.Navigation("GameEvent");
+        modelBuilder.Entity("Mafiator.Entities.Game", b =>
+            {
+                b.Navigation("GameEvent");
 
-                    b.Navigation("GameMember");
+                b.Navigation("GameMember");
 
-                    b.Navigation("GameMessage");
+                b.Navigation("GameMessage");
 
-                    b.Navigation("Report");
+                b.Navigation("Report");
 
-                    b.Navigation("Vote");
-                });
+                b.Navigation("Vote");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.GameMember", b =>
-                {
-                    b.Navigation("GameEvent");
+        modelBuilder.Entity("Mafiator.Entities.GameMember", b =>
+            {
+                b.Navigation("GameEvent");
 
-                    b.Navigation("Target");
+                b.Navigation("Target");
 
-                    b.Navigation("Voter");
-                });
+                b.Navigation("Voter");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.Role", b =>
-                {
-                    b.Navigation("Claims");
+        modelBuilder.Entity("Mafiator.Entities.Identity.Role", b =>
+            {
+                b.Navigation("Claims");
 
-                    b.Navigation("Users");
-                });
+                b.Navigation("Users");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Identity.User", b =>
-                {
-                    b.Navigation("ChatMessage");
+        modelBuilder.Entity("Mafiator.Entities.Identity.User", b =>
+            {
+                b.Navigation("ChatMessage");
 
-                    b.Navigation("Claims");
+                b.Navigation("Claims");
 
-                    b.Navigation("EventJoin");
+                b.Navigation("EventJoin");
 
-                    b.Navigation("GameMember");
+                b.Navigation("GameMember");
 
-                    b.Navigation("GameMessage");
+                b.Navigation("GameMessage");
 
-                    b.Navigation("RefreshToken");
+                b.Navigation("RefreshToken");
 
-                    b.Navigation("Reported");
+                b.Navigation("Reported");
 
-                    b.Navigation("Reporter");
+                b.Navigation("Reporter");
 
-                    b.Navigation("Roles");
+                b.Navigation("Roles");
 
-                    b.Navigation("Room");
+                b.Navigation("Room");
 
-                    b.Navigation("RoomMember");
-                });
+                b.Navigation("RoomMember");
+            });
 
-            modelBuilder.Entity("Mafiator.Entities.Room", b =>
-                {
-                    b.Navigation("ChatMessage");
+        modelBuilder.Entity("Mafiator.Entities.Room", b =>
+            {
+                b.Navigation("ChatMessage");
 
-                    b.Navigation("Game");
+                b.Navigation("Game");
 
-                    b.Navigation("RoomMember");
-                });
+                b.Navigation("RoomMember");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }

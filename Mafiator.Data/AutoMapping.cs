@@ -7,18 +7,20 @@ using Mafiator.Entities;
 using Mafiator.Entities.Identity;
 using System;
 
-namespace Mafiator.Data
+namespace Mafiator.Data;
+
+/// <summary>
+/// Custom Automapper profil used for dto conversion.
+/// </summary>
+public class AutoMapping : Profile
 {
-    public class AutoMapping : Profile
+    public AutoMapping()
     {
-        public AutoMapping()
-        {
-            CreateMap<string, Guid>().ConvertUsing(s => Guid.Parse(s));
-            CreateMap<RegisterUserDto, User>();
-            CreateMap<RoomCreateDto,Room>();
-            CreateMap<GameCreateDto, Game>();
-            CreateMap<RefreshTokenDto, RefreshToken>();
-            CreateMap<GameEventDto,GameEvent>();
-        }
+        CreateMap<string, Guid>().ConvertUsing(s => Guid.Parse(s));
+        CreateMap<RegisterUserDto, User>();
+        CreateMap<RoomCreateDto,Room>();
+        CreateMap<GameCreateDto, Game>();
+        CreateMap<RefreshTokenDto, RefreshToken>();
+        CreateMap<GameEventDto,GameEvent>();
     }
 }

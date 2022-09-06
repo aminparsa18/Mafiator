@@ -1,8 +1,8 @@
-﻿using Mafiator.Entities;
+﻿namespace Mafiator.Repository.Contracts;
 
-namespace Mafiator.Repository.Contracts
+/// <summary>
+/// Repository provides methods to retrieve/handle game violation report data.
+/// </summary>
+public interface IGameViolationReportRepository : IBaseRepository<GameViolationReport>
 {
-    public interface IGameViolationReportRepository:IRepository<GameViolationReport>
-    {
-    }
 }

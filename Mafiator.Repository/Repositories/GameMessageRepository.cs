@@ -1,14 +1,14 @@
-﻿using Mafiator.Data;
-using Mafiator.Entities;
-using Mafiator.Repository.Contracts;
-using System.Data;
+﻿using System.Data;
 
-namespace Mafiator.Repository.Repositories
+namespace Mafiator.Repository.Repositories;
+
+/// <inheritdoc/>
+public class GameMessageRepository : BaseRepository<GameMessage>, IGameMessageRepository
 {
-    public class GameMessageRepository:Repository<GameMessage>,IGameMessageRepository
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GameMessageRepository"/> class.
+    /// </summary>
+    public GameMessageRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
     {
-        public GameMessageRepository(ApplicationDbContext context,IDbConnection connection) : base(context,connection)
-        {
-        }
     }
 }

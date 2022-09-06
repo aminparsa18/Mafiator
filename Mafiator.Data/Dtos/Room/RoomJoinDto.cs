@@ -1,11 +1,14 @@
-﻿using MessagePack;
+﻿namespace Mafiator.Data.Dtos.Room;
 
-namespace Mafiator.Data.Dtos.Room
+/// <summary>
+/// Room join dto.
+/// </summary>
+[MessagePackObject()]
+public class RoomJoinDto
 {
-    [MessagePackObject()]
-    public class RoomJoinDto
-    {
-        [Key(0)] 
-        public string Code { get; set; }
-    }
+    /// <summary>
+    /// Room code.
+    /// </summary>
+    [Key(0)] 
+    public string Code { get; set; }
 }

@@ -1,26 +1,24 @@
-﻿using RepoDb;
-using RepoDb.Interfaces;
+﻿using RepoDb.Interfaces;
 
-namespace Mafiator.Repository
+namespace Mafiator.Repository;
+
+public static class CacheFactory
 {
-    public static class CacheFactory
+    private static readonly object SyncLock;
+    private static ICache _cache;
+
+    static CacheFactory()
     {
-        private static readonly object SyncLock;
-        private static ICache _cache;
+        SyncLock = new object();
+    }
 
-        static CacheFactory()
+    public static ICache GetCache()
+    {
+        if (_cache != null) return _cache;
+        lock (SyncLock)
         {
-            SyncLock = new object();
+            _cache ??= new MemoryCache();
         }
-
-        public static ICache GetCache()
-        {
-            if (_cache != null) return _cache;
-            lock (SyncLock)
-            {
-                _cache ??= new MemoryCache();
-            }
-            return _cache;
-        }
+        return _cache;
     }
 }

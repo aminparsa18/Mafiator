@@ -1,24 +1,22 @@
-﻿using Mafiator.Data;
-using Mafiator.Data.Dtos;
-using Mafiator.Entities;
-using Mafiator.Repository.Contracts;
-using RepoDb;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 
-namespace Mafiator.Repository.Repositories
+namespace Mafiator.Repository.Repositories;
+
+/// <inheritdoc/>
+public class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
 {
-    public class AvatarRepository:Repository<Avatar>,IAvatarRepository
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvatarRepository"/> class.
+    /// </summary>
+    public AvatarRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
     {
-        public AvatarRepository(ApplicationDbContext context,IDbConnection connection) : base(context,connection)
-        {
-        }
+    }
 
-        public async Task<IEnumerable<AvatarDto>> GetAllDto()
-        {
-            //return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]",cacheKey:"ActiveAvatars",cache:CacheFactory.GetCache());
-            return await Connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]");
-        }
+    /// <inheritdoc/>
+    public async Task<IEnumerable<AvatarDto>> GetAllDto()
+    {
+        //return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]",cacheKey:"ActiveAvatars",cache:CacheFactory.GetCache());
+        return await Connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]");
     }
 }

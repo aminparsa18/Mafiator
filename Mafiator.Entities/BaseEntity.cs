@@ -1,11 +1,24 @@
 ﻿using System;
 
-namespace Mafiator.Entities
+namespace Mafiator.Entities;
+
+/// <summary>
+/// Database object base entity.
+/// </summary>
+public class BaseEntity
 {
-    public class BaseEntity
-    {
-        public Guid Id { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-    }
+    /// <summary>
+    /// Primary key identifier.
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Object creation date.
+    /// </summary>
+    public DateTime CreatedDate { get; set; }
+    
+    /// <summary>
+    /// Object modification date.
+    /// </summary>
+    public DateTime ModifiedDate { get; set; }
 }

@@ -1,20 +1,40 @@
-﻿using MessagePack;
-using System;
+﻿using System;
 
-namespace Mafiator.Data.Dtos.Game
+namespace Mafiator.Data.Dtos.Game;
+
+/// <summary>
+/// Game dto.
+/// </summary>
+[MessagePackObject()]
+public class GameDto
 {
-    [MessagePackObject()]
-    public class GameDto
-    {
-        [Key(0)]
-        public Guid Id { get; set; }
-        [Key(1)]
-        public short Capacity{ get; set; }
-        [Key(2)]
-        public Guid RoomId { get; set; }
-        [Key(3)]
-        public short Count { get; set; }
-        [Key(4)]
-        public DateTime Date{ get; set; }
-    }
+    /// <summary>
+    /// Game key identifier.
+    /// </summary>
+    [Key(0)]
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Capacity.
+    /// </summary>
+    [Key(1)]
+    public short Capacity{ get; set; }
+
+    /// <summary>
+    /// Room key identifier.
+    /// </summary>
+    [Key(2)]
+    public Guid RoomId { get; set; }
+
+    /// <summary>
+    /// Game member count.
+    /// </summary>
+    [Key(3)]
+    public short MemberCount { get; set; }
+
+    /// <summary>
+    /// Game start date.
+    /// </summary>
+    [Key(4)]
+    public DateTime StartDate{ get; set; }
 }

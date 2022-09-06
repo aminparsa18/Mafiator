@@ -1,17 +1,29 @@
-﻿using MessagePack;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Mafiator.Data.Dtos.Vote
+namespace Mafiator.Data.Dtos.Vote;
+
+/// <summary>
+/// Vote dto.
+/// </summary>
+[MessagePackObject()]
+public class VoteDto
 {
-    [MessagePackObject()]
-    public class VoteDto
-    {
-        [Key(0)]
-        public Guid GameId { get; set; }
-        [Key(1)]
-        public Guid VoterId { get; set; }
-        [Key(2)]
-        public List<Guid> Targets { get; set; }
-    }
+    /// <summary>
+    /// Game key identifier.
+    /// </summary>
+    [Key(0)]
+    public Guid GameId { get; set; }
+
+    /// <summary>
+    /// Voter key identifier.
+    /// </summary>
+    [Key(1)]
+    public Guid VoterId { get; set; }
+
+    /// <summary>
+    /// List of targets.
+    /// </summary>
+    [Key(2)]
+    public List<Guid> Targets { get; set; }
 }

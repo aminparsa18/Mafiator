@@ -1,12 +1,16 @@
 ﻿using System;
-using MessagePack;
 
-namespace Mafiator.Data.Dtos.Room
+namespace Mafiator.Data.Dtos.Room;
+
+/// <summary>
+/// Room identifier dto.
+/// </summary>
+[MessagePackObject]
+public class RoomIdDto
 {
-    [MessagePackObject]
-    public class RoomIdDto
-    {
-        [Key(0)] 
-        public Guid Id { get; set; }
-    }
+    /// <summary>
+    /// Room key identifier.
+    /// </summary>
+    [Key(0)] 
+    public Guid Id { get; set; }
 }

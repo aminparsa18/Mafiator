@@ -1,14 +1,22 @@
-﻿using Mafiator.Entities.Enums;
-using MessagePack;
+﻿using Mafiator.Common.Enums;
 
-namespace Mafiator.Data.Dtos.Game
+namespace Mafiator.Data.Dtos.Game;
+
+/// <summary>
+/// Game role dto.
+/// </summary>
+[MessagePackObject()]
+public class GameRoleDto
 {
-    [MessagePackObject()]
-    public class GameRoleDto
-    {
-        [Key(0)] 
-        public GameRole Role { get; set; }
-        [Key(1)] 
-        public short Count { get; set; }
-    }
+    /// <summary>
+    /// Game role.
+    /// </summary>
+    [Key(0)] 
+    public GameRole Role { get; set; }
+
+    /// <summary>
+    /// Count.
+    /// </summary>
+    [Key(1)] 
+    public short Count { get; set; }
 }

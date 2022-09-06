@@ -1,16 +1,24 @@
-﻿using MessagePack;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mafiator.Data.Dtos.User
+namespace Mafiator.Data.Dtos.User;
+
+/// <summary>
+/// Confirm phone dto.
+/// </summary>
+[MessagePackObject]
+public class ConfirmPhoneDto
 {
-    [MessagePackObject]
-    public class ConfirmPhoneDto
-    {
-        [MessagePack.Key(0)]
-        [Required]
-        public string PhoneNo{ get; set; }
-        [MessagePack.Key(1)]
-        [Required]
-        public string Token { get; set; }
-    }
+    /// <summary>
+    /// Phone number.
+    /// </summary>
+    [MessagePack.Key(0)]
+    [Required]
+    public string PhoneNo{ get; set; }
+
+    /// <summary>
+    /// Jwt token.
+    /// </summary>
+    [MessagePack.Key(1)]
+    [Required]
+    public string Token { get; set; }
 }

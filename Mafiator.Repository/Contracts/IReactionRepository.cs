@@ -1,12 +1,16 @@
 ﻿using Mafiator.Data.Dtos.Game;
-using Mafiator.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Mafiator.Repository.Contracts
+namespace Mafiator.Repository.Contracts;
+
+/// <summary>
+/// Repository provides methods to retrieve/handle reaction data.
+/// </summary>
+public interface IReactionRepository : IBaseRepository<Reaction>
 {
-    public interface IReactionRepository:IRepository<Reaction>
-    {
-        Task<IEnumerable<ReactionDto>> GetAllDtos();
-    }
+    /// <summary>
+    /// Retrieves all reactions.
+    /// </summary>
+    /// <returns>List of reactions.</returns>
+    Task<IEnumerable<ReactionDto>> GetAllDtos();
 }

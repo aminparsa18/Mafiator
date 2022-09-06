@@ -1,8 +1,8 @@
-﻿using Mafiator.Entities;
+﻿namespace Mafiator.Repository.Contracts;
 
-namespace Mafiator.Repository.Contracts
+/// <summary>
+/// Repository provides methods to retrieve/handle event join data.
+/// </summary>
+public interface IEventJoinRepository : IBaseRepository<EventJoin>
 {
-    public interface IEventJoinRepository:IRepository<EventJoin>
-    {
-    }
 }

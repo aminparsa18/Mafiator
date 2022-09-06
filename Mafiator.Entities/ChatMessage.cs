@@ -1,16 +1,41 @@
-﻿using Mafiator.Entities.Enums;
+﻿using Mafiator.Common.Enums;
 using Mafiator.Entities.Identity;
 using System;
 
-namespace Mafiator.Entities
+namespace Mafiator.Entities;
+
+/// <summary>
+/// Chat messages in a room.
+/// </summary>
+public class ChatMessage:BaseEntity
 {
-    public class ChatMessage:BaseEntity
-    {
-        public Guid RoomId { get; set; }
-        public Guid UserId { get; set; }
-        public GameMessageType MessageType { get; set; }
-        public string Content { get; set; }
-        public virtual Room Room{ get; set; }
-        public virtual User User { get; set; }
-    }
+    /// <summary>
+    /// Room key identifier.
+    /// </summary>
+    public Guid RoomId { get; set; }
+
+    /// <summary>
+    /// User key identifier.
+    /// </summary>
+    public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Message type.
+    /// </summary>
+    public GameMessageType MessageType { get; set; }
+
+    /// <summary>
+    /// Message contents.
+    /// </summary>
+    public string Content { get; set; }
+
+    /// <summary>
+    /// Room.
+    /// </summary>
+    public virtual Room Room{ get; set; }
+    
+    /// <summary>
+    /// User.
+    /// </summary>
+    public virtual User User { get; set; }
 }

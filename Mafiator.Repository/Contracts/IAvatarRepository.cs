@@ -1,12 +1,15 @@
-﻿using Mafiator.Data.Dtos;
-using Mafiator.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Mafiator.Repository.Contracts
+namespace Mafiator.Repository.Contracts;
+
+/// <summary>
+/// Repository provides methods to retrieve/handle avatar data.
+/// </summary>
+public interface IAvatarRepository : IBaseRepository<Avatar>
 {
-    public interface IAvatarRepository : IRepository<Avatar>
-    {
-        Task<IEnumerable<AvatarDto>> GetAllDto();
-    }
+    /// <summary>
+    /// Retrieves all avatars data.
+    /// </summary>
+    /// <returns>List of avatars</returns>
+    Task<IEnumerable<AvatarDto>> GetAllDto();
 }

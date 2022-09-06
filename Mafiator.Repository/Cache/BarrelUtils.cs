@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace Mafiator.Repository.Cache
-{
-    /// <summary>
+namespace Mafiator.Repository.Cache;
+
+/// <summary>
 	/// Barrel Utils
 	/// </summary>
 	public static class BarrelUtils
@@ -69,9 +69,8 @@ namespace Mafiator.Repository.Cache
 				return DateTime.UtcNow.Add(timeSpan);
 			}
 			catch
-            {
-                return timeSpan.Milliseconds < 0 ? DateTime.MinValue : DateTime.MaxValue;
-            }
+        {
+            return timeSpan.Milliseconds < 0 ? DateTime.MinValue : DateTime.MaxValue;
+        }
 		}
 	}
-}

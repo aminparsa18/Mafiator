@@ -1,9 +1,22 @@
-﻿namespace Mafiator.Entities
+﻿namespace Mafiator.Entities;
+
+/// <summary>
+/// Reactions.
+/// </summary>
+public class Reaction : BaseEntity
 {
-    public class Reaction : BaseEntity
-    {
-        public string Title { get; set; }
-        public string Image { get; set; }
-        public decimal Price { get; set; }
-    }
+    /// <summary>
+    /// Title.
+    /// </summary>
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
+
+    /// <summary>
+    /// Price.
+    /// </summary>
+    public decimal Price { get; set; }
 }

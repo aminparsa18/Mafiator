@@ -1,61 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-ios;net6.0-android;net6.0-maccatalyst</TargetFrameworks>
-		<!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);net6.0-windows10.0.19041</TargetFrameworks> -->
+		<TargetFrameworks>net6.0-android;net6.0-ios;</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Mafiator.Game</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
-		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
 		<ApplicationTitle>Mafiator.Game</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.Mafiator.Game</ApplicationId>
+		<ApplicationId>com.companyname.mafiator.game</ApplicationId>
+		<ApplicationIdGuid>03D29F4F-DC9E-4479-B1AB-09D0BDD8EE72</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationVersion>1.0</ApplicationVersion>
-		<AndroidVersionCode>1</AndroidVersionCode>
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
 
-		<!-- Required for C# Hot Reload -->
-		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiImage
-			Include="Resources\appicon.svg"
-			ForegroundFile="Resources\appiconfg.svg"
-			IsAppIcon="true"
-			Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<!-- Required - WinUI does not yet have buildTransitive for everything -->
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-experimental1" />
-		<PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="1.0.0-experimental1" />
-		<PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="1.0.0-experimental1" />
-		<PackageReference Include="Microsoft.WindowsAppSDK.InteractiveExperiences" Version="1.0.0-experimental1" NoWarn="NU1701" />
+	<ItemGroup>
+	  <ProjectReference Include="..\Mafiator.Common\Mafiator.Common.csproj" />
 	</ItemGroup>
-
-	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<OutputType>WinExe</OutputType>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
-		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-	</PropertyGroup>
 
 </Project>

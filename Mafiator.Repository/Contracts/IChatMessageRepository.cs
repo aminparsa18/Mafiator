@@ -1,13 +1,17 @@
-﻿using Mafiator.Data.Dtos;
-using Mafiator.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Mafiator.Repository.Contracts
+namespace Mafiator.Repository.Contracts;
+
+/// <summary>
+/// Repository provides methods to retrieve/handle chat message data.
+/// </summary>
+public interface IChatMessageRepository : IBaseRepository<ChatMessage>
 {
-    public interface IChatMessageRepository:IRepository<ChatMessage>
-    {
-        Task<List<ChatMessageDto>> GetByRoom(Guid roomId);
-    }
+    /// <summary>
+    /// Retrieves all chat messages in a room.
+    /// </summary>
+    /// <param name="roomId">Room key identifier.</param>
+    /// <returns>List of chat messages.</returns>
+    Task<List<ChatMessageDto>> GetByRoom(Guid roomId);
 }

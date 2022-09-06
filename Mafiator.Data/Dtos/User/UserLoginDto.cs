@@ -1,16 +1,24 @@
-﻿using MessagePack;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mafiator.Data.Dtos.User
+namespace Mafiator.Data.Dtos.User;
+
+/// <summary>
+/// User login dto.
+/// </summary>
+[MessagePackObject]
+public class UserLoginDto
 {
-    [MessagePackObject]
-    public class UserLoginDto
-    {
-        [MessagePack.Key(0)]
-        [Required] 
-        public string Username { get; set; }
-        [MessagePack.Key(1)]
-        [Required]
-        public string Password { get; set; }
-    }
+    /// <summary>
+    /// Username.
+    /// </summary>
+    [MessagePack.Key(0)]
+    [Required] 
+    public string Username { get; set; }
+    
+    /// <summary>
+    /// Password.
+    /// </summary>
+    [MessagePack.Key(1)]
+    [Required]
+    public string Password { get; set; }
 }

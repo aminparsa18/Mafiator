@@ -1,7 +1,7 @@
 ﻿using Hangfire;
+using Mafiator.Common.Enums;
+using Mafiator.Common.Extensions;
 using Mafiator.Data.Dtos.GameEvent;
-using Mafiator.Entities.Enums;
-using Mafiator.Entities.Extensions;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;

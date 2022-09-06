@@ -1,12 +1,16 @@
-﻿using MessagePack;
-using System;
+﻿using System;
 
-namespace Mafiator.Data.Dtos.Game
+namespace Mafiator.Data.Dtos.Game;
+
+/// <summary>
+/// Game creation result dto.
+/// </summary>
+[MessagePackObject]
+public class GameResultDto
 {
-    [MessagePackObject]
-    public class GameResultDto
-    {
-        [Key(0)]
-        public Guid Id { get; set; }
-    }
+    /// <summary>
+    /// Game key identifier.
+    /// </summary>
+    [Key(0)]
+    public Guid Id { get; set; }
 }

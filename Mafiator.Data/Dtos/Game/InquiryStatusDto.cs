@@ -1,11 +1,14 @@
-﻿using MessagePack;
+﻿namespace Mafiator.Data.Dtos.Game;
 
-namespace Mafiator.Data.Dtos.Game
+/// <summary>
+/// Detective inquiry status dto.
+/// </summary>
+[MessagePackObject()]
+public class InquiryStatusDto
 {
-    [MessagePackObject()]
-    public class InquiryStatusDto
-    {
-        [Key(0)]
-        public bool IsMafia { get; set; }
-    }
+    /// <summary>
+    /// Indicating player is mafia.
+    /// </summary>
+    [Key(0)]
+    public bool IsMafia { get; set; }
 }

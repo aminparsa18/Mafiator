@@ -1,12 +1,15 @@
-﻿using Mafiator.Data.Dtos;
-using Mafiator.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Mafiator.Repository.Contracts
+namespace Mafiator.Repository.Contracts;
+
+/// <summary>
+/// Repository provides methods to retrieve/handle gem data.
+/// </summary>
+public interface IGemRepository : IBaseRepository<Gem>
 {
-    public interface IGemRepository:IRepository<Gem>
-    {
-        Task<IEnumerable<GemDto>> GetAllDto();
-    }
+    /// <summary>
+    /// Retrieves all gems.
+    /// </summary>
+    /// <returns>List of gems.</returns>
+    Task<IEnumerable<GemDto>> GetAllDto();
 }

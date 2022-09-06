@@ -28,8 +28,8 @@ namespace Mafiator.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage("Server=tcp:mftor.database.windows.net,1433;Initial Catalog=mftor_jobs;Persist Security Info=False;User ID=mftor_admin;Password=54Delta45!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
-            services.AddHangfireServer();
+           // services.AddHangfire(x => x.UseSqlServerStorage("Server=tcp:mftor.database.windows.net,1433;Initial Catalog=mftor_jobs;Persist Security Info=False;User ID=mftor_admin;Password=54Delta45!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
+           // services.AddHangfireServer();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
             SqlServerBootstrap.Initialize();
@@ -43,13 +43,13 @@ namespace Mafiator.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.AddCustomMiddleware();
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            {
-                Authorization = new[]
-                {
-                    new HangfireAuthorizationFilter()
-                }
-            });
+            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            //{
+            //    Authorization = new[]
+            //    {
+            //        new HangfireAuthorizationFilter()
+            //    }
+            //});
             app.Run(async context => await Task.Run(() => context.Response.Redirect("/swagger")));
         }
     }

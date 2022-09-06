@@ -1,32 +1,30 @@
-﻿using Mafiator.Data;
-using Mafiator.Data.Dtos;
-using Mafiator.Entities;
-using Mafiator.Repository.Contracts;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Mafiator.Repository.Repositories
+namespace Mafiator.Repository.Repositories;
+
+/// <inheritdoc/>
+public class ChatMessageRepository : BaseRepository<ChatMessage>, IChatMessageRepository
 {
-    public class ChatMessageRepository:Repository<ChatMessage>,IChatMessageRepository
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ChatMessageRepository"/> class.
+    /// </summary>
+    public ChatMessageRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
     {
-        public ChatMessageRepository(ApplicationDbContext context, IDbConnection connection) : base(context, connection)
-        {
-        }
+    }
 
-        public Task<List<ChatMessageDto>> GetByRoom(Guid roomId)
-        {
-            return Context.ChatMessage.AsNoTracking().Where(c => c.RoomId == roomId)
-                .Select(s => new ChatMessageDto()
-                {
-                    Type = s.MessageType,
-                    Image = s.User.Image,
-                    DisplayName = s.User.DisplayName,
-                    Content = s.Content
-                }).ToListAsync();
-        }
+    /// <inheritdoc/>
+    public Task<List<ChatMessageDto>> GetByRoom(Guid roomId)
+    {
+        return Context.ChatMessage.AsNoTracking().Where(c => c.RoomId == roomId)
+            .Select(s => new ChatMessageDto()
+            {
+                Type = s.MessageType,
+                Image = s.User.Image,
+                DisplayName = s.User.DisplayName,
+                Content = s.Content
+            }).ToListAsync();
     }
 }

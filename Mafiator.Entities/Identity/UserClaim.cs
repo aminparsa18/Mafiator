@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Mafiator.Entities.Identity
+namespace Mafiator.Entities.Identity;
+
+/// <summary>
+/// User claim.
+/// </summary>
+public class UserClaim : IdentityUserClaim<Guid>
 {
-    public class UserClaim : IdentityUserClaim<Guid>
-    {
-        public virtual User User { get; set; }
-    }
+    /// <summary>
+    /// User.
+    /// </summary>
+    public virtual User User { get; set; }
 }

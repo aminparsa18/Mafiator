@@ -1,17 +1,32 @@
-﻿using MessagePack;
+﻿namespace Mafiator.Data.Dtos.Game;
 
-namespace Mafiator.Data.Dtos.Game
+/// <summary>
+/// Waiting player dto.
+/// </summary>
+[MessagePackObject()]
+public class WaitingPlayerDto
 {
-   [MessagePackObject()]
-   public class WaitingPlayerDto
-    {
-        [Key(0)]
-        public string UserId { get; set; }
-        [Key(1)]
-        public string DisplayName { get; set; }
-        [Key(2)]
-        public string Image { get; set; }
-        [Key(3)]
-        public int Score { get; set; }
-    }
+    /// <summary>
+    /// Player user key identifier.
+    /// </summary>
+    [Key(0)]
+    public string UserId { get; set; }
+
+    /// <summary>
+    /// Display name.
+    /// </summary>
+    [Key(1)]
+    public string DisplayName { get; set; }
+
+    /// <summary>
+    /// Image.
+    /// </summary>
+    [Key(2)]
+    public string Image { get; set; }
+
+    /// <summary>
+    /// Score.
+    /// </summary>
+    [Key(3)]
+    public int Score { get; set; }
 }

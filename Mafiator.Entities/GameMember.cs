@@ -1,20 +1,57 @@
-﻿using Mafiator.Entities.Enums;
+﻿using Mafiator.Common.Enums;
 using Mafiator.Entities.Identity;
 using System;
 using System.Collections.Generic;
 
-namespace Mafiator.Entities
+namespace Mafiator.Entities;
+
+/// <summary>
+/// Game member.
+/// </summary>
+public class GameMember:BaseEntity
 {
-    public class GameMember:BaseEntity
-    {
-        public Guid GameId { get; set; }
-        public Guid? UserId { get; set; }
-        public GameRole Role { get; set; } 
-        public PlayerStatus Status{ get; set; } 
-        public virtual Game Game { get; set; }
-        public virtual User User { get; set; }
-        public virtual ICollection<Vote> Voter{ get; set; }
-        public virtual ICollection<Vote> Target{ get; set; }
-        public virtual ICollection<GameEvent> GameEvent{ get; set; }
-    }
+    /// <summary>
+    /// Game key identifier.
+    /// </summary>
+    public Guid GameId { get; set; }
+
+    /// <summary>
+    /// Game member user key identifier.
+    /// </summary>
+    public Guid? UserId { get; set; }
+
+    /// <summary>
+    /// Game mamber role.
+    /// </summary>
+    public GameRole Role { get; set; } 
+
+    /// <summary>
+    /// Player status.
+    /// </summary>
+    public PlayerStatus Status{ get; set; } 
+
+    /// <summary>
+    /// Game.
+    /// </summary>
+    public virtual Game Game { get; set; }
+
+    /// <summary>
+    /// User.
+    /// </summary>
+    public virtual User User { get; set; }
+
+    /// <summary>
+    /// Collection of voters.
+    /// </summary>
+    public virtual ICollection<Vote> Voter{ get; set; }
+
+    /// <summary>
+    /// Collection of targets.
+    /// </summary>
+    public virtual ICollection<Vote> Target{ get; set; }
+    
+    /// <summary>
+    /// Collection of game events.
+    /// </summary>
+    public virtual ICollection<GameEvent> GameEvent{ get; set; }
 }
