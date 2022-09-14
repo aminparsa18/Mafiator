@@ -3,7 +3,7 @@
 /// <summary>
 /// Gem.
 /// </summary>
-public class Gem:BaseEntity
+public sealed class Gem : BaseEntity
 {
     /// <summary>
     /// Count.

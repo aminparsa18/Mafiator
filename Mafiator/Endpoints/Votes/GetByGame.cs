@@ -1,5 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Votes;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Votes;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class GetByGame : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<IEnumerable<VoteDetailsResult>>>
@@ -23,7 +25,7 @@ public class GetByGame : EndpointBaseAsync
     }
 
     [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/votes")]
+    [HttpGet("api/v{version:apiVersion}/votes/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [OpenApiOperation("Votes.GetByGame", "Retrieves all votes statuses of game.")]
     [OpenApiTag("Votes Endpoints")]

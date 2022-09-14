@@ -6,7 +6,7 @@ using System.Data;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class VoteRepository : BaseRepository<Vote>, IVoteRepository
+public sealed class VoteRepository : BaseRepository<Vote>, IVoteRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="VoteRepository"/> class.

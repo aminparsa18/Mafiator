@@ -108,9 +108,9 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             return await UpdateAsync(role);
         }
 
-        public async Task<List<RoleDto>> GetAllRolesDtoAsync()
+        public async Task<List<RoleDetails>> GetAllRolesDtoAsync()
         {
-            return await Roles.Select(role => new RoleDto
+            return await Roles.Select(role => new RoleDetails
             {
                 Id = role.Id,
                 Name = role.Name,

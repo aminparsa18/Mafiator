@@ -1,7 +1,9 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -11,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
+[Authorize]
 public class Get : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<RoomDetailsResult>>
@@ -23,7 +28,7 @@ public class Get : EndpointBaseAsync
     }
 
     [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/rooms/{roomId:int}")]
+    [HttpGet("api/v{version:apiVersion}/rooms/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [OpenApiOperation("Rooms.Get", "", "Retrieves room details.")]
     [OpenApiTag("Rooms Endpoints")]

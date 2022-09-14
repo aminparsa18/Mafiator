@@ -7,7 +7,7 @@ namespace Mafiator.Entities.Identity;
 /// <summary>
 /// User.
 /// </summary>
-public class User : IdentityUser<Guid>
+public sealed class User : IdentityUser<Guid>
 {
     /// <summary>
     /// User key identifier.
@@ -47,55 +47,55 @@ public class User : IdentityUser<Guid>
     /// <summary>
     /// Collection of event joins.
     /// </summary>
-    public virtual ICollection<EventJoin> EventJoin { get; set; }
+    public ICollection<EventJoin> EventJoin { get; set; }
 
     /// <summary>
     /// Collection of game members.
     /// </summary>
-    public virtual ICollection<GameMember> GameMember { get; set; }
+    public ICollection<GameMember> GameMember { get; set; }
 
     /// <summary>
     /// Collection of game messages.
     /// </summary>
-    public virtual ICollection<GameMessage> GameMessage { get; set; }
+    public ICollection<GameMessage> GameMessage { get; set; }
 
     /// <summary>
     /// Collection of chat messages.
     /// </summary>
-    public virtual ICollection<ChatMessage> ChatMessage{ get; set; }
+    public ICollection<ChatMessage> ChatMessage{ get; set; }
 
     /// <summary>
     /// Collection of refresh tokens.
     /// </summary>
-    public virtual ICollection<RefreshToken> RefreshToken { get; set; }
+    public ICollection<RefreshToken> RefreshToken { get; set; }
 
     /// <summary>
     /// Collection of reporters.
     /// </summary>
-    public virtual ICollection<GameViolationReport> Reporter { get; set; }
+    public ICollection<GameViolationReport> Reporter { get; set; }
 
     /// <summary>
     /// Collectio of reported.
     /// </summary>
-    public virtual ICollection<GameViolationReport> Reported { get; set; }
+    public ICollection<GameViolationReport> Reported { get; set; }
 
     /// <summary>
     /// Collectio of rooms.
     /// </summary>
-    public virtual ICollection<Room> Room { get; set; }
+    public ICollection<Room> Room { get; set; }
 
     /// <summary>
     /// Collection of room members.
     /// </summary>
-    public virtual ICollection<RoomMember> RoomMember { get; set; }
+    public ICollection<RoomMember> RoomMember { get; set; }
 
     /// <summary>
     /// Collection of user roles.
     /// </summary>
-    public virtual ICollection<UserRole> Roles { get; set; }
+    public ICollection<UserRole> Roles { get; set; }
 
     /// <summary>
     /// Collection of user claims.
     /// </summary>
-    public virtual ICollection<UserClaim> Claims { get; set; }
+    public ICollection<UserClaim> Claims { get; set; }
 }

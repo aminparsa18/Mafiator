@@ -1,10 +1,11 @@
-﻿using MafiatorApp.Cache;
-using MafiatorApp.Dtos.Room;
-using MafiatorApp.Dtos.User;
-using MafiatorApp.Extensions;
+﻿using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Rooms;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Common.Data.Dtos.Users;
 using MafiatorApp.Helpers;
 using MafiatorApp.Models;
-using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
@@ -55,16 +56,20 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand AddByCodeCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
         public ICommand PrivateHelpCommand { get; set; }
+
+        private readonly IRoomsApiService _roomsApiService;
         private List<Country> countries;
-        public NewRoomViewModel()
-        { 
+
+        public NewRoomViewModel(IRoomsApiService roomsApiService)
+        {
+            _roomsApiService = roomsApiService;
             Name = new ValidatableObject<string>();
             AddValidations();
             AddRoomCommand = new AsyncCommand(AddRoom);
             AddByCodeCommand = new AsyncCommand(AddByCode);
             PopCommand = new AsyncCommand(Pop);
             PrivateHelpCommand=new Command(PrivateHelp);
-           LoadData();
+            LoadData();
         }
 
         private void PrivateHelp()
@@ -77,7 +82,7 @@ namespace MafiatorApp.ViewModels
             Task.Run(() =>
             {
                 countries = Barrel.Current.Get<List<Country>>("Countries");
-                var code = Barrel.Current.Get<UserDto>("User")?.CountryCode;
+                var code = Barrel.Current.Get<UserDetailsResult>("User")?.CountryCode;
                 Country = countries.FirstOrDefault(c => c.Code == code);
             });
         }
@@ -98,7 +103,7 @@ namespace MafiatorApp.ViewModels
             if (isValid)
             {
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Creating Room...");
-                var response = await WebApiService.AddRoom(new RoomCreateDto()
+                var response = await _roomsApiService.AddRoom(new RoomCreateRequest()
                 {
                     Name = Name.Value,
                     IsPrivate = IsPrivate,
@@ -108,7 +113,7 @@ namespace MafiatorApp.ViewModels
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsMessagePackAsync<ApiResult<RoomIdDto>>();
+                    var result = await response.Content.ReadAsMessagePackAsync<ApiResult<RoomCreateResult>>();
                     if (result.IsSuccess)
                     {
                         SystemConstant.Members = null;

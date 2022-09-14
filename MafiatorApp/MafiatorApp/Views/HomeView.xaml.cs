@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azure;
 using FFImageLoading.Transformations;
-using MafiatorApp.Cache;
+using Mafiator.Common.Client.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
 using MafiatorApp.UserControls;

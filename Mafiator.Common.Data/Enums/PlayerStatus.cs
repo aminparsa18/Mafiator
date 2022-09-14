@@ -1,27 +1,28 @@
-﻿namespace Mafiator.Common.Data.Enums;
-
-/// <summary>
-/// Player status.
-/// </summary>
-public enum PlayerStatus
+﻿namespace Mafiator.Common.Data.Enums
 {
     /// <summary>
-    /// Playing.
+    /// Player status.
     /// </summary>
-    Playing = 0,
+    public enum PlayerStatus
+    {
+        /// <summary>
+        /// Playing.
+        /// </summary>
+        Playing = 0,
 
-    /// <summary>
-    /// Killed.
-    /// </summary>
-    Killed = 1,
+        /// <summary>
+        /// Killed.
+        /// </summary>
+        Killed = 1,
 
-    /// <summary>
-    /// Kicked.
-    /// </summary>
-    Kicked = 2,
+        /// <summary>
+        /// Kicked.
+        /// </summary>
+        Kicked = 2,
 
-    /// <summary>
-    /// Silenced.
-    /// </summary>
-    Silenced = 3
+        /// <summary>
+        /// Silenced.
+        /// </summary>
+        Silenced = 3
+    }
 }

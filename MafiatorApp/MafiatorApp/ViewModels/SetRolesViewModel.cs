@@ -1,7 +1,9 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -43,11 +45,14 @@ namespace MafiatorApp.ViewModels
         public Command<GameRole> IncCommand { get; set; }
         public Command<GameRole> DecCommand { get; set; }
 
-        public SetRolesViewModel()
+        private readonly IGamesApiService _gamesApiService;
+
+        public SetRolesViewModel(IGamesApiService gamesApiService)
         {
+            _gamesApiService = gamesApiService;
             Roles = new ObservableRangeCollection<NewGameRole>();
             LoadRolesCommand = new AsyncCommand(LoadRoles);
-            RoleSelectedCommand=new AsyncCommand(RoleSelected);
+            RoleSelectedCommand = new AsyncCommand(RoleSelected);
             SetRolesCommand = new AsyncCommand(SetRoles);
             PopCommand = new AsyncCommand(Pop);
             IncCommand = new Command<GameRole>(Increment);
@@ -56,10 +61,10 @@ namespace MafiatorApp.ViewModels
 
         private async Task RoleSelected()
         {
-            if(Role==null)return;
+            if (Role == null) return;
             if (TotalCount == SelectedCount && !Role.Selected)
             {
-                DependencyService.Get<IAlert>().ShortAlert("No more choice",MessageType.Error);
+                DependencyService.Get<IAlert>().ShortAlert("No more choice", MessageType.Error);
                 Role = null;
                 return;
             }
@@ -74,28 +79,29 @@ namespace MafiatorApp.ViewModels
         private async Task LoadRoles()
         {
             IsBusy = true;
-            var roles = await WebApiService.GetAllRoles();
-            if (roles.IsSuccess)
+            var roles = new List<GameRole>()
             {
-                Roles.Clear();
-                Roles.AddRange(roles.Data.Select(s => new NewGameRole()
-                {
-                    Count = 1,
-                    Role = s,
-                    AllowInc = s == GameRole.Citizen || s == GameRole.Mafia
-                }));
-               
-
-                //Device.BeginInvokeOnMainThread(() =>
-                //{
-                //    CurrentState = !Rooms.Any() ? LayoutState.Empty : LayoutState.None;
-                //});
-            }
-            else
+                GameRole.Mafia,
+                GameRole.Citizen,
+                GameRole.GodFather,
+                GameRole.Terrorist,
+                GameRole.Detective,
+                GameRole.Doctor,
+                GameRole.Sniper,
+                GameRole.Gun,
+                GameRole.Healer,
+                GameRole.Immortal,
+                GameRole.Natasha,
+                GameRole.Priest,
+                GameRole.Judge
+            };
+            Roles.Clear();
+            Roles.AddRange(roles.Select(s => new NewGameRole()
             {
-                // CurrentState = LayoutState.Error;
-                DependencyService.Get<IAlert>().ShortAlert(roles.Errors.ToString(), MessageType.Error);
-            }
+                Count = 1,
+                Role = s,
+                AllowInc = s == GameRole.Citizen || s == GameRole.Mafia
+            }));
             IsBusy = false;
         }
 
@@ -108,7 +114,7 @@ namespace MafiatorApp.ViewModels
         {
             if (TotalCount != SelectedCount)
             {
-                DependencyService.Get<IAlert>().ShortAlert("Role selected count must be equal to "+TotalCount, MessageType.Error);
+                DependencyService.Get<IAlert>().ShortAlert("Role selected count must be equal to " + TotalCount, MessageType.Error);
                 return;
             }
             SystemConstant.SelectedRoles = Roles.Where(r => r.Selected).ToList();

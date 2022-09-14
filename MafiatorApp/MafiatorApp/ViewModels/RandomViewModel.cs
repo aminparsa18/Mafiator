@@ -1,4 +1,5 @@
-﻿using MafiatorApp.Dtos.Game;
+﻿using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Data.Dtos.Games;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using System;
@@ -10,12 +11,16 @@ namespace MafiatorApp.ViewModels
 {
     public class RandomViewModel:ViewModelBase
     {
-        public ObservableRangeCollection<GameDto> Games { get; set; }
+        public ObservableRangeCollection<AvailableGameResult> Games { get; set; }
         public IAsyncCommand LoadGamesCommand { get; set; }
         public IAsyncCommand OpenRoomCommand { get; set; }
-        public RandomViewModel()
+
+        private readonly IGamesApiService _gamesApiService;
+
+        public RandomViewModel(IGamesApiService gamesApiService)
         {
-            Games=new ObservableRangeCollection<GameDto>();
+            _gamesApiService = gamesApiService;
+            Games=new ObservableRangeCollection<AvailableGameResult>();
             LoadGamesCommand=new AsyncCommand(LoadGames);
             LoadGamesCommand.ExecuteAsync();
             //OpenRoomCommand=new AsyncCommand(OpenRoom);
@@ -28,7 +33,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task LoadGames()
         {
-            var response = await WebApiService.GetAvailableGames();
+            var response = await _gamesApiService.GetAvailableGames();
             if (response.IsSuccess)
             {
                 Games.Clear();

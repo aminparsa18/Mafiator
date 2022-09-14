@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Votes;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class Create : EndpointBaseAsync
     .WithRequest<VoteCreateRequest>
     .WithoutResult

@@ -2,7 +2,7 @@
 
 namespace MafiatorApp.Dtos.Game
 {
-    public class CandidateDto:ObservableObject
+    public class CandidateDto : ObservableObject
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }

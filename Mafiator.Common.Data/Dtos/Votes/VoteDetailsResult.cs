@@ -1,20 +1,23 @@
-﻿namespace Mafiator.Common.Data.Dtos.Votes;
+﻿using MessagePack;
 
-/// <summary>
-/// Vote details result dto.
-/// </summary>
-[MessagePackObject()]
-public class VoteDetailsResult
+namespace Mafiator.Common.Data.Dtos.Votes
 {
     /// <summary>
-    /// Voter key identifier.
+    /// Vote details result dto.
     /// </summary>
-    [Key(0)]
-    public string VoterId { get; set; }
+    [MessagePackObject()]
+    public sealed class VoteDetailsResult
+    {
+        /// <summary>
+        /// Voter key identifier.
+        /// </summary>
+        [Key(0)]
+        public string VoterId { get; set; }
 
-    /// <summary>
-    /// Target key identifier.
-    /// </summary>
-    [Key(1)]
-    public string TargetId { get; set; }
+        /// <summary>
+        /// Target key identifier.
+        /// </summary>
+        [Key(1)]
+        public string TargetId { get; set; }
+    }
 }

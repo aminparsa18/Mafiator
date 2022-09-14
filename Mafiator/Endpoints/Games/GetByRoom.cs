@@ -1,5 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class GetByRoom : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<IEnumerable<RoomGameResult>>>
@@ -23,7 +25,7 @@ public class GetByRoom : EndpointBaseAsync
     }
 
     [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/games")]
+    [HttpGet("api/v{version:apiVersion}/games/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [OpenApiOperation("Games.GetByRoom", "", "Retrieves all games in a room.")]
     [OpenApiTag("Games Endpoints")]

@@ -8,7 +8,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Game member.
 /// </summary>
-public class GameMember:BaseEntity
+public sealed class GameMember : BaseEntity
 {
     /// <summary>
     /// Game key identifier.
@@ -23,35 +23,35 @@ public class GameMember:BaseEntity
     /// <summary>
     /// Game mamber role.
     /// </summary>
-    public GameRole Role { get; set; } 
+    public GameRole Role { get; set; }
 
     /// <summary>
     /// Player status.
     /// </summary>
-    public PlayerStatus Status{ get; set; } 
+    public PlayerStatus Status { get; set; }
 
     /// <summary>
     /// Game.
     /// </summary>
-    public virtual Game Game { get; set; }
+    public Game Game { get; set; }
 
     /// <summary>
     /// User.
     /// </summary>
-    public virtual User User { get; set; }
+    public User User { get; set; }
 
     /// <summary>
     /// Collection of voters.
     /// </summary>
-    public virtual ICollection<Vote> Voter{ get; set; }
+    public ICollection<Vote> Voter { get; set; }
 
     /// <summary>
     /// Collection of targets.
     /// </summary>
-    public virtual ICollection<Vote> Target{ get; set; }
-    
+    public ICollection<Vote> Target { get; set; }
+
     /// <summary>
     /// Collection of game events.
     /// </summary>
-    public virtual ICollection<GameEvent> GameEvent{ get; set; }
+    public ICollection<GameEvent> GameEvent { get; set; }
 }

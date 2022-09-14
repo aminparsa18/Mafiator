@@ -1,8 +1,8 @@
-﻿using System;
-using FFImageLoading.Svg.Forms;
-using MafiatorApp.Enums;
+﻿using FFImageLoading.Svg.Forms;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.ViewModels;
 using Rg.Plugins.Popup.Pages;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

@@ -1,4 +1,6 @@
-﻿using MafiatorApp.Dtos;
+﻿using Mafiator.Common.Client.Services.Gems;
+using Mafiator.Common.Data.Dtos.Gems;
+using MafiatorApp.Dtos;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using Plugin.InAppBilling;
@@ -22,9 +24,9 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref currentState, value);
         }
 
-        private GemDto gem;
+        private GemResult gem;
 
-        public GemDto Gem
+        public GemResult Gem
         {
             get => gem;
             set => SetProperty(ref gem, value);
@@ -32,11 +34,14 @@ namespace MafiatorApp.ViewModels
 
         public IAsyncCommand GoPremiumCommand { get; set; }
         public IAsyncCommand BuyGemCommand { get; set; }
-        public ObservableRangeCollection<GemDto> Gems { get; set; }
+        public ObservableRangeCollection<GemResult> Gems { get; set; }
 
-        public StoreViewModel()
+        private readonly IGemsApiService _gemsApiService;
+
+        public StoreViewModel(IGemsApiService gemsApiService)
         {
-            Gems = new ObservableRangeCollection<GemDto>();
+            _gemsApiService = gemsApiService;
+            Gems = new ObservableRangeCollection<GemResult>();
             GoPremiumCommand = new AsyncCommand(GoPremium);
             BuyGemCommand = new AsyncCommand(BuyGem);
             LoadGems();
@@ -45,7 +50,7 @@ namespace MafiatorApp.ViewModels
         private async void LoadGems()
         {
             CurrentState = LayoutState.Loading;
-            var gems = await WebApiService.GetAllGems();
+            var gems = await _gemsApiService.GetAllGems();
             if (gems.IsSuccess)
             {
                 Gems.AddRange(gems.Data);

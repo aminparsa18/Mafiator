@@ -1,8 +1,9 @@
-﻿using MafiatorApp.Dtos.Game;
-using MafiatorApp.Extensions;
+﻿using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Games;
 using MafiatorApp.Helpers;
 using MafiatorApp.Models;
-using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
@@ -19,7 +20,6 @@ namespace MafiatorApp.ViewModels
 {
     public class NewGameViewModel : ViewModelBase
     {
-        private readonly IPublisher<UpdateRoomEvent> publisher;
         private ValidatableObject<short> capacity;
         public ValidatableObject<short> Capacity
         {
@@ -63,10 +63,15 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand SaveGameCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
         public ICommand PublicHelpCommand { get; set; }
+
+        private readonly IGamesApiService _gamesApiService;
+        private readonly IPublisher<UpdateRoomEvent> _publisher;
         private Guid _roomId;
-        public NewGameViewModel(IPublisher<UpdateRoomEvent> publisher)
+
+        public NewGameViewModel(IGamesApiService gamesApiService, IPublisher<UpdateRoomEvent> publisher)
         {
-            this.publisher = publisher;
+            _gamesApiService = gamesApiService;
+            _publisher = publisher;
             Capacity = new ValidatableObject<short> {Value = 6};
             Roles = new ObservableRangeCollection<NewGameRole>();
             SetRolesCommand = new AsyncCommand(SetRoles);
@@ -111,21 +116,20 @@ namespace MafiatorApp.ViewModels
             }
 
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Creating Game...");
-            var response = await WebApiService.AddGame(new GameCreateDto()
+            var response = await _gamesApiService.AddGame(new GameCreateRequest()
             {
                 RoomId = _roomId,
-                Roles = SystemConstant.SelectedRoles.Select(s => new GameRoleDto() {Role = s.Role, Count = s.Count})
+                Roles = SystemConstant.SelectedRoles.Select(s => new GameRoleCreateRequest() {Role = s.Role, Count = s.Count})
                     .ToList(),
                 StartDate = IsImmediate ? DateTime.Now : Date.Value
             });
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsMessagePackAsync<ApiResult<GameResultDto>>();
+                var result = await response.Content.ReadAsMessagePackAsync<ApiResult<GameCreateResult>>();
                 if (result.IsSuccess)
                 {
                     SystemConstant.SelectedRoles = null;
-                    //MessagingCenter.Send(this, "GameCreated");
-                    publisher.Publish(new UpdateRoomEvent());
+                    _publisher.Publish(new UpdateRoomEvent());
                     Admob.Load();
                     await NavigationService.RemovePopupAsync();
                 }

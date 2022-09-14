@@ -82,7 +82,6 @@
                             </Path>
                         </StackLayout>
                        
-                        <Button Text="{xct:Translate Set}" Command="{Binding AvatarSelectedCommand}" HorizontalOptions="CenterAndExpand"></Button>
                    </StackLayout>
                     <Frame.Background>
                         <LinearGradientBrush StartPoint="0,0"
@@ -143,6 +142,7 @@
                                 <TapGestureRecognizer Command="{Binding SkipCommand}" />
                             </Label.GestureRecognizers>
                         </Label>
+                        <Button Text="{xct:Translate Set}" Command="{Binding AvatarSelectedCommand}" HorizontalOptions="CenterAndExpand"></Button>
 
                     </StackLayout>
                     <Frame.Background>

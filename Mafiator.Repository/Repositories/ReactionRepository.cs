@@ -5,7 +5,7 @@ using System.Data;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class ReactionRepository : BaseRepository<Reaction>, IReactionRepository
+public sealed class ReactionRepository : BaseRepository<Reaction>, IReactionRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ReactionRepository"/> class.

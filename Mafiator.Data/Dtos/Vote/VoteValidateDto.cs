@@ -3,7 +3,7 @@
 /// <summary>
 /// Vote validate dto.
 /// </summary>
-public class VoteValidateDto
+public sealed class VoteValidateDto
 {
     /// <summary>
     /// Target key identifier.

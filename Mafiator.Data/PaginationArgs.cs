@@ -3,7 +3,7 @@
 /// <summary>
 /// Pagination arguments.
 /// </summary>
-public class PaginationArgs
+public sealed class PaginationArgs
 {
     /// <summary>
     /// Page row count.

@@ -6,7 +6,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Refresh token.
 /// </summary>
-public class RefreshToken:BaseEntity
+public sealed class RefreshToken : BaseEntity
 {
     /// <summary>
     /// Jwt token.
@@ -41,5 +41,5 @@ public class RefreshToken:BaseEntity
     /// <summary>
     /// User.
     /// </summary>
-    public virtual User User { get; set; }
+    public User User { get; set; }
 }

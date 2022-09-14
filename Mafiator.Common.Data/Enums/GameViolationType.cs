@@ -1,32 +1,33 @@
-﻿namespace Mafiator.Common.Data.Enums;
-
-/// <summary>
-/// Game violation type.
-/// </summary>
-public enum GameViolationType
+﻿namespace Mafiator.Common.Data.Enums
 {
     /// <summary>
-    /// Disclosure.
+    /// Game violation type.
     /// </summary>
-    Disclosure = 0,
+    public enum GameViolationType
+    {
+        /// <summary>
+        /// Disclosure.
+        /// </summary>
+        Disclosure = 0,
 
-    /// <summary>
-    /// Not playing.
-    /// </summary>
-    NotPlaying = 1,
+        /// <summary>
+        /// Not playing.
+        /// </summary>
+        NotPlaying = 1,
 
-    /// <summary>
-    /// Offense.
-    /// </summary>
-    Offense = 2,
+        /// <summary>
+        /// Offense.
+        /// </summary>
+        Offense = 2,
 
-    /// <summary>
-    /// Cheating.
-    /// </summary>
-    Cheating = 3,
+        /// <summary>
+        /// Cheating.
+        /// </summary>
+        Cheating = 3,
 
-    /// <summary>
-    /// Other.
-    /// </summary>
-    Other = 4
+        /// <summary>
+        /// Other.
+        /// </summary>
+        Other = 4
+    }
 }

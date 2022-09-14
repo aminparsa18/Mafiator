@@ -5,7 +5,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Vote.
 /// </summary>
-public class Vote:BaseEntity
+public sealed class Vote : BaseEntity
 {
     /// <summary>
     /// Game key identifier.
@@ -30,15 +30,15 @@ public class Vote:BaseEntity
     /// <summary>
     /// Game.
     /// </summary>
-    public virtual Game Game { get; set; }
+    public Game Game { get; set; }
 
     /// <summary>
     /// Voter.
     /// </summary>
-    public virtual GameMember Voter { get; set; }
+    public GameMember Voter { get; set; }
 
     /// <summary>
     /// Target.
     /// </summary>
-    public virtual GameMember Target { get; set; }
+    public GameMember Target { get; set; }
 }

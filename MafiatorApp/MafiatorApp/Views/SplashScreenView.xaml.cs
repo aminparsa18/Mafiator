@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using MafiatorApp.Cache;
+using Mafiator.Common.Client.Cache;
 using MafiatorApp.ViewModels;
 using MediaManager;
 using Xamarin.Forms;

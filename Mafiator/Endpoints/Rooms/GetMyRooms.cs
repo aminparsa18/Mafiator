@@ -1,18 +1,20 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Mafiator.Repository;
-using Mafiator.Common.Data.Dtos.Rooms;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
+[Authorize]
 public class GetMyRooms : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult<ApiResult<RoomDetailsResult>>

@@ -13,7 +13,7 @@ public interface IGameEventRepository : IBaseRepository<GameEvent>
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of game events.</returns>
-    Task<IEnumerable<GameEventStatusDto>> GetByGame(string gameId);
+    Task<IEnumerable<GameEventResult>> GetByGame(string gameId);
 
     /// <summary>
     /// Validates all not validated game events by game.

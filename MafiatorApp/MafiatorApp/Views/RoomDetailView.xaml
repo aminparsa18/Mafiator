@@ -7,9 +7,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
-             xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
-             xmlns:room="clr-namespace:MafiatorApp.Dtos.Room;assembly=MafiatorApp"
+             xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp" xmlns:room="clr-namespace:Mafiator.Common.Data.Dtos.RoomMembers;assembly=Mafiator.Common.Data"
              x:Class="MafiatorApp.Views.RoomDetailView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:RoomDetailViewModel">
@@ -264,7 +262,7 @@
                         <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="room:RoomMemberDto">
+                        <DataTemplate x:DataType="room:RoomMemberResult">
                             <StackLayout>
                                 <forms:CachedImage
                                     x:Name="CachedImage"

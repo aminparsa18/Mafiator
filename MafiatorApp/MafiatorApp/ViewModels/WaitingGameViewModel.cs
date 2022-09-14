@@ -1,8 +1,11 @@
-﻿using MafiatorApp.Cache;
-using MafiatorApp.Dtos.Game;
-using MafiatorApp.Enums;
-using MafiatorApp.Extensions;
-using MafiatorApp.Models.Api;
+﻿using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.GameMembers;
+using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -28,7 +31,7 @@ namespace MafiatorApp.ViewModels
         }
 
         //detail of occuring game
-        private WaitingGameDto waiting;
+        private AppointedGameResult waiting;
 
         //total capacity of game
         private int total;
@@ -70,14 +73,19 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand InviteCommand { get; set; }
         public IAsyncCommand JoinGameCommand { get; set; }
         public IAsyncCommand LeaveGameCommand { get; set; }
+        public ObservableRangeCollection<WaitingPlayerResult> Members { get; set; }
+
+        private readonly IGamesApiService _gamesApiService;
+        private readonly IGameMemberApiService _gameMemberApiService;
 
         //to handle hub connection
         private CancellationTokenSource cts;
-        public ObservableRangeCollection<WaitingPlayerDto> Members { get; set; }
 
-        public WaitingGameViewModel()
+        public WaitingGameViewModel(IGamesApiService gamesApiService, IGameMemberApiService gameMemberApiService)
         {
-            Members = new ObservableRangeCollection<WaitingPlayerDto>();
+            _gamesApiService = gamesApiService;
+            _gameMemberApiService = gameMemberApiService;
+            Members = new ObservableRangeCollection<WaitingPlayerResult>();
             InviteCommand = new AsyncCommand(Invite);
             JoinGameCommand = new AsyncCommand(JoinGame);
             LeaveGameCommand = new AsyncCommand(LeaveGame);
@@ -105,7 +113,7 @@ namespace MafiatorApp.ViewModels
             }
 
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Leaving Game...");
-            var request = await WebApiService.LeaveGame(waiting.Id.ToString());
+            var request = await _gamesApiService.LeaveGame(waiting.Id.ToString());
             if (request.IsSuccessStatusCode)
             {
                 var response = await request.Content.ReadAsMessagePackAsync<ApiResult>();
@@ -128,7 +136,7 @@ namespace MafiatorApp.ViewModels
         private async Task JoinGame()
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Joining Game...");
-            var request = await WebApiService.JoinGame(waiting.Id.ToString());
+            var request = await _gamesApiService.JoinGame(waiting.Id.ToString());
             if (request.IsSuccessStatusCode)
             {
                 var response = await request.Content.ReadAsMessagePackAsync<ApiResult>();
@@ -193,7 +201,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task SomebodyJoined(string user)
         {
-            var members = await WebApiService.GetWaitingPlayersByGame(waiting.Id.ToString());
+            var members = await _gameMemberApiService.GetWaitingPlayersByGame(waiting.Id.ToString());
             if (members.IsSuccess)
             {
                 Members.Clear();
@@ -216,7 +224,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task GetJoinStatus()
         {
-            var joinResult = await WebApiService.IsGameJoined(waiting.Id.ToString());
+            var joinResult = await _gamesApiService.IsGameJoined(waiting.Id.ToString());
             if (joinResult.IsSuccess)
             {
                 IsJoined = !string.IsNullOrEmpty(joinResult.Data);
@@ -233,10 +241,10 @@ namespace MafiatorApp.ViewModels
 
         public override async Task InitializeAsync(object navigationData)
         {
-            if (navigationData is WaitingGameDto waiting)
+            if (navigationData is AppointedGameResult waiting)
             {
                 this.waiting = waiting;
-                Members.AddRange(waiting.Members.Select(w => new WaitingPlayerDto()
+                Members.AddRange(waiting.Members.Select(w => new WaitingPlayerResult()
                 {
                     DisplayName = w.DisplayName,
                     Image = w.Image,
@@ -250,11 +258,11 @@ namespace MafiatorApp.ViewModels
             else if (navigationData is Guid gameId)
             {
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Loading Game Status...");
-                var request = await WebApiService.GetWaitingGameByGame(gameId.ToString());
+                var request = await _gamesApiService.GetAppointedGameDetails(gameId.ToString());
                 if (request.IsSuccess)
                 {
                     this.waiting = request.Data;
-                    Members.AddRange(this.waiting.Members.Select(w => new WaitingPlayerDto()
+                    Members.AddRange(this.waiting.Members.Select(w => new WaitingPlayerResult()
                     {
                         DisplayName = w.DisplayName,
                         Image = w.Image,

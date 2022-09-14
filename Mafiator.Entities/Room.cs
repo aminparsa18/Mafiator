@@ -7,7 +7,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Room.
 /// </summary>
-public class Room:BaseEntity
+public sealed class Room : BaseEntity
 {
     /// <summary>
     /// Room name.
@@ -37,20 +37,20 @@ public class Room:BaseEntity
     /// <summary>
     /// User.
     /// </summary>
-    public virtual User User { get; set; }
+    public User User { get; set; }
 
     /// <summary>
     /// Collection of games.
     /// </summary>
-    public virtual ICollection<Game> Game { get; set; }
+    public ICollection<Game> Game { get; set; }
 
     /// <summary>
     /// Collection of chat messages.
     /// </summary>
-    public virtual ICollection<ChatMessage> ChatMessage{ get; set; }
+    public ICollection<ChatMessage> ChatMessage { get; set; }
 
     /// <summary>
     /// Collection of room members.
     /// </summary>
-    public virtual ICollection<RoomMember> RoomMember { get; set; }
+    public ICollection<RoomMember> RoomMember { get; set; }
 }

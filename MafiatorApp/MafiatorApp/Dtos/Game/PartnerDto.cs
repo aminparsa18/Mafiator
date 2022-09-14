@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
 
 namespace MafiatorApp.Dtos.Game
 {

@@ -1,4 +1,15 @@
-﻿using MafiatorApp.Dtos;
+﻿using Mafiator.Common.Client.Services.Avatars;
+using Mafiator.Common.Client.Services.ChatMessages;
+using Mafiator.Common.Client.Services.GameEvents;
+using Mafiator.Common.Client.Services.GameMembers;
+using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Client.Services.RoomMembers;
+using Mafiator.Common.Client.Services.Rooms;
+using Mafiator.Common.Client.Services.Users;
+using Mafiator.Common.Client.Services.Votes;
+using Mafiator.Common.Data.Dtos.Avatars;
+using Mafiator.Common.Data.Dtos.GameMembers;
+using MafiatorApp.Dtos;
 using MafiatorApp.Dtos.Game;
 using MafiatorApp.Models;
 using MafiatorApp.Services;
@@ -40,12 +51,20 @@ namespace MafiatorApp.ViewModels.Base
                 .AddClasses().AsSelf().WithTransientLifetime());
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService,NavigationService>();
-            services.AddSingleton<IWebApiService,WebApiService>();
+            services.AddSingleton<IAvatarsApiService,AvatarsApiService>();
+            services.AddSingleton<IChatMessagesApiService, ChatMessagesApiService>();
+            services.AddSingleton<IGamesApiService, GamesApiService>();
+            services.AddSingleton<IGameEventsApiService, GameEventsApiService>();
+            services.AddSingleton<IGameMemberApiService, GameMemberApiService>();
+            services.AddSingleton<IRoomsApiService, RoomsApiService>();
+            services.AddSingleton<IRoomMembersApiService, RoomMembersApiService>();
+            services.AddSingleton<IUsersApiService, UsersApiService>();
+            services.AddSingleton<IVotesApiService, VoteApiService>();
             services.AddAutoMapper(cfg =>
             {
-                cfg.CreateMap<AvatarDto, Avatar>();
-                cfg.CreateMap<GameMemberDto, PlayerDto>();
-                cfg.CreateMap<PlayerDto, CandidateDto>();
+                cfg.CreateMap<AvatarResult, Avatar>();
+                cfg.CreateMap<GameMemberResult, PlayerDetails>();
+                cfg.CreateMap<PlayerDetails, CandidateDto>();
             });
             ServiceProvider = services.BuildServiceProvider();
         }

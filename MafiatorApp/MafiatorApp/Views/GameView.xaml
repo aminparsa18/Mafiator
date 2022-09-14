@@ -246,7 +246,7 @@
                     <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="game:PlayerDto">
+                    <DataTemplate x:DataType="game:PlayerDetails">
                         <StackLayout Margin="8,4">
                             <Grid>
                                 <userControls:TintedCachedImage

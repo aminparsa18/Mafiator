@@ -2,7 +2,10 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using FluentFTP;
-using MafiatorApp.Cache;
+using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Services.GameMembers;
+using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.Dtos.Game;
 using MafiatorApp.Enums;
 using MafiatorApp.Models.PipeEvents;
@@ -33,8 +36,6 @@ namespace MafiatorApp.ViewModels
 {
     public class GameViewModel : ViewModelBase
     {
-        private readonly ISubscriber<UpdateMembersEvent> subscriber;
-
         //persists game hub state
         private LayoutState currentState = LayoutState.Loading;
 
@@ -75,9 +76,9 @@ namespace MafiatorApp.ViewModels
         private bool isRecording;
 
         //current member turn
-        private PlayerDto member;
+        private PlayerDetails member;
 
-        public PlayerDto Member
+        public PlayerDetails Member
         {
             get => member;
             set => SetProperty(ref member, value);
@@ -115,7 +116,7 @@ namespace MafiatorApp.ViewModels
         }
 
         public event EventHandler<bool> TurnChanged;
-        public ObservableRangeCollection<PlayerDto> Members { get; set; }
+        public ObservableRangeCollection<PlayerDetails> Members { get; set; }
         public ObservableRangeCollection<GameMessageDto> Messages { get; set; }
         public IAsyncCommand SendMessageCommand { get; set; }
         public IAsyncCommand LikeCommand { get; set; }
@@ -128,16 +129,20 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand NextCommand { get; set; }
         public IAsyncCommand<string> PlayVoiceCommand { get; set; }
 
-        private readonly IMapper mapper;
+        private readonly IGameMemberApiService _gameMemberApiService;
+        private readonly IMapper _mapper;
+        private readonly ISubscriber<UpdateMembersEvent> _subscriber;
+
         private AudioRecorderService recorder;
-        private PlayerRoleDto player;
+        private PlayerRoleResult player;
         private string gameId;
 
-        public GameViewModel(IMapper mapper, ISubscriber<UpdateMembersEvent> subscriber)
+        public GameViewModel(IGameMemberApiService gameMemberApiService, IMapper mapper, ISubscriber<UpdateMembersEvent> subscriber)
         {
-            this.mapper = mapper;
-            this.subscriber = subscriber;
-            Members = new ObservableRangeCollection<PlayerDto>();
+            _gameMemberApiService = gameMemberApiService;
+            _mapper = mapper;
+            _subscriber = subscriber;
+            Members = new ObservableRangeCollection<PlayerDetails>();
             Messages = new ObservableRangeCollection<GameMessageDto>();
             SendMessageCommand = new AsyncCommand(SendMessage);
             LikeCommand = new AsyncCommand(Like);
@@ -212,7 +217,7 @@ namespace MafiatorApp.ViewModels
         {
             await UpdateMembers();
 
-            var result = await WebApiService.GetPlayerRole(gameId);
+            var result = await _gameMemberApiService.GetPlayerRole(gameId);
             if (result.IsSuccess)
             {
                 Role = result.Data.Role;
@@ -374,7 +379,7 @@ namespace MafiatorApp.ViewModels
             Member = Members.FirstOrDefault(m => m.Id == memberId);
             totalTime = 0;
             _timer ??= new Timer(Callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
             TurnChanged?.Invoke(this, player?.MemberId == memberId);
         }
 
@@ -394,9 +399,10 @@ namespace MafiatorApp.ViewModels
             Member = Members.FirstOrDefault(m => m.Id == memberId);
             totalTime = 0;
             _timer ??= new Timer(Callback2, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
             TurnChanged?.Invoke(this, player?.MemberId == memberId);
         }
+
         private void Callback2(object state)
         {
             totalTime += 100;
@@ -485,11 +491,11 @@ namespace MafiatorApp.ViewModels
 
         public async Task UpdateMembers()
         {
-            var members = await WebApiService.GetMembersOfGame(gameId);
+            var members = await _gameMemberApiService.GetMembersOfGame(gameId);
             if (members.IsSuccess)
             {
                 Members.Clear();
-                var players = mapper.Map<IEnumerable<PlayerDto>>(members.Data);
+                var players = _mapper.Map<IEnumerable<PlayerDetails>>(members.Data);
                 Members.AddRange(players);
                 Barrel.Current.Add("Members", players, TimeSpan.FromHours(3));
             }

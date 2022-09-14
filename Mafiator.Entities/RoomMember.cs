@@ -6,7 +6,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Room member.
 /// </summary>
-public class RoomMember:BaseEntity
+public sealed class RoomMember : BaseEntity
 {
     /// <summary>
     /// Room key identifier.
@@ -21,10 +21,10 @@ public class RoomMember:BaseEntity
     /// <summary>
     /// Room.
     /// </summary>
-    public virtual Room Room { get; set; }
-    
+    public Room Room { get; set; }
+
     /// <summary>
     /// User.
     /// </summary>
-    public virtual User User { get; set; }
+    public User User { get; set; }
 }

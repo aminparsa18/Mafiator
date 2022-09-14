@@ -4,12 +4,12 @@
                  xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                  xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-                 xmlns:user="clr-namespace:MafiatorApp.Dtos.User;assembly=MafiatorApp"
                  xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+                 xmlns:user="clr-namespace:Mafiator.Common.Data.Dtos.Users;assembly=Mafiator.Common.Data"
                  x:Class="MafiatorApp.Views.NewMemberView"
                  CloseWhenBackgroundIsClicked="True"
                  base:ViewModelLocator.AutoWireViewModel="True"
@@ -43,7 +43,7 @@
                             </Frame>
                             <StackLayout BindableLayout.ItemsSource="{Binding Members}">
                                 <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="user:ValidateUserDto">
+                                    <DataTemplate x:DataType="user:ValidateUserResult">
                                         <StackLayout Orientation="Horizontal">
                                             <forms:CachedImage
                                                 x:Name="ProfileImage"

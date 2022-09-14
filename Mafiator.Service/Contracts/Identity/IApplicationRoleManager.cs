@@ -38,7 +38,7 @@ namespace Mafiator.Service.Contracts.Identity
         #endregion
 
         #region Methods For Dto
-        Task<List<RoleDto>> GetAllRolesDtoAsync();
+        Task<List<RoleDetails>> GetAllRolesDtoAsync();
         #endregion
 
     }

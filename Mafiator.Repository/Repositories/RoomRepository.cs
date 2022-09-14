@@ -8,7 +8,7 @@ using System.Linq;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class RoomRepository : BaseRepository<Room>, IRoomRepository
+public sealed class RoomRepository : BaseRepository<Room>, IRoomRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="RoomRepository"/> class.
@@ -24,7 +24,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
             .Skip(skip).Take(20).OrderByDescending(o => o.CreatedDate).Select(s => new RoomDetailsResult()
             {
                 Id = s.Id,
-                MemberCount = (short) s.RoomMember.Count,
+                MemberCount = (short)s.RoomMember.Count,
                 GamePlayedCount = s.Game.Count(g => g.Status != GameStatus.NotStarted),
                 Name = s.Name
             }).ToListAsync();
@@ -42,7 +42,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     SELECT [r0].[Id], [r0].[CreatedDate], [r0].[Image], [r0].[IsPrivate], [r0].[ModifiedDate], [r0].[Name], [r0].[UserId]
     FROM [Room] AS [r0] WHERE [r0].[IsPrivate] <> CAST(1 AS bit)
     ORDER BY (SELECT 1) OFFSET @Offset ROWS FETCH NEXT @Take ROWS ONLY
-    ) AS [t] ORDER BY [t].[CreatedDate] DESC", new {Status = GameStatus.NotStarted, Offset = skip, Take = 20});
+    ) AS [t] ORDER BY [t].[CreatedDate] DESC", new { Status = GameStatus.NotStarted, Offset = skip, Take = 20 });
     }
 
     /// <inheritdoc/>
@@ -53,9 +53,10 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
             .Select(s => new RoomDetailsResult()
             {
                 Id = s.Id,
-                MemberCount = (short) s.RoomMember.Count,
+                MemberCount = (short)s.RoomMember.Count,
                 GamePlayedCount = s.Game.Count(g => g.Status != GameStatus.NotStarted),
-                Name = s.Name
+                Name = s.Name,
+                Code = s.Code,
             }).FirstOrDefaultAsync();
     }
 
@@ -65,12 +66,11 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
         return Connection.ExecuteQueryAsync<RoomDetailsResult>(@"SELECT TOP(1) CAST((
             SELECT COUNT(*)
             FROM[dbo].[RoomMember] AS[r]
-            WHERE[r0].[Id] = [r].[RoomId]) AS smallint) AS[MemberCount], (
-                SELECT COUNT(*)
+            WHERE[r0].[Id] = [r].[RoomId]) AS smallint) AS[MemberCount], (SELECT COUNT(*)
             FROM[dbo].[Game] AS[g]
             WHERE([r0].[Id] = [g].[RoomId]) AND([g].[Status] <> CAST(0 AS smallint))) AS[GamePlayedCount], [r0].[Name],[r0].[Code]
             FROM[dbo].[Room] AS[r0]
-            WHERE[r0].[Id] = @roomId", new {roomId});
+            WHERE[r0].[Id] = @roomId", new { roomId });
     }
 
     /// <inheritdoc/>
@@ -80,7 +80,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
             .Select(s => new RoomDetailsResult()
             {
                 Id = s.RoomId,
-                MemberCount = (short) s.Room.RoomMember.Count,
+                MemberCount = (short)s.Room.RoomMember.Count,
                 GamePlayedCount = s.Room.Game.Count(g => g.Status != GameStatus.NotStarted),
                 Name = s.Room.Name,
                 IsAdmin = s.Room.UserId == userId
@@ -102,7 +102,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     END AS [IsAdmin]
     FROM [dbo].[RoomMember] AS [r0]
     INNER JOIN [dbo].[Room] AS [r1] ON [r0].[RoomId] = [r1].[Id]
-    WHERE [r0].[UserId] = @userId ", new {userId = userId.ToString()});
+    WHERE [r0].[UserId] = @userId ", new { userId = userId.ToString() });
     }
 
     /// <inheritdoc/>
@@ -117,7 +117,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
         return Connection.ExecuteScalarAsync<string>(
             @"SELECT TOP(1) [r].[Id]
                   FROM [dbo].[RoomMember] AS [r]
-                  WHERE ([r].[UserId] = @userId) AND ([r].[RoomId] = @roomId)", new {userId, roomId});
+                  WHERE ([r].[UserId] = @userId) AND ([r].[RoomId] = @roomId)", new { userId, roomId });
     }
 
     /// <inheritdoc/>

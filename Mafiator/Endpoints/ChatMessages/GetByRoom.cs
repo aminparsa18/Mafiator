@@ -1,5 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.ChatMessages;
 using Mafiator.Data;
 using Mafiator.Repository;
@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.ChatMessages;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class GetByRoom : EndpointBaseAsync
     .WithRequest<Guid>
     .WithActionResult<ApiResult<IEnumerable<ChatMessageResult>>>
@@ -25,7 +27,7 @@ public class GetByRoom : EndpointBaseAsync
     }
 
     [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/chatMessages")]
+    [HttpGet("api/v{version:apiVersion}/chatMessages/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [OpenApiOperation("ChatMessages.GetByRoom", "", "Retrieves all chat messages in a room.")]
     [OpenApiTag("Chat Messages Endpoints")]

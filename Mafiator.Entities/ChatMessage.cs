@@ -7,7 +7,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Chat messages in a room.
 /// </summary>
-public class ChatMessage:BaseEntity
+public sealed class ChatMessage : BaseEntity
 {
     /// <summary>
     /// Room key identifier.
@@ -32,10 +32,10 @@ public class ChatMessage:BaseEntity
     /// <summary>
     /// Room.
     /// </summary>
-    public virtual Room Room{ get; set; }
-    
+    public Room Room { get; set; }
+
     /// <summary>
     /// User.
     /// </summary>
-    public virtual User User { get; set; }
+    public User User { get; set; }
 }

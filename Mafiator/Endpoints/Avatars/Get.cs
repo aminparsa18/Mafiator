@@ -1,5 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Avatars;
 using Mafiator.Data;
 using Mafiator.Repository;
@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Avatars;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class Get : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult<ApiResult<IEnumerable<AvatarResult>>>

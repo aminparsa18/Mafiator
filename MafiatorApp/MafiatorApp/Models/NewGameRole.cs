@@ -1,11 +1,12 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace MafiatorApp.Models
 {
-    public class NewGameRole:ObservableObject
+    public class NewGameRole : ObservableObject
     {
         public GameRole Role { get; set; }
+
         private bool allowInc;
         public bool AllowInc
         {

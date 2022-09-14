@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Cache;
+﻿using Mafiator.Common.Client.Cache;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
 using MediaManager;
@@ -48,7 +48,7 @@ namespace MafiatorApp.ViewModels
                     await NavigationService.NavigateToAsync<HomeViewModel>();
             }
             else
-                await NavigationService.NavigateToAsync<HomeViewModel>();
+                await NavigationService.NavigateToAsync<LoginViewModel>();
 
             if (!Barrel.Current.Exists("PlayMusic") || Barrel.Current.Get<bool>("PlayMusic"))
                await CrossMediaManager.Current.PlayFromAssembly("mafia1.mp3", Assembly.GetExecutingAssembly());

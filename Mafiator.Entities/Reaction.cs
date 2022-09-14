@@ -3,7 +3,7 @@
 /// <summary>
 /// Reactions.
 /// </summary>
-public class Reaction : BaseEntity
+public sealed class Reaction : BaseEntity
 {
     /// <summary>
     /// Title.

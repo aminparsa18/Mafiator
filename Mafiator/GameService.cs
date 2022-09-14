@@ -158,7 +158,7 @@ namespace Mafiator.Api
         public async Task ShowNightResult(string gameId)
         {
             var finish = false;
-            var results = new List<GameEventResultDto>();
+            var results = new List<GameEventResult>();
             var events = await _unitOfWork.GameEvent.GetByGame(gameId);
             var members = await _unitOfWork.GameMember.GetPlayerByGame(gameId);
             if (events.Any())
@@ -209,7 +209,7 @@ namespace Mafiator.Api
                     var fuckedUp = members.FirstOrDefault(m => m.MemberId == killed.MemberId);
                     if (fuckedUp?.Role != GameRole.Immortal)
                         await _unitOfWork.GameMember.KillMember(killed.MemberId);
-                    results.Add(new GameEventResultDto()
+                    results.Add(new GameEventResult()
                     {
                         MemberId = killed.MemberId,
                         //Description = "Can no longer play or vote",
@@ -225,7 +225,7 @@ namespace Mafiator.Api
                         silenced = null;
                     else
                     {
-                        results.Add(new GameEventResultDto()
+                        results.Add(new GameEventResult()
                         {
                             MemberId = speak.MemberId,
                             //Description = "Has Extra talk tomorrow",
@@ -239,7 +239,7 @@ namespace Mafiator.Api
                 if (silenced != null)
                 {
                     await _unitOfWork.GameMember.SilenceMember(silenced.MemberId);
-                    results.Add(new GameEventResultDto()
+                    results.Add(new GameEventResult()
                     {
                         MemberId = silenced.MemberId,
                         //Description = "Can't Talk tomorrow",
@@ -265,7 +265,7 @@ namespace Mafiator.Api
                             {
                                 var sniper = snipers.FirstOrDefault();
                                 await _unitOfWork.GameMember.KillMember(sniper.MemberId);
-                                results.Add(new GameEventResultDto()
+                                results.Add(new GameEventResult()
                                 {
                                     MemberId = sniper.MemberId,
                                     //Description = "Can no longer play or vote",
@@ -278,7 +278,7 @@ namespace Mafiator.Api
                         else
                         {
                             await _unitOfWork.GameMember.KillMember(sniped.MemberId);
-                            results.Add(new GameEventResultDto()
+                            results.Add(new GameEventResult()
                             {
                                 MemberId = sniped.MemberId,
                                 //Description = "Can no longer play or vote",

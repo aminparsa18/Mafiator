@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
 using MafiatorApp.Helpers;
 using System;
 using System.Globalization;

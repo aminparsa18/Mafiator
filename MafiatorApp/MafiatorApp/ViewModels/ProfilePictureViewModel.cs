@@ -2,11 +2,13 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using MafiatorApp.Cache;
-using MafiatorApp.Dtos.User;
-using MafiatorApp.Extensions;
+using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Avatars;
+using Mafiator.Common.Client.Services.Users;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Users;
 using MafiatorApp.Models;
-using MafiatorApp.Models.Api;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
@@ -81,15 +83,20 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand SetPhotoCommand { get; set; }
 
         private IEnumerable<Avatar> avatars;
-        private readonly IMapper mapper;
         private FileResult photo;
         private bool isEdit;
-        private readonly IPublisher<UpdateProfileEvent> publisher;
 
-        public ProfilePictureViewModel(IPublisher<UpdateProfileEvent> publisher, IMapper mapper)
+        private readonly IAvatarsApiService _avatarsApiService;
+        private readonly IMapper _mapper;
+        private readonly IPublisher<UpdateProfileEvent> _publisher;
+        private readonly IUsersApiService _usersApiService;
+
+        public ProfilePictureViewModel(IAvatarsApiService avatarsApiService, IMapper mapper, IPublisher<UpdateProfileEvent> publisher, IUsersApiService usersApiService)
         {
-            this.publisher = publisher;
-            this.mapper = mapper;
+            _avatarsApiService = avatarsApiService;
+            _mapper = mapper;
+            _publisher = publisher;
+            _usersApiService = usersApiService;
             DisplayName = new ValidatableObject<string>();
             SkipCommand = new Command(Skip);
             ChoosePhotoCommand = new AsyncCommand(ChoosePhoto);
@@ -106,7 +113,7 @@ namespace MafiatorApp.ViewModels
             if (navigationData is not bool) 
                 return base.InitializeAsync(navigationData);
             isEdit = true;
-            var user = Barrel.Current.Get<UserDto>("User");
+            var user = Barrel.Current.Get<UserDetailsResult>("User");
             DisplayName.Value = user.DisplayName;
             // Image = ImageSource.FromUri(new Uri(user.Image));
 
@@ -170,7 +177,7 @@ namespace MafiatorApp.ViewModels
             if (!ValidateUpdate())
                 return;
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Changing profile picture");
-            var response = await WebApiService.UpdateProfile(new UpdateProfileDto()
+            var response = await _usersApiService.UpdateProfile(new UpdateProfileRequest()
             {
                 Image = System.IO.Path.GetFileName(new Uri(Avatar.Name).LocalPath),
                 Name = DisplayName.Value
@@ -185,7 +192,7 @@ namespace MafiatorApp.ViewModels
                     Barrel.Current.Empty("User");
                     if (isEdit)
                     {
-                        publisher.Publish(new UpdateProfileEvent());
+                        _publisher.Publish(new UpdateProfileEvent());
                         await NavigationService.RemoveLastFromBackStackAsync();
                     }
                     else
@@ -203,10 +210,10 @@ namespace MafiatorApp.ViewModels
 
         private async Task LoadAvatars()
         {
-            var response = await WebApiService.GetAllAvatars();
+            var response = await _avatarsApiService.GetAllAvatars();
             if (response.IsSuccess)
             {
-                avatars = mapper.Map<IEnumerable<Avatar>>(response.Data);
+                avatars = _mapper.Map<IEnumerable<Avatar>>(response.Data);
                 Avatars.Clear();
                 Avatars.AddRange(avatars);
             }
@@ -236,7 +243,7 @@ namespace MafiatorApp.ViewModels
         {
             if (!ValidateUpdate())
                 return;
-            var response = await WebApiService.UpdateProfile(new UpdateProfileDto()
+            var response = await _usersApiService.UpdateProfile(new UpdateProfileRequest()
             {
                 Image = image,
                 Name = DisplayName.Value
@@ -248,7 +255,7 @@ namespace MafiatorApp.ViewModels
                 {
                     Barrel.Current.Add("UserImage", name, TimeSpan.FromDays(180));
                     Barrel.Current.Empty("User");
-                    publisher.Publish(new UpdateProfileEvent());
+                    _publisher.Publish(new UpdateProfileEvent());
                     await NavigationService.RemovePopupAsync();
                     if (isEdit)
                     {

@@ -1,4 +1,5 @@
-﻿using Mafiator.Data.Dtos.Game;
+﻿using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.User;
 using System;
 using System.Collections.Generic;
@@ -15,35 +16,35 @@ public interface IGameMemberRepository : IBaseRepository<GameMember>
     /// </summary>
     /// <param name="userId">User key identifier.</param>
     /// <returns>List of user game statuses.</returns>
-    Task<List<UserGameStatusDto>> GetUserStatus(Guid userId);
+    Task<List<UserGameStatus>> GetUserStatus(Guid userId);
 
     /// <summary>
     /// Retrieves user status based on played games.
     /// </summary>
     /// <param name="userId">User key identifier.</param>
     /// <returns>List of user game statuses.</returns>
-    Task<IEnumerable<UserGameStatusDto>> GetUserStatusFast(string userId);
+    Task<IEnumerable<UserGameStatus>> GetUserStatusFast(string userId);
 
     /// <summary>
     /// Retrieves game members by game.
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of game members.</returns>
-    Task<List<GameMemberDto>> GetByGame(Guid gameId);
+    Task<List<GameMemberResult>> GetByGame(Guid gameId);
 
     /// <summary>
     /// Retrieves game members by game.
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of game members.</returns>
-    Task<IEnumerable<GameMemberDto>> GetByGameFast(string gameId);
+    Task<IEnumerable<GameMemberResult>> GetByGameFast(string gameId);
 
     /// <summary>
     /// Retrieves waiting players for a game.
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of waiting players.</returns>
-    Task<IEnumerable<WaitingPlayerDto>> GetWaitingPlayersByGame(string gameId);
+    Task<IEnumerable<WaitingPlayerResult>> GetWaitingPlayersByGame(string gameId);
 
     /// <summary>
     /// Retrieves role of player in a game.
@@ -51,21 +52,21 @@ public interface IGameMemberRepository : IBaseRepository<GameMember>
     /// <param name="userId">User key identifier.</param>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>Player role (first in list).</returns>
-    Task<IEnumerable<PlayerRoleDto>> GetRoleOfPlayer(string userId, string gameId);
+    Task<IEnumerable<PlayerRoleResult>> GetRoleOfPlayer(string userId, string gameId);
 
     /// <summary>
     /// Retrieves players in a game.
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of players.</returns>
-    Task<IEnumerable<PlayerDto>> GetPlayerByGame(string gameId);
+    Task<IEnumerable<PlayerDetails>> GetPlayerByGame(string gameId);
 
     /// <summary>
     /// Retrieves players in a game.
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of players.</returns>
-    Task<IEnumerable<PlayerDto>> GetUsersByGame(string gameId);
+    Task<IEnumerable<PlayerDetails>> GetUsersByGame(string gameId);
 
     /// <summary>
     /// Retrives players count in a game.
@@ -80,7 +81,7 @@ public interface IGameMemberRepository : IBaseRepository<GameMember>
     /// <param name="gameId">Game key identifier.</param>
     /// <param name="role">Game role.</param>
     /// <returns>Player role.</returns>
-    Task<IEnumerable<PlayerRoleDto>> GetPlayerByRoleFast(string gameId, short role);
+    Task<IEnumerable<PlayerRoleResult>> GetPlayerByRoleFast(string gameId, short role);
 
     /// <summary>
     /// Retrieves partners of a player as mafia.
@@ -88,7 +89,7 @@ public interface IGameMemberRepository : IBaseRepository<GameMember>
     /// <param name="memberId">Member key identifier.</param>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>List of mafia partners.</returns>
-    Task<IEnumerable<PlayerRoleDto>> GetMafiaPartners(string memberId, string gameId);
+    Task<IEnumerable<PlayerRoleResult>> GetMafiaPartners(string memberId, string gameId);
 
     /// <summary>
     /// Retrieves Player role by user in a game.
@@ -96,7 +97,7 @@ public interface IGameMemberRepository : IBaseRepository<GameMember>
     /// <param name="userId">User key identifier.</param>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>Player role</returns>
-    Task<IEnumerable<PlayerRoleDto>> GetUser(string userId, string gameId);
+    Task<IEnumerable<PlayerRoleResult>> GetUser(string userId, string gameId);
 
     /// <summary>
     /// Join a game.
@@ -139,5 +140,5 @@ public interface IGameMemberRepository : IBaseRepository<GameMember>
     /// </summary>
     /// <param name="memberId">Game member key identifier.</param>
     /// <returns>Player status.</returns>
-    Task<IEnumerable<UserGameStatusDto>> GetPlayerStatusFast(string memberId);
+    Task<IEnumerable<UserGameStatus>> GetPlayerStatusFast(string memberId);
 }

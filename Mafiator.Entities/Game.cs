@@ -7,7 +7,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Game.
 /// </summary>
-public class Game:BaseEntity
+public sealed class Game : BaseEntity
 {
     /// <summary>
     /// Game start date.
@@ -32,30 +32,30 @@ public class Game:BaseEntity
     /// <summary>
     /// Room.
     /// </summary>
-    public virtual Room Room { get; set; }
+    public Room Room { get; set; }
 
     /// <summary>
     /// Collection of game events.
     /// </summary>
-    public virtual ICollection<GameEvent> GameEvent{ get; set; }
+    public ICollection<GameEvent> GameEvent { get; set; }
 
     /// <summary>
     /// Collection of game members.
     /// </summary>
-    public virtual ICollection<GameMember> GameMember { get; set; }
+    public ICollection<GameMember> GameMember { get; set; }
 
     /// <summary>
     /// Collection of game messages.
     /// </summary>
-    public virtual ICollection<GameMessage> GameMessage { get; set; }
+    public ICollection<GameMessage> GameMessage { get; set; }
 
     /// <summary>
     /// Collection of game votes.
     /// </summary>
-    public virtual ICollection<Vote> Vote{ get; set; }
+    public ICollection<Vote> Vote { get; set; }
 
     /// <summary>
     /// Collection of game violation reports.
     /// </summary>
-    public virtual ICollection<GameViolationReport> Report{ get; set; }
+    public ICollection<GameViolationReport> Report { get; set; }
 }

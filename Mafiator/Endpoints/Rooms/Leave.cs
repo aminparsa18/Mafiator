@@ -1,19 +1,25 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
-using System.Security.Claims;
 using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
+[Authorize]
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class Leave : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<string>>
+    .WithRequest<LeaveRoomRequest>
+    .WithActionResult<ApiResult>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -25,36 +31,24 @@ public class Leave : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/rooms/leave")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Rooms.Join", "", "leaving an existing room.")]
+    [OpenApiOperation("Rooms.Join", "", "Leaving an existing room.")]
     [OpenApiTag("Rooms Endpoints")]
-    public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string code, CancellationToken cancellationToken = default)
+    public override async Task<ActionResult<ApiResult>> HandleAsync(LeaveRoomRequest request, CancellationToken cancellationToken = default)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
-        var roomId = await _unitOfWork.Room.GetByCode(code);
-        if (string.IsNullOrEmpty(roomId))
-        {
-            return Ok(new ApiResult<string>()
-            {
-                IsSuccess = false,
-                Errors = new[] { "No such room exist" },
-                StatusCode = ApiResultStatusCode.NotFound
-            });
-        }
-        var member = await _unitOfWork.RoomMember.Get(r => r.UserId == userId && r.RoomId == Guid.Parse(roomId));
+        var member = await _unitOfWork.RoomMember.Get(r => r.UserId == userId && r.RoomId == request.RoomId);
         if (member == null)
-            return Ok(new ApiResult<string>()
+            return Ok(new ApiResult
             {
                 IsSuccess = false,
-                Errors = new[] { "You are not member of this room" },
-                StatusCode = ApiResultStatusCode.Conflict,
-                Data = roomId
+                Errors = new[] { "You are not member of this room." },
+                StatusCode = ApiResultStatusCode.BadRequest
             });
         _unitOfWork.RoomMember.Remove(member);
         await _unitOfWork.Commit();
-        return Ok(new ApiResult<string>()
+        return Ok(new ApiResult
         {
             IsSuccess = true,
-            Data = roomId
         });
     }
 }

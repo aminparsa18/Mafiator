@@ -1,5 +1,6 @@
 ﻿using Hangfire;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Extensions;
 using Mafiator.Common.Server.Media;
 using Mafiator.Data;
@@ -163,7 +164,7 @@ namespace Mafiator.IocConfig.Extensions
                     }
                 });
             });
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseAuthentication();

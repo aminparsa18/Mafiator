@@ -1,6 +1,7 @@
-﻿using MafiatorApp.Cache;
+﻿using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Services.GameMembers;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.Dtos.Game;
-using MafiatorApp.Enums;
 using MafiatorApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -48,8 +49,12 @@ namespace MafiatorApp.ViewModels
         private bool fromDetail;
         public IAsyncCommand PopCommand { get; set; }
         public ObservableRangeCollection<PartnerDto> Partners { get; set; }
-        public PlayerRoleViewModel()
+
+        private readonly IGameMemberApiService _gameMemberApiService;
+
+        public PlayerRoleViewModel(IGameMemberApiService gameMemberApiService)
         {
+            _gameMemberApiService = gameMemberApiService;
             Partners=new ObservableRangeCollection<PartnerDto>();
             PopCommand=new AsyncCommand(Pop);
         }
@@ -78,10 +83,10 @@ namespace MafiatorApp.ViewModels
             IsMafia = Role is GameRole.Mafia or GameRole.GodFather;
                 if (IsMafia)
                 {
-                    var partners = await WebApiService.GetMafiaPartners(gameId);
+                    var partners = await _gameMemberApiService.GetMafiaPartners(gameId);
                     if (partners.IsSuccess)
                     {
-                        var members = Barrel.Current.Get<IEnumerable<PlayerDto>>("Members");
+                        var members = Barrel.Current.Get<IEnumerable<PlayerDetails>>("Members");
                         Partners.AddRange(partners.Data.Select(s=>new PartnerDto()
                         {
                             Role = s.Role,

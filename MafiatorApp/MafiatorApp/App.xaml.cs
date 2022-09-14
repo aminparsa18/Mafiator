@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
-using MafiatorApp.Cache;
+using Mafiator.Common.Client.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Resources.Texts;
 using MafiatorApp.UserControls.ShimmerLayout;

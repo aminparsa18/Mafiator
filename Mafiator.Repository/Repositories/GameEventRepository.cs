@@ -5,7 +5,7 @@ using System.Data;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class GameEventRepository : BaseRepository<GameEvent>, IGameEventRepository
+public sealed class GameEventRepository : BaseRepository<GameEvent>, IGameEventRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="GameEventRepository"/> class.
@@ -15,9 +15,9 @@ public class GameEventRepository : BaseRepository<GameEvent>, IGameEventReposito
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<GameEventStatusDto>> GetByGame(string gameId)
+    public Task<IEnumerable<GameEventResult>> GetByGame(string gameId)
     {
-        return Connection.ExecuteQueryAsync<GameEventStatusDto>("SELECT [g].[MemberId],[g].[EventType] FROM [GameEvent] g WHERE g.[GameId] = @gameId AND g.[IsValidated] = 0", new { gameId });
+        return Connection.ExecuteQueryAsync<GameEventResult>("SELECT [g].[MemberId],[g].[EventType] FROM [GameEvent] g WHERE g.[GameId] = @gameId AND g.[IsValidated] = 0", new { gameId });
     }
 
     /// <inheritdoc/>

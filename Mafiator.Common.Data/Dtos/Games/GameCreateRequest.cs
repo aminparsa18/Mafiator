@@ -1,26 +1,31 @@
-﻿namespace Mafiator.Common.Data.Dtos.Games;
+﻿using MessagePack;
+using System;
+using System.Collections.Generic;
 
-/// <summary>
-/// Game create dto.
-/// </summary>
-[MessagePackObject]
-public record GameCreateRequest
+namespace Mafiator.Common.Data.Dtos.Games
 {
     /// <summary>
-    /// Start date.
+    /// Game create dto.
     /// </summary>
-    [Key(0)]
-    public DateTime StartDate { get; init; }
+    [MessagePackObject]
+    public sealed class GameCreateRequest
+    {
+        /// <summary>
+        /// Start date.
+        /// </summary>
+        [Key(0)]
+        public DateTime StartDate { get; set; }
 
-    /// <summary>
-    /// Game roles.
-    /// </summary>
-    [Key(1)]
-    public List<GameRoleCreateRequest> Roles { get; init; }
+        /// <summary>
+        /// Game roles.
+        /// </summary>
+        [Key(1)]
+        public List<GameRoleCreateRequest> Roles { get; set; }
 
-    /// <summary>
-    /// Room key identifier.
-    /// </summary>
-    [Key(2)]
-    public Guid RoomId { get; init; }
+        /// <summary>
+        /// Room key identifier.
+        /// </summary>
+        [Key(2)]
+        public Guid RoomId { get; set; }
+    }
 }

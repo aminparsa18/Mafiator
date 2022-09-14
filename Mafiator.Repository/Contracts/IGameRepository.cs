@@ -1,5 +1,4 @@
 ﻿using Mafiator.Common.Data.Dtos.Games;
-using Mafiator.Data.Dtos.Game;
 using System;
 using System.Collections.Generic;
 
@@ -22,14 +21,14 @@ public interface IGameRepository : IBaseRepository<Game>
     /// </summary>
     /// <param name="gameId">Game key identifier.</param>
     /// <returns>Waiting game informations.</returns>
-    Task<WaitingGameDto> GetWaitingGameInformations(Guid gameId);
+    Task<AppointedGameResult> GetWaitingGameInformations(Guid gameId);
 
     /// <summary>
     /// Retrieves informations of a waiting game.
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>Waiting game informations.</returns>
-    Task<WaitingGameDto> GetWaitingGameByRoom(Guid roomId);
+    Task<AppointedGameResult> GetWaitingGameByRoom(Guid roomId);
 
     /// <summary>
     /// Retrieves available games to play.

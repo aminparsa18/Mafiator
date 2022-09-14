@@ -1,11 +1,11 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
 using System;
 using System.Globalization;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
 {
-    public class PlayerStatusVisibilityConverter:IValueConverter
+    public class PlayerStatusVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

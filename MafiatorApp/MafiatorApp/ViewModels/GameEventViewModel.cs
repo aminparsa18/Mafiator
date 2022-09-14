@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using MafiatorApp.Cache;
+using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Services.GameEvents;
+using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Common.Data.Enums;
+using Mafiator.Data.Dtos.GameEvent;
 using MafiatorApp.Dtos.Game;
-using MafiatorApp.Dtos.GameEvent;
-using MafiatorApp.Enums;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
@@ -24,7 +26,6 @@ namespace MafiatorApp.ViewModels
 {
     public class GameEventViewModel : ViewModelBase
     {
-        private readonly IPublisher<UpdateMembersEvent> publisher;
         private LayoutState mainState = LayoutState.Empty;
 
         public LayoutState MainState
@@ -40,8 +41,8 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref sleepState, value);
         }
         public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
-        public ObservableRangeCollection<GameEventResultDto> Results { get; set; }
-        public ObservableRangeCollection<PlayerDto> Partners { get; set; }
+        public ObservableRangeCollection<GameEventResult> Results { get; set; }
+        public ObservableRangeCollection<PlayerDetails> Partners { get; set; }
         private CandidateDto candidate;
         public CandidateDto Candidate
         {
@@ -102,15 +103,19 @@ namespace MafiatorApp.ViewModels
         public ICommand CandidateSelectedCommand { get; set; }
         public IAsyncCommand ApplyCommand { get; set; }
         private string gameId;
-        private readonly IMapper mapper;
 
-        public GameEventViewModel(IMapper mapper, IPublisher<UpdateMembersEvent> publisher)
+        private readonly IGameEventsApiService _gameEventsApiService;
+        private readonly IMapper _mapper;
+        private readonly IPublisher<UpdateMembersEvent> _publisher;
+
+        public GameEventViewModel(IGameEventsApiService gameEventsApiService, IMapper mapper, IPublisher<UpdateMembersEvent> publisher)
         {
-            this.mapper = mapper;
-            this.publisher = publisher;
+            _gameEventsApiService = gameEventsApiService;   
+            _mapper = mapper;
+            _publisher = publisher;
             Candidates = new ObservableRangeCollection<CandidateDto>();
-            Results = new ObservableRangeCollection<GameEventResultDto>();
-            Partners = new ObservableRangeCollection<PlayerDto>();
+            Results = new ObservableRangeCollection<GameEventResult>();
+            Partners = new ObservableRangeCollection<PlayerDetails>();
             CandidateSelectedCommand = new Command(CandidateSelected);
             ApplyCommand = new AsyncCommand(Apply);
             _timer ??= new Timer(Callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
@@ -127,14 +132,14 @@ namespace MafiatorApp.ViewModels
 
         private async Task ShowInquiryResult(bool value)
         {
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
             if (player.Role == GameRole.Detective)
                 await NavigationService.NavigateToPopupAsync<InquiryStatusViewModel>(value);
         }
 
         private void MafiaChose(string memberId)
         {
-            var members = Barrel.Current.Get<IEnumerable<PlayerDto>>("Members");
+            var members = Barrel.Current.Get<IEnumerable<PlayerDetails>>("Members");
             Partners.Add(members.FirstOrDefault(m => m.Id == memberId));
         }
 
@@ -172,7 +177,7 @@ namespace MafiatorApp.ViewModels
             GameHub.Instance.Remove("NightResult");
             _timer ??= new Timer(Callback2, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             MainState = LayoutState.Loading;
-            var status = await WebApiService.GetNightResult(gameId);
+            var status = await _gameEventsApiService.GetNightResult(gameId);
             if (status.IsSuccess)
             {
                 Title = LocalizationResourceManager.Current.GetValue("StatusBoard");
@@ -182,7 +187,7 @@ namespace MafiatorApp.ViewModels
                 if (Results.Any())
                 {
                     Barrel.Current.Add("EventResults", Results.ToList(), TimeSpan.FromMinutes(1));
-                    publisher.Publish(new UpdateMembersEvent());
+                    _publisher.Publish(new UpdateMembersEvent());
                 }
 
                 MainState = LayoutState.Saving;
@@ -196,7 +201,7 @@ namespace MafiatorApp.ViewModels
         private async Task Apply()
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Current.GetValue("ApplyingTarget"));
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
             HttpResponseMessage request = null;
             if (player.Role == GameRole.Mafia)
             {
@@ -205,7 +210,7 @@ namespace MafiatorApp.ViewModels
             }
             else if (player.Role == GameRole.Detective)
             {
-                request = await WebApiService.Inquiry(new GameEventDto()
+                request = await _gameEventsApiService.Inquiry(new GameEventRequest()
                 {
                     MemberId = Guid.Parse(Candidate.Id),
                     GameId = Guid.Parse(gameId),
@@ -214,7 +219,7 @@ namespace MafiatorApp.ViewModels
             }
             else if (player.Role == GameRole.Doctor)
             {
-                request = await WebApiService.Cure(new GameEventDto()
+                request = await _gameEventsApiService.Cure(new GameEventRequest()
                 {
                     MemberId = Guid.Parse(Candidate.Id),
                     GameId = Guid.Parse(gameId),
@@ -223,7 +228,7 @@ namespace MafiatorApp.ViewModels
             }
             else
             {
-                request = await WebApiService.FireGameEvent(new GameEventDto()
+                request = await _gameEventsApiService.FireGameEvent(new GameEventRequest()
                 {
                     MemberId = Guid.Parse(Candidate.Id),
                     GameId = Guid.Parse(gameId),
@@ -244,8 +249,8 @@ namespace MafiatorApp.ViewModels
         {
             if (navigationData is string data)
             {
-                var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
-                var members = Barrel.Current.Get<IEnumerable<PlayerDto>>("Members");
+                var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
+                var members = Barrel.Current.Get<IEnumerable<PlayerDetails>>("Members");
                 var currentMember = members.FirstOrDefault(m => m.Id == player.MemberId);
                 if (player.Role == GameRole.Citizen || player.Role == GameRole.Terrorist)
                 {
@@ -258,7 +263,7 @@ namespace MafiatorApp.ViewModels
                 {
                     if (currentMember.Status != PlayerStatus.Kicked && currentMember.Status != PlayerStatus.Killed)
                     {
-                        var players = mapper.Map<List<CandidateDto>>(members.Where(m =>
+                        var players = _mapper.Map<List<CandidateDto>>(members.Where(m =>
                             m.Status != PlayerStatus.Killed && m.Status != PlayerStatus.Kicked));
                         //players.RemoveAll(p => p.Id == player?.MemberId);
                         gameId = data;
@@ -280,7 +285,7 @@ namespace MafiatorApp.ViewModels
 
         private static string ShowPlayerTask()
         {
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
             return player.Role switch
             {
                 GameRole.GodFather => LocalizationResourceManager.Current.GetValue("KillDesc"),
@@ -296,7 +301,7 @@ namespace MafiatorApp.ViewModels
 
         private static string ShowPlayerAction()
         {
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
             return player.Role switch
             {
                 GameRole.GodFather => LocalizationResourceManager.Current.GetValue("Kill"),

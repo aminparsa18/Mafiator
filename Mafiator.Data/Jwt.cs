@@ -5,7 +5,7 @@ namespace Mafiator.Data;
 /// <summary>
 /// Jwt options stored in app settings.
 /// </summary>
-public class Jwt
+public sealed class Jwt
 {
     /// <summary>
     /// Jwt secret key.

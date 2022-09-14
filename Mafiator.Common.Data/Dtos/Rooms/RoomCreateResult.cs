@@ -1,14 +1,18 @@
-﻿namespace Mafiator.Common.Data.Dtos.Rooms;
+﻿using MessagePack;
+using System;
 
-/// <summary>
-/// Room create result dto.
-/// </summary>
-[MessagePackObject]
-public class RoomCreateResult
+namespace Mafiator.Common.Data.Dtos.Rooms
 {
     /// <summary>
-    /// Room key identifier.
+    /// Room create result dto.
     /// </summary>
-    [Key(0)]
-    public Guid Id { get; set; }
+    [MessagePackObject]
+    public sealed class RoomCreateResult
+    {
+        /// <summary>
+        /// Room key identifier.
+        /// </summary>
+        [Key(0)]
+        public Guid Id { get; set; }
+    }
 }

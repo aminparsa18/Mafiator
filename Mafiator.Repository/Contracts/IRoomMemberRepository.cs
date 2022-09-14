@@ -1,4 +1,4 @@
-﻿using Mafiator.Data.Dtos.Room;
+﻿using Mafiator.Common.Data.Dtos.RoomMembers;
 using System;
 using System.Collections.Generic;
 
@@ -22,12 +22,12 @@ public interface IRoomMemberRepository : IBaseRepository<RoomMember>
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>List of room members.</returns>
-    Task<List<RoomMemberDto>> GetByRoom(Guid roomId);
+    Task<List<RoomMemberResult>> GetByRoom(Guid roomId);
 
     /// <summary>
     /// Retrieves all member of room.
     /// </summary>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>List of room members.</returns>
-    Task<IEnumerable<RoomMemberDto>> GetByRoomFast(string roomId);
+    Task<IEnumerable<RoomMemberResult>> GetByRoomFast(string roomId);
 }

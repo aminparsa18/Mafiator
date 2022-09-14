@@ -2,7 +2,7 @@
 
 namespace Mafiator.Data;
 
-public class ApplicationIdentityErrorDescriber : IdentityErrorDescriber
+public sealed class ApplicationIdentityErrorDescriber : IdentityErrorDescriber
 {
     public override IdentityError DuplicateUserName(string userName) => new() { Code = nameof(DuplicateUserName), Description = $"نام کاربری '{userName}' قبلا توسط شخص دیگری انتخاب شده است." };
 
@@ -23,5 +23,4 @@ public class ApplicationIdentityErrorDescriber : IdentityErrorDescriber
     public override IdentityError DuplicateRoleName(string role) => new() { Code = nameof(DuplicateRoleName), Description = $"نقش '{role}' تکراری است." };
 
     public override IdentityError PasswordMismatch() => new() { Code = nameof(PasswordMismatch), Description = "گذرواژه شما نادرست است" };
-
 }

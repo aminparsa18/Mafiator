@@ -5,7 +5,7 @@ using System.Data;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
+public sealed class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AvatarRepository"/> class.

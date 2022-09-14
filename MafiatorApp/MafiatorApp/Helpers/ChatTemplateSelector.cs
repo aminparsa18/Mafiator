@@ -1,5 +1,5 @@
-﻿using MafiatorApp.Dtos.Game;
-using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
+using MafiatorApp.Dtos.Game;
 using MafiatorApp.Views.Templates;
 using Xamarin.Forms;
 
@@ -7,29 +7,29 @@ namespace MafiatorApp.Helpers
 {
     public class ChatTemplateSelector : DataTemplateSelector
     {
-        private readonly DataTemplate incomingTextDataTemplate;
-        private readonly DataTemplate outgoingTextDataTemplate;
-        private readonly DataTemplate incomingVoiceDataTemplate;
-        private readonly DataTemplate outgoingVoiceDataTemplate;
-        private readonly DataTemplate incomingVideoDataTemplate;
-        private readonly DataTemplate outgoingVideoDataTemplate;
-        private readonly DataTemplate incomingLikeDataTemplate;
-        private readonly DataTemplate outgoingLikeDataTemplate;
-        private readonly DataTemplate incomingDissLikeDataTemplate;
-        private readonly DataTemplate outgoingDissLikeDataTemplate;
+        private readonly DataTemplate _incomingTextDataTemplate;
+        private readonly DataTemplate _outgoingTextDataTemplate;
+        private readonly DataTemplate _incomingVoiceDataTemplate;
+        private readonly DataTemplate _outgoingVoiceDataTemplate;
+        private readonly DataTemplate _incomingVideoDataTemplate;
+        private readonly DataTemplate _outgoingVideoDataTemplate;
+        private readonly DataTemplate _incomingLikeDataTemplate;
+        private readonly DataTemplate _outgoingLikeDataTemplate;
+        private readonly DataTemplate _incomingDissLikeDataTemplate;
+        private readonly DataTemplate _outgoingDissLikeDataTemplate;
 
         public ChatTemplateSelector()
         {
-            this.incomingTextDataTemplate = new DataTemplate(typeof(IncomingTextView));
-            this.outgoingTextDataTemplate = new DataTemplate(typeof(OutgoingTextView));
-            this.incomingVoiceDataTemplate= new DataTemplate(typeof(IncomingVoiceView));
-            this.outgoingVoiceDataTemplate = new DataTemplate(typeof(OutgoingVoiceView));
-            this.incomingVideoDataTemplate = new DataTemplate(typeof(IncomingVideoView));
-            this.outgoingVideoDataTemplate = new DataTemplate(typeof(OutgoingVideoView));
-            this.incomingLikeDataTemplate=new DataTemplate(typeof(IncomingLikeView));
-            this.outgoingLikeDataTemplate=new DataTemplate(typeof(OutgoingLikeView));
-            this.incomingDissLikeDataTemplate=new DataTemplate(typeof(IncomingDissLikeView));
-            this.outgoingDissLikeDataTemplate=new DataTemplate(typeof(OutgoingDissLikeView));
+            _incomingTextDataTemplate = new DataTemplate(typeof(IncomingTextView));
+            _outgoingTextDataTemplate = new DataTemplate(typeof(OutgoingTextView));
+            _incomingVoiceDataTemplate= new DataTemplate(typeof(IncomingVoiceView));
+            _outgoingVoiceDataTemplate = new DataTemplate(typeof(OutgoingVoiceView));
+            _incomingVideoDataTemplate = new DataTemplate(typeof(IncomingVideoView));
+            _outgoingVideoDataTemplate = new DataTemplate(typeof(OutgoingVideoView));
+            _incomingLikeDataTemplate=new DataTemplate(typeof(IncomingLikeView));
+            _outgoingLikeDataTemplate=new DataTemplate(typeof(OutgoingLikeView));
+            _incomingDissLikeDataTemplate=new DataTemplate(typeof(IncomingDissLikeView));
+            _outgoingDissLikeDataTemplate=new DataTemplate(typeof(OutgoingDissLikeView));
         }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
@@ -40,22 +40,22 @@ namespace MafiatorApp.Helpers
             {
                 return message.Type switch
                 {
-                    GameMessageType.Text => outgoingTextDataTemplate,
-                    GameMessageType.Voice => outgoingVoiceDataTemplate,
-                    GameMessageType.Video => outgoingVideoDataTemplate,
-                    GameMessageType.Like => outgoingLikeDataTemplate,
-                    GameMessageType.DissLike => outgoingDissLikeDataTemplate,
+                    GameMessageType.Text => _outgoingTextDataTemplate,
+                    GameMessageType.Voice => _outgoingVoiceDataTemplate,
+                    GameMessageType.Video => _outgoingVideoDataTemplate,
+                    GameMessageType.Like => _outgoingLikeDataTemplate,
+                    GameMessageType.DissLike => _outgoingDissLikeDataTemplate,
                     _ => null
                 };
             }
 
             return message.Type switch
             {
-                GameMessageType.Text => incomingTextDataTemplate,
-                GameMessageType.Voice => incomingVoiceDataTemplate,
-                GameMessageType.Video => incomingVideoDataTemplate,
-                GameMessageType.Like => incomingLikeDataTemplate,
-                GameMessageType.DissLike => incomingDissLikeDataTemplate,
+                GameMessageType.Text => _incomingTextDataTemplate,
+                GameMessageType.Voice => _incomingVoiceDataTemplate,
+                GameMessageType.Video => _incomingVideoDataTemplate,
+                GameMessageType.Like => _incomingLikeDataTemplate,
+                GameMessageType.DissLike => _incomingDissLikeDataTemplate,
                 _ => null
             };
         }

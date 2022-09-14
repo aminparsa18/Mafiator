@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
 using System;
 using System.Globalization;
 using Xamarin.Forms;

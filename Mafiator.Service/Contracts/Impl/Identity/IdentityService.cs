@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using Mafiator.Common.Api;
-using Mafiator.Common.Api.Auth;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Api.Auth;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Common.Helpers;
 using Mafiator.Data;
-using Mafiator.Data.Dtos.User;
 using Mafiator.Entities;
 using Mafiator.Entities.Identity;
 using Mafiator.Repository;
@@ -44,22 +45,22 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<ValidateUserDto>> GetByUsername(string username)
+        public async Task<IEnumerable<ValidateUserResult>> GetByUsername(string username)
         {
-            return await dbConnection.ExecuteQueryAsync<ValidateUserDto>(
-                "SELECT TOP 1 [Id],[DisplayName],[Image] FROM [Users] WHERE Username = @username", new {username});
+            return await dbConnection.ExecuteQueryAsync<ValidateUserResult>(
+                "SELECT TOP 1 [Id],[DisplayName],[Image] FROM [Users] WHERE Username = @username", new { username });
         }
 
-        public async Task<AuthResult> Login(UserLoginDto userLogin)
+        public async Task<AuthResult> Login(UserLoginRequest userLogin)
         {
             var users = await dbConnection.ExecuteQueryAsync<User>(
-                "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new {username = userLogin.Username});
+                "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new { username = userLogin.Username });
             if (!users.Any())
             {
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.Unauthorized,
-                    Errors = new[] {"Login data is not correct."}
+                    Errors = new[] { "Login data is not correct." }
                 };
             }
 
@@ -70,18 +71,18 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.Unauthorized,
-                    Errors = new[] {"Login data is not correct."}
+                    Errors = new[] { "Login data is not correct." }
                 };
             }
 
             if (!user.PhoneNumberConfirmed)
             {
                 var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
-                smsSender.SendAuthSmsAsync(token, user.PhoneNumber);
+                //smsSender.SendAuthSmsAsync(token, user.PhoneNumber);
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.Forbidden,
-                    Errors = new[] {"Phone number is not confirmed"},
+                    Errors = new[] { "Phone number is not confirmed" },
                     Token = user.PhoneNumber
                 };
             }
@@ -109,21 +110,21 @@ namespace Mafiator.Service.Contracts.Impl.Identity
             };
         }
 
-        public async Task<ApiResult> Register(RegisterUserDto registerUser)
+        public async Task<ApiResult> Register(RegisterUserRequest registerUser)
         {
             var users = await dbConnection.ExecuteQueryAsync<User>(
-                "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new {username = registerUser.Username});
+                "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new { username = registerUser.Username });
             if (users.Any())
             {
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.Conflict,
-                    Errors = new[] {"User already exist."}
+                    Errors = new[] { "User already exist." }
                 };
             }
 
-            var user = mapper.Map<RegisterUserDto, User>(registerUser);
-            user.Id = Guid.NewGuid();;
+            var user = mapper.Map<RegisterUserRequest, User>(registerUser);
+            user.Id = Guid.NewGuid(); ;
             user.Code = RandomHelper.CreateRandomText(10);
             user.Score = 100;
             var createdUser = await userManager.CreateAsync(user, registerUser.Password);
@@ -138,7 +139,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
             await userManager.AddToRoleAsync(user, Constants.PlayerRole);
             var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
-            smsSender.SendAuthSmsAsync(token, user.PhoneNumber);
+            //smsSender.SendAuthSmsAsync(token, user.PhoneNumber);
             return new ApiResult()
             {
                 IsSuccess = true
@@ -154,7 +155,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] {"Invalid Token"}
+                    Errors = new[] { "Invalid Token" }
                 };
             }
 
@@ -164,7 +165,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.NotFound,
-                    Errors = new[] {"Refresh Token does not exist"}
+                    Errors = new[] { "Refresh Token does not exist" }
                 };
             }
 
@@ -174,7 +175,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.LogicError,
-                    Errors = new[] {"Refresh Token has expired"}
+                    Errors = new[] { "Refresh Token has expired" }
                 };
             }
 
@@ -183,18 +184,19 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] {"Refresh Token Invalidated"}
+                    Errors = new[] { "Refresh Token Invalidated" }
                 };
             }
 
-            if (storedRefreshToken.IsUsed)
-            {
-                return new AuthResult()
-                {
-                    StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] {"This refresh token has been used"}
-                };
-            }
+            //Tode: must be enabled after issue investigation.
+            //if (storedRefreshToken.IsUsed)
+            //{
+            //    return new AuthResult()
+            //    {
+            //        StatusCode = ApiResultStatusCode.BadRequest,
+            //        Errors = new[] { "This refresh token has been used" }
+            //    };
+            //}
 
             var jti = principle.Claims.Single(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
             if (storedRefreshToken.JwtId != jti)
@@ -202,11 +204,11 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = new[] {"This refresh token does not match this JWT"}
+                    Errors = new[] { "This refresh token does not match this JWT" }
                 };
             }
 
-            await unitOfWork.RefreshToken.SetUsed(storedRefreshToken.Id);
+            await unitOfWork.RefreshToken.SetUsed(storedRefreshToken.Id.ToString());
             var user = await userManager.FindByIdAsync(principle.FindFirstValue(ClaimTypes.Name));
             var claims = new List<Claim>
             {
@@ -239,7 +241,7 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new AuthResult()
                 {
                     StatusCode = ApiResultStatusCode.Unauthorized,
-                    Errors = new[] {"User does not exist"}
+                    Errors = new[] { "User does not exist" }
                 };
             }
 
@@ -292,7 +294,6 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 Token = tokenResult.Token,
                 RefreshToken = refreshToken.Token
             };
-
         }
 
         public async Task<ApiResult> UpdateProfile(string userId, string name, string image)
@@ -303,31 +304,31 @@ namespace Mafiator.Service.Contracts.Impl.Identity
                 return new ApiResult()
                 {
                     StatusCode = ApiResultStatusCode.Unauthorized,
-                    Errors = new[] {"User does not exist"}
+                    Errors = new[] { "User does not exist" }
                 };
             }
 
             user.DisplayName = name;
             user.Image = image;
             await userManager.UpdateAsync(user);
-            return new ApiResult() {IsSuccess = true};
+            return new ApiResult() { IsSuccess = true };
         }
 
-        public async Task<ApiResult<UserDto>> GetUser(string userId)
+        public async Task<ApiResult<UserDetailsResult>> GetUser(string userId)
         {
-            var users = await dbConnection.ExecuteQueryAsync<UserDto>(
+            var users = await dbConnection.ExecuteQueryAsync<UserDetailsResult>(
                 "SELECT TOP 1 [Image],[Score],[DisplayName],[CountryCode] FROM [Users] WHERE Id = @id",
-                new {id = userId});
+                new { id = userId });
             if (!users.Any())
             {
-                return new ApiResult<UserDto>()
+                return new ApiResult<UserDetailsResult>()
                 {
                     StatusCode = ApiResultStatusCode.Unauthorized,
-                    Errors = new[] {"User does not exist"}
+                    Errors = new[] { "User does not exist" }
                 };
             }
 
-            return new ApiResult<UserDto>()
+            return new ApiResult<UserDetailsResult>()
             {
                 IsSuccess = true,
                 Data = users.FirstOrDefault()

@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Data.Enums;
 using MediaManager;
 using MediaManager.Player;
 using System.Threading.Tasks;
@@ -7,14 +7,14 @@ using Xamarin.CommunityToolkit.UI.Views;
 
 namespace MafiatorApp.Dtos.Game
 {
-    public class GameMessageDto:ObservableObject
+    public class GameMessageDto : ObservableObject
     {
-        public bool Sender{ get; set; }
+        public bool Sender { get; set; }
         public string Content { get; set; }
         public string Image { get; set; }
         public string DisplayName { get; set; }
         public GameMessageType Type { get; set; }
-        private double _totalLength=100;
+        private double _totalLength = 100;
         public double TotalLength
         {
             get => _totalLength;
@@ -27,7 +27,7 @@ namespace MafiatorApp.Dtos.Game
             get => _currentPosition;
             set => SetProperty(ref _currentPosition, value);
         }
-        private LayoutState _currentState=LayoutState.Empty;
+        private LayoutState _currentState = LayoutState.Empty;
 
         public LayoutState CurrentState
         {
@@ -40,16 +40,14 @@ namespace MafiatorApp.Dtos.Game
 
         public GameMessageDto()
         {
-            PlayVoiceCommand=new AsyncCommand(PlayVoice);
-            PauseVoiceCommand=new AsyncCommand(PauseVoice);
+            PlayVoiceCommand = new AsyncCommand(PlayVoice);
+            PauseVoiceCommand = new AsyncCommand(PauseVoice);
         }
-
-       
 
         private async Task PlayVoice()
         {
             //continue playing same voice
-            if (CrossMediaManager.Current.State == MediaPlayerState.Paused && this.Content==SystemConstant.PlayingVoice )
+            if (CrossMediaManager.Current.State == MediaPlayerState.Paused && this.Content == SystemConstant.PlayingVoice)
             {
                 await CrossMediaManager.Current.Play();
                 CurrentState = LayoutState.Success;
@@ -64,9 +62,7 @@ namespace MafiatorApp.Dtos.Game
                 CurrentState = LayoutState.Success;
                 TotalLength = media.Duration.TotalMilliseconds;
             }
-
         }
-
 
         private async Task PauseVoice()
         {

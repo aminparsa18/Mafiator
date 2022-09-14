@@ -1,6 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Entities;
@@ -16,6 +17,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class Create : EndpointBaseAsync
     .WithRequest<GameCreateRequest>
     .WithActionResult<ApiResult<GameCreateResult>>

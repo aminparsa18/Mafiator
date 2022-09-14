@@ -1,6 +1,7 @@
-﻿using MafiatorApp.Cache;
-using MafiatorApp.Dtos.Room;
-using MafiatorApp.Dtos.User;
+﻿using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Services.Users;
+using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Common.Data.Dtos.Users;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
@@ -16,23 +17,23 @@ namespace MafiatorApp.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        private UserDto user = Barrel.Current.Get<UserDto>("User");
+        private UserDetailsResult user = Barrel.Current.Get<UserDetailsResult>("User");
 
-        public UserDto User
+        public UserDetailsResult User
         {
             get => user;
             set => SetProperty(ref user, value);
         }
 
-        private RoomDto room;
+        private RoomDetailsResult room;
 
-        public RoomDto Room
+        public RoomDetailsResult Room
         {
             get => room;
             set => SetProperty(ref room, value);
         }
 
-        public UserStatusDto UserStatus { get; set; }
+        public UserStatusResult UserStatus { get; set; }
         public IAsyncCommand AddRoomCommand { get; set; }
         public IAsyncCommand RandomCommand { get; set; }
         public IAsyncCommand JoinRoomCommand { get; set; }
@@ -42,12 +43,15 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand HelpCommand { get; set; }
         public IAsyncCommand EditProfileCommand { get; set; }
         public IAsyncCommand SignOutCommand { get; set; }
+
         private readonly ISubscriber<UpdateProfileEvent> _subscriber;
+        private readonly IUsersApiService _usersApiService;
         private readonly IDisposable _disposable;
 
-        public HomeViewModel(ISubscriber<UpdateProfileEvent> subscriber)
+        public HomeViewModel(ISubscriber<UpdateProfileEvent> subscriber, IUsersApiService usersApiService)
         {
             _subscriber = subscriber;
+            _usersApiService = usersApiService;
             var bag = DisposableBag.CreateBuilder();
             _subscriber.Subscribe(c => LoadData()).AddTo(bag);
             _disposable = bag.Build();
@@ -117,7 +121,7 @@ namespace MafiatorApp.ViewModels
         {
             if (!Barrel.Current.Exists("User") || Barrel.Current.IsExpired("User"))
             {
-                var userResponse = await WebApiService.GetUser();
+                var userResponse = await _usersApiService.GetUser();
                 if (userResponse.IsSuccess)
                 {
                     User = userResponse.Data;
@@ -125,19 +129,13 @@ namespace MafiatorApp.ViewModels
                 }
             }
             else
-            {
-                User = Barrel.Current.Get<UserDto>("User");
-            }
+                User = Barrel.Current.Get<UserDetailsResult>("User");
 
-            var response = await WebApiService.GetUserStatus();
+            var response = await _usersApiService.GetUserStatus();
             if (response.IsSuccess)
-            {
                 UserStatus = response.Data;
-            }
             else
-            {
                 DependencyService.Get<IAlert>().ShortAlert(response.Errors.ToString(), MessageType.Error);
-            }
         }
     }
 }

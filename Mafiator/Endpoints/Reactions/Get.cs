@@ -1,5 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Reactions;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Reactions;
 
+[Produces("application/x-msgpack")]
+[Consumes("application/x-msgpack")]
 public class Get : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult<ApiResult<IEnumerable<ReactionResult>>>

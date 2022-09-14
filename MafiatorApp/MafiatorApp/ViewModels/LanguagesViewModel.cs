@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Cache;
+﻿using Mafiator.Common.Client.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;

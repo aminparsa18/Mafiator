@@ -3,7 +3,7 @@
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class EventRepository : BaseRepository<Event>, IEventRepository
+public sealed class EventRepository : BaseRepository<Event>, IEventRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="EventRepository"/> class.

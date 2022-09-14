@@ -1,4 +1,5 @@
-﻿using Mafiator.Common.Data.Dtos.Games;
+﻿using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Data.Dtos.Game;
 using System;
@@ -10,7 +11,7 @@ using DateTime = System.DateTime;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class GameRepository : BaseRepository<Game>, IGameRepository
+public sealed class GameRepository : BaseRepository<Game>, IGameRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="GameRepository"/> class.
@@ -29,16 +30,16 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
     }
 
     /// <inheritdoc/>
-    public Task<WaitingGameDto> GetWaitingGameInformations(Guid gameId)
+    public Task<AppointedGameResult> GetWaitingGameInformations(Guid gameId)
     {
         return Context.Game.AsNoTracking().Where(g => g.Id == gameId && (g.Status == GameStatus.NotStarted || g.Status == GameStatus.Playing))
-            .Select(s => new WaitingGameDto()
+            .Select(s => new AppointedGameResult()
             {
                 Id = s.Id,
                 StartDate = s.StartDate,
                 Roles = s.GameMember.Select(s => s.Role).ToList(),
                 Status = s.Status,
-                Members = s.GameMember.Where(m => m.UserId.HasValue).Select(x => new WaitingGameMemberDto()
+                Members = s.GameMember.Where(m => m.UserId.HasValue).Select(x => new WaitingPlayerResult()
                 {
                     DisplayName = x.User.DisplayName,
                     Image = x.User.Image,
@@ -49,15 +50,15 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
     }
 
     /// <inheritdoc/>
-    public Task<WaitingGameDto> GetWaitingGameByRoom(Guid roomId)
+    public Task<AppointedGameResult> GetWaitingGameByRoom(Guid roomId)
     {
         return Context.Game.AsNoTracking().Where(g => g.RoomId == roomId && (g.Status == GameStatus.NotStarted || g.Status == GameStatus.Playing) && g.StartDate < DateTime.Now)
-            .Select(s => new WaitingGameDto()
+            .Select(s => new AppointedGameResult()
             {
                 Id = s.Id,
                 StartDate = s.StartDate,
                 Roles = s.GameMember.Select(s => s.Role).ToList(),
-                Members = s.GameMember.Where(m => m.UserId.HasValue).Select(x => new WaitingGameMemberDto()
+                Members = s.GameMember.Where(m => m.UserId.HasValue).Select(x => new WaitingPlayerResult()
                 {
                     DisplayName = x.User.DisplayName,
                     Image = x.User.Image,

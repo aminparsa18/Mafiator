@@ -1,4 +1,5 @@
-﻿using Mafiator.Data.Dtos.Game;
+﻿using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.User;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepository
+public sealed class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="GameMemberRepository"/> class.
@@ -18,10 +19,10 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<List<GameMemberDto>> GetByGame(Guid gameId)
+    public Task<List<GameMemberResult>> GetByGame(Guid gameId)
     {
         return Context.GameMember.AsNoTracking().Where(g => g.UserId.HasValue && g.GameId == gameId).Select(s =>
-            new GameMemberDto()
+            new GameMemberResult()
             {
                 DisplayName = s.User.DisplayName,
                 Image = s.User.Image,
@@ -32,9 +33,9 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<GameMemberDto>> GetByGameFast(string gameId)
+    public Task<IEnumerable<GameMemberResult>> GetByGameFast(string gameId)
     {
-        return Connection.ExecuteQueryAsync<GameMemberDto>(
+        return Connection.ExecuteQueryAsync<GameMemberResult>(
             @"SELECT [u].[DisplayName], [u].[Image], [u].[Score], [g].[Id],[g].[Status]
                FROM [dbo].[GameMember] AS [g]
                LEFT JOIN [dbo].[Users] AS [u] ON [g].[UserId] = [u].[Id]
@@ -42,9 +43,9 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<WaitingPlayerDto>> GetWaitingPlayersByGame(string gameId)
+    public Task<IEnumerable<WaitingPlayerResult>> GetWaitingPlayersByGame(string gameId)
     {
-        return Connection.ExecuteQueryAsync<WaitingPlayerDto>(
+        return Connection.ExecuteQueryAsync<WaitingPlayerResult>(
             @"SELECT [u].[DisplayName], [u].[Image], [u].[Score], [g].[UserId],[g].[Status]
                FROM [dbo].[GameMember] AS [g]
                LEFT JOIN [dbo].[Users] AS [u] ON [g].[UserId] = [u].[Id]
@@ -52,9 +53,9 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<List<UserGameStatusDto>> GetUserStatus(Guid userId)
+    public Task<List<UserGameStatus>> GetUserStatus(Guid userId)
     {
-        return Context.GameMember.AsNoTracking().Where(g => g.UserId == userId).Select(s => new UserGameStatusDto()
+        return Context.GameMember.AsNoTracking().Where(g => g.UserId == userId).Select(s => new UserGameStatus()
         {
             GameStatus = s.Game.Status,
             GameRole = s.Role
@@ -62,9 +63,9 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<UserGameStatusDto>> GetUserStatusFast(string userId)
+    public Task<IEnumerable<UserGameStatus>> GetUserStatusFast(string userId)
     {
-        return Connection.ExecuteQueryAsync<UserGameStatusDto>(
+        return Connection.ExecuteQueryAsync<UserGameStatus>(
             @"SELECT [g0].[Status] AS [GameStatus], [g].[Role] AS [GameRole],[g].[Id] as [MemberId]
             FROM [dbo].[GameMember] AS [g]
             INNER JOIN[dbo].[Game] AS[g0] ON[g].[GameId] = [g0].[Id]
@@ -72,42 +73,42 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<UserGameStatusDto>> GetPlayerStatusFast(string memberId)
+    public Task<IEnumerable<UserGameStatus>> GetPlayerStatusFast(string memberId)
     {
-        return Connection.ExecuteQueryAsync<UserGameStatusDto>(
+        return Connection.ExecuteQueryAsync<UserGameStatus>(
             @"SELECT [g].[Status] AS [GameStatus], [g].[Role] AS [GameRole]
             FROM [dbo].[GameMember] g WHERE [g].[Id] = @memberId", new { memberId });
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<PlayerRoleDto>> GetPlayerByRoleFast(string gameId, short role)
+    public Task<IEnumerable<PlayerRoleResult>> GetPlayerByRoleFast(string gameId, short role)
     {
-        return Connection.ExecuteQueryAsync<PlayerRoleDto>(
+        return Connection.ExecuteQueryAsync<PlayerRoleResult>(
             @"SELECT [g].[Id] AS [MemberId] FROM [dbo].[GameMember] g WHERE [g].[GameId] = @gameId AND [g].[Role] = @role", new { gameId, role });
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<PlayerRoleDto>> GetUser(string userId, string gameId)
+    public Task<IEnumerable<PlayerRoleResult>> GetUser(string userId, string gameId)
     {
-        return Connection.ExecuteQueryAsync<PlayerRoleDto>(
+        return Connection.ExecuteQueryAsync<PlayerRoleResult>(
             @"SELECT TOP(1) g.[Id] AS [MemberId]
                   FROM [dbo].[GameMember] AS [g]
                   WHERE ([g].[UserId] = @userId) AND ([g].[GameId] = @gameId)", new { userId, gameId });
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<PlayerRoleDto>> GetRoleOfPlayer(string userId, string gameId)
+    public Task<IEnumerable<PlayerRoleResult>> GetRoleOfPlayer(string userId, string gameId)
     {
-        return Connection.ExecuteQueryAsync<PlayerRoleDto>(
+        return Connection.ExecuteQueryAsync<PlayerRoleResult>(
             @"SELECT TOP(1) [g].[Role],g.[Id] AS [MemberId]
                   FROM [dbo].[GameMember] AS [g]
                   WHERE ([g].[UserId] = @userId) AND ([g].[GameId] = @gameId)", new { userId, gameId });
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<PlayerRoleDto>> GetMafiaPartners(string memberId, string gameId)
+    public Task<IEnumerable<PlayerRoleResult>> GetMafiaPartners(string memberId, string gameId)
     {
-        return Connection.ExecuteQueryAsync<PlayerRoleDto>(
+        return Connection.ExecuteQueryAsync<PlayerRoleResult>(
             @"SELECT [g].[Role],g.[Id] AS [MemberId]
                   FROM [dbo].[GameMember] AS [g]
                   WHERE ([g].[Id] <> @memberId) AND ([g].[GameId] = @gameId) AND ([g].[Role] = 0 OR  [g].[Role] = 1)",
@@ -115,17 +116,17 @@ public class GameMemberRepository : BaseRepository<GameMember>, IGameMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<PlayerDto>> GetPlayerByGame(string gameId)
+    public Task<IEnumerable<PlayerDetails>> GetPlayerByGame(string gameId)
     {
-        return Connection.ExecuteQueryAsync<PlayerDto>(
+        return Connection.ExecuteQueryAsync<PlayerDetails>(
             @"SELECT [g].[UserId],[g].[Id] AS MemberId,[g].[Role],[g].[Status] FROM [dbo].[GameMember] AS [g] WHERE [g].[GameId] = @gameId AND g.[Status] = 0",
             new { gameId }, cacheKey: $"GamePlayers-{gameId}", cache: CacheFactory.GetCache());
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<PlayerDto>> GetUsersByGame(string gameId)
+    public Task<IEnumerable<PlayerDetails>> GetUsersByGame(string gameId)
     {
-        return Connection.ExecuteQueryAsync<PlayerDto>(
+        return Connection.ExecuteQueryAsync<PlayerDetails>(
             @"SELECT [g].[UserId],[g].[Id] As MemberId FROM [dbo].[GameMember] AS [g] WHERE[g].[GameId] = @gameId", new { gameId });
     }
 

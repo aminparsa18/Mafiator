@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
-using MafiatorApp.Cache;
+using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Services.Votes;
+using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Common.Data.Dtos.Votes;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.Dtos.Game;
 using MafiatorApp.Dtos.Vote;
 using MafiatorApp.Enums;
@@ -23,8 +27,6 @@ namespace MafiatorApp.ViewModels
 {
     public class CandidatesViewModel : ViewModelBase
     {
-        private readonly IPublisher<UpdateMembersEvent> publisher;
-
         private LayoutState currentState = LayoutState.Empty;
         public LayoutState CurrentState
         {
@@ -32,7 +34,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref currentState, value);
         }
 
-        private string title= LocalizationResourceManager.Current.GetValue("VotingTitle");
+        private string title = LocalizationResourceManager.Current.GetValue("VotingTitle");
 
         public string Title
         {
@@ -65,16 +67,20 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref progressTimer, value);
         }
 
-
         public ICommand CandidateSelectedCommand { get; set; }
         public IAsyncCommand SendVotesCommand { get; set; }
-        private string gameId;
-        private readonly IMapper mapper;
 
-        public CandidatesViewModel(IMapper mapper,IPublisher<UpdateMembersEvent> publisher)
+        private readonly IMapper _mapper;
+        private readonly IPublisher<UpdateMembersEvent> _publisher;
+        private readonly IVotesApiService _votesApiService;
+
+        private string gameId;
+
+        public CandidatesViewModel(IMapper mapper, IPublisher<UpdateMembersEvent> publisher, IVotesApiService votesApiService)
         {
-            this.mapper = mapper;
-            this.publisher = publisher;
+            _mapper = mapper;
+            _publisher = publisher;
+            _votesApiService = votesApiService;
             Candidates = new ObservableRangeCollection<CandidateDto>();
             Votes = new ObservableRangeCollection<VoteStatusResultDto>();
             CandidateSelectedCommand = new Command(CandidateSelected);
@@ -94,7 +100,7 @@ namespace MafiatorApp.ViewModels
         private void Callback(object state)
         {
             totalTime += 100;
-            ProgressTimer = 100 * (double) totalTime / 45000;
+            ProgressTimer = 100 * (double)totalTime / 45000;
             if (totalTime != 45000)
                 return;
             totalTime = 0;
@@ -105,8 +111,8 @@ namespace MafiatorApp.ViewModels
         private void Callback2(object state)
         {
             totalTime += 100;
-            ProgressTimer = 100 * (double) totalTime / 20000;
-            if (totalTime != 20000) 
+            ProgressTimer = 100 * (double)totalTime / 20000;
+            if (totalTime != 20000)
                 return;
             totalTime = 0;
             _timer?.Dispose();
@@ -124,11 +130,11 @@ namespace MafiatorApp.ViewModels
 
             _timer ??= new Timer(Callback2, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             CurrentState = LayoutState.Loading;
-            var votesStatus = await WebApiService.GetVotesStatus(gameId);
+            var votesStatus = await _votesApiService.GetVotesStatus(gameId);
             if (votesStatus.IsSuccess)
             {
-                var members = Barrel.Current.Get<IEnumerable<PlayerDto>>("Members");
-                var votes=new List<VoteStatusResultDto>();
+                var members = Barrel.Current.Get<IEnumerable<PlayerDetails>>("Members");
+                var votes = new List<VoteStatusResultDto>();
                 foreach (var member in members)
                 {
                     var vote = new VoteStatusResultDto()
@@ -139,7 +145,7 @@ namespace MafiatorApp.ViewModels
                     };
                     var voters = votesStatus.Data.Where(v => v.TargetId == member.Id).Select(s => s.VoterId);
                     voters.ForEach(v => vote.Votes += members.FirstOrDefault(m => m.Id == v)?.DisplayName + " - ");
-                    vote.Voters=new List<string>();
+                    vote.Voters = new List<string>();
                     voters.ForEach(v => vote.Voters.Add(members.FirstOrDefault(m => m.Id == v).Id));
                     votes.Add(vote);
                 }
@@ -154,7 +160,7 @@ namespace MafiatorApp.ViewModels
                     {
                         Votes.FirstOrDefault(f => f.MemberId == candidate).Status = CandidateStatus.Kicked;
                     }
-                    publisher.Publish(new UpdateMembersEvent());//  MessagingCenter.Send(this,"UpdateMembers");
+                    _publisher.Publish(new UpdateMembersEvent());//  MessagingCenter.Send(this,"UpdateMembers");
                 }
                 else
                 {
@@ -185,8 +191,8 @@ namespace MafiatorApp.ViewModels
         private async Task SendVotes()
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Current.GetValue("SendingVotes"));
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
-            var request = await WebApiService.SendVotes(new VoteDto()
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
+            var request = await _votesApiService.SendVotes(new VoteCreateRequest()
             {
                 Targets = Candidates.Where(c => c.Selected).Select(s => Guid.Parse(s.Id)).ToList(),
                 VoterId = Guid.Parse(player.MemberId),
@@ -200,10 +206,10 @@ namespace MafiatorApp.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            if (navigationData is not Tuple<List<PlayerDto>, string, bool> data)
+            if (navigationData is not Tuple<List<PlayerDetails>, string, bool> data)
                 return base.InitializeAsync(navigationData);
-            var player = Barrel.Current.Get<PlayerRoleDto>("PlayerRole");
-            var players = mapper.Map<List<CandidateDto>>(data.Item1.Where(p=>p.Status!=PlayerStatus.Killed && p.Status!=PlayerStatus.Kicked).ToList());
+            var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
+            var players = _mapper.Map<List<CandidateDto>>(data.Item1.Where(p => p.Status != PlayerStatus.Killed && p.Status != PlayerStatus.Kicked).ToList());
             players.RemoveAll(p => p.Id == player?.MemberId);
             gameId = data.Item2;
             advocacy = data.Item3;

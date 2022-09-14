@@ -1,5 +1,6 @@
-﻿using MafiatorApp.Extensions;
-using MafiatorApp.Models.Api;
+﻿using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Rooms;
+using Mafiator.Common.Data.Dtos.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
@@ -22,8 +23,11 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand PopCommand { get; set; }
         public IAsyncCommand JoinRoomCommand { get; set; }
 
-        public JoinRoomViewModel()
+        private readonly IRoomsApiService _roomsApiService;
+
+        public JoinRoomViewModel(IRoomsApiService roomsApiService)
         {
+            _roomsApiService = roomsApiService;
             Code=new ValidatableObject<string>();
             PopCommand = new AsyncCommand(Pop);
             JoinRoomCommand=new AsyncCommand(JoinRoom);
@@ -33,7 +37,7 @@ namespace MafiatorApp.ViewModels
         private async Task JoinRoom()
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Joining Room...");
-            var request = await WebApiService.JoinRoom(Code.Value);
+            var request = await _roomsApiService.JoinRoom(Code.Value);
             if (request.IsSuccessStatusCode)
             {
                 var result = await request.Content.ReadAsMessagePackAsync<ApiResult<string>>();

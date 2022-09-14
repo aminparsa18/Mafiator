@@ -5,7 +5,7 @@ using System.Data;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class GemRepository : BaseRepository<Gem>, IGemRepository
+public sealed class GemRepository : BaseRepository<Gem>, IGemRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="GemRepository"/> class.

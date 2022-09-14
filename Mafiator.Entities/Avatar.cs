@@ -3,7 +3,7 @@
 /// <summary>
 /// Avatar picture of user.
 /// </summary>
-public class Avatar:BaseEntity
+public sealed class Avatar : BaseEntity
 {
     /// <summary>
     /// Avatar file name.

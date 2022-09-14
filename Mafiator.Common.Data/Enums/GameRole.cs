@@ -1,80 +1,81 @@
-﻿namespace Mafiator.Common.Data.Enums;
-
-/// <summary>
-/// Game Roles.
-/// </summary>
-public enum GameRole
+﻿namespace Mafiator.Common.Data.Enums
 {
-    #region Mafia
-
     /// <summary>
-    /// God father.
+    /// Game Roles.
     /// </summary>
-    GodFather = 0,
+    public enum GameRole
+    {
+        #region Mafia
 
-    /// <summary>
-    /// Mafia.
-    /// </summary>
-    Mafia = 1,
+        /// <summary>
+        /// God father.
+        /// </summary>
+        GodFather = 0,
 
-    /// <summary>
-    /// Terrorist.
-    /// </summary>
-    Terrorist = 2,
+        /// <summary>
+        /// Mafia.
+        /// </summary>
+        Mafia = 1,
 
-    #endregion Mafia
+        /// <summary>
+        /// Terrorist.
+        /// </summary>
+        Terrorist = 2,
 
-    #region Citizen
+        #endregion Mafia
 
-    /// <summary>
-    /// Citizen.
-    /// </summary>
-    Citizen = 3,
+        #region Citizen
 
-    /// <summary>
-    /// Doctor.
-    /// </summary>
-    Doctor = 4,
+        /// <summary>
+        /// Citizen.
+        /// </summary>
+        Citizen = 3,
 
-    /// <summary>
-    /// Detective.
-    /// </summary>
-    Detective = 5,
+        /// <summary>
+        /// Doctor.
+        /// </summary>
+        Doctor = 4,
 
-    /// <summary>
-    /// Sniper.
-    /// </summary>
-    Sniper = 6,
+        /// <summary>
+        /// Detective.
+        /// </summary>
+        Detective = 5,
 
-    /// <summary>
-    /// Gun.
-    /// </summary>
-    Gun = 7,
+        /// <summary>
+        /// Sniper.
+        /// </summary>
+        Sniper = 6,
 
-    /// <summary>
-    /// Healer.
-    /// </summary>
-    Healer = 8,
+        /// <summary>
+        /// Gun.
+        /// </summary>
+        Gun = 7,
 
-    /// <summary>
-    /// Immortal.
-    /// </summary>
-    Immortal = 9,
+        /// <summary>
+        /// Healer.
+        /// </summary>
+        Healer = 8,
 
-    /// <summary>
-    /// Natasha.
-    /// </summary>
-    Natasha = 10,
+        /// <summary>
+        /// Immortal.
+        /// </summary>
+        Immortal = 9,
 
-    /// <summary>
-    /// Priest.
-    /// </summary>
-    Priest = 11,
+        /// <summary>
+        /// Natasha.
+        /// </summary>
+        Natasha = 10,
 
-    /// <summary>
-    /// Judge.
-    /// </summary>
-    Judge = 12
+        /// <summary>
+        /// Priest.
+        /// </summary>
+        Priest = 11,
 
-    #endregion Citizen
+        /// <summary>
+        /// Judge.
+        /// </summary>
+        Judge = 12
+
+        #endregion Citizen
+    }
 }

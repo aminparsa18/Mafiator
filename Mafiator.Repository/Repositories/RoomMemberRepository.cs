@@ -1,4 +1,4 @@
-﻿using Mafiator.Data.Dtos.Room;
+﻿using Mafiator.Common.Data.Dtos.RoomMembers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Linq;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class RoomMemberRepository : BaseRepository<RoomMember>, IRoomMemberRepository
+public sealed class RoomMemberRepository : BaseRepository<RoomMember>, IRoomMemberRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="RoomMemberRepository"/> class.
@@ -24,11 +24,11 @@ public class RoomMemberRepository : BaseRepository<RoomMember>, IRoomMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<List<RoomMemberDto>> GetByRoom(Guid roomId)
+    public Task<List<RoomMemberResult>> GetByRoom(Guid roomId)
     {
         return Context.RoomMember.AsNoTracking().Where(r => r.RoomId == roomId)
             .OrderByDescending(o => o.CreatedDate)
-            .Select(s => new RoomMemberDto()
+            .Select(s => new RoomMemberResult()
             {
                 UserId = s.UserId,
                 Name = s.User.DisplayName,
@@ -38,9 +38,9 @@ public class RoomMemberRepository : BaseRepository<RoomMember>, IRoomMemberRepos
     }
 
     /// <inheritdoc/>
-    public Task<IEnumerable<RoomMemberDto>> GetByRoomFast(string roomId)
+    public Task<IEnumerable<RoomMemberResult>> GetByRoomFast(string roomId)
     {
-        return Connection.ExecuteQueryAsync<RoomMemberDto>(@"SELECT [r].[UserId], [u].[DisplayName] AS [Name], [u].[Image], (
+        return Connection.ExecuteQueryAsync<RoomMemberResult>(@"SELECT [r].[UserId], [u].[DisplayName] AS [Name], [u].[Image], (
            SELECT COUNT(*)
            FROM[dbo].[GameMember] AS[g]
            WHERE[u].[Id] = [g].[UserId]) AS[TotalGame]

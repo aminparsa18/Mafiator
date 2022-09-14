@@ -1,26 +1,30 @@
-﻿namespace Mafiator.Common.Data.Dtos.Reactions;
+﻿using MessagePack;
+using System;
 
-/// <summary>
-/// Reaction dto
-/// </summary>
-[MessagePackObject()]
-public class ReactionResult
+namespace Mafiator.Common.Data.Dtos.Reactions
 {
     /// <summary>
-    /// Reaction key Identifier.
+    /// Reaction dto
     /// </summary>
-    [Key(0)]
-    public Guid Id { get; set; }
+    [MessagePackObject()]
+    public sealed class ReactionResult
+    {
+        /// <summary>
+        /// Reaction key Identifier.
+        /// </summary>
+        [Key(0)]
+        public Guid Id { get; set; }
 
-    /// <summary>
-    /// Title.
-    /// </summary>
-    [Key(1)]
-    public string Title { get; set; }
+        /// <summary>
+        /// Title.
+        /// </summary>
+        [Key(1)]
+        public string Title { get; set; }
 
-    /// <summary>
-    /// Image.
-    /// </summary>
-    [Key(2)]
-    public string Image { get; set; }
+        /// <summary>
+        /// Image.
+        /// </summary>
+        [Key(2)]
+        public string Image { get; set; }
+    }
 }

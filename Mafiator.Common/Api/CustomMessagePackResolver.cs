@@ -7,7 +7,7 @@ namespace Mafiator.Common.Api;
 /// <summary>
 /// Storage of typed serializers.
 /// </summary>
-public class CustomMessagePackResolver : IFormatterResolver
+public sealed class CustomMessagePackResolver : IFormatterResolver
 {
     public static readonly IFormatterResolver Instance = new CustomMessagePackResolver();
 

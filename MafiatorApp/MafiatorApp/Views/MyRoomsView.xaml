@@ -5,8 +5,7 @@
              xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
              xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
-             xmlns:dtos="clr-namespace:MafiatorApp.Dtos;assembly=MafiatorApp"
-             xmlns:room="clr-namespace:MafiatorApp.Dtos.Room;assembly=MafiatorApp"
+             xmlns:room="clr-namespace:Mafiator.Common.Data.Dtos.Rooms;assembly=Mafiator.Common.Data"
              x:Class="MafiatorApp.Views.MyRoomsView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:MyRoomsViewModel">
@@ -75,7 +74,7 @@
 
                         </CollectionView.Header>
                         <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="room:RoomDto">
+                                    <DataTemplate x:DataType="room:RoomDetailsResult">
                                 <StackLayout >
                                     <Grid Margin="16,8" >
                                         <Image Source="history.png" Aspect="Fill"/>
@@ -92,7 +91,7 @@
                                                         <Label Text="{xct:Translate GamePlayed}"  FontSize="16" />
                                             </StackLayout>
                                             <Button x:Name="LeaveBtn" HorizontalOptions="StartAndExpand" BackgroundColor="{StaticResource Error}"
-                                                    Text="{xct:Translate Leave}"  Padding="16,4" CornerRadius="24" CommandParameter="{Binding Code}" Clicked="LeaveBtn_OnClicked" />
+                                                    Text="{xct:Translate Leave}"  Padding="16,4" CornerRadius="24" CommandParameter="{Binding Id}" Clicked="LeaveBtn_OnClicked" />
                                                 </StackLayout>
                                     </Grid>
                                 </StackLayout>

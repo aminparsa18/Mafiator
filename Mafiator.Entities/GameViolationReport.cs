@@ -7,7 +7,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Game violation report.
 /// </summary>
-public class GameViolationReport:BaseEntity
+public sealed class GameViolationReport : BaseEntity
 {
     /// <summary>
     /// Game key identifier.
@@ -32,15 +32,15 @@ public class GameViolationReport:BaseEntity
     /// <summary>
     /// Game.
     /// </summary>
-    public virtual Game Game { get; set; }
+    public Game Game { get; set; }
 
     /// <summary>
     /// Reporter.
     /// </summary>
-    public virtual User Reporter { get; set; }
+    public User Reporter { get; set; }
 
     /// <summary>
     /// Reported.
     /// </summary>
-    public virtual User Reported { get; set; }
+    public User Reported { get; set; }
 }

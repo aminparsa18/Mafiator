@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Data.Dtos.User;
 using Mafiator.Entities;
@@ -12,15 +13,15 @@ namespace Mafiator.Data;
 /// <summary>
 /// Custom Automapper profil used for dto conversion.
 /// </summary>
-public class AutoMapping : Profile
+public sealed class AutoMapping : Profile
 {
     public AutoMapping()
     {
         CreateMap<string, Guid>().ConvertUsing(s => Guid.Parse(s));
-        CreateMap<RegisterUserDto, User>();
+        CreateMap<RegisterUserRequest, User>();
         CreateMap<RoomCreateRequest,Room>();
         CreateMap<GameCreateRequest, Game>();
-        CreateMap<RefreshTokenDto, RefreshToken>();
-        CreateMap<GameEventDto,GameEvent>();
+        CreateMap<RefreshTokenDetails, RefreshToken>();
+        CreateMap<GameEventRequest,GameEvent>();
     }
 }

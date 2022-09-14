@@ -1,17 +1,18 @@
-﻿namespace Mafiator.Common.Data.Enums;
-
-/// <summary>
-/// Gender type.
-/// </summary>
-public enum GenderType
+﻿namespace Mafiator.Common.Data.Enums
 {
     /// <summary>
-    /// Male.
+    /// Gender type.
     /// </summary>
-    Male = 1,
+    public enum GenderType
+    {
+        /// <summary>
+        /// Male.
+        /// </summary>
+        Male = 1,
 
-    /// <summary>
-    /// Female.
-    /// </summary>
-    Female = 2
+        /// <summary>
+        /// Female.
+        /// </summary>
+        Female = 2
+    }
 }

@@ -1,7 +1,9 @@
-﻿using MafiatorApp.Cache;
-using MafiatorApp.Dtos.User;
-using MafiatorApp.Extensions;
-using MafiatorApp.Models.Api;
+﻿using Mafiator.Common.Client;
+using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Users;
+using Mafiator.Common.Data.Dtos.Api.Auth;
+using Mafiator.Common.Data.Dtos.Users;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
@@ -32,10 +34,13 @@ namespace MafiatorApp.ViewModels
 
         public IAsyncCommand ConfirmCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
+
+        private readonly IUsersApiService _usersApiService;
         private string phoneNo;
 
-        public ConfirmPhoneViewModel()
+        public ConfirmPhoneViewModel(IUsersApiService usersApiService)
         {
+            _usersApiService = usersApiService;
             ConfirmCommand = new AsyncCommand(Confirm);
             PopCommand = new AsyncCommand(Pop);
             Code = new ValidatableObject<string>();
@@ -56,7 +61,7 @@ namespace MafiatorApp.ViewModels
             if (isValid)
             {
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Checking Code...");
-                var response = await WebApiService.ConfirmPhoneNo(new ConfirmPhoneDto()
+                var response = await _usersApiService.ConfirmPhoneNo(new ConfirmPhoneRequest()
                     {PhoneNo = phoneNo, Token = Code.Value});
                 if (response.IsSuccessStatusCode)
                 {
@@ -77,7 +82,6 @@ namespace MafiatorApp.ViewModels
                 }
                 else
                 {
-                    var resres = await response.Content.ReadAsStringAsync();
                     var result = await response.Content.ReadAsMessagePackAsync<AuthResult>();
                     DependencyService.Get<IAlert>()
                         .ShortAlert(string.Join(',',result.Errors), MessageType.Error);

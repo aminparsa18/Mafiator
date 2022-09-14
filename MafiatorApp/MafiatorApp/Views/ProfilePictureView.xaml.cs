@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using MafiatorApp.Models;
-using MafiatorApp.ViewModels;
-using Xamarin.CommunityToolkit.Core;
+﻿using MafiatorApp.ViewModels;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -37,7 +34,7 @@ namespace MafiatorApp.Views
             if (e.Value)
             {
                 AvatarFrame.IsVisible = true;
-                AvatarFrame.TranslateTo(0, 170, 800, Easing.SpringOut);
+                AvatarFrame.TranslateTo(0, 100, 800, Easing.SpringOut);
             }
             else
             {

@@ -1,8 +1,10 @@
-﻿using MafiatorApp.Dtos.Room;
-using MafiatorApp.Extensions;
-using MafiatorApp.Models.Api;
+﻿using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Rooms;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Rooms;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -20,24 +22,26 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref currentState, value);
         }
 
-        private RoomDto room;
+        private RoomDetailsResult room;
 
-        public RoomDto Room
+        public RoomDetailsResult Room
         {
             get => room;
             set => SetProperty(ref room, value);
         }
 
-        public ObservableRangeCollection<RoomDto> Rooms { get; set; }
+        public ObservableRangeCollection<RoomDetailsResult> Rooms { get; set; }
         public IAsyncCommand LoadRoomsCommand { get; set; }
         public IAsyncCommand RoomSelectedCommand { get; set; }
         public IAsyncCommand AddRoomCommand { get; set; }
 
-        public MyRoomsViewModel()
+        private readonly IRoomsApiService _roomsApiService;
+
+        public MyRoomsViewModel(IRoomsApiService roomsApiService)
         {
-            Rooms = new ObservableRangeCollection<RoomDto>();
+            _roomsApiService = roomsApiService;
+            Rooms = new ObservableRangeCollection<RoomDetailsResult>();
             LoadRoomsCommand = new AsyncCommand(LoadRooms);
-            LoadRoomsCommand.ExecuteAsync();
             RoomSelectedCommand = new AsyncCommand(RoomSelected);
             AddRoomCommand = new AsyncCommand(AddRoom);
         }
@@ -59,7 +63,7 @@ namespace MafiatorApp.ViewModels
         {
             CurrentState = LayoutState.Loading;
             IsBusy = true;
-            var rooms = await WebApiService.GetMyRooms();
+            var rooms = await _roomsApiService.GetMyRooms();
             if (rooms.IsSuccess)
             {
                 Rooms.Clear();
@@ -75,21 +79,20 @@ namespace MafiatorApp.ViewModels
             IsBusy = false;
         }
 
-        public async Task Leave(string code)
+        public async Task Leave(string roomId)
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Leaving...");
-            var response = await WebApiService.LeaveRoom(code);
+            var response = await _roomsApiService.LeaveRoom(new LeaveRoomRequest
+            {
+                RoomId = Guid.Parse(roomId)
+            });
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
                 if (result.IsSuccess)
-                {
                     await LoadRoomsCommand.ExecuteAsync();
-                }
                 else
-                {
                     DependencyService.Get<IAlert>().ShortAlert(result.Errors.ToString(), MessageType.Error);
-                }
             }
             else
             {

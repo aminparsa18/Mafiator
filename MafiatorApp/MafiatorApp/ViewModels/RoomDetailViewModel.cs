@@ -1,8 +1,13 @@
-﻿using MafiatorApp.Dtos.Game;
-using MafiatorApp.Dtos.Room;
-using MafiatorApp.Enums;
-using MafiatorApp.Extensions;
-using MafiatorApp.Models.Api;
+﻿using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Client.Services.RoomMembers;
+using Mafiator.Common.Client.Services.Rooms;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Common.Data.Dtos.RoomMembers;
+using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Common.Data.Enums;
+using MafiatorApp.Dtos.Game;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
@@ -19,13 +24,12 @@ namespace MafiatorApp.ViewModels
 {
     public class RoomDetailViewModel : ViewModelBase
     {
-        private readonly ISubscriber<UpdateRoomEvent> _subscriber;
-        public ObservableRangeCollection<RoomMemberDto> Members { get; set; }
+        public ObservableRangeCollection<RoomMemberResult> Members { get; set; }
         public ObservableRangeCollection<GameRoleDto> Roles { get; set; }
 
-        private RoomDto room;
+        private RoomDetailsResult room;
 
-        public RoomDto Room
+        public RoomDetailsResult Room
         {
             get => room;
             set => SetProperty(ref room, value);
@@ -88,12 +92,22 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand RoleChangeCommand { get; set; }
         public IAsyncCommand JoinCommand { get; set; }
         public IAsyncCommand LeaveCommand { get; set; }
-        private ApiResult<WaitingGameDto> waiting;
 
-        public RoomDetailViewModel(ISubscriber<UpdateRoomEvent> subscriber)
+        private readonly IGamesApiService _gamesApiService;
+        private readonly IRoomsApiService _roomsApiService;
+        private readonly IRoomMembersApiService _roomMembersApiService;
+        private readonly ISubscriber<UpdateRoomEvent> _subscriber;
+
+        private ApiResult<AppointedGameResult> waiting;
+
+        public RoomDetailViewModel(IGamesApiService gamesApiService, IRoomsApiService roomsApiService, 
+            IRoomMembersApiService roomMembersApiService, ISubscriber<UpdateRoomEvent> subscriber)
         {
-            this._subscriber = subscriber;
-            Members = new ObservableRangeCollection<RoomMemberDto>();
+            _gamesApiService = gamesApiService;
+            _roomsApiService = roomsApiService;
+            _roomMembersApiService = roomMembersApiService;
+            _subscriber = subscriber;
+            Members = new ObservableRangeCollection<RoomMemberResult>();
             Roles = new ObservableRangeCollection<GameRoleDto>();
             LoadDataCommand = new AsyncCommand(LoadData);
             AddMemberCommand = new AsyncCommand(AddMember);
@@ -104,7 +118,7 @@ namespace MafiatorApp.ViewModels
             JoinCommand = new AsyncCommand(Join);
             RoleChangeCommand = new AsyncCommand(RoleChanged);
             ChatCommand = new AsyncCommand(Chat);
-            subscriber.Subscribe(async s => await LoadDataCommand.ExecuteAsync());
+            _subscriber.Subscribe(async s => await LoadDataCommand.ExecuteAsync());
         }
 
         private async Task Chat()
@@ -120,7 +134,7 @@ namespace MafiatorApp.ViewModels
         private async Task Join()
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Joining Room...");
-            var request = await WebApiService.JoinRoom(Room.Code);
+            var request = await _roomsApiService.JoinRoom(Room.Code);
             if (request.IsSuccessStatusCode)
             {
                 var result = await request.Content.ReadAsMessagePackAsync<ApiResult<string>>();
@@ -145,18 +159,19 @@ namespace MafiatorApp.ViewModels
         private async Task Leave()
         {
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Leaving...");
-            var response = await WebApiService.LeaveRoom(Room.Code);
+            var response = await _roomsApiService.LeaveRoom(new LeaveRoomRequest
+            {
+                RoomId = Room.Id
+            });
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
-                if (result.IsSuccess)
-                {
-                    await LoadDataCommand.ExecuteAsync();
+                if (result.IsSuccess) {
+                    DependencyService.Get<IAlert>().ShortAlert("You left the room", MessageType.Success);
+                    await NavigationService.RemoveLastFromBackStackAsync();
                 }
                 else
-                {
                     DependencyService.Get<IAlert>().ShortAlert(result.Errors.ToString(), MessageType.Error);
-                }
             }
             else
             {
@@ -196,14 +211,14 @@ namespace MafiatorApp.ViewModels
         private async Task LoadData()
         {
             CurrentState = LayoutState.Loading;
-            var members = await WebApiService.GetMembersByRoom(Room.Id);
+            var members = await _roomMembersApiService.GetMembersByRoom(Room.Id);
             if (members.IsSuccess)
             {
                 Members.Clear();
                 Members.AddRange(members.Data);
             }
 
-            waiting = await WebApiService.GetWaitingGameByRoom(Room.Id.ToString());
+            waiting = await _gamesApiService.GetAppointedGame(Room.Id.ToString());
             if (waiting.IsSuccess)
             {
                 CurrentState = waiting.Data == null ? LayoutState.Empty : LayoutState.Success;
@@ -234,7 +249,7 @@ namespace MafiatorApp.ViewModels
             }
             else
             {
-                var joinResult = await WebApiService.IsRoomJoined(Room.Id.ToString());
+                var joinResult = await _roomsApiService.IsRoomJoined(Room.Id.ToString());
                 if (joinResult.IsSuccess)
                 {
                     IsJoined = !string.IsNullOrEmpty(joinResult.Data);
@@ -247,7 +262,7 @@ namespace MafiatorApp.ViewModels
         {
             if (navigationData is Guid roomId)
             {
-                var response = await WebApiService.GetRoom(roomId.ToString());
+                ApiResult<RoomDetailsResult> response = await _roomsApiService.GetRoom(roomId.ToString());
                 if (response.IsSuccess)
                 {
                     response.Data.Id = roomId;
@@ -256,10 +271,8 @@ namespace MafiatorApp.ViewModels
                 else
                     DependencyService.Get<IAlert>().ShortAlert(response.Errors.ToString(), MessageType.Error);
             }
-            else if (navigationData is RoomDto navigatedRoom)
-            {
+            else if (navigationData is RoomDetailsResult navigatedRoom)
                 Room = navigatedRoom;
-            }
 
             await LoadData();
         }

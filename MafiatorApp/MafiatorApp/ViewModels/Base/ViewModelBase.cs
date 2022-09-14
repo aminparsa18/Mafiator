@@ -8,7 +8,6 @@ namespace MafiatorApp.ViewModels.Base
     {
         protected readonly IDialogService DialogService;
         protected readonly INavigationService NavigationService;
-        protected readonly IWebApiService WebApiService;
 
         private bool _isBusy;
         private string _pageTitle;
@@ -23,7 +22,6 @@ namespace MafiatorApp.ViewModels.Base
         {
             DialogService = ViewModelLocator.GetService<IDialogService>();
             NavigationService = ViewModelLocator.GetService<INavigationService>();
-            WebApiService = ViewModelLocator.GetService<IWebApiService>();
         }
 
         public virtual Task InitializeAsync(object navigationData)

@@ -13,7 +13,7 @@ public interface IRefreshTokenRepository : IBaseRepository<RefreshToken>
     /// </summary>
     /// <param name="refreshToken">Refresh token.</param>
     /// <returns>List of tokens.</returns>
-    Task<IEnumerable<RefreshTokenDto>> GetByToken(string refreshToken);
+    Task<IEnumerable<RefreshTokenDetails>> GetByToken(string refreshToken);
 
     /// <summary>
     /// Update flag for token to be used.

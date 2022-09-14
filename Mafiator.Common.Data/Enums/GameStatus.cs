@@ -1,27 +1,28 @@
-﻿namespace Mafiator.Common.Data.Enums;
-
-/// <summary>
-/// Game status.
-/// </summary>
-public enum GameStatus
+﻿namespace Mafiator.Common.Data.Enums
 {
     /// <summary>
-    /// Not started.
+    /// Game status.
     /// </summary>
-    NotStarted = 0,
+    public enum GameStatus
+    {
+        /// <summary>
+        /// Not started.
+        /// </summary>
+        NotStarted = 0,
 
-    /// <summary>
-    /// Playing.
-    /// </summary>
-    Playing = 1,
+        /// <summary>
+        /// Playing.
+        /// </summary>
+        Playing = 1,
 
-    /// <summary>
-    /// Mafia win.
-    /// </summary>
-    MafiaWin = 2,
+        /// <summary>
+        /// Mafia win.
+        /// </summary>
+        MafiaWin = 2,
 
-    /// <summary>
-    /// Citizen win.
-    /// </summary>
-    CitizenWin = 3
+        /// <summary>
+        /// Citizen win.
+        /// </summary>
+        CitizenWin = 3
+    }
 }

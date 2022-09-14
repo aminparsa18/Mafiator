@@ -1,6 +1,7 @@
-﻿using MafiatorApp.Dtos;
-using MafiatorApp.Dtos.Room;
-using MafiatorApp.Enums;
+﻿using Mafiator.Common.Client.Services.ChatMessages;
+using Mafiator.Common.Data.Dtos.ChatMessages;
+using Mafiator.Common.Data.Dtos.RoomMembers;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.Services;
 using MafiatorApp.ViewModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -38,22 +39,24 @@ namespace MafiatorApp.ViewModels
         }
 
         private string roomId;
-        public ObservableRangeCollection<ChatMessageDto> Messages { get; set; }
-        public ObservableRangeCollection<RoomMemberDto> Members { get; set; }
+        public ObservableRangeCollection<ChatMessageResult> Messages { get; set; }
+        public ObservableRangeCollection<RoomMemberResult> Members { get; set; }
         public IAsyncCommand SendMessageCommand { get; set; }
 
-        public ChatViewModel()
-        {
-            Messages=new ObservableRangeCollection<ChatMessageDto>();
-            SendMessageCommand = new AsyncCommand(SendMessage);
+        private readonly IChatMessagesApiService _chatMessagesApiService;
 
+        public ChatViewModel(IChatMessagesApiService chatMessagesApiService)
+        {
+            _chatMessagesApiService = chatMessagesApiService;
+            Messages=new ObservableRangeCollection<ChatMessageResult>();
+            SendMessageCommand = new AsyncCommand(SendMessage);
         }
 
         private async Task SendMessage()
         {
             if (string.IsNullOrEmpty(Message))
                 return;
-            Messages.Add(new ChatMessageDto()
+            Messages.Add(new ChatMessageResult()
             {
                 Content = Message,
                 Type = GameMessageType.Text,
@@ -92,7 +95,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task LoadMessages()
         {
-            var res=await WebApiService.GetChatByRoom(roomId);
+            var res=await _chatMessagesApiService.GetChatByRoom(roomId);
             if (res.IsSuccess)
             {
                 Messages.AddRange(res.Data);
@@ -105,7 +108,7 @@ namespace MafiatorApp.ViewModels
 
         private void MessageReceived(string msg, string type, string sender)
         {
-            var message = new ChatMessageDto()
+            var message = new ChatMessageResult()
             {
                 Content = msg,
                 Image = Members.FirstOrDefault(m => m.UserId == Guid.Parse(sender))?.Image,

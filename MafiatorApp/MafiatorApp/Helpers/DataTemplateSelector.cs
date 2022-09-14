@@ -5,6 +5,7 @@ namespace MafiatorApp.Helpers
     public class PersonDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate Login { get; set; }
+
         public DataTemplate Register { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)

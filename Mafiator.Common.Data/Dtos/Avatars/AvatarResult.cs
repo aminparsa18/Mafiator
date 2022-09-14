@@ -1,8 +1,11 @@
-﻿namespace Mafiator.Common.Data.Dtos.Avatars;
+﻿using MessagePack;
 
-[MessagePackObject()]
-public record AvatarResult
+namespace Mafiator.Common.Data.Dtos.Avatars
 {
-    [Key(0)]
-    public string Name { get; set; }
+    [MessagePackObject()]
+    public sealed class AvatarResult
+    {
+        [Key(0)]
+        public string Name { get; set; }
+    }
 }

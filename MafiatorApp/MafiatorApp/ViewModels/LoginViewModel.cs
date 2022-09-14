@@ -1,8 +1,12 @@
-﻿using MafiatorApp.Cache;
-using MafiatorApp.Dtos.User;
-using MafiatorApp.Extensions;
+﻿using Mafiator.Common.Client;
+using Mafiator.Common.Client.Cache;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Users;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Api.Auth;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Users;
 using MafiatorApp.Models;
-using MafiatorApp.Models.Api;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
 using MafiatorApp.ViewModels.Base;
@@ -21,8 +25,11 @@ namespace MafiatorApp.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private readonly ISubscriber<Country> subscriber;
+        private readonly ISubscriber<Country> _subscriber;
+        private readonly IUsersApiService _usersApiService;
+
         private ValidatableObject<string> _loginUsername;
+        
         public ValidatableObject<string> LoginUsername
         {
             get => _loginUsername;
@@ -125,9 +132,10 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand FacebookCommand { get; set; }
         public IAsyncCommand ShowCountriesCommand { get; set; }
 
-        public LoginViewModel(ISubscriber<Country> subscriber)
+        public LoginViewModel(ISubscriber<Country> subscriber, IUsersApiService usersApiService)
         {
-            this.subscriber = subscriber;
+            _subscriber = subscriber;
+            _usersApiService = usersApiService;
             LoginCommand = new AsyncCommand(Login);
             RegisterCommand = new AsyncCommand(Register);
             GoogleCommand = new AsyncCommand(Google);
@@ -206,7 +214,7 @@ namespace MafiatorApp.ViewModels
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Logging in...");
                 try
                 {
-                    var response = await WebApiService.Login(new UserLoginDto()
+                    var response = await _usersApiService.Login(new UserLoginRequest()
                     {
                         Password = LoginPassword.Value,
                         Username = LoginUsername.Value
@@ -265,7 +273,7 @@ namespace MafiatorApp.ViewModels
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Registering your account");
                 try
                 {
-                    var response = await WebApiService.RegisterUser(new RegisterUserDto()
+                    var response = await _usersApiService.RegisterUser(new RegisterUserRequest()
                     {
                         Username = Username.Value,
                         PhoneNumber = Country.DialCode+PhoneNo.Value,

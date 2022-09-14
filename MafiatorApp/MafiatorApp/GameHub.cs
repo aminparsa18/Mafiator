@@ -1,4 +1,4 @@
-﻿using MafiatorApp.Cache;
+﻿using Mafiator.Common.Client.Cache;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

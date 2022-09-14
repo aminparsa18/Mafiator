@@ -1,8 +1,8 @@
 ﻿using Mafiator.Api.Controllers.Base;
-using Mafiator.Common.Api;
-using Mafiator.Common.Api.Auth;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Data;
-using Mafiator.Data.Dtos.User;
 using Mafiator.Service.Contracts;
 using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Authentication;
@@ -39,7 +39,7 @@ namespace Mafiator.Api.Controllers
                     Errors = new[] {"User not Found"}
                 });
             user.FirstOrDefault().Image = Constants.BlobStorageEndpoint + user.FirstOrDefault().Image;
-            return Ok(new ApiResult<ValidateUserDto>()
+            return Ok(new ApiResult<ValidateUserResult>()
             {
                 IsSuccess = true,
                 Data = user.FirstOrDefault()
@@ -47,82 +47,10 @@ namespace Mafiator.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto profile)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.Name);
-            var res = await identityService.UpdateProfile(userId, profile.Name,profile.Image);
-            if (res.IsSuccess)
-                return Ok(res);
-            return BadRequest(res);
-        }
-
-        [HttpPost]
         public IActionResult SendMessage()
         {
             smsSender.SendAuthSmsAsync("52005", "+905316335119");
             return Ok();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ConfirmPhoneNo([FromBody] ConfirmPhoneDto confirmPhoneDto)
-        {
-            if (!ModelState.IsValid)
-                return Ok(new AuthResult()
-                {
-                    StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = ModelState.Values.SelectMany(v => v.Errors.Select(s => s.ErrorMessage))
-                });
-            var res = await identityService.ConfirmPhoneNumber(confirmPhoneDto.PhoneNo, confirmPhoneDto.Token);
-            if (res.IsSuccess)
-                return Ok(res);
-            return BadRequest(res);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto loginDto)
-        {
-            if (!ModelState.IsValid)
-                return Ok(new AuthResult()
-                {
-                    StatusCode = ApiResultStatusCode.BadRequest,
-                    Errors = ModelState.Values.SelectMany(v => v.Errors.Select(s => s.ErrorMessage))
-                });
-            var result = await identityService.Login(loginDto);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto userDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Ok(new ApiResult()
-                {
-                    Errors = ModelState.Values.SelectMany(v => v.Errors.Select(s => s.ErrorMessage)),
-                    StatusCode = ApiResultStatusCode.BadRequest
-                });
-            }
-
-            var result = await identityService.Register(userDto);
-            return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
-        {
-            var result = await identityService.RefreshToken(refreshTokenRequest);
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetUser()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.Name);
-            var res = await identityService.GetUser(userId);
-            res.Data.Image = Constants.BlobStorageEndpoint + res.Data.Image;
-            return Ok(res);
         }
 
         [HttpGet]

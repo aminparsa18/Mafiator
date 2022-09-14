@@ -3,7 +3,7 @@
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class GameMessageRepository : BaseRepository<GameMessage>, IGameMessageRepository
+public sealed class GameMessageRepository : BaseRepository<GameMessage>, IGameMessageRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="GameMessageRepository"/> class.

@@ -1,8 +1,10 @@
 ﻿using GoogleVisionBarCodeScanner;
-using MafiatorApp.Dtos.Game;
-using MafiatorApp.Dtos.User;
-using MafiatorApp.Extensions;
-using MafiatorApp.Models.Api;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.RoomMembers;
+using Mafiator.Common.Client.Services.Users;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.RoomMembers;
+using Mafiator.Common.Data.Dtos.Users;
 using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.Services;
 using MafiatorApp.Validations;
@@ -20,8 +22,7 @@ namespace MafiatorApp.ViewModels
 {
     public class NewMemberViewModel : ViewModelBase
     {
-        private readonly IPublisher<UpdateRoomEvent> publisher;
-        public ObservableRangeCollection<ValidateUserDto> Members { get; set; }
+        public ObservableRangeCollection<ValidateUserResult> Members { get; set; }
         private ValidatableObject<string> name;
 
         public ValidatableObject<string> Name
@@ -43,13 +44,18 @@ namespace MafiatorApp.ViewModels
         public IAsyncCommand ScanQrCommand { get; set; }
         public IAsyncCommand SearchMemberCommand { get; set; }
 
+        private readonly IPublisher<UpdateRoomEvent> _publisher;
+        private readonly IRoomMembersApiService _roomMembersApiService;
+        private readonly IUsersApiService _usersApiService;
+
         private Guid roomId;
 
-
-        public NewMemberViewModel(IPublisher<UpdateRoomEvent> publisher)
+        public NewMemberViewModel(IPublisher<UpdateRoomEvent> publisher, IRoomMembersApiService roomMembersApiService, IUsersApiService usersApiService)
         {
-            this.publisher = publisher;
-            Members = new ObservableRangeCollection<ValidateUserDto>();
+            _publisher = publisher;
+            _roomMembersApiService = roomMembersApiService;
+            _usersApiService = usersApiService;
+            Members = new ObservableRangeCollection<ValidateUserResult>();
             Name = new ValidatableObject<string>();
             AddValidations();
             AddMemberCommand = new AsyncCommand(AddMember);
@@ -67,7 +73,7 @@ namespace MafiatorApp.ViewModels
             try
             {
                 await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Finding User...");
-                var member = await WebApiService.ValidateUser(Name.Value);
+                var member = await _usersApiService.ValidateUser(Name.Value);
                 if (Members.Any(m => m.Id == member.Data.Id))
                 {
                     await NavigationService.RemovePopupAsync();
@@ -114,7 +120,7 @@ namespace MafiatorApp.ViewModels
                 return;
             }
             await NavigationService.NavigateToPopupAsync<WaitingViewModel>("Adding members...");
-            var response = await WebApiService.AddMember(new AddMemberDto()
+            var response = await _roomMembersApiService.AddMember(new NewMembersRequest()
             {
                 RoomId = roomId,
                 Users = Members.Select(s=>s.Id).ToList()
@@ -128,7 +134,7 @@ namespace MafiatorApp.ViewModels
                     await NavigationService.RemovePopupAsync();
                     await NavigationService.RemovePopupAsync();
                     DependencyService.Get<IAlert>().ShortAlert("Member(s) joined room", MessageType.Success);
-                    publisher.Publish(new UpdateRoomEvent());
+                    _publisher.Publish(new UpdateRoomEvent());
                 }
                 else
                 {

@@ -6,7 +6,7 @@ namespace Mafiator.Entities;
 /// <summary>
 /// Game events.
 /// </summary>
-public class GameEvent:BaseEntity
+public sealed class GameEvent : BaseEntity
 {
     /// <summary>
     /// Game key identifier.
@@ -16,7 +16,7 @@ public class GameEvent:BaseEntity
     /// <summary>
     /// Flag indicating that game event has been checked.
     /// </summary>
-    public bool IsValidated{ get; set; }
+    public bool IsValidated { get; set; }
 
     /// <summary>
     /// Indicates the member who made the event in game.
@@ -31,10 +31,10 @@ public class GameEvent:BaseEntity
     /// <summary>
     /// Game.
     /// </summary>
-    public virtual Game Game { get; set; }
+    public Game Game { get; set; }
 
     /// <summary>
     /// Game member.
     /// </summary>
-    public virtual GameMember Member{ get; set; }
+    public GameMember Member { get; set; }
 }

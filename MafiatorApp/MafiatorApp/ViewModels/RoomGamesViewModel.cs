@@ -1,4 +1,5 @@
-﻿using MafiatorApp.Enums;
+﻿using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Data.Enums;
 using MafiatorApp.ViewModels.Base;
 using System;
 using System.Linq;
@@ -19,8 +20,12 @@ namespace MafiatorApp.ViewModels
 
         private Guid _roomId;
         public IAsyncCommand AddGameCommand { get; set; }
-        public RoomGamesViewModel()
+
+        private readonly IGamesApiService _gamesApiService;
+
+        public RoomGamesViewModel(IGamesApiService gamesApiService)
         {
+            _gamesApiService = gamesApiService;
             AddGameCommand=new AsyncCommand(AddGame);
         }
 
@@ -31,7 +36,7 @@ namespace MafiatorApp.ViewModels
 
         private async Task LoadGames(string roomId)
         {
-            var response=await WebApiService.GetGamesByRoom(roomId);
+            var response=await _gamesApiService.GetGamesByRoom(roomId);
             if (response.IsSuccess)
             {
                 if (response.Data.Any(s => s.Status == GameStatus.NotStarted))

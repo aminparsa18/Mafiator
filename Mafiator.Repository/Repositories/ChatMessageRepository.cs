@@ -7,7 +7,7 @@ using System.Linq;
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public class ChatMessageRepository : BaseRepository<ChatMessage>, IChatMessageRepository
+public sealed class ChatMessageRepository : BaseRepository<ChatMessage>, IChatMessageRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatMessageRepository"/> class.

@@ -11,13 +11,19 @@ namespace MafiatorApp.Views
         public MyRoomsView()
         {
             InitializeComponent();
-            NavigationPage.SetHasNavigationBar(this,false);
+            NavigationPage.SetHasNavigationBar(this, false);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ((MyRoomsViewModel)BindingContext).LoadRoomsCommand.ExecuteAsync();
         }
 
         private async void LeaveBtn_OnClicked(object sender, EventArgs e)
         {
-            var code = ((Button) sender).CommandParameter.ToString();
-            await ((MyRoomsViewModel) this.BindingContext).Leave(code);
+            string roomId = ((Button)sender).CommandParameter.ToString();
+            await ((MyRoomsViewModel)BindingContext).Leave(roomId);
         }
     }
 }

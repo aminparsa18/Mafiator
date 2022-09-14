@@ -1,20 +1,23 @@
 ﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Api;
+using AutoMapper;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Helpers;
 using Mafiator.Entities;
+using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using NSwag.Annotations;
 using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Http;
-using NSwag.Annotations;
-using Mafiator.Common.Data.Dtos.Rooms;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
+[Authorize]
+[Produces("application/x-msgpack")]
 public class Create : EndpointBaseAsync
     .WithRequest<RoomCreateRequest>
     .WithActionResult<ApiResult<RoomCreateResult>>
