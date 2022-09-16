@@ -3,6 +3,7 @@ using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -14,8 +15,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Leave : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<string>>

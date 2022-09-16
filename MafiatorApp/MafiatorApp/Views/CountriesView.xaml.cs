@@ -1,5 +1,6 @@
 ﻿using MafiatorApp.ViewModels;
 using Rg.Plugins.Popup.Pages;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,6 +13,12 @@ namespace MafiatorApp.Views
         {
             InitializeComponent();
         }
+
+        //protected override async Task OnAppearingAnimationEndAsync()
+        //{
+        //    await base.OnAppearingAnimationEndAsync();
+        //    await ((CountriesViewModel)this.BindingContext).LoadDataCommand.ExecuteAsync();
+        //}
 
         private void InputView_OnTextChanged(object sender, TextChangedEventArgs e)
         {

@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Entities;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -12,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class JoinById : EndpointBaseAsync
     .WithRequest<Guid>
     .WithActionResult<ApiResult>

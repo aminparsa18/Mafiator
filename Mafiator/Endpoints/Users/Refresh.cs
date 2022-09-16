@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace Mafiator.Api.Endpoints.Users;
 
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Refresh : EndpointBaseAsync
     .WithRequest<RefreshTokenRequest>
     .WithActionResult<AuthResult>

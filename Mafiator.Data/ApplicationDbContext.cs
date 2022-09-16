@@ -13,7 +13,6 @@ public class ApplicationDbContext:IdentityDbContext<User, Role, Guid, UserClaim,
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-
     }
 
     public virtual DbSet<Avatar> Avatar{ get; set; }

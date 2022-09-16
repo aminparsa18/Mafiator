@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -11,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.GameEvents;
 
-[Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
+[Authorize]
 public class Get : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<GameEventResult>>
@@ -25,7 +25,7 @@ public class Get : EndpointBaseAsync
     }
 
     [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/gameevents/{gameId}")]
+    [HttpGet("api/v{version:apiVersion}/gameevents/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [OpenApiOperation("GameEvents.Get", "", "Get events of a game.")]
     [OpenApiTag("Game Events Endpoints")]

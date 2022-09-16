@@ -3,6 +3,7 @@ using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.RoomMembers;
 using Mafiator.Entities;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -12,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.RoomMembers;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Create : EndpointBaseAsync
     .WithRequest<NewMembersRequest>
     .WithActionResult<ApiResult>

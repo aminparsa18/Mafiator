@@ -16,7 +16,6 @@ namespace Mafiator.Api.Endpoints.Rooms;
 
 [Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Leave : EndpointBaseAsync
     .WithRequest<LeaveRoomRequest>
     .WithActionResult<ApiResult>

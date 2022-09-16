@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Service.Contracts.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -11,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Users;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Update : EndpointBaseAsync
     .WithRequest<UpdateProfileRequest>
     .WithActionResult<ApiResult>

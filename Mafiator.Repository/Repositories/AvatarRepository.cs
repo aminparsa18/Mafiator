@@ -1,11 +1,12 @@
 ﻿using Mafiator.Common.Data.Dtos.Avatars;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Mafiator.Repository.Repositories;
 
 /// <inheritdoc/>
-public sealed class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
+public class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AvatarRepository"/> class.
@@ -15,9 +16,17 @@ public sealed class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<AvatarResult>> GetAllDto()
+    public Task<List<AvatarResult>> GetAllDtos()
     {
-        //return await connection.ExecuteQueryAsync<AvatarDto>("SELECT Name FROM [Avatar]",cacheKey:"ActiveAvatars",cache:CacheFactory.GetCache());
+        return Context.Avatar.AsNoTracking().Select(s => new AvatarResult
+        {
+            Name = s.Name
+        }).ToListAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<AvatarResult>> GetAllDtosFast()
+    {
         return await Connection.ExecuteQueryAsync<AvatarResult>("SELECT Name FROM [Avatar]");
     }
 }

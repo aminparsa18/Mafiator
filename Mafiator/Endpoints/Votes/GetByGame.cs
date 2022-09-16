@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Votes;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -11,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Votes;
 
-[Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
+[Authorize]
 public class GetByGame : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<IEnumerable<VoteDetailsResult>>>

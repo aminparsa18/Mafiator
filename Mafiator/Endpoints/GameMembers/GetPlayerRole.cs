@@ -3,6 +3,7 @@ using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.GameMembers;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.GameMembers;
 
+[Authorize]
 public class GetPlayerRole : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<PlayerRoleResult>>

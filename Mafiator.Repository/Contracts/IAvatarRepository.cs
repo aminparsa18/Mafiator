@@ -12,5 +12,11 @@ public interface IAvatarRepository : IBaseRepository<Avatar>
     /// Retrieves all avatars data.
     /// </summary>
     /// <returns>List of avatars</returns>
-    Task<IEnumerable<AvatarResult>> GetAllDto();
+    Task<IEnumerable<AvatarResult>> GetAllDtosFast();
+
+    /// <summary>
+    /// Retrieves all avatars data.
+    /// </summary>
+    /// <returns>List of avatars</returns>
+    Task<List<AvatarResult>> GetAllDtos();
 }

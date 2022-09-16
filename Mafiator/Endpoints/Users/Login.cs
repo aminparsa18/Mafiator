@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 namespace Mafiator.Api.Endpoints.Users;
 
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Login : EndpointBaseAsync
     .WithRequest<UserLoginRequest>
     .WithActionResult<AuthResult>

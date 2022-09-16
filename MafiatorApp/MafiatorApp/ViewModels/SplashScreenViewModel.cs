@@ -40,7 +40,7 @@ namespace MafiatorApp.ViewModels
                 {
                     var path = uri.Segments[1];
                     if (path.StartsWith("room"))
-                     await NavigationService.NavigateToAsync<RoomDetailViewModel>(Guid.Parse(uri.Segments[2]));
+                       await NavigationService.NavigateToAsync<RoomDetailViewModel>(Guid.Parse(uri.Segments[2]));
                     else if (path.StartsWith("game"))
                        await NavigationService.NavigateToAsync<WaitingGameViewModel>(Guid.Parse(uri.Segments[2]));
                 }
@@ -51,7 +51,7 @@ namespace MafiatorApp.ViewModels
                 await NavigationService.NavigateToAsync<LoginViewModel>();
 
             if (!Barrel.Current.Exists("PlayMusic") || Barrel.Current.Get<bool>("PlayMusic"))
-               await CrossMediaManager.Current.PlayFromAssembly("mafia1.mp3", Assembly.GetExecutingAssembly());
+                await CrossMediaManager.Current.PlayFromAssembly("mafia1.mp3", Assembly.GetExecutingAssembly());
             CrossMediaManager.Current.Notification.Enabled = false;
             CrossMediaManager.Current.RepeatMode = RepeatMode.All;
             _disposable.Dispose();

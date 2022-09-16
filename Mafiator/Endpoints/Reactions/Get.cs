@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Reactions;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -11,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Reactions;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Get : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult<ApiResult<IEnumerable<ReactionResult>>>

@@ -3,13 +3,12 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-                 xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
                  xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
+                 xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp" xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout"
                  base:ViewModelLocator.AutoWireViewModel="True"
                  x:Class="MafiatorApp.Views.CountriesView"
                  x:DataType="viewModels:CountriesViewModel">
@@ -45,6 +44,21 @@
                         Margin="16,0"
                         SelectionMode="Single"
                         SelectionChangedCommand="{Binding CountrySelectedCommand}">
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <shimmerLayout:ShimmerLayout Margin="0,48,0,0" Angle="-45" GradientSize="0.4"
+                                                             BackgroundGradientColor="{StaticResource Day4}"
+                                                             IsLoading="True">
+                                <Grid Padding="24">
+                                    <StackLayout Margin="24,8">
+                                        <BoxView CornerRadius="12" BackgroundColor="White" HeightRequest="24" />
+                                        <BoxView CornerRadius="12" HeightRequest="24" />
+                                        <BoxView CornerRadius="12" HeightRequest="24" />
+                                    </StackLayout>
+                                </Grid>
+                            </shimmerLayout:ShimmerLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Country">
                                 <StackLayout Margin="8">

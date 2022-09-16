@@ -3,6 +3,7 @@ using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.ChatMessages;
 using Mafiator.Data;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -13,17 +14,16 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.ChatMessages;
 
-[Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
+[Authorize]
 public class GetByRoom : EndpointBaseAsync
     .WithRequest<Guid>
     .WithActionResult<ApiResult<IEnumerable<ChatMessageResult>>>
 {
-    private readonly IUnitOfWork unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GetByRoom(IUnitOfWork unitOfWork)
     {
-        this.unitOfWork = unitOfWork;
+        this._unitOfWork = unitOfWork;
     }
 
     [ApiVersion("1.0")]
@@ -33,7 +33,7 @@ public class GetByRoom : EndpointBaseAsync
     [OpenApiTag("Chat Messages Endpoints")]
     public override async Task<ActionResult<ApiResult<IEnumerable<ChatMessageResult>>>> HandleAsync(Guid roomId, CancellationToken cancellationToken = default)
     {
-        var chats = await unitOfWork.ChatMessage.GetByRoom(roomId);
+        var chats = await _unitOfWork.ChatMessage.GetByRoom(roomId);
         chats.ForEach(c => c.Image = $"{Constants.BlobStorageEndpoint}{c.Image}");
         return Ok(new ApiResult<List<ChatMessageResult>>()
         {

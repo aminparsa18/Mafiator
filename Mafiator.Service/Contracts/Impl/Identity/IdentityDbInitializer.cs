@@ -63,7 +63,12 @@ namespace Mafiator.Service.Contracts.Impl.Identity
 
         public async Task<IdentityResult> SeedDatabaseWithAdminUserAsync()
         {
-           // var adminUserSeed = _adminUserSeedOptions.Value.AdminUserSeed;
+            //var fakeAvatars = FakeDbData.InitFakeAvatars(10);
+            //using var serviceScope = _scopeFactory.CreateScope();
+            //using var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            //await context.Avatar.AddRangeAsync(fakeAvatars);
+            //await context.SaveChangesAsync();
+            // var adminUserSeed = _adminUserSeedOptions.Value.AdminUserSeed;
 
             // var name = adminUserSeed.Username;
             //var password = adminUserSeed.Password;

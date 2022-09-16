@@ -6,6 +6,7 @@ using Mafiator.Common.Extensions;
 using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -18,8 +19,8 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Join : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult>

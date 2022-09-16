@@ -31,7 +31,6 @@ namespace MafiatorApp.ViewModels
             Countries=new ObservableRangeCollection<Country>();
             LoadDataCommand=new AsyncCommand(LoadData);
             PopCommand=new AsyncCommand(Pop);
-            LoadDataCommand.ExecuteAsync();
             CountrySelectedCommand=new AsyncCommand(CountrySelected);
         }
 

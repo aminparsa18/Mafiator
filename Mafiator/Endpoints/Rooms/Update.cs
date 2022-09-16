@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NSwag.Annotations;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
+[Authorize]
 [Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 public class Update : EndpointBaseAsync
     .WithRequest<UpdateRoomNameRequest>
     .WithActionResult<ApiResult>

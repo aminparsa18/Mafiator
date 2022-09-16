@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
-[Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
 [Authorize]
 public class Get : EndpointBaseAsync
     .WithRequest<string>

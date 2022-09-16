@@ -32,10 +32,10 @@ public class Get : EndpointBaseAsync
     [OpenApiTag("Avatars Endpoints")]
     public override async Task<ActionResult<ApiResult<IEnumerable<AvatarResult>>>> HandleAsync(CancellationToken cancellationToken = default)
     {
-        IEnumerable<AvatarResult> avatars = await _unitOfWork.Avatar.GetAllDto();
+        IEnumerable<AvatarResult> avatars = await _unitOfWork.Avatar.GetAllDtosFast();
         foreach (var avatar in avatars)
         {
-            avatar.Name = Constants.BlobStorageEndpoint + avatar.Name;
+            avatar.Name = string.Join(Constants.BlobStorageEndpoint, avatar.Name);
         }
         return Ok(new ApiResult<IEnumerable<AvatarResult>>
         {

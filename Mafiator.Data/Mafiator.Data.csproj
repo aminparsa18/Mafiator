@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Mafiator.Common\Mafiator.Common.csproj" />
     <ProjectReference Include="..\Mafiator.Entities\Mafiator.Entities.csproj" />
   </ItemGroup>

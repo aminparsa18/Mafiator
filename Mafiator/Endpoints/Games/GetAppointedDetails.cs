@@ -3,6 +3,7 @@ using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Data;
 using Mafiator.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
@@ -12,8 +13,7 @@ using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
-[Produces("application/x-msgpack")]
-[Consumes("application/x-msgpack")]
+[Authorize]
 public class GetAppointedDetails : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<AppointedGameResult>>

@@ -35,7 +35,7 @@ namespace Mafiator.IocConfig.Extensions
     {
         public static IServiceCollection ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("MafiatorContext")));
+            services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
             services.AddHangfireServer();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
