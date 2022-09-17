@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
-using System.Text.Json;
-using Mafiator.Common.Client.Cache;
-using MafiatorApp.Models;
+﻿using Mafiator.Common.Client.Cache;
 using MafiatorApp.Resources.Texts;
 using MafiatorApp.UserControls.ShimmerLayout;
-using MafiatorApp.Views;
 using MediaManager;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using System;
+using System.Globalization;
 using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Application = Xamarin.Forms.Application;
 
@@ -22,8 +16,11 @@ namespace MafiatorApp
 {
     public partial class App : Application
     {
+        public Uri AppUri { get; }
+
         public App(Uri uri)
         {
+            AppUri = uri;
             Current.On<Xamarin.Forms.PlatformConfiguration.Android>()
                 .UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
             InitializeComponent();
@@ -34,7 +31,6 @@ namespace MafiatorApp
 
             Barrel.ApplicationId = "Mafiator";
             Barrel.EncryptionKey = "NJR*fgpB5a";
-            InitBarrel();
             if (Barrel.Current.Exists("Culture"))
             {
                 if (Barrel.Current.Get<string>("Culture") == "RU")
@@ -58,17 +54,7 @@ namespace MafiatorApp
             //else
             //    UserAppTheme = OSAppTheme.Light;
 
-            MainPage = new NavigationPage(new SplashScreenView(uri));
-        }
-
-        private async void InitBarrel()
-        {
-            if (!Barrel.Current.Exists("Countries"))
-            {
-                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MafiatorApp.countries.json");
-                var countries = await JsonSerializer.DeserializeAsync<List<Country>>(stream);
-                Barrel.Current.Add("Countries", countries, TimeSpan.MaxValue);
-            }
+            MainPage = new AppShell();// NavigationPage(new SplashScreenView(uri));
         }
 
         protected override void OnStart()

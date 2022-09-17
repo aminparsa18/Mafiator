@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Http;
 using NSwag.Annotations;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+using FluentValidation;
+using System.Linq;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
@@ -19,10 +22,12 @@ public class Update : EndpointBaseAsync
     .WithRequest<UpdateRoomNameRequest>
     .WithActionResult<ApiResult>
 {
+    private readonly IValidator<UpdateRoomNameRequest> _validator;
     private readonly IUnitOfWork _unitOfWork;
 
-    public Update(IUnitOfWork unitOfWork)
+    public Update(IValidator<UpdateRoomNameRequest> validator, IUnitOfWork unitOfWork)
     {
+        _validator = validator;
         _unitOfWork = unitOfWork;
     }
 
@@ -33,6 +38,13 @@ public class Update : EndpointBaseAsync
     [OpenApiTag("Rooms Endpoints")]
     public override async Task<ActionResult<ApiResult>> HandleAsync(UpdateRoomNameRequest request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new ApiResult
+            {
+                StatusCode = ApiResultStatusCode.BadRequest,
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+            });
         var room = await _unitOfWork.Room.Get(request.RoomId);
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
         if (room.UserId != userId)

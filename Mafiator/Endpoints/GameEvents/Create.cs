@@ -1,6 +1,8 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Entities;
 using Mafiator.Repository;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,11 +22,13 @@ public class Create : EndpointBaseAsync
     .WithRequest<GameEventRequest>
     .WithActionResult<ApiResult>
 {
+    private readonly IValidator<GameEventRequest> _validator;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public Create(IMapper mapper, IUnitOfWork unitOfWork)
+    public Create(IValidator<GameEventRequest> validator, IMapper mapper, IUnitOfWork unitOfWork)
     {
+        _validator = validator;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
@@ -35,6 +40,13 @@ public class Create : EndpointBaseAsync
     [OpenApiTag("Game Events Endpoints")]
     public override async Task<ActionResult<ApiResult>> HandleAsync(GameEventRequest request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new ApiResult
+            {
+                StatusCode = ApiResultStatusCode.BadRequest,
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+            });
         var gameEvent = _mapper.Map<GameEvent>(request);
         await _unitOfWork.GameEvent.AddFast(gameEvent);
         return Ok();

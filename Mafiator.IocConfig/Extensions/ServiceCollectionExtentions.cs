@@ -1,6 +1,9 @@
-﻿using Hangfire;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Hangfire;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Common.Extensions;
 using Mafiator.Common.Server.Media;
 using Mafiator.Data;
@@ -12,6 +15,7 @@ using Mafiator.Service.Contracts.Identity;
 using Mafiator.Service.Contracts.Impl;
 using Mafiator.Service.Contracts.Impl.Identity;
 using Mafiator.Service.Models;
+using Mafiator.Service.Validations.Users;
 using MessagePack;
 using MessagePack.AspNetCoreMvcFormatter;
 using MessagePack.Resolvers;
@@ -95,6 +99,7 @@ namespace Mafiator.IocConfig.Extensions
 
         public static IServiceCollection ConfigureCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ISmsSender, TwilioSmsSender>();

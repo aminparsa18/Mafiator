@@ -1,5 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.RoomMembers;
 using Mafiator.Entities;
 using Mafiator.Repository;
@@ -19,10 +21,12 @@ public class Create : EndpointBaseAsync
     .WithRequest<NewMembersRequest>
     .WithActionResult<ApiResult>
 {
+    private readonly IValidator<NewMembersRequest> _validator;
     private readonly IUnitOfWork _unitOfWork;
 
-    public Create(IUnitOfWork unitOfWork)
+    public Create(IValidator<NewMembersRequest> validator, IUnitOfWork unitOfWork)
     {
+        _validator = validator;
         _unitOfWork = unitOfWork;
     }
 
@@ -33,6 +37,13 @@ public class Create : EndpointBaseAsync
     [OpenApiTag("Rooms Endpoints")]
     public override async Task<ActionResult<ApiResult>> HandleAsync(NewMembersRequest request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new ApiResult
+            {
+                StatusCode = ApiResultStatusCode.BadRequest,
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+            });
         foreach (var userId in request.Users)
         {
             var user = await _unitOfWork.RoomMember.FindInRoom(request.RoomId, userId);

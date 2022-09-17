@@ -334,7 +334,7 @@ namespace Mafiator.Api
 
         }
 
-        public async void Inquiry(string gameId, string memberId, bool isToggled)
+        public async Task Inquiry(string gameId, string memberId, bool isToggled)
         {
             var targets = await _unitOfWork.GameMember.GetPlayerStatusFast(memberId);
             if (!targets.Any())

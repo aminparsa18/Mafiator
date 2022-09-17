@@ -7,6 +7,7 @@ using MessagePipe;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
 {
@@ -21,12 +22,12 @@ namespace MafiatorApp.ViewModels
             var bag = DisposableBag.CreateBuilder();
             _subscriber.Subscribe(async (_,_) =>
             {
-                await Navigate(new Uri("about:blank"));
+                await Navigate();
             }).AddTo(bag);
             _disposable = bag.Build();
         }
 
-        public async Task Navigate(Uri uri)
+        public async Task Navigate()
         {
             if (!Barrel.Current.Exists("Culture"))
             {
@@ -34,21 +35,22 @@ namespace MafiatorApp.ViewModels
                 return;
             }
 
-            if (Barrel.Current.Exists("Token"))
+            if (!Barrel.Current.Exists("Token"))
             {
-                if (uri.Segments.Length == 3)
+                var segments = (Application.Current as App).AppUri.Segments;
+                if (segments.Length == 3)
                 {
-                    var path = uri.Segments[1];
+                    var path = segments[1];
                     if (path.StartsWith("room"))
-                       await NavigationService.NavigateToAsync<RoomDetailViewModel>(Guid.Parse(uri.Segments[2]));
+                       await NavigationService.NavigateToAsync<RoomDetailViewModel>(Guid.Parse(segments[2]), replace:true);
                     else if (path.StartsWith("game"))
-                       await NavigationService.NavigateToAsync<WaitingGameViewModel>(Guid.Parse(uri.Segments[2]));
+                       await NavigationService.NavigateToAsync<WaitingGameViewModel>(Guid.Parse(segments[2]), replace: true);
                 }
                 else
-                    await NavigationService.NavigateToAsync<HomeViewModel>();
+                    await NavigationService.NavigateToAsync<HomeViewModel>(true);
             }
             else
-                await NavigationService.NavigateToAsync<LoginViewModel>();
+                await NavigationService.NavigateToAsync<LoginViewModel>(true);
 
             if (!Barrel.Current.Exists("PlayMusic") || Barrel.Current.Get<bool>("PlayMusic"))
                 await CrossMediaManager.Current.PlayFromAssembly("mafia1.mp3", Assembly.GetExecutingAssembly());

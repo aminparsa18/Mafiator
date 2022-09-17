@@ -1,7 +1,6 @@
 ﻿using MafiatorApp.ViewModels.Base;
-using MafiatorApp.Views;
-using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Pages;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Globalization;
 using System.Reflection;
@@ -12,39 +11,14 @@ namespace MafiatorApp.Services.Impl
 {
     public class NavigationService : INavigationService
     {
-        public ViewModelBase PreviousPageViewModel
+        public Task NavigateToAsync<TViewModel>(bool replace = false) where TViewModel : ViewModelBase
         {
-            get
-            {
-                var mainPage = Application.Current.MainPage as HomeView;
-                var viewModel = mainPage.Navigation.NavigationStack[0].BindingContext;
-                return viewModel as ViewModelBase;
-            }
+            return InternalNavigateToAsync(typeof(TViewModel), null, replace);
         }
 
-        public string PreviousPage
+        public Task NavigateToAsync<TViewModel>(object parameter, bool replace = false) where TViewModel : ViewModelBase
         {
-            get
-            {
-                var navigation = GetNavigation();
-                var previousPage = navigation.NavigationStack[2];
-                return previousPage.ToString();
-            }
-        }
-
-        public Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase
-        {
-            return InternalNavigateToAsync(typeof(TViewModel), null);
-        }
-
-        public Task NavigateToAsync<TViewModel>(object parameter) where TViewModel : ViewModelBase
-        {
-            return InternalNavigateToAsync(typeof(TViewModel), parameter);
-        }
-
-        public async Task NavigateToModalAsync<TViewModel>(object parameter) where TViewModel : ViewModelBase
-        {
-            await InternalNavigateToModalAsync(typeof(TViewModel), parameter);
+            return InternalNavigateToAsync(typeof(TViewModel), parameter, replace);
         }
 
         public async Task<Page> NavigateToPopupAsync<TViewModel>() where TViewModel : ViewModelBase
@@ -62,98 +36,36 @@ namespace MafiatorApp.Services.Impl
             return InternalNavigateToAsync(page, parameter);
         }
 
-        public async Task NavigateToRootPage()
-        {
-            var navigation = GetNavigation();
-            await navigation.PopToRootAsync(true);
-        }
-
         public async Task RemovePopupAsync()
         {
-            var navigation = GetNavigation();
-            await navigation.PopPopupAsync();
-        }
-
-        public async Task RemoveModalAsync()
-        {
-            var navigation = GetNavigation();
-            await navigation.PopModalAsync();
+            await PopupNavigation.Instance.PopAsync();
         }
 
         public async Task RemoveLastFromBackStackAsync()
         {
-            var navigation = GetNavigation();
-            await navigation.PopAsync();
+            await Shell.Current.GoToAsync("..");
         }
 
-        public Task RemoveBackStackAsync()
-        {
-            var navigation = GetNavigation();
-
-            if (navigation == null) return Task.FromResult(true);
-            for (var i = 0; i < navigation.NavigationStack.Count - 2; i++)
-            {
-                var page = navigation.NavigationStack[i];
-                navigation.RemovePage(page);
-            }
-
-            return Task.FromResult(true);
-        }
-
-        private static async Task InternalNavigateToAsync(Type viewModelType, object parameter)
+        private static async Task InternalNavigateToAsync(Type viewModelType, object parameter, bool replace)
         {
             var page = CreatePage(viewModelType, parameter);
-            var navigation = GetNavigation();
-
-            await navigation.PushAsync(page);
-            await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
-        }
-
-        private static async Task InternalNavigateToModalAsync(Type viewModelType, object parameter)
-        {
-            var page = CreatePage(viewModelType, parameter);
-            var navigation = GetNavigation();
-            await navigation.PushModalAsync(page);
+            var path = string.Join(string.Empty, (replace ? "//" : ""), viewModelType.Name.Replace("ViewModel", "View"));
+            await Shell.Current.GoToAsync(path);
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
         }
 
         private static async Task<Page> InternalNavigateToPopupAsync(Type viewModelType, object parameter)
         {
             var page = CreatePage(viewModelType, parameter);
-            var navigation = GetNavigation();
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
-            await navigation.PushPopupAsync(page as PopupPage);
+            await PopupNavigation.Instance.PushAsync(page as PopupPage);
             return page;
         }
 
         private static async Task InternalNavigateToAsync(Page page, object parameter)
         {
-            var navigationPage = GetNavigation();
-            await navigationPage.PushAsync(page);
+            await Shell.Current.GoToAsync(nameof(page));
             await ((ViewModelBase) page.BindingContext).InitializeAsync(parameter);
-        }
-
-        private static INavigation GetNavigation()
-        {
-            INavigation navigationPage;
-            if (Application.Current.MainPage is MasterDetailPage masterDetailPage)
-            {
-                if (masterDetailPage.Detail is NavigationPage navPage)
-                {
-                    navigationPage = navPage.Navigation;
-                }
-                else
-                {
-                    var detailNavigationPage = new NavigationPage(masterDetailPage);
-                    navigationPage = detailNavigationPage.Navigation;
-                }
-            }
-            else
-            {
-                navigationPage = Application.Current.MainPage.Navigation;
-            }
-
-            return navigationPage;
         }
 
         private static Type GetPageTypeForViewModel(Type viewModelType)

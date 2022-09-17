@@ -4,8 +4,8 @@
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.SplashScreenView"
              BackgroundColor="Black"
-             base:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="viewModels:SplashScreenViewModel">
+             x:DataType="viewModels:SplashScreenViewModel"
+             base:ViewModelLocator.AutoWireViewModel="True">
     <ContentPage.Content>
         <StackLayout>
             <Image

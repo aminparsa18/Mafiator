@@ -60,25 +60,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="AppShell.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
     <Compile Update="Views\BarcodeScannerView.xaml.cs">
       <DependentUpon>BarcodeScannerView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\LanguagesView.xaml.cs">
+    <Compile Update="Views\Popups\LanguagesView.xaml.cs">
       <DependentUpon>LanguagesView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MenuView.xaml.cs">
-      <DependentUpon>MenuView.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\ConfirmPhoneView.xaml.cs">
       <DependentUpon>ConfirmPhoneView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\JoinRoomView.xaml.cs">
+    <Compile Update="Views\Popups\JoinRoomView.xaml.cs">
       <DependentUpon>JoinRoomView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\LoginView.xaml.cs">
@@ -90,10 +90,10 @@
     <Compile Update="Views\RoomDetailView.xaml.cs">
       <DependentUpon>RoomDetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\PlayerRoleView.xaml.cs">
+    <Compile Update="Views\Popups\PlayerRoleView.xaml.cs">
       <DependentUpon>PlayerRoleView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\GameFinishView.xaml.cs">
+    <Compile Update="Views\Popups\GameFinishView.xaml.cs">
       <DependentUpon>GameFinishView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Templates\IncomingDissLikeView.xaml.cs">
@@ -135,37 +135,28 @@
     <EmbeddedResource Update="Views\BarcodeScannerView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CandidatesView.xaml">
+    <EmbeddedResource Update="Views\Popups\CandidatesView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CountriesView.xaml">
+    <EmbeddedResource Update="Views\Popups\CountriesView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ChatView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\GameEventView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\GameShareView.xaml">
+    <EmbeddedResource Update="Views\Popups\GameEventView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\GameView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\InquiryStatusView.xaml">
+    <EmbeddedResource Update="Views\Popups\InquiryStatusView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\LazyViews\LazyVideoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MainView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\HomeView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\MenuView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ConfirmPhoneView.xaml">
@@ -177,31 +168,25 @@
     <EmbeddedResource Update="Views\RoomDetailView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\NewGameView.xaml">
+    <EmbeddedResource Update="Views\Popups\NewGameView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\NewMemberView.xaml">
+    <EmbeddedResource Update="Views\Popups\NewMemberView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\NewRoomView.xaml">
+    <EmbeddedResource Update="Views\Popups\NewRoomView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ProfilePictureView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\RandomView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\RoomGamesView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\SetRolesView.xaml">
+    <EmbeddedResource Update="Views\Popups\SetRolesView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\LoginView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SettingsView.xaml">
+    <EmbeddedResource Update="Views\Popups\SettingsView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SplashScreenView.xaml">
@@ -210,7 +195,7 @@
     <EmbeddedResource Update="Views\StoreView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\GameFinishView.xaml">
+    <EmbeddedResource Update="Views\Popups\GameFinishView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Templates\CheckBoxView.xaml">
@@ -249,7 +234,7 @@
     <EmbeddedResource Update="Views\WaitingGameView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\WaitingView.xaml">
+    <EmbeddedResource Update="Views\Popups\WaitingView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

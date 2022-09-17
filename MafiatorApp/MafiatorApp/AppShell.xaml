@@ -1,0 +1,22 @@
+<Shell
+    x:Class="MafiatorApp.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MafiatorApp.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Shell.PresentationMode="Animated">
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:SplashScreenView}"
+        Route="SplashScreenView" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:LoginView}"
+        Route="LoginView" />
+    
+    <ShellContent
+        ContentTemplate="{DataTemplate local:HomeView}"
+        Route="HomeView" />
+
+</Shell>

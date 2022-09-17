@@ -34,6 +34,7 @@ namespace MafiatorApp.ViewModels
         }
 
         public UserStatusResult UserStatus { get; set; }
+        public IAsyncCommand LoadDataCommand { get; set; }
         public IAsyncCommand AddRoomCommand { get; set; }
         public IAsyncCommand RandomCommand { get; set; }
         public IAsyncCommand JoinRoomCommand { get; set; }
@@ -55,7 +56,7 @@ namespace MafiatorApp.ViewModels
             var bag = DisposableBag.CreateBuilder();
             _subscriber.Subscribe(c => LoadData()).AddTo(bag);
             _disposable = bag.Build();
-            LoadData();
+            LoadDataCommand = new AsyncCommand(LoadData);
             AddRoomCommand = new AsyncCommand(AddRoom);
             RandomCommand = new AsyncCommand(Random);
             JoinRoomCommand = new AsyncCommand(JoinRoom);
@@ -65,11 +66,12 @@ namespace MafiatorApp.ViewModels
             HelpCommand = new AsyncCommand(Help);
             EditProfileCommand = new AsyncCommand(EditProfile);
             SignOutCommand = new AsyncCommand(SignOut);
+            LoadDataCommand.ExecuteAsync();
         }
 
         private async Task EditProfile()
         {
-            await NavigationService.NavigateToAsync<ProfilePictureViewModel>(true);
+            await NavigationService.NavigateToAsync<ProfilePictureViewModel>(parameter: true);
         }
 
         private async Task Store()
@@ -117,7 +119,7 @@ namespace MafiatorApp.ViewModels
             await NavigationService.NavigateToAsync<RandomViewModel>();
         }
 
-        private async void LoadData()
+        private async Task LoadData()
         {
             if (!Barrel.Current.Exists("User") || Barrel.Current.IsExpired("User"))
             {

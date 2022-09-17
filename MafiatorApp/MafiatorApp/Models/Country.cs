@@ -2,7 +2,7 @@
 
 namespace MafiatorApp.Models
 {
-    public class Country
+    public sealed class Country
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }

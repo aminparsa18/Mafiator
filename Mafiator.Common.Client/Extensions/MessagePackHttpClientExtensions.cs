@@ -30,10 +30,9 @@ namespace Mafiator.Common.Client.Extensions
                     if (!refreshTokenResult.IsSuccess)
                         throw new HttpRequestException(string.Join('-', refreshTokenResult.Errors));
                 });
-
         }
 
-        public static async Task<ApiResult> CheckToken()
+        private static async Task<ApiResult> CheckToken()
         {
             if (!Barrel.Current.Exists("Token"))
             {
@@ -69,7 +68,7 @@ namespace Mafiator.Common.Client.Extensions
             }
         }
 
-        public static Task<HttpResponseMessage> RefreshToken(RefreshTokenRequest refreshTokenRequest)
+        private static Task<HttpResponseMessage> RefreshToken(RefreshTokenRequest refreshTokenRequest)
         {
             return BaseHttpClient.Instance.PostAsMessagePackAsync(new Uri(UrlConstants.BaseUrl + "users/refresh"),
                 refreshTokenRequest);
@@ -105,9 +104,9 @@ namespace Mafiator.Common.Client.Extensions
                 request.Headers.Add("Accept", ContentTypeString);
                 request.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", Barrel.Current.Get<string>("Token"));
-                return await client.SendAsync(request, context).ConfigureAwait(false);
+                return await client.SendAsync(request, context);
             }, CancellationToken.None).ConfigureAwait(false);
-            var dd = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsMessagePackAsync<T>();
         }
 
@@ -124,11 +123,13 @@ namespace Mafiator.Common.Client.Extensions
             if (client == null)
                 throw new ArgumentNullException(nameof(client));
             CreateRefreshTokenPolicy();
-            return await _refreshTokenPolicy.ExecuteAsync(async context =>
+            var response = await _refreshTokenPolicy.ExecuteAsync(async context =>
             {
                 using var content = new ObjectContent(typeof(T), value, MessagePackMediaTypeFormatter.DefaultInstance);
                 return await client.PostAsync(requestUri, content, context);
             }, CancellationToken.None).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return response;
         }
 
         /// <summary>

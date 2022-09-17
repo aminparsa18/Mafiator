@@ -1,6 +1,8 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Helpers;
 using Mafiator.Entities;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,11 +25,13 @@ public class Create : EndpointBaseAsync
     .WithRequest<RoomCreateRequest>
     .WithActionResult<ApiResult<RoomCreateResult>>
 {
+    private readonly IValidator<RoomCreateRequest> _validator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public Create(IUnitOfWork unitOfWork, IMapper mapper)
+    public Create(IValidator<RoomCreateRequest> validator, IUnitOfWork unitOfWork, IMapper mapper)
     {
+        _validator = validator;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -38,6 +43,13 @@ public class Create : EndpointBaseAsync
     [OpenApiTag("Rooms Endpoints")]
     public override async Task<ActionResult<ApiResult<RoomCreateResult>>> HandleAsync(RoomCreateRequest request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new ApiResult
+            {
+                StatusCode = ApiResultStatusCode.BadRequest,
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+            });
         var room = _mapper.Map<RoomCreateRequest, Room>(request);
         room.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
         room.Code = RandomHelper.CreateRandomText(8);

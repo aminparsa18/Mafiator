@@ -1,4 +1,8 @@
 ﻿using Ardalis.ApiEndpoints;
+using FluentValidation;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Api.Auth;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Votes;
 using Mafiator.Entities;
 using Mafiator.Repository;
@@ -17,12 +21,14 @@ namespace Mafiator.Api.Endpoints.Votes;
 [Produces("application/x-msgpack")]
 public class Create : EndpointBaseAsync
     .WithRequest<VoteCreateRequest>
-    .WithoutResult
+    .WithActionResult<ApiResult>
 {
+    private readonly IValidator<VoteCreateRequest> _validator;
     private readonly IUnitOfWork _unitOfWork;
 
-    public Create(IUnitOfWork unitOfWork)
+    public Create(IUnitOfWork unitOfWork, IValidator<VoteCreateRequest> validator)
     {
+        _validator = validator;
         _unitOfWork = unitOfWork;
     }
 
@@ -31,8 +37,15 @@ public class Create : EndpointBaseAsync
     [ProducesResponseType(StatusCodes.Status200OK)]
     [OpenApiOperation("Votes.Create", "", "Creates a new vote.")]
     [OpenApiTag("Votes Endpoints")]
-    public override async Task HandleAsync(VoteCreateRequest request, CancellationToken cancellationToken = default)
+    public override async Task<ActionResult<ApiResult>> HandleAsync(VoteCreateRequest request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new ApiResult
+            {
+                StatusCode = ApiResultStatusCode.BadRequest,
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+            });
         await _unitOfWork.Vote.AddRangeFast(request.Targets.Select(s => new Vote()
         {
             Id = Guid.NewGuid(),
@@ -42,5 +55,9 @@ public class Create : EndpointBaseAsync
             TargetId = s,
             VoterId = request.VoterId
         }));
+        return Ok(new ApiResult
+        {
+            IsSuccess = true
+        });
     }
 }

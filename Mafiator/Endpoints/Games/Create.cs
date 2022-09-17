@@ -1,5 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Games;
@@ -24,11 +25,13 @@ public class Create : EndpointBaseAsync
     .WithRequest<GameCreateRequest>
     .WithActionResult<ApiResult<GameCreateResult>>
 {
+    private readonly IValidator<GameCreateRequest> _validator;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public Create(IUnitOfWork unitOfWork, IMapper mapper)
+    public Create(IValidator<GameCreateRequest> validator, IUnitOfWork unitOfWork, IMapper mapper)
     {
+        _validator = validator;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -40,6 +43,13 @@ public class Create : EndpointBaseAsync
     [OpenApiTag("Games Endpoints")]
     public override async Task<ActionResult<ApiResult<GameCreateResult>>> HandleAsync(GameCreateRequest request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new ApiResult
+            {
+                StatusCode = ApiResultStatusCode.BadRequest,
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
+            });
         var already = await _unitOfWork.Game.IsAlreadyPlaying(request.RoomId.ToString());
         if (!string.IsNullOrEmpty(already))
             return Ok(new ApiResult<GameCreateResult>()

@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api.Auth;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Users;
@@ -18,10 +19,12 @@ public class Login : EndpointBaseAsync
     .WithActionResult<AuthResult>
 {
     private readonly IIdentityService _identityService;
+    private readonly IValidator<UserLoginRequest> _validator;
 
-    public Login(IIdentityService identityService)
+    public Login(IIdentityService identityService, IValidator<UserLoginRequest> validator)
     {
         _identityService = identityService;
+        _validator = validator;
     }
 
     [ApiVersion("1.0")]
@@ -31,11 +34,12 @@ public class Login : EndpointBaseAsync
     [OpenApiTag("Users Endpoints")]
     public override async Task<ActionResult<AuthResult>> HandleAsync(UserLoginRequest request, CancellationToken cancellationToken = default)
     {
-        if (!ModelState.IsValid)
-            return Ok(new AuthResult()
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            return Ok(new AuthResult
             {
                 StatusCode = ApiResultStatusCode.BadRequest,
-                Errors = ModelState.Values.SelectMany(v => v.Errors.Select(s => s.ErrorMessage))
+                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
             });
         var result = await _identityService.Login(request);
         return Ok(result);

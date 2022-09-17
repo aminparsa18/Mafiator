@@ -65,19 +65,19 @@ namespace MafiatorApp.Droid
             }
         }
 
-        public override Android.Content.Res.Resources Resources
-        {
-            get
-            {
-                var res = base.Resources;
-                var config = new Configuration();
-                config.SetToDefaults();
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.NMr1)
-                    return CreateConfigurationContext(config)?.Resources;
-                res?.UpdateConfiguration(config, res.DisplayMetrics);
-                return res;
-            }
-        }
+        //public override Android.Content.Res.Resources Resources
+        //{
+        //    get
+        //    {
+        //        var res = base.Resources;
+        //        var config = new Configuration();
+        //        config.SetToDefaults();
+        //        if (Build.VERSION.SdkInt >= BuildVersionCodes.NMr1)
+        //            return CreateConfigurationContext(config)?.Resources;
+        //        res?.UpdateConfiguration(config, res.DisplayMetrics);
+        //        return res;
+        //    }
+        //}
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
             [GeneratedEnum] Permission[] grantResults)

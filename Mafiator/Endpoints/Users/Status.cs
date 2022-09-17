@@ -30,7 +30,7 @@ public class Status : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/users/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Users.Get", "Retrieves user game status.")]
+    [OpenApiOperation("Users.Status", "Retrieves user game status.")]
     [OpenApiTag("Users Endpoints")]
     public override async Task<ActionResult<ApiResult<UserStatusResult>>> HandleAsync(CancellationToken cancellationToken = default)
     {

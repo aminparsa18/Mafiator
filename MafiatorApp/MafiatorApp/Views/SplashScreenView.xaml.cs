@@ -1,8 +1,7 @@
-﻿using System;
-using System.Reflection;
-using Mafiator.Common.Client.Cache;
+﻿using Mafiator.Common.Client.Cache;
 using MafiatorApp.ViewModels;
 using MediaManager;
+using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,10 +10,8 @@ namespace MafiatorApp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SplashScreenView : ContentPage
     {
-        private readonly Uri uri;
-        public SplashScreenView(Uri uri)
+        public SplashScreenView()
         {
-            this.uri = uri;
             NavigationPage.SetHasNavigationBar(this,false);
             InitializeComponent();
         }
@@ -29,12 +26,8 @@ namespace MafiatorApp.Views
                 await Logo.FadeTo(1, 600, Easing.Linear);
                 await Logo.RelRotateTo(360, 400, Easing.Linear);
                 await AppName.FadeTo(1, 800, Easing.Linear);
-                await ((SplashScreenViewModel) this.BindingContext).Navigate(uri);
-               // Navigation.RemovePage(this);
-
+                await ((SplashScreenViewModel)this.BindingContext).Navigate();
             });
-          
-          
         }
     }
 }
