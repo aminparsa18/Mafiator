@@ -1,4 +1,5 @@
-﻿using Mafiator.Common.Client.Cache;
+﻿using Mafiator.Common.Client;
+using Mafiator.Common.Client.Cache;
 using MafiatorApp.Models;
 using MafiatorApp.ViewModels.Base;
 using MessagePipe;
@@ -31,8 +32,8 @@ namespace MafiatorApp.ViewModels
         {
             this.publisher = publisher;
             Countries=new ObservableRangeCollection<Country>();
-            LoadData();
-            //LoadDataCommand=new AsyncCommand(LoadData);
+            LoadDataCommand=new AsyncCommand(LoadData);
+            LoadDataCommand.ExecuteAsync();
             PopCommand=new AsyncCommand(Pop);
             CountrySelectedCommand=new AsyncCommand(CountrySelected);
         }
@@ -48,14 +49,14 @@ namespace MafiatorApp.ViewModels
             await NavigationService.RemovePopupAsync();
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
             var sw = new Stopwatch();
+            var json = await BaseHttpClient.Instance.GetStringAsync("https://filebin.net/868ee5vt07j21ndf/countries.json");
             sw.Start();
             //var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MafiatorApp.countries.json");
-            var countries = Barrel.Current.Get<List<Country>>("Countries");
-            var ss = sw.ElapsedMilliseconds;
-           // countries =await JsonSerializer.DeserializeAsync<List<Country>>(stream);
+            countries = JsonSerializer.Deserialize<List<Country>>(json);
+            var tt = sw.ElapsedMilliseconds;
             Countries.AddRange(countries);
         }
 

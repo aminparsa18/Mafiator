@@ -6,7 +6,7 @@ using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,8 +30,7 @@ public class Login : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/users/login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Users.Login", "", "login user.")]
-    [OpenApiTag("Users Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Login), Tags = new[] { "Users Endpoints" })]
     public override async Task<ActionResult<AuthResult>> HandleAsync(UserLoginRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

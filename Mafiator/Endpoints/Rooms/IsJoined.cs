@@ -4,7 +4,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,8 +26,7 @@ public class IsJoined : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/rooms/isJoined/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Rooms.IsJoined", "", "Indicated if user is joined in room .")]
-    [OpenApiTag("Rooms Endpoints")]
+    [SwaggerOperation(OperationId = nameof(IsJoined), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string roomId, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);

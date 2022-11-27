@@ -10,7 +10,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,8 +39,7 @@ public class Create : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/games")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Games.Create", "", "Creates a new game.")]
-    [OpenApiTag("Games Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Game Endpoints" })]
     public override async Task<ActionResult<ApiResult<GameCreateResult>>> HandleAsync(GameCreateRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Mafiator.Game.Controls;assembly=Mafiator.Game">
 
     <!--<Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
@@ -20,25 +21,25 @@
         <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
     </Style>-->
 
-    <Style TargetType="userControls:TransitionNavigationPage">
+    <!--<Style TargetType="userControls:TransitionNavigationPage">
         <Setter Property="BarBackgroundColor" Value="{StaticResource Day1}" />
         <Setter Property="BarTextColor" Value="White" />
-    </Style>
+    </Style>-->
 
     <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
         <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night3}}" />
         <Setter Property="NavigationPage.HasNavigationBar" Value="False" />
     </Style>
-    <Style TargetType="userControls:ExtendedEntry">
+    <!--<Style TargetType="userControls:ExtendedEntry">
         <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="PlaceholderColor" Value="#B5ADAD" />
         <Setter Property="InvalidLineColor" Value="{StaticResource Error}" />
         <Setter Property="IsTextPredictionEnabled" Value="False" />
-    </Style>
-    <Style TargetType="Editor">
+    </Style>-->
+    <!--<Style TargetType="Editor">
         <Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
         <Setter Property="HeightRequest" Value="120" />
         <Setter Property="BackgroundColor" Value="Transparent" />
@@ -51,13 +52,13 @@
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontFamily" Value="{StaticResource NormalFont}"></Setter>
         <Setter Property="TextColor" Value="White" />
-    </Style>
+    </Style>-->
     <Style TargetType="Frame">
         <Setter Property="CornerRadius" Value="16" />
         <Setter Property="HasShadow" Value="True" />
         <Setter Property="Padding" Value="8" />
     </Style>
-    <Style TargetType="userControls:Popup">
+    <Style TargetType="controls:PopupFrame">
         <Setter Property="CornerRadius" Value="52" />
         <Setter Property="HasShadow" Value="True" />
         <Setter Property="Padding" Value="0" />
@@ -76,7 +77,7 @@
     </Style>
     <Style TargetType="Button">
         <Setter Property="CornerRadius" Value="14" />
-        <Setter Property="androidSpecific:Button.UseDefaultShadow" Value="True" />
+        <!--<Setter Property="androidSpecific:Button.UseDefaultShadow" Value="True" />-->
         <Setter Property="FontSize" Value="12" />
         <Setter Property="TextColor" Value="White" />
         <Setter Property="Margin" Value="0,8" />
@@ -88,7 +89,7 @@
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="CornerRadius" Value="30" />
     </Style>
-    <Style TargetType="controls:MTAdView">
+    <!--<Style TargetType="controls:MTAdView">
         <Setter Property="HeightRequest" Value="90"/>
-    </Style>
+    </Style>-->
 </ResourceDictionary>

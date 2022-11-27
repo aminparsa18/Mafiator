@@ -5,7 +5,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +27,7 @@ public class Get : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/gems")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Gems.GetAll", "", "Retrieves all gems.")]
-    [OpenApiTag("Gems Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Gem Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<GemResult>>>> HandleAsync(CancellationToken cancellationToken = default)
     {
         return Ok(new ApiResult<IEnumerable<GemResult>>()

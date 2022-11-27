@@ -5,7 +5,7 @@ using Mafiator.Service.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.GameEvents;
@@ -25,8 +25,7 @@ public class GetNightResult : EndpointBaseSync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/gameevents/night/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("GameEvents.GetNughtResult", "", "Get results of night in a game.")]
-    [OpenApiTag("Game Events Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Game Events Endpoints" })]
     public override ActionResult<ApiResult<IEnumerable<GameEventResult>>> Handle(string gameId)
     {
         return Ok(new ApiResult<IEnumerable<GameEventResult>>()

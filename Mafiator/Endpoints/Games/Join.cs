@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -42,8 +42,7 @@ public class Join : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/games/join/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Games.Join", "", "Joins a game.")]
-    [OpenApiTag("Games Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Join), Tags = new[] { "Game Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var members = await _unitOfWork.GameMember.GetUsersByGame(gameId);

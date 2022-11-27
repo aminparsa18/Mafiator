@@ -1,6 +1,5 @@
-﻿using Mafiator.Common.Server.Media;
-using Microsoft.Azure.Management.Media;
-using Microsoft.Azure.Management.Media.Models;
+﻿using Azure.ResourceManager.Media.Models;
+using Mafiator.Common.Server.Media;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using Microsoft.Rest;
@@ -30,14 +29,14 @@ namespace Mafiator.Service.Contracts.Impl
         /// </summary>
         /// <returns>A task.</returns>
         // <CreateMediaServicesClientAsync>
-        public async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync()
-        {
-            var credentials = await GetCredentialsAsync();
-            return new AzureMediaServicesClient(_credential.ArmEndpoint, credentials)
-            {
-                SubscriptionId = _credential.SubscriptionId,
-            };
-        }
+        //public async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync()
+        //{
+        //    var credentials = await GetCredentialsAsync();
+        //    return new AzureMediaServicesClient(_credential.ArmEndpoint, credentials)
+        //    {
+        //        SubscriptionId = _credential.SubscriptionId,
+        //    };
+        //}
         private  async Task<ServiceClientCredentials> GetCredentialsAsync()
         {
             // Use ConfidentialClientApplicationBuilder.AcquireTokenForClient to get a token using a service principal with symmetric key
@@ -58,72 +57,68 @@ namespace Mafiator.Service.Contracts.Impl
        
         public async Task<Tuple<string,string>> CreateLiveEvent(string liveEventName)
         {
-            var client = await CreateMediaServicesClientAsync();
-            var mediaService = await client.Mediaservices.GetAsync(_credential.ResourceGroup, _credential.AccountName);
-            IPRange allAllowIpRange = new(
-                "AllowAll",
-                "0.0.0.0",
-                0
-            );
-            LiveEventInputAccessControl liveEventInputAccess = new()
-            {
-                Ip = new IPAccessControl(
-                    new[]
-                    {
-                        allAllowIpRange
-                    }
-                )
-            };
+            //var client = await CreateMediaServicesClientAsync();
+            //var mediaService = await client.Mediaservices.GetAsync(_credential.ResourceGroup, _credential.AccountName);
+            //IPRange allAllowIpRange = new IPRange();
+            //LiveEventInputAccessControl liveEventInputAccess = new()
+            //{
+            //    Ip = new IPAccessControl(
+            //        new[]
+            //        {
+            //            allAllowIpRange
+            //        }
+            //    )
+            //};
 
-            LiveEventPreview liveEventPreview = new()
-            {
-                AccessControl = new LiveEventPreviewAccessControl(
-                    new IPAccessControl(
-                        new[]
-                        {
-                            allAllowIpRange
-                        }
-                    )
-                )
-            };
+            //LiveEventPreview liveEventPreview = new()
+            //{
+            //    AccessControl = new LiveEventPreviewAccessControl(
+            //        new IPAccessControl(
+            //            new[]
+            //            {
+            //                allAllowIpRange
+            //            }
+            //        )
+            //    )
+            //};
 
-            LiveEvent liveEvent = new(
-                mediaService.Location,
-                description: "Game Live Event",
-                useStaticHostname: true,
-                input: new LiveEventInput(
-                    LiveEventInputProtocol
-                        .RTMP,
-                    accessToken:
-                    "acf7b6ef-8a37-425f-b8fc-51c2d6a5a86a",
-                    accessControl: liveEventInputAccess, 
-                    keyFrameIntervalDuration: "PT2S"
-                ),
-                encoding: new LiveEventEncoding(
-                    LiveEventEncodingType.None 
-                ),
-                preview: liveEventPreview,
-                streamOptions: new List<StreamOptionsFlag?>()
-                {
-                    StreamOptionsFlag.LowLatency
-                }
-            );
+            //LiveEvent liveEvent = new(
+            //    mediaService.Location,
+            //    description: "Game Live Event",
+            //    useStaticHostname: true,
+            //    input: new LiveEventInput(
+            //        LiveEventInputProtocol
+            //            .RTMP,
+            //        accessToken:
+            //        "acf7b6ef-8a37-425f-b8fc-51c2d6a5a86a",
+            //        accessControl: liveEventInputAccess, 
+            //        keyFrameIntervalDuration: "PT2S"
+            //    ),
+            //    encoding: new LiveEventEncoding(
+            //        LiveEventEncodingType.None 
+            //    ),
+            //    preview: liveEventPreview,
+            //    streamOptions: new List<StreamOptionsFlag?>()
+            //    {
+            //        StreamOptionsFlag.LowLatency
+            //    }
+            //);
 
             Console.WriteLine("Creating the LiveEvent, please be patient as this can take time to complete async.");
             Console.WriteLine(
                 "Live Event creation is an async operation in Azure and timing can depend on resources available.");
 
-            var watch = Stopwatch.StartNew();
-            liveEvent = await client.LiveEvents.CreateAsync(
-                _credential.ResourceGroup,
-                _credential.AccountName,
-                liveEventName,
-                liveEvent,
-                autoStart: false);
-            watch.Stop();
-            var elapsedTime =
-                $":{watch.Elapsed.Seconds:00}.{watch.Elapsed.Milliseconds / 10:00}";
-            Console.WriteLine($"Create Live Event run time : {elapsedTime}");
+            //var watch = Stopwatch.StartNew();
+            //liveEvent = await client.LiveEvents.CreateAsync(
+            //    _credential.ResourceGroup,
+            //    _credential.AccountName,
+            //    liveEventName,
+            //    liveEvent,
+            //    autoStart: false);
+            //watch.Stop();
+            //var elapsedTime =
+            //    $":{watch.Elapsed.Seconds:00}.{watch.Elapsed.Milliseconds / 10:00}";
+            //Console.WriteLine($"Create Live Event run time : {elapsedTime}");
 
             //#region CreateAsset
             //// Create an Asset for the LiveOutput to use. Think of this as the "tape" that will be recorded to. 
@@ -138,41 +133,41 @@ namespace Mafiator.Service.Contracts.Impl
             Console.WriteLine($"Creating a live output named mftorliveoutput");
             Console.WriteLine();
 
-            watch = Stopwatch.StartNew();
-            // See the REST API for details on each of the settings on Live Output
-            // https://docs.microsoft.com/rest/api/media/liveoutputs/create
-            LiveOutput liveOutput = new(
-                "mftorlive",
-                manifestName: manifestName, 
-                archiveWindowLength: TimeSpan.FromHours(2)
-            );
-            liveOutput = await client.LiveOutputs.CreateAsync(
-                _credential.ResourceGroup,
-                _credential.AccountName,
-                liveEventName,
-                "mftorliveoutput",
-                liveOutput);
-            elapsedTime = $":{watch.Elapsed.Seconds:00}.{watch.Elapsed.Milliseconds / 10:00}";
-            Console.WriteLine($"Create Live Output run time : {elapsedTime}");
+            //watch = Stopwatch.StartNew();
+            //// See the REST API for details on each of the settings on Live Output
+            //// https://docs.microsoft.com/rest/api/media/liveoutputs/create
+            //LiveOutput liveOutput = new(
+            //    "mftorlive",
+            //    manifestName: manifestName, 
+            //    archiveWindowLength: TimeSpan.FromHours(2)
+            //);
+            //liveOutput = await client.LiveOutputs.CreateAsync(
+            //    _credential.ResourceGroup,
+            //    _credential.AccountName,
+            //    liveEventName,
+            //    "mftorliveoutput",
+            //    liveOutput);
+            //elapsedTime = $":{watch.Elapsed.Seconds:00}.{watch.Elapsed.Milliseconds / 10:00}";
+            //Console.WriteLine($"Create Live Output run time : {elapsedTime}");
             Console.WriteLine();
             #endregion
 
 
             Console.WriteLine("Starting the Live Event now... please stand by as this can take time...");
-            watch = Stopwatch.StartNew();
-            // Start the Live Event - this will take some time...
-            await client.LiveEvents.StartAsync(_credential.ResourceGroup, _credential.AccountName, liveEventName);
-            elapsedTime = $":{watch.Elapsed.Seconds:00}.{watch.Elapsed.Milliseconds / 10:00}";
-            Console.WriteLine($"Start Live Event run time : {elapsedTime}");
-            Console.WriteLine();
+            //watch = Stopwatch.StartNew();
+            //// Start the Live Event - this will take some time...
+            //await client.LiveEvents.StartAsync(_credential.ResourceGroup, _credential.AccountName, liveEventName);
+            //elapsedTime = $":{watch.Elapsed.Seconds:00}.{watch.Elapsed.Milliseconds / 10:00}";
+            //Console.WriteLine($"Start Live Event run time : {elapsedTime}");
+            //Console.WriteLine();
 
-            // Refresh the liveEvent object's settings after starting it...
-            liveEvent = await client.LiveEvents.GetAsync(_credential.ResourceGroup, _credential.AccountName, liveEventName);
-            var ingestUrl = liveEvent.Input.Endpoints.First().Url;
-            var previewUrl = liveEvent.Preview.Endpoints.First().Url;
-            _cache.SetCache(ingestUrl,"Ingest-"+liveEventName);
-            _cache.SetCache(previewUrl,"Preview-"+liveEventName);
-            return Tuple.Create(ingestUrl,previewUrl);
+            //// Refresh the liveEvent object's settings after starting it...
+            //liveEvent = await client.LiveEvents.GetAsync(_credential.ResourceGroup, _credential.AccountName, liveEventName);
+            //var ingestUrl = liveEvent.Input.Endpoints.First().Url;
+            //var previewUrl = liveEvent.Preview.Endpoints.First().Url;
+            //_cache.SetCache(ingestUrl,"Ingest-"+liveEventName);
+            //_cache.SetCache(previewUrl,"Preview-"+liveEventName);
+            return Tuple.Create("", "");// ingestUrl,previewUrl);
         }
     }
 }

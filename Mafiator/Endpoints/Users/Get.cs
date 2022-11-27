@@ -6,7 +6,7 @@ using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,13 +28,12 @@ public class Get : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Users.Get", "Retrieves user details.")]
-    [OpenApiTag("Users Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Users Endpoints" })]
     public override async Task<ActionResult<ApiResult<UserDetailsResult>>> HandleAsync(CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
         var res = await _identityService.GetUser(userId);
-        res.Data.Image = Constants.BlobStorageEndpoint + res.Data.Image;
+        res.Data.Image = Data.Constants.BlobStorageEndpoint + res.Data.Image;
         return Ok(res);
     }
 }

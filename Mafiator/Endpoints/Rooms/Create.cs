@@ -10,7 +10,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -39,8 +39,7 @@ public class Create : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/rooms")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Rooms.Create", "", "Creates a new room.")]
-    [OpenApiTag("Rooms Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult<RoomCreateResult>>> HandleAsync(RoomCreateRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

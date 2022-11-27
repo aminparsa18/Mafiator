@@ -1,11 +1,11 @@
 ﻿using Ardalis.ApiEndpoints;
+using Mafiator.Api.Constants;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Avatars;
-using Mafiator.Data;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,16 +26,15 @@ public class Get : EndpointBaseAsync
     }
 
     [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/avatars")]
+    [HttpGet(ApiUrls.Avatars)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Avatar.GetAll", "Retrieves all avatars data.")]
-    [OpenApiTag("Avatars Endpoints")]
+    [SwaggerOperation(OperationId = nameof(ApiUrls.Avatars), Tags = new[] { "Avatars Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<AvatarResult>>>> HandleAsync(CancellationToken cancellationToken = default)
     {
         IEnumerable<AvatarResult> avatars = await _unitOfWork.Avatar.GetAllDtosFast();
         foreach (var avatar in avatars)
         {
-            avatar.Name = string.Join(Constants.BlobStorageEndpoint, avatar.Name);
+            avatar.Name = string.Join(Data.Constants.BlobStorageEndpoint, avatar.Name);
         }
         return Ok(new ApiResult<IEnumerable<AvatarResult>>
         {

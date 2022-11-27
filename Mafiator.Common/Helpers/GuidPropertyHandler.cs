@@ -1,5 +1,5 @@
-﻿using RepoDb;
-using RepoDb.Interfaces;
+﻿using RepoDb.Interfaces;
+using RepoDb.Options;
 using System;
 
 namespace Mafiator.Common.Helpers;
@@ -10,12 +10,13 @@ namespace Mafiator.Common.Helpers;
 /// </summary>
 public class GuidPropertyHandler : IPropertyHandler<string, Guid>
 {
-    public Guid Get(string input, ClassProperty property)
+    public Guid Get(string input, PropertyHandlerGetOptions options)
     {
         return Guid.Parse(input);
     }
 
-    public string Set(Guid input, ClassProperty property)
+
+    public string Set(Guid input, PropertyHandlerSetOptions options)
     {
         return input.ToString();
     }

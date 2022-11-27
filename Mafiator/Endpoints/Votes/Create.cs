@@ -1,7 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Api.Auth;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Votes;
 using Mafiator.Entities;
@@ -9,7 +8,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
 using System.Threading;
@@ -35,8 +34,7 @@ public class Create : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/votes")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Votes.Create", "", "Creates a new vote.")]
-    [OpenApiTag("Votes Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Votes Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(VoteCreateRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

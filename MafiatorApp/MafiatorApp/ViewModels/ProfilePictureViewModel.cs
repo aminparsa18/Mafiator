@@ -78,7 +78,7 @@ namespace MafiatorApp.ViewModels
         public ObservableRangeCollection<Avatar> Avatars { get; set; }
         public IAsyncCommand LoadAvatarsCommand { get; set; }
         public IAsyncCommand AvatarSelectedCommand { get; set; }
-        public ICommand SkipCommand { get; set; }
+        public IAsyncCommand SkipCommand { get; set; }
         public IAsyncCommand ChoosePhotoCommand { get; set; }
         public IAsyncCommand SetPhotoCommand { get; set; }
 
@@ -98,7 +98,7 @@ namespace MafiatorApp.ViewModels
             _publisher = publisher;
             _usersApiService = usersApiService;
             DisplayName = new ValidatableObject<string>();
-            SkipCommand = new Command(Skip);
+            SkipCommand = new AsyncCommand(Skip);
             ChoosePhotoCommand = new AsyncCommand(ChoosePhoto);
             SetPhotoCommand = new AsyncCommand(SetPhoto);
             Avatars = new ObservableRangeCollection<Avatar>();
@@ -221,7 +221,7 @@ namespace MafiatorApp.ViewModels
                 DependencyService.Get<IAlert>().ShortAlert(response.Errors.ToString(), MessageType.Error);
         }
 
-        private async void Skip()
+        private async Task Skip()
         {
             if (isEdit)
                 await NavigationService.RemoveLastFromBackStackAsync();

@@ -7,7 +7,7 @@ using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,8 +32,7 @@ public class Register : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/users/register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Users.Create", "", "Creates a new user.")]
-    [OpenApiTag("Users Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Register), Tags = new[] { "Users Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(RegisterUserRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

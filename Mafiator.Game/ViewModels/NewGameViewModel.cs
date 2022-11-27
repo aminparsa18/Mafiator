@@ -1,0 +1,167 @@
+﻿using CommunityToolkit.Mvvm.Input;
+using Mafiator.Common.Client.Extensions;
+using Mafiator.Common.Client.Services.Games;
+using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Game.Models;
+using Mafiator.Game.Models.PipeEvents;
+using Mafiator.Game.Resources.Texts;
+using Mafiator.Game.Services;
+using Mafiator.Game.Validations;
+using Mafiator.Game.ViewModels.Base;
+using MessagePipe;
+using Microsoft.Extensions.Localization;
+using Plugin.MauiMTAdmob;
+
+namespace Mafiator.Game.ViewModels
+{
+    public class NewGameViewModel : ViewModelBase
+    {
+        private ValidatableObject<short> capacity;
+        public ValidatableObject<short> Capacity
+        {
+            get => capacity;
+            set => SetProperty(ref capacity, value);
+        }
+
+        private bool isCapacityValid;
+
+        public bool IsCapacityValid
+        {
+            get => isCapacityValid;
+            set => SetProperty(ref isCapacityValid, value);
+        }
+
+        private bool isImmediate;
+
+        public bool IsImmediate
+        {
+            get => isImmediate;
+            set => SetProperty(ref isImmediate, value);
+        }
+
+        private bool isPublic;
+
+        public bool IsPublic
+        {
+            get => isPublic;
+            set => SetProperty(ref isPublic, value);
+        }
+        private DateTime? date = DateTime.Now;
+
+        public DateTime? Date
+        {
+            get => date;
+            set => SetProperty(ref date, value);
+        }
+
+        public ObservableRangeCollection<NewGameRole> Roles { get; set; }
+        public IAsyncRelayCommand SetRolesCommand { get; set; }
+        public IAsyncRelayCommand SaveGameCommand { get; set; }
+        public IAsyncRelayCommand PopCommand { get; set; }
+        public IRelayCommand PublicHelpCommand { get; set; }
+
+        private readonly IGamesApiService _gamesApiService;
+        private readonly IPublisher<UpdateRoomEvent> _publisher;
+        private Guid _roomId;
+
+        public NewGameViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
+            IGamesApiService gamesApiService, IPublisher<UpdateRoomEvent> publisher) : base(navigationService, localizer, toastService)
+        {
+            _gamesApiService = gamesApiService;
+            _publisher = publisher;
+            Capacity = new ValidatableObject<short> { Value = 6 };
+            Roles = new ObservableRangeCollection<NewGameRole>();
+            SetRolesCommand = new AsyncRelayCommand(SetRoles);
+            SaveGameCommand = new AsyncRelayCommand(SaveGame);
+            PublicHelpCommand = new RelayCommand(PublicHelp);
+            PopCommand = new AsyncRelayCommand(Pop);
+        }
+
+        private void PublicHelp()
+        {
+            _toastService.ShortAlert("Everyone can observe your game live as guests", MessageType.Info);
+        }
+
+        private async Task Pop()
+        {
+            SystemConstant.SelectedRoles = null;
+            await _navigationService.RemovePopupAsync();
+        }
+
+        public override Task InitializeAsync(object navigationData)
+        {
+            if (navigationData is Guid roomId)
+                _roomId = roomId;
+
+            return base.InitializeAsync(navigationData);
+        }
+
+        private async Task SaveGame()
+        {
+            if (Capacity.Value < 6)
+            {
+                _toastService.ShortAlert("Game Players must be at least 6 person", MessageType.Error);
+                return;
+            }
+
+            if (SystemConstant.SelectedRoles == null || !SystemConstant.SelectedRoles.Any())
+            {
+                await _navigationService.NavigateToPopupAsync<SetRolesViewModel>(Capacity.Value);
+                return;
+            }
+
+            await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Creating Game...");
+            var response = await _gamesApiService.AddGame(new GameCreateRequest()
+            {
+                RoomId = _roomId,
+                Roles = SystemConstant.SelectedRoles.Select(s => new GameRoleCreateRequest() { Role = s.Role, Count = s.Count })
+                    .ToList(),
+                StartDate = IsImmediate ? DateTime.Now : Date.Value
+            });
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsMessagePackAsync<ApiResult<GameCreateResult>>();
+                if (result.IsSuccess)
+                {
+                    SystemConstant.SelectedRoles = null;
+                    _publisher.Publish(new UpdateRoomEvent());
+                    CrossMauiMTAdmob.Current.LoadInterstitial("");
+                    await _navigationService.RemovePopupAsync();
+                }
+                else
+                {
+                    _toastService.ShortAlert(result.Errors.ToString(), MessageType.Error);
+                }
+            }
+            else
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                _toastService.ShortAlert("result.Errors[0]", MessageType.Error);
+            }
+
+            await _navigationService.RemovePopupAsync();
+        }
+
+        private async Task SetRoles()
+        {
+            if (Capacity.Value < 6)
+                _toastService.ShortAlert("Game Players must be at least 6 person", MessageType.Error);
+            else
+                await _navigationService.NavigateToPopupAsync<SetRolesViewModel>(Capacity.Value);
+        }
+
+        public void RefreshRoles()
+        {
+            Roles.Clear();
+            Roles.AddRange(SystemConstant.SelectedRoles);
+        }
+
+        public void SetTime(in TimeSpan time)
+        {
+            if (!Date.HasValue)
+                return;
+            Date = Date.Value.Date + time;
+        }
+    }
+}

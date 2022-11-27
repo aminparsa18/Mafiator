@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,14 +28,13 @@ public class GetByGame : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/gamemembers/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("GameMembers.GetByGame", "", "Retrieves all members in a game.")]
-    [OpenApiTag("GameMembers Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetByGame), Tags = new[] { "Game members Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<GameMemberResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var members = await _unitOfWork.GameMember.GetByGameFast(gameId);
         foreach (var gameMemberDto in members)
         {
-            gameMemberDto.Image = Constants.BlobStorageEndpoint + gameMemberDto.Image;
+            gameMemberDto.Image = Data.Constants.BlobStorageEndpoint + gameMemberDto.Image;
         }
         return Ok(new ApiResult<IEnumerable<GameMemberResult>>()
         {

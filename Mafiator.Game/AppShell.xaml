@@ -3,12 +3,12 @@
     x:Class="Mafiator.Game.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Mafiator.Game"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:local="clr-namespace:Mafiator.Game.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        ContentTemplate="{DataTemplate local:SplashView}"
         Route="MainPage" />
 
 </Shell>

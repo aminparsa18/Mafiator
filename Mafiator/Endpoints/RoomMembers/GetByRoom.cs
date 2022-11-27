@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,15 +28,14 @@ public class GetByRoom : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/roommembers/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("RoomMembers.GetByRoom", "", "Retrieves all members in a room.")]
-    [OpenApiTag("RoomMembers Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetByRoom), Tags = new[] { "Room member Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<RoomMemberResult>>>> HandleAsync(string roomId, CancellationToken cancellationToken = default)
     {
         var data = await _unitOfWork.RoomMember.GetByRoomFast(roomId);
         foreach (var item in data)
         {
             item.Level = (item.TotalGame / 10) + 1;
-            item.Image = Constants.BlobStorageEndpoint + item.Image;
+            item.Image = Data.Constants.BlobStorageEndpoint + item.Image;
         }
 
         return Ok(new ApiResult<IEnumerable<RoomMemberResult>>()

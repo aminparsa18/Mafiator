@@ -9,7 +9,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -35,8 +35,7 @@ public class Cure : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/gameevents/cure")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("GameEvents.Cure", "", "Cures a player by doctor.")]
-    [OpenApiTag("Game Events Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Cure), Tags = new[] { "Game Event Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(GameEventRequest request, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);

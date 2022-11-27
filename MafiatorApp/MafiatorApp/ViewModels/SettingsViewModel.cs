@@ -22,7 +22,7 @@ namespace MafiatorApp.ViewModels
             get => playMusic;
             set
             {
-                TogglePlayMusic();
+                _ = TogglePlayMusic();
                 SetProperty(ref playMusic, value);
             }
         }
@@ -61,11 +61,12 @@ namespace MafiatorApp.ViewModels
 
         public bool Initial = true;
         public ICommand PlaySoundCommand { get; set; }
-        public ICommand PlayMusicCommand { get; set; }
+        public IAsyncCommand PlayMusicCommand { get; set; }
         public ICommand AllowNotificationCommand { get; set; }
         public ICommand AutoplayCommand { get; set; }
         public IAsyncCommand ChangeLangCommand { get; set; }
         public IAsyncCommand PopCommand { get; set; }
+
         private readonly ISubscriber<ChangeLanguageEvent> _subscriber;
         private readonly IDisposable _disposable;
 
@@ -87,7 +88,7 @@ namespace MafiatorApp.ViewModels
                 Country = new Country() { Code = culture, Name = "English" };
             PopCommand = new AsyncCommand(Pop);
             PlaySoundCommand = new Command(TogglePlaySound);
-            PlayMusicCommand = new Command(TogglePlayMusic);
+            PlayMusicCommand = new AsyncCommand(TogglePlayMusic);
             AllowNotificationCommand = new Command(ToggleAllowNotification);
             AutoplayCommand = new Command(ToggleAutoplay);
             ChangeLangCommand = new AsyncCommand(ChangeLang);
@@ -112,7 +113,7 @@ namespace MafiatorApp.ViewModels
             Autoplay = !Autoplay;
         }
 
-        private async void TogglePlayMusic()
+        private async Task TogglePlayMusic()
         {
             if (Initial) return;
             //make it reverse

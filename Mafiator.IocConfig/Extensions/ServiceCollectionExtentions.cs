@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
 using Hangfire;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Common.Extensions;
 using Mafiator.Common.Server.Media;
 using Mafiator.Data;
@@ -72,28 +70,29 @@ namespace Mafiator.IocConfig.Extensions
 
         public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
         {
-            services.AddSwaggerDocument(setting =>
-            {
-                setting.SchemaProcessors.Add(new MessagePackAttributesSchemaProcessor());
-                setting.PostProcess = document =>
-                {
-                    document.Info.Version = "v1";
-                    document.Info.Title = "Mafiator API";
-                    document.Info.Description = "legendary online game forever";
-                    document.Info.TermsOfService = "None";
-                    document.Info.Contact = new NSwag.OpenApiContact
-                    {
-                        Name = "Amin Parsa",
-                        Email = "aminparsa18@gmail.com",
-                        Url = "https://aminparsa.me"
-                    };
-                    document.Info.License = new NSwag.OpenApiLicense
-                    {
-                        Name = "MIT License",
-                        Url = "https://opensource.org/licenses/MIT"
-                    };
-                };
-            });
+            services.AddSwaggerGen();
+            //services.AddSwaggerDocument(setting =>
+            //{
+            //    setting.SchemaProcessors.Add(new MessagePackAttributesSchemaProcessor());
+            //    setting.PostProcess = document =>
+            //    {
+            //        document.Info.Version = "v1";
+            //        document.Info.Title = "Mafiator API";
+            //        document.Info.Description = "legendary online game forever";
+            //        document.Info.TermsOfService = "None";
+            //        document.Info.Contact = new NSwag.OpenApiContact
+            //        {
+            //            Name = "Amin Parsa",
+            //            Email = "aminparsa18@gmail.com",
+            //            Url = "https://aminparsa.me"
+            //        };
+            //        document.Info.License = new NSwag.OpenApiLicense
+            //        {
+            //            Name = "MIT License",
+            //            Url = "https://opensource.org/licenses/MIT"
+            //        };
+            //    };
+            //});
             return services;
         }
 
@@ -182,8 +181,8 @@ namespace Mafiator.IocConfig.Extensions
                 endpoints.MapHub<RoomHub>("/roomhub");
             });
             app.CallDbInitializer();
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
     }
 }

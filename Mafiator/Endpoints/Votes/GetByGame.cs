@@ -5,7 +5,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +27,7 @@ public class GetByGame : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/votes/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Votes.GetByGame", "Retrieves all votes statuses of game.")]
-    [OpenApiTag("Votes Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetByGame), Tags = new[] { "Votes Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<VoteDetailsResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         return Ok(new ApiResult<IEnumerable<VoteDetailsResult>>()

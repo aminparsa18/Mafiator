@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -29,8 +29,7 @@ public class GetPlayerRole : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/gamemembers/role/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("GameMembers.GetPlayerRole", "", "Retrieves role of game player.")]
-    [OpenApiTag("GameMembers Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetPlayerRole), Tags = new[] { "Game members Endpoints" })]
     public override async Task<ActionResult<ApiResult<PlayerRoleResult>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);

@@ -8,7 +8,7 @@ namespace MafiatorApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "https://mftor.blob.core.windows.net/avatars/" + value;
+            return string.Join("", "https://mftor.blob.core.windows.net/avatars/", value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

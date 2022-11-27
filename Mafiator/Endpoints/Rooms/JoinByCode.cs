@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Security.Claims;
 using System.Threading;
@@ -30,8 +30,7 @@ public class JoinByCode : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/rooms/join/code/{code}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Rooms.JoinByCode", "", "Joining an existing room.")]
-    [OpenApiTag("Rooms Endpoints")]
+    [SwaggerOperation(OperationId = nameof(JoinByCode), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string code, CancellationToken cancellationToken = default)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));

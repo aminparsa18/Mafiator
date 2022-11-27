@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,8 +28,7 @@ public class Get : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/rooms/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Rooms.Get", "", "Retrieves room details.")]
-    [OpenApiTag("Rooms Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult<RoomDetailsResult>>> HandleAsync(string roomId, CancellationToken cancellationToken = default)
     {
         var data = await _unitOfWork.Room.GetRoomFast(roomId);

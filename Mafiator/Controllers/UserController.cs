@@ -38,7 +38,7 @@ namespace Mafiator.Api.Controllers
                     StatusCode = ApiResultStatusCode.NotFound,
                     Errors = new[] {"User not Found"}
                 });
-            user.FirstOrDefault().Image = Constants.BlobStorageEndpoint + user.FirstOrDefault().Image;
+            user.FirstOrDefault().Image = Data.Constants.BlobStorageEndpoint + user.FirstOrDefault().Image;
             return Ok(new ApiResult<ValidateUserResult>()
             {
                 IsSuccess = true,

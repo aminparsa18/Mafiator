@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
 {
-   public class RecordingTimeConverter:IValueConverter
+    public class RecordingTimeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

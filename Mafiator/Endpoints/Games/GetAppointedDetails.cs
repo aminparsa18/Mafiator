@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,12 +28,11 @@ public class GetAppointedDetails : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/games/appointed-details/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Games.GetAppointedDetails", "", "Retrieves appointed game details.")]
-    [OpenApiTag("Games Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetAppointedDetails), Tags = new[] { "Game Endpoints" })]
     public override async Task<ActionResult<ApiResult<AppointedGameResult>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var data = await _unitOfWork.Game.GetWaitingGameInformations(Guid.Parse(gameId));
-        data?.Members.ForEach(m => m.Image = Constants.BlobStorageEndpoint + m.Image);
+        data?.Members.ForEach(m => m.Image = Data.Constants.BlobStorageEndpoint + m.Image);
         return Ok(new ApiResult<AppointedGameResult>
         {
             IsSuccess = true,

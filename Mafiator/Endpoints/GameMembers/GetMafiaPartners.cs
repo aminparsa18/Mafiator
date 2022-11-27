@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using Azure.ResourceManager.Resources.Models;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.GameMembers;
@@ -7,7 +8,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -31,8 +32,7 @@ public class GetMafiaPartners : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/gamemembers/mafia-partners/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("GameMembers.GetMafiaPartners", "", "Retrieves all mafia partners in a game.")]
-    [OpenApiTag("GameMembers Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetMafiaPartners), Tags = new[] { "Game members Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<PlayerRoleResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);

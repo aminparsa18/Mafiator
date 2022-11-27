@@ -4,11 +4,11 @@ using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
 {
-    public class TurnTimerColorConverter:IValueConverter
+    public class TurnTimerColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is not string timer) 
+            if (value is not string timer)
                 return Color.White;
             var span = TimeSpan.ParseExact(timer, @"mm\:ss", CultureInfo.InvariantCulture, TimeSpanStyles.None);
             return span.Seconds switch

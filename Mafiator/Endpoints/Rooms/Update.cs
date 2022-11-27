@@ -1,18 +1,18 @@
 ﻿using Ardalis.ApiEndpoints;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Rooms;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using NSwag.Annotations;
 using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
@@ -34,8 +34,7 @@ public class Update : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPut("api/v{version:apiVersion}/rooms")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Rooms.Create", "", "Updates an existing room.")]
-    [OpenApiTag("Rooms Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Update), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(UpdateRoomNameRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

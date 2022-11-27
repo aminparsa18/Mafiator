@@ -3,4 +3,12 @@
     <color name="colorPrimary">#512BD4</color>
     <color name="colorPrimaryDark">#2B0B98</color>
     <color name="colorAccent">#2B0B98</color>
+
+	<!--Toasty-->
+	<color name="defaultTextColor">#FFFFFF</color>
+	<color name="errorColor">#D50000</color>
+	<color name="infoColor">#3F51B5</color>
+	<color name="successColor">#388E3C</color>
+	<color name="warningColor">#FFA900</color>
+	<color name="normalColor">#353A3E</color>
 </resources>

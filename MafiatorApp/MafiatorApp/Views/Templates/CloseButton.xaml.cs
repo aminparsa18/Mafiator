@@ -15,6 +15,7 @@ namespace MafiatorApp.Views.Templates
         public CloseButton()
         {
             InitializeComponent();
+            TouchEffect
         }
     }
 }

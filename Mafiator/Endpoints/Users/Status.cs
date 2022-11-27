@@ -7,7 +7,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -30,8 +30,7 @@ public class Status : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/users/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Users.Status", "Retrieves user game status.")]
-    [OpenApiTag("Users Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Status), Tags = new[] { "Users Endpoints" })]
     public override async Task<ActionResult<ApiResult<UserStatusResult>>> HandleAsync(CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);

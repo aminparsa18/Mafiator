@@ -1,0 +1,22 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             x:Class="Mafiator.Game.Views.SplashView"
+             Title="SplashView"
+             BackgroundColor="Black"
+             x:DataType="viewModels:SplashScreenViewModel">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Image
+                x:Name="Logo"
+                Source="god.png"
+                HeightRequest="150"
+                WidthRequest="150"
+                Opacity="0" />
+        <Label Grid.Row="1" x:Name="AppName" Margin="16" FontSize="Medium" TextColor="White" Text="Parsoft Studio"
+                   Opacity="0" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+    </Grid>
+</ContentPage>

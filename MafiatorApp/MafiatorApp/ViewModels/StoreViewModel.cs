@@ -32,6 +32,7 @@ namespace MafiatorApp.ViewModels
             set => SetProperty(ref gem, value);
         }
 
+        public IAsyncCommand LoadGemsCommand { get; set; }
         public IAsyncCommand GoPremiumCommand { get; set; }
         public IAsyncCommand BuyGemCommand { get; set; }
         public ObservableRangeCollection<GemResult> Gems { get; set; }
@@ -44,10 +45,11 @@ namespace MafiatorApp.ViewModels
             Gems = new ObservableRangeCollection<GemResult>();
             GoPremiumCommand = new AsyncCommand(GoPremium);
             BuyGemCommand = new AsyncCommand(BuyGem);
-            LoadGems();
+            LoadGemsCommand = new AsyncCommand(LoadGems);
+            LoadGemsCommand.ExecuteAsync();
         }
 
-        private async void LoadGems()
+        private async Task LoadGems()
         {
             CurrentState = LayoutState.Loading;
             var gems = await _gemsApiService.GetAllGems();

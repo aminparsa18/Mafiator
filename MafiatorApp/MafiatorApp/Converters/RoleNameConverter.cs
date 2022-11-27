@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace MafiatorApp.Converters
 {
-    public class RoleNameConverter: IValueConverter
+    public class RoleNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

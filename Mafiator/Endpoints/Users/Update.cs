@@ -7,7 +7,7 @@ using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -33,8 +33,7 @@ public class Update : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/users/update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Users.Update", "", "Updates user details.")]
-    [OpenApiTag("Users Endpoints")]
+    [SwaggerOperation(OperationId = nameof(Update), Tags = new[] { "Users Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(UpdateProfileRequest request, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(request);

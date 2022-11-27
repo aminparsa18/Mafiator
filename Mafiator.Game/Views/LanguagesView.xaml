@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+             xmlns:controls="clr-namespace:Mafiator.Game.Controls;assembly=Mafiator.Game"
+             x:Class="Mafiator.Game.Views.LanguagesView"
+             x:DataType="viewModels:LanguagesViewModel">
+    <mopups:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </mopups:PopupPage.Animation>
+    
+    <controls:PopupFrame Margin="24,36">
+        <VerticalStackLayout >
+            <Label Text="sdfsdfsdf"/>
+        </VerticalStackLayout>
+    </controls:PopupFrame>
+</mopups:PopupPage>

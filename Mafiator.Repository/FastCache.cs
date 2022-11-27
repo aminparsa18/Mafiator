@@ -2,6 +2,7 @@
 using RepoDb.Interfaces;
 using System;
 using System.Collections;
+using System.Threading;
 
 namespace Mafiator.Repository;
 
@@ -42,4 +43,11 @@ public class FastCache : ICache
     {
         Barrel.Current.Empty(key);
     }
+
+    public Task AddAsync<T>(string key, T value, int expiration = 180, bool throwException = true, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public Task AddAsync<T>(CacheItem<T> item, bool throwException = true, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public Task ClearAsync(CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public Task<bool> ContainsAsync(string key, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public Task<CacheItem<T>> GetAsync<T>(string key, bool throwException = true, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public Task RemoveAsync(string key, bool throwException = true, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 }

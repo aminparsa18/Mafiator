@@ -37,7 +37,7 @@ namespace MafiatorApp.Views
             if (!Barrel.Current.Exists("HomeTut"))
             {
                 await Task.Delay(1000);
-               var targets = new Dictionary<View, string>()
+                var targets = new Dictionary<View, string>()
                 {
                     {ProfileImage,"Tap or swipe up for profile status"},
                 };

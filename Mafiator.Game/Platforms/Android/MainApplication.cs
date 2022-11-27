@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Mafiator.Game;
+namespace Mafiator.Game.Platforms.Android;
 [Application]
 public class MainApplication : MauiApplication
 {

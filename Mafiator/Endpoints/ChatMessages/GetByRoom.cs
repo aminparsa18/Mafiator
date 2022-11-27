@@ -6,7 +6,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -29,12 +29,11 @@ public class GetByRoom : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/chatMessages/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("ChatMessages.GetByRoom", "", "Retrieves all chat messages in a room.")]
-    [OpenApiTag("Chat Messages Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetByRoom), Tags = new[] { "Chat Messages Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<ChatMessageResult>>>> HandleAsync(Guid roomId, CancellationToken cancellationToken = default)
     {
         var chats = await _unitOfWork.ChatMessage.GetByRoom(roomId);
-        chats.ForEach(c => c.Image = $"{Constants.BlobStorageEndpoint}{c.Image}");
+        chats.ForEach(c => c.Image = $"{Data.Constants.BlobStorageEndpoint}{c.Image}");
         return Ok(new ApiResult<List<ChatMessageResult>>()
         {
             IsSuccess = true,

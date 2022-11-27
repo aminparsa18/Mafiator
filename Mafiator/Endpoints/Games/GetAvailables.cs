@@ -5,7 +5,7 @@ using Mafiator.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +27,7 @@ public class GetAvailables : EndpointBaseAsync
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/games/availables")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [OpenApiOperation("Games.GetAvailables", "", "Retrieves available games to play.")]
-    [OpenApiTag("Games Endpoints")]
+    [SwaggerOperation(OperationId = nameof(GetAvailables), Tags = new[] { "Game Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<AvailableGameResult>>>> HandleAsync(CancellationToken cancellationToken = default)
     {
         var data = await _unitOfWork.Game.GetAvailables();
