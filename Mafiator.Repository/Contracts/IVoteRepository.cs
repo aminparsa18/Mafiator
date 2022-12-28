@@ -1,6 +1,5 @@
 ﻿using Mafiator.Common.Data.Dtos.Votes;
 using Mafiator.Data.Dtos.Vote;
-using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 

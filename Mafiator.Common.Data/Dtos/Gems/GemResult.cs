@@ -1,36 +1,31 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 
-namespace Mafiator.Common.Data.Dtos.Gems
+namespace Mafiator.Common.Data.Dtos.Gems;
+
+/// <summary>
+/// Gem dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class GemResult
 {
     /// <summary>
-    /// Gem dto.
+    /// Gem key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class GemResult
-    {
-        /// <summary>
-        /// Gem key identifier.
-        /// </summary>
-        [Key(0)]
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        /// <summary>
-        /// Gem count.
-        /// </summary>
-        [Key(1)]
-        public int Count { get; set; }
+    /// <summary>
+    /// Gem count.
+    /// </summary>
+    public int Count { get; set; }
 
-        /// <summary>
-        /// Price.
-        /// </summary>
-        [Key(2)]
-        public int Price { get; set; }
+    /// <summary>
+    /// Price.
+    /// </summary>
+    public int Price { get; set; }
 
-        /// <summary>
-        /// Image.
-        /// </summary>
-        [Key(3)]
-        public string Image { get; set; }
-    }
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
 }

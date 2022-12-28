@@ -1,31 +1,27 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 using System.Collections.Generic;
 
-namespace Mafiator.Common.Data.Dtos.Votes
+namespace Mafiator.Common.Data.Dtos.Votes;
+
+/// <summary>
+/// Vote create request dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class VoteCreateRequest
 {
     /// <summary>
-    /// Vote create request dto.
+    /// Game key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class VoteCreateRequest
-    {
-        /// <summary>
-        /// Game key identifier.
-        /// </summary>
-        [Key(0)]
-        public Guid GameId { get; set; }
+    public Guid GameId { get; set; }
 
-        /// <summary>
-        /// Voter key identifier.
-        /// </summary>
-        [Key(1)]
-        public Guid VoterId { get; set; }
+    /// <summary>
+    /// Voter key identifier.
+    /// </summary>
+    public Guid VoterId { get; set; }
 
-        /// <summary>
-        /// List of targets.
-        /// </summary>
-        [Key(2)]
-        public List<Guid> Targets { get; set; }
-    }
+    /// <summary>
+    /// List of targets.
+    /// </summary>
+    public List<Guid> Targets { get; set; }
 }

@@ -3,12 +3,11 @@
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
-             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.ProfilePictureView"
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:ProfilePictureViewModel">
@@ -98,7 +97,7 @@
                
                 <Frame CornerRadius="20" Padding="16,24">
                     <StackLayout Padding="24" HorizontalOptions="CenterAndExpand">
-                        <userControls:ExtendedEntry Placeholder="{xct:Translate DisplayName}"
+                        <controls:ExtendedEntry Placeholder="{xct:Translate DisplayName}"
                                                     Text="{Binding DisplayName.Value}"
                                                     IsValid="{Binding IsDisplayNameValid, Mode=TwoWay}"
                                                     Errors="{Binding DisplayName.Errors}" />

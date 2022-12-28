@@ -1,15 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Games;
-using Mafiator.Data;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Common.Data.Dtos.Games;
+using Mafiator.Service.Contracts.Games;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
@@ -18,26 +9,17 @@ public class GetAppointed : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<AppointedGameResult>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IGameService _gameService;
 
-    public GetAppointed(IUnitOfWork unitOfWork)
+    public GetAppointed(IGameService gameService)
     {
-        _unitOfWork = unitOfWork;
+        _gameService = gameService;
     }
 
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/games/appointed/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(OperationId = nameof(GetAppointed), Tags = new[] { "Game Endpoints" })]
-    public override async Task<ActionResult<ApiResult<AppointedGameResult>>> HandleAsync
-        (string roomId, CancellationToken cancellationToken = default)
-    {
-        var data = await _unitOfWork.Game.GetWaitingGameByRoom(Guid.Parse(roomId));
-        data?.Members.ForEach(m => m.Image = Data.Constants.BlobStorageEndpoint + m.Image);
-        return Ok(new ApiResult<AppointedGameResult>
-        {
-            IsSuccess = true,
-            Data = data
-        });
-    }
+    public override async Task<ActionResult<ApiResult<AppointedGameResult>>> HandleAsync(string roomId, CancellationToken cancellationToken = default) =>
+        Ok(await _gameService.GetAppointed(Guid.Parse(roomId)));
 }

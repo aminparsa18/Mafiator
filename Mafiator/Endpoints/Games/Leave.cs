@@ -1,17 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.IocConfig.Hubs;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
+﻿using Mafiator.Service.Contracts.Games;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
@@ -21,13 +9,11 @@ public class Leave : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<string>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IHubContext<GameHub> _gameHub;
+    private readonly IGameLeaveService _gameLeaveService;
 
-    public Leave(IUnitOfWork unitOfWork, IHubContext<GameHub> gameHub)
+    public Leave(IGameLeaveService gameLeaveService)
     {
-        _unitOfWork = unitOfWork;
-        _gameHub = gameHub;
+        _gameLeaveService = gameLeaveService;
     }
 
     [ApiVersion("1.0")]
@@ -37,19 +23,6 @@ public class Leave : EndpointBaseAsync
     public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        var member = await _unitOfWork.GameMember.GetUser(userId, gameId);
-        if (!member.Any())
-            return Ok(new ApiResult<string>()
-            {
-                IsSuccess = false,
-                Errors = new[] { "You are not member of this game" },
-                StatusCode = ApiResultStatusCode.NotFound
-            });
-        await _unitOfWork.GameMember.Leave(userId);
-        await _gameHub.Clients.Group(gameId).SendAsync("Join", userId.ToString());
-        return Ok(new ApiResult<string>()
-        {
-            IsSuccess = true,
-        });
+        return Ok(await _gameLeaveService.Leave(userId, gameId));
     }
 }

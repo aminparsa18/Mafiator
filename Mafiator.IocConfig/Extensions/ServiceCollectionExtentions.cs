@@ -5,18 +5,14 @@ using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Extensions;
 using Mafiator.Common.Server.Media;
 using Mafiator.Data;
-using Mafiator.IocConfig.Formatters;
-using Mafiator.IocConfig.Hubs;
 using Mafiator.Repository;
 using Mafiator.Service.Contracts;
-using Mafiator.Service.Contracts.Identity;
-using Mafiator.Service.Contracts.Impl;
-using Mafiator.Service.Contracts.Impl.Identity;
+using Mafiator.Service.Contracts.Avatars;
+using Mafiator.Service.Hubs;
 using Mafiator.Service.Models;
+using Mafiator.Service.Services;
 using Mafiator.Service.Validations.Users;
-using MessagePack;
-using MessagePack.AspNetCoreMvcFormatter;
-using MessagePack.Resolvers;
+using MemoryPack.AspNetCoreMvcFormatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -25,164 +21,183 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using RepoDb;
 using Serilog;
+using System.Collections.Generic;
 using System.Data;
 using System.Net;
-using MemoryCache = Mafiator.Service.Contracts.Impl.MemoryCache;
 
-namespace Mafiator.IocConfig.Extensions
+namespace Mafiator.IocConfig.Extensions;
+
+public static class ServiceCollectionExtentions
 {
-    public static class ServiceCollectionExtentions
+    public static IServiceCollection ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
+        services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
+        services.AddHangfireServer();
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
+        RepoDb.GlobalConfiguration.Setup().UseSqlServer();
+        services.AddTransient<IDbConnection>(sp => new SqlConnection(configuration.GetConnectionString("MafiatorContext")));
+        return services;
+    }
+
+    public static IServiceCollection ConfigureController(this IServiceCollection services)
+    {
+        services.AddAntiforgery();
+
+        services.AddControllers(options =>
         {
-            services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
-            services.AddHangfireServer();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
-            SqlServerBootstrap.Initialize();
-            services.AddTransient<IDbConnection>(sp => new SqlConnection(configuration.GetConnectionString("MafiatorContext")));
-            return services;
-        }
+            options.InputFormatters.Insert(0, new MemoryPackInputFormatter());
+            // If checkContentType: true then can output multiple format(JSON/MemoryPack, etc...). default is false.
+            options.OutputFormatters.Insert(0, new MemoryPackOutputFormatter(checkContentType: false));
+        }).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-        public static IServiceCollection ConfigureController(this IServiceCollection services)
+        services.AddApiVersioning(options =>
         {
-            services.AddAntiforgery();
+            options.ReportApiVersions = true;
+            options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+        });
+        return services;
+    }
 
-            var resolver = StandardResolver.Instance;
-            var messagePackOption = MessagePackSerializerOptions.Standard.WithResolver(resolver);
-
-            services.AddControllers(option =>
+    public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                option.OutputFormatters.Add(new MessagePackOutputFormatter(messagePackOption));
-                option.InputFormatters.Add(new MessagePackInputFormatter(messagePackOption));
-            }).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
-
-            services.AddApiVersioning(options =>
-            {
-                options.ReportApiVersions = true;
-                options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
-                options.AssumeDefaultVersionWhenUnspecified = true;
+                Description =
+                    "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey
             });
-            return services;
-        }
-
-        public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
-        {
-            services.AddSwaggerGen();
-            //services.AddSwaggerDocument(setting =>
-            //{
-            //    setting.SchemaProcessors.Add(new MessagePackAttributesSchemaProcessor());
-            //    setting.PostProcess = document =>
-            //    {
-            //        document.Info.Version = "v1";
-            //        document.Info.Title = "Mafiator API";
-            //        document.Info.Description = "legendary online game forever";
-            //        document.Info.TermsOfService = "None";
-            //        document.Info.Contact = new NSwag.OpenApiContact
-            //        {
-            //            Name = "Amin Parsa",
-            //            Email = "aminparsa18@gmail.com",
-            //            Url = "https://aminparsa.me"
-            //        };
-            //        document.Info.License = new NSwag.OpenApiLicense
-            //        {
-            //            Name = "MIT License",
-            //            Url = "https://opensource.org/licenses/MIT"
-            //        };
-            //    };
-            //});
-            return services;
-        }
-
-        public static IServiceCollection ConfigureCustomServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IEmailSender, EmailSender>();
-            services.AddScoped<ISmsSender, TwilioSmsSender>();
-            services.AddScoped<ILiveEventManager, LiveEventManager>();
-            services.AddSingleton<INotificationService, NotificationHubService>();
-            services.AddDistributedMemoryCache();
-            services.AddScoped<IMemoryCache, MemoryCache>();
-            services.AddOptions<NotificationHubOptions>()
-                .Configure(configuration.GetSection("NotificationHub").Bind)
-                .ValidateDataAnnotations();
-            services.AddOptions<MediaServiceCredential>()
-                .Configure(configuration.GetSection("MediaService").Bind)
-                .ValidateDataAnnotations();
-            services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapping>());
-
-            var resolver = StandardResolver.Instance;
-            var messagePackOption = MessagePackSerializerOptions.Standard.WithResolver(resolver);
-            services.AddSignalR().AddMessagePackProtocol(o => o.SerializerOptions = messagePackOption)
-                .AddAzureSignalR("Endpoint=https://mftor.service.signalr.net;AccessKey=/bXupX8SacE1iztiuK/ZqxdZopEVKtaYTUVb3xUjs9U=;Version=1.0;");
-         
-            return services;
-        }
-
-        public static void ConfigureCustomIdentityServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
-        {
-            services.AddIdentityWithOptions(configuration, webHostEnvironment);
-            services.AddScoped<IApplicationRoleManager, ApplicationRoleManager>();
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<IIdentityDbInitializer, IdentityDbInitializer>();
-            services.AddScoped<ApplicationIdentityErrorDescriber>();
-        }
-
-        public static void UseMainMiddlewares(this IApplicationBuilder app)
-        {
-            app.UseHsts();
-            app.UseStatusCodePages(async context =>
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
-                context.HttpContext.Response.ContentType = "application/x-msgpack";
-                if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
                 {
-                    await context.HttpContext.Response.WriteAsync(new ApiResult()
+                    new OpenApiSecurityScheme
                     {
-                        Errors = new[] {"Token not validated"},
-                        StatusCode = ApiResultStatusCode.Unauthorized
-                    }.ToString());
-                }
-                else
-                {
-                    await context.HttpContext.Response.WriteAsync(new ApiResult()
-                    {
-                        Errors = new[] {"Internal Error"},
-                        StatusCode = ApiResultStatusCode.ServerError
-                    }.ToString());
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+                    },
+                    new List<string>()
                 }
             });
-            app.UseExceptionHandler(appError =>
+            options.IgnoreObsoleteActions();
+            options.IgnoreObsoleteProperties();
+            options.EnableAnnotations();
+
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
-                appError.Run(async context =>
+                Version = "v1",
+                Title = "Mafiator API",
+                Description = "legendary online game forever",
+                License = new OpenApiLicense
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/x-msgpack";
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
-                    {
-                        var err = contextFeature.Error;
-                        await context.Response.WriteAsync(contextFeature.Error.DetailedMessage());
-                    }
-                });
+                    Name = "MIT License",
+                    Url = new System.Uri("https://opensource.org/licenses/MIT")
+                },
+                Contact = new OpenApiContact
+                {
+                    Name = "Amin Parsa",
+                    Email = "aminparsa18@gmail.com",
+                    Url = new System.Uri("https://aminparsa.me")
+                }
             });
-            //app.UseHttpsRedirection();
-            app.UseSerilogRequestLogging();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
+        });
+        return services;
+    }
+
+    public static IServiceCollection ConfigureCustomServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
+        services.Scan(scan => scan
+        .FromAssemblyOf<IUnitOfWork>()
+        .AddClasses(classes => classes.AssignableTo<IUnitOfWork>()).AsMatchingInterface().WithScopedLifetime()
+        .FromAssemblyOf<IAvatarService>()
+        .AddClasses().AsImplementedInterfaces().WithScopedLifetime());
+        services.AddSingleton<INotificationService, NotificationHubService>();
+        services.AddDistributedMemoryCache();
+        services.AddOptions<NotificationHubOptions>()
+            .Configure(configuration.GetSection("NotificationHub").Bind)
+            .ValidateDataAnnotations();
+        services.AddOptions<MediaServiceCredential>()
+            .Configure(configuration.GetSection("MediaService").Bind)
+            .ValidateDataAnnotations();
+        services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapping>());
+
+        services.AddSignalR().AddMessagePackProtocol()
+            .AddAzureSignalR("Endpoint=https://mftor.service.signalr.net;AccessKey=/bXupX8SacE1iztiuK/ZqxdZopEVKtaYTUVb3xUjs9U=;Version=1.0;");
+     
+        return services;
+    }
+
+    public static void ConfigureCustomIdentityServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+    {
+        services.AddIdentityWithOptions(configuration, webHostEnvironment);
+        services.AddScoped<ApplicationIdentityErrorDescriber>();
+    }
+
+    public static void UseMainMiddlewares(this IApplicationBuilder app)
+    {
+        app.UseHsts();
+        app.UseStatusCodePages(async context =>
+        {
+            context.HttpContext.Response.ContentType = "application/x-msgpack";
+            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
             {
-                endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("/chathub");
-                endpoints.MapHub<GameHub>("/gamehub");
-                endpoints.MapHub<RoomHub>("/roomhub");
+                await context.HttpContext.Response.WriteAsync(new ApiResult()
+                {
+                    Errors = new[] {"Token not validated"},
+                    StatusCode = ApiResultStatusCode.Unauthorized
+                }.ToString());
+            }
+            else
+            {
+                await context.HttpContext.Response.WriteAsync(new ApiResult()
+                {
+                    Errors = new[] {"Internal Error"},
+                    StatusCode = ApiResultStatusCode.ServerError
+                }.ToString());
+            }
+        });
+        app.UseExceptionHandler(appError =>
+        {
+            appError.Run(async context =>
+            {
+                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/x-msgpack";
+                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (contextFeature != null)
+                {
+                    var err = contextFeature.Error;
+                    await context.Response.WriteAsync(contextFeature.Error.DetailedMessage());
+                }
             });
-            app.CallDbInitializer();
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        });
+        //app.UseHttpsRedirection();
+        app.UseSerilogRequestLogging();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapHub<ChatHub>("/chathub");
+            endpoints.MapHub<GameHub>("/gamehub");
+            endpoints.MapHub<RoomHub>("/roomhub");
+        });
+        app.CallDbInitializer();
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 }

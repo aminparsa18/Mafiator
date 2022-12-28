@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mafiator.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping;
@@ -32,6 +33,7 @@ public class VoteMapping : BaseEntityTypeConfiguration<Vote>
         builder.HasIndex(i => i.GameId);
         builder.HasIndex(i => i.VoterId);
         builder.HasIndex(i => i.TargetId);
+
         base.Configure(builder);
     }
 }

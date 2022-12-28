@@ -1,37 +1,32 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 using System.Collections.Generic;
 
-namespace Mafiator.Common.Data.Dtos.Rooms
+namespace Mafiator.Common.Data.Dtos.Rooms;
+
+/// <summary>
+/// Room create dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class RoomCreateRequest
 {
     /// <summary>
-    /// Room create dto.
+    /// Room name.
     /// </summary>
-    [MessagePackObject]
-    public sealed class RoomCreateRequest
-    {
-        /// <summary>
-        /// Room name.
-        /// </summary>
-        [Key(0)]
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        /// <summary>
-        /// Indicating room is private.
-        /// </summary>
-        [Key(1)]
-        public bool IsPrivate { get; set; }
+    /// <summary>
+    /// Indicating room is private.
+    /// </summary>
+    public bool IsPrivate { get; set; }
 
-        /// <summary>
-        /// List of users.
-        /// </summary>
-        [Key(2)]
-        public List<Guid> Users { get; set; }
+    /// <summary>
+    /// List of users.
+    /// </summary>
+    public List<Guid> Users { get; set; }
 
-        /// <summary>
-        /// Country.
-        /// </summary>
-        [Key(3)]
-        public string Country { get; set; }
-    }
+    /// <summary>
+    /// Country.
+    /// </summary>
+    public string Country { get; set; }
 }

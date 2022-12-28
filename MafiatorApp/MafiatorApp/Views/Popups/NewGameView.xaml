@@ -3,10 +3,9 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
-                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.NewGameView"
                  CloseWhenBackgroundIsClicked="True"
                  base:ViewModelLocator.AutoWireViewModel="true"
@@ -26,10 +25,10 @@
     </pages:PopupPage.Animation>
     <pages:PopupPage.Content>
         <StackLayout>
-            <userControls:Popup Margin="16">
+            <controls:PopupFrame Margin="16">
                 <StackLayout>
-                    <userControls:PopupHeader TitleText="{xct:Translate Start}" SubTitleText="{xct:Translate NewGame}"/>
-                    <userControls:ExtendedEntry
+                    <controls:PopupHeader TitleText="{xct:Translate Start}" SubTitleText="{xct:Translate NewGame}"/>
+                    <controls:ExtendedEntry
                         Keyboard="Numeric"
                         Placeholder="{xct:Translate GamePlayersCount}"
                         Text="{Binding Capacity.Value}"
@@ -46,7 +45,7 @@
                                  HeightRequest="1" BackgroundColor="#fff" />
                     </Grid>
                     <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                        <templates:CheckBoxView Text="{xct:Translate ScheduleGame}"
+                        <controls:CheckBoxView Text="{xct:Translate ScheduleGame}"
                                                 IsChecked="{Binding IsImmediate,Mode=TwoWay}" />
                     </StackLayout>
                     
@@ -54,7 +53,7 @@
                         <DatePicker IsVisible="False" Date="{Binding Date,Mode=TwoWay}"
                                     Unfocused="GameDatePicker_OnUnfocused" x:Name="GameDatePicker" />
 
-                        <userControls:ExtendedEntry
+                        <controls:ExtendedEntry
                             x:Name="DateInput"
                             Placeholder="{xct:Translate GameStartsAt}"
                             Text="{Binding Date}"
@@ -62,7 +61,7 @@
                             Focused="DateInput_OnFocused" />
                     </Grid>
                     <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                        <templates:CheckBoxView Text="{xct:Translate PublicLiveStream}"
+                        <controls:CheckBoxView Text="{xct:Translate PublicLiveStream}"
                                                 IsChecked="{Binding IsPublic,Mode=TwoWay}" />
 
                         <Grid WidthRequest="30" HeightRequest="30">
@@ -143,7 +142,7 @@
                         </Frame>
                     </Grid>
                 </StackLayout>
-            </userControls:Popup>
+            </controls:PopupFrame>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

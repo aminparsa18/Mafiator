@@ -1,6 +1,5 @@
 ﻿using Mafiator.Common.Data.Dtos.ChatMessages;
 using System;
-using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 

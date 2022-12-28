@@ -1,42 +1,36 @@
 ﻿using Mafiator.Common.Data.Enums;
-using MessagePack;
+using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.GameMembers
+namespace Mafiator.Common.Data.Dtos.GameMembers;
+
+/// <summary>
+/// Game member dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class GameMemberResult
 {
     /// <summary>
-    /// Game member dto.
+    /// Game member key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class GameMemberResult
-    {
-        /// <summary>
-        /// Game member key identifier.
-        /// </summary>
-        [Key(0)]
-        public string Id { get; set; }
+    public string Id { get; set; }
 
-        /// <summary>
-        /// Display name.
-        /// </summary>
-        [Key(1)]
-        public string DisplayName { get; set; }
+    /// <summary>
+    /// Display name.
+    /// </summary>
+    public string DisplayName { get; set; }
 
-        /// <summary>
-        /// Image.
-        /// </summary>
-        [Key(2)]
-        public string Image { get; set; }
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
 
-        /// <summary>
-        /// Player score.
-        /// </summary>
-        [Key(3)]
-        public int Score { get; set; }
+    /// <summary>
+    /// Player score.
+    /// </summary>
+    public int Score { get; set; }
 
-        /// <summary>
-        ///Player status.
-        /// </summary>
-        [Key(4)]
-        public PlayerStatus Status { get; set; }
-    }
+    /// <summary>
+    ///Player status.
+    /// </summary>
+    public PlayerStatus Status { get; set; }
 }

@@ -1,35 +1,30 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.GameMembers
+namespace Mafiator.Common.Data.Dtos.GameMembers;
+
+/// <summary>
+/// Waiting game member dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class WaitingPlayerResult
 {
     /// <summary>
-    /// Waiting game member dto.
+    /// Game member user key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class WaitingPlayerResult
-    {
-        /// <summary>
-        /// Game member user key identifier.
-        /// </summary>
-        [Key(0)]
-        public string UserId { get; set; }
+    public string UserId { get; set; }
 
-        /// <summary>
-        /// Display name.
-        /// </summary>
-        [Key(1)]
-        public string DisplayName { get; set; }
+    /// <summary>
+    /// Display name.
+    /// </summary>
+    public string DisplayName { get; set; }
 
-        /// <summary>
-        /// Image.
-        /// </summary>
-        [Key(2)]
-        public string Image { get; set; }
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
 
-        /// <summary>
-        /// Score.
-        /// </summary>
-        [Key(3)]
-        public int Score { get; set; }
-    }
+    /// <summary>
+    /// Score.
+    /// </summary>
+    public int Score { get; set; }
 }

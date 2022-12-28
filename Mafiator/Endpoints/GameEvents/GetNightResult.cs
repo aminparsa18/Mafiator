@@ -1,11 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Data.Dtos.GameEvent;
+﻿using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Service.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.GameEvents;

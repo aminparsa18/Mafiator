@@ -6,16 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mafiator.Common.Client.Services.Avatars
+namespace Mafiator.Common.Client.Services.Avatars;
+
+/// <inheritdoc/>
+public class AvatarsApiService : IAvatarsApiService
 {
     /// <inheritdoc/>
-    public class AvatarsApiService : IAvatarsApiService
+    public Task<ApiResult<IEnumerable<AvatarResult>>> GetAllAvatars()
     {
-        /// <inheritdoc/>
-        public Task<ApiResult<IEnumerable<AvatarResult>>> GetAllAvatars()
-        {
-            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<AvatarResult>>>(
-               new Uri($"{UrlConstants.BaseUrl}avatars"));
-        }
+        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<AvatarResult>>>(
+           new Uri($"{UrlConstants.BaseUrl}avatars"));
     }
 }

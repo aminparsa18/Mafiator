@@ -1,5 +1,4 @@
 ﻿using Mafiator.Common.Data.Dtos.Gems;
-using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 

@@ -1,43 +1,42 @@
-﻿namespace Mafiator.Common.Data.Enums
+﻿namespace Mafiator.Common.Data.Enums;
+
+/// <summary>
+/// Game event types.
+/// </summary>
+public enum GameEventType
 {
     /// <summary>
-    /// Game event types.
+    /// Killed.
     /// </summary>
-    public enum GameEventType
-    {
-        /// <summary>
-        /// Killed.
-        /// </summary>
-        Killed = 1,
+    Killed = 1,
 
-        /// <summary>
-        /// Cured.
-        /// </summary>
-        Cured = 2,
+    /// <summary>
+    /// Cured.
+    /// </summary>
+    Cured = 2,
 
-        /// <summary>
-        /// Inquired.
-        /// </summary>
-        Inquired = 3,
+    /// <summary>
+    /// Inquired.
+    /// </summary>
+    Inquired = 3,
 
-        /// <summary>
-        /// Silenced.
-        /// </summary>
-        Silenced = 4,
+    /// <summary>
+    /// Silenced.
+    /// </summary>
+    Silenced = 4,
 
-        /// <summary>
-        /// Speak.
-        /// </summary>
-        Speak = 5,
+    /// <summary>
+    /// Speak.
+    /// </summary>
+    Speak = 5,
 
-        /// <summary>
-        /// Sniped.
-        /// </summary>
-        Sniped = 6,
+    /// <summary>
+    /// Sniped.
+    /// </summary>
+    Sniped = 6,
 
-        /// <summary>
-        /// Poisoned.
-        /// </summary>
-        Poisoned = 7
-    }
+    /// <summary>
+    /// Poisoned.
+    /// </summary>
+    Poisoned = 7
 }

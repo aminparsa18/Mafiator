@@ -1,9 +1,8 @@
-﻿namespace Mafiator.Game.Enums
+﻿namespace Mafiator.Game.Enums;
+
+public enum CandidateStatus
 {
-    public enum CandidateStatus
-    {
-        None = 0,
-        Advocacy = 1,
-        Kicked = 2
-    }
+    None = 0,
+    Advocacy = 1,
+    Kicked = 2
 }

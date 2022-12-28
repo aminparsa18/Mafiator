@@ -1,16 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Rooms;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Collections.Generic;
+﻿using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Service.Contracts.Rooms;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
@@ -19,11 +9,11 @@ public class GetMyRooms : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult<ApiResult<RoomDetailsResult>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRoomService _roomService;
 
-    public GetMyRooms(IUnitOfWork unitOfWork)
+    public GetMyRooms(IRoomService roomService)
     {
-        _unitOfWork = unitOfWork;
+        _roomService = roomService;
     }
 
     [ApiVersion("1.0")]
@@ -32,12 +22,7 @@ public class GetMyRooms : EndpointBaseAsync
     [SwaggerOperation(OperationId = nameof(GetMyRooms), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult<RoomDetailsResult>>> HandleAsync(CancellationToken cancellationToken = default)
     {
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
-        var data = await _unitOfWork.Room.GetMyRoomsFast(userId);
-        return Ok(new ApiResult<IEnumerable<RoomDetailsResult>>()
-        {
-            IsSuccess = true,
-            Data = data
-        });
+        var userId = User.FindFirstValue(ClaimTypes.Name);
+        return Ok(await _roomService.GetMyRooms(userId));
     }
 }

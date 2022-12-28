@@ -1,14 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Votes;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Common.Data.Dtos.Votes;
+using Mafiator.Service.Contracts.Votes;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Votes;
 
@@ -17,23 +9,17 @@ public class GetByGame : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<IEnumerable<VoteDetailsResult>>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVoteService _voteService;
 
-    public GetByGame(IUnitOfWork unitOfWork)
+    public GetByGame(IVoteService voteService)
     {
-        _unitOfWork = unitOfWork;
+        _voteService = voteService;
     }
 
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/votes/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(OperationId = nameof(GetByGame), Tags = new[] { "Votes Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<VoteDetailsResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
-    {
-        return Ok(new ApiResult<IEnumerable<VoteDetailsResult>>()
-        {
-            Data = await _unitOfWork.Vote.GetVoteStatus(gameId),
-            IsSuccess = true
-        });
-    }
+    public override async Task<ActionResult<ApiResult<IEnumerable<VoteDetailsResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default) =>
+        Ok(await _voteService.GetByGame(gameId));
 }

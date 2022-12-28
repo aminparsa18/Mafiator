@@ -1,23 +1,20 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Votes
+namespace Mafiator.Common.Data.Dtos.Votes;
+
+/// <summary>
+/// Vote details result dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class VoteDetailsResult
 {
     /// <summary>
-    /// Vote details result dto.
+    /// Voter key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class VoteDetailsResult
-    {
-        /// <summary>
-        /// Voter key identifier.
-        /// </summary>
-        [Key(0)]
-        public string VoterId { get; set; }
+    public string VoterId { get; set; }
 
-        /// <summary>
-        /// Target key identifier.
-        /// </summary>
-        [Key(1)]
-        public string TargetId { get; set; }
-    }
+    /// <summary>
+    /// Target key identifier.
+    /// </summary>
+    public string TargetId { get; set; }
 }

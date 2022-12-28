@@ -3,39 +3,35 @@ using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Microsoft.Extensions.Localization;
 
-namespace Mafiator.Game.ViewModels.Base
+namespace Mafiator.Game.ViewModels.Base;
+
+public abstract class ViewModelBase : ObservableObject
 {
-    public abstract class ViewModelBase : ObservableObject
+    protected readonly INavigationService _navigationService;
+    protected readonly IStringLocalizer<AppResources> _localizer;
+    protected readonly IToastService _toastService;
+
+    private bool _isBusy;
+    private string _pageTitle;
+
+    public bool IsBusy
     {
-        protected readonly INavigationService _navigationService;
-        protected readonly IStringLocalizer<AppResources> _localizer;
-        protected readonly IToastService _toastService;
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
+    }
 
-        private bool _isBusy;
-        private string _pageTitle;
+    protected ViewModelBase(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService)
+    {
+        _navigationService = navigationService;
+        _localizer = localizer;
+        _toastService = toastService;
+    }
 
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set => SetProperty(ref _isBusy, value);
-        }
+    public virtual Task InitializeAsync(object navigationData) => Task.FromResult(false);
 
-        protected ViewModelBase(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService)
-        {
-            _navigationService = navigationService;
-            _localizer = localizer;
-            _toastService = toastService;
-        }
-
-        public virtual Task InitializeAsync(object navigationData)
-        {
-            return Task.FromResult(false);
-        }
-
-        public string PageTitle
-        {
-            get => _pageTitle;
-            set => SetProperty(ref _pageTitle, value);
-        }
+    public string PageTitle
+    {
+        get => _pageTitle;
+        set => SetProperty(ref _pageTitle, value);
     }
 }

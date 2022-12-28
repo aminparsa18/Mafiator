@@ -1,18 +1,16 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 
-namespace Mafiator.Common.Data.Dtos.Games
+namespace Mafiator.Common.Data.Dtos.Games;
+
+/// <summary>
+/// Game creation result dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class GameCreateResult
 {
     /// <summary>
-    /// Game creation result dto.
+    /// Game key identifier.
     /// </summary>
-    [MessagePackObject]
-    public sealed class GameCreateResult
-    {
-        /// <summary>
-        /// Game key identifier.
-        /// </summary>
-        [Key(0)]
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

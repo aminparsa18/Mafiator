@@ -85,6 +85,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Mafiator.Common.Client\Mafiator.Common.Client.csproj" />
 	  <ProjectReference Include="..\Mafiator.Common.Data\Mafiator.Common.Data.csproj" />
+	  <ProjectReference Include="..\MauiTouchEffect\MauiTouchEffect.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

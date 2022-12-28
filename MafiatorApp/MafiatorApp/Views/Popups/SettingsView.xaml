@@ -2,7 +2,7 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:pages="http://rotorgames.com"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                  xmlns:forms1="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
@@ -25,26 +25,26 @@
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
-        <userControls:Popup Margin="24,36">
+        <controls:PopupFrame Margin="24,36">
             <StackLayout Margin="24">
-                <userControls:PopupHeader TitleText="{xct:Translate Settings}"></userControls:PopupHeader>
+                <controls:PopupHeader TitleText="{xct:Translate Settings}"></controls:PopupHeader>
                 <StackLayout Orientation="Horizontal" Margin="16,16,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate PlayMusic}"
+                    <controls:CheckBoxView Text="{xct:Translate PlayMusic}"
                                             IsChecked="{Binding PlayMusic,Mode=TwoWay}" />
 
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate PlaySound}" IsChecked="{Binding PlaySound}" />
+                    <controls:CheckBoxView Text="{xct:Translate PlaySound}" IsChecked="{Binding PlaySound}" />
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding PlaySoundCommand}"></TapGestureRecognizer>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate AllowNotifications}"
+                    <controls:CheckBoxView Text="{xct:Translate AllowNotifications}"
                                             IsChecked="{Binding AllowNotification}" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Margin="16,0,16,16">
-                    <templates:CheckBoxView Text="{xct:Translate Autoplay}" IsChecked="{Binding Autoplay}" />
+                    <controls:CheckBoxView Text="{xct:Translate Autoplay}" IsChecked="{Binding Autoplay}" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="{xct:Translate LanguageColon} " FontSize="16" VerticalOptions="CenterAndExpand"
@@ -73,6 +73,6 @@
                     </Frame>
                 </StackLayout>
             </StackLayout>
-        </userControls:Popup>
+        </controls:PopupFrame>
     </pages:PopupPage.Content>
 </pages:PopupPage>

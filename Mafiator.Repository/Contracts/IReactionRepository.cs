@@ -1,5 +1,4 @@
 ﻿using Mafiator.Common.Data.Dtos.Reactions;
-using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 

@@ -1,16 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using FluentValidation;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Api.Auth;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
+﻿using Mafiator.Common.Data.Dtos.Api.Auth;
 using Mafiator.Common.Data.Dtos.Users;
-using Mafiator.Service.Contracts.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Mafiator.Service.Contracts.Users;
 
 namespace Mafiator.Api.Endpoints.Users;
 
@@ -19,29 +9,17 @@ public class Confirm : EndpointBaseAsync
     .WithRequest<ConfirmPhoneRequest>
     .WithActionResult<AuthResult>
 {
-    private readonly IIdentityService _identityService;
-    private readonly IValidator<ConfirmPhoneRequest> _validator;
+    private readonly IUserConfirmService _userConfirmService;
 
-    public Confirm(IIdentityService identityService, IValidator<ConfirmPhoneRequest> validator)
+    public Confirm(IUserConfirmService userConfirmService)
     {
-        _identityService = identityService;
-        _validator = validator;
+        _userConfirmService = userConfirmService;
     }
 
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/users/confirm")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(OperationId = nameof(Confirm), Tags = new[] { "Users Endpoints" })]
-    public override async Task<ActionResult<AuthResult>> HandleAsync(ConfirmPhoneRequest request, CancellationToken cancellationToken = default)
-    {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-            return Ok(new ApiResult
-            {
-                StatusCode = ApiResultStatusCode.BadRequest,
-                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
-            });
-        var res = await _identityService.ConfirmPhoneNumber(request.PhoneNo, request.Token);
-        return Ok(res);
-    }
+    public override async Task<ActionResult<AuthResult>> HandleAsync(ConfirmPhoneRequest request, CancellationToken cancellationToken = default) =>
+        Ok(await _userConfirmService.Confirm(request));
 }

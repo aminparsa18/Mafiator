@@ -7,6 +7,10 @@ using Mafiator.Game.Services;
 using Mafiator.Game.Services.Impl;
 using Mafiator.Game.ViewModels;
 using Mafiator.Game.Views;
+using MauiTouchEffect;
+#if ANDROID
+using MauiTouchEffect.Platforms.Android;
+#endif
 using MessagePipe;
 using Mopups.Hosting;
 using Plugin.Maui.Audio;
@@ -28,6 +32,12 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            })
+            .ConfigureEffects(effects =>
+            {
+#if ANDROID
+                effects.Add<TouchEffect, PlatformTouchEffect>();
+#endif
             });
 
         builder.Services.AddMessagePipe(e =>

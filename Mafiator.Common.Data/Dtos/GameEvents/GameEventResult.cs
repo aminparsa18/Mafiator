@@ -1,24 +1,21 @@
 ﻿using Mafiator.Common.Data.Enums;
-using MessagePack;
+using MemoryPack;
 
-namespace Mafiator.Data.Dtos.GameEvent
+namespace Mafiator.Data.Dtos.GameEvent;
+
+/// <summary>
+/// Game event result dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class GameEventResult
 {
     /// <summary>
-    /// Game event result dto.
+    /// Game member key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class GameEventResult
-    {
-        /// <summary>
-        /// Game member key identifier.
-        /// </summary>
-        [Key(0)]
-        public string MemberId { get; set; }
+    public string MemberId { get; set; }
 
-        /// <summary>
-        /// Game event type.
-        /// </summary>
-        [Key(1)]
-        public GameEventType EventType { get; set; }
-    }
+    /// <summary>
+    /// Game event type.
+    /// </summary>
+    public GameEventType EventType { get; set; }
 }

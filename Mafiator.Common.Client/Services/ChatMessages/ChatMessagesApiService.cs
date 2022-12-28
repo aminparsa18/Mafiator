@@ -6,16 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mafiator.Common.Client.Services.ChatMessages
+namespace Mafiator.Common.Client.Services.ChatMessages;
+
+/// <inheritdoc/>
+public class ChatMessagesApiService : IChatMessagesApiService
 {
     /// <inheritdoc/>
-    public class ChatMessagesApiService : IChatMessagesApiService
+    public Task<ApiResult<IEnumerable<ChatMessageResult>>> GetChatByRoom(string roomId)
     {
-        /// <inheritdoc/>
-        public Task<ApiResult<IEnumerable<ChatMessageResult>>> GetChatByRoom(string roomId)
-        {
-            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<ChatMessageResult>>>(
-               new Uri($"{UrlConstants.BaseUrl}chatMessages/{roomId}"));
-        }
+        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<ChatMessageResult>>>(
+           new Uri($"{UrlConstants.BaseUrl}chatMessages/{roomId}"));
     }
 }

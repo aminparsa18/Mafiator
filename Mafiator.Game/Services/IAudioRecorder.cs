@@ -1,10 +1,9 @@
-﻿namespace Mafiator.Game.Services
+﻿namespace Mafiator.Game.Services;
+
+public interface IAudioRecorder
 {
-    public interface IAudioRecorder
-    {
-        void StartRecording();
-        Task StopRecording();
-        bool IsRecording { get; set; }
-       // void ConvertToFlac(string path);
-    }
+    void StartRecording();
+    Task StopRecording();
+    bool IsRecording { get; set; }
+   // void ConvertToFlac(string path);
 }

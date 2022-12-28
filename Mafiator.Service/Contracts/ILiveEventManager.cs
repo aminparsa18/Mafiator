@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Mafiator.Service.Contracts
+namespace Mafiator.Service.Contracts;
+
+public interface ILiveEventManager
 {
-    public interface ILiveEventManager
-    {
-        Task<Tuple<string, string>> CreateLiveEvent(string liveEventName);
-    }
+    Task<Tuple<string, string>> CreateLiveEvent(string liveEventName);
 }

@@ -1,7 +1,7 @@
-﻿using Mafiator.Entities;
-using Mafiator.Entities.Extensions;
+﻿using Mafiator.Entities.Extensions;
 using Mafiator.Entities.Identity;
 using Mafiator.Entities.Mapping;
+using Mafiator.Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

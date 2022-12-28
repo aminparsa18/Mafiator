@@ -1,5 +1,4 @@
 ﻿using Mafiator.Common.Data.Dtos.Avatars;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 

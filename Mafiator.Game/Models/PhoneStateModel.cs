@@ -1,6 +1,5 @@
-﻿namespace Mafiator.Game.Models
+﻿namespace Mafiator.Game.Models;
+
+public class PhoneStateModel
 {
-    public class PhoneStateModel
-    {
-    }
 }

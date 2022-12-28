@@ -1,19 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mafiator.Game.Validations
+namespace Mafiator.Game.Validations;
+
+public class EmailRule : IValidationRule<string>
 {
-    public class EmailRule : IValidationRule<string>
+    public EmailRule()
     {
-        public EmailRule()
-        {
-            ValidationMessage = "Phải là một địa chỉ email";
-        }
-
-        public string ValidationMessage { get; set; }
-
-        public bool Check(string value)
-        {
-            return new EmailAddressAttribute().IsValid(value);
-        }
+        ValidationMessage = "Phải là một địa chỉ email";
     }
+
+    public string ValidationMessage { get; set; }
+
+    public bool Check(string value) => new EmailAddressAttribute().IsValid(value);
 }

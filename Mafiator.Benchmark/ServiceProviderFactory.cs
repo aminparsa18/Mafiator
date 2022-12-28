@@ -1,5 +1,6 @@
 ﻿using Mafiator.Data;
 using Mafiator.Repository;
+using MessagePipe;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,11 +16,12 @@ public class ServiceProviderFactory
 
     public static ServiceProvider BuildServiceProvider()
     {
-        SqlServerBootstrap.Initialize();
+        GlobalConfiguration.Setup().UseSqlServer();
         _serviceProvider ??= new ServiceCollection()
-            .AddDbContext<ApplicationDbContext>(options =>options.UseSqlServer(connectionString))
+            .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
             .AddTransient<IDbConnection>(sp => new SqlConnection(connectionString))
             .AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddMessagePipe()
             .BuildServiceProvider();
         return _serviceProvider;
     }

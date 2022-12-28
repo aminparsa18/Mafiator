@@ -6,7 +6,7 @@
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp" xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout"
                  base:ViewModelLocator.AutoWireViewModel="True"
@@ -26,11 +26,11 @@
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
-            <userControls:Popup Margin="24,36">
+            <controls:PopupFrame Margin="24,36">
                 <StackLayout>
-                <userControls:PopupHeader TitleText="{xct:Translate Select}" SubTitleText="{xct:Translate YourCountry}"/>
+                <controls:PopupHeader TitleText="{xct:Translate Select}" SubTitleText="{xct:Translate YourCountry}"/>
                     <Grid  MinimumHeightRequest="60">
-                        <userControls:ExtendedEntry  Margin="16,0"
+                        <controls:ExtendedEntry  Margin="16,0"
                                                      HeightRequest="60"
                                                     Placeholder="{xct:Translate Search}"
                                                     HorizontalTextAlignment="Center" 
@@ -93,6 +93,6 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
-        </userControls:Popup>
+        </controls:PopupFrame>
     </pages:PopupPage.Content>
 </pages:PopupPage>

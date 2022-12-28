@@ -1,16 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.GameMembers;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
+﻿using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Service.Contracts.GameMembers;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.GameMembers;
 
@@ -19,11 +9,11 @@ public class GetPlayerRole : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<PlayerRoleResult>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IGameMemberService _gameMemberService;
 
-    public GetPlayerRole(IUnitOfWork unitOfWork)
+    public GetPlayerRole(IGameMemberService gameMemberService)
     {
-        _unitOfWork = unitOfWork;
+        _gameMemberService = gameMemberService;
     }
 
     [ApiVersion("1.0")]
@@ -33,18 +23,6 @@ public class GetPlayerRole : EndpointBaseAsync
     public override async Task<ActionResult<ApiResult<PlayerRoleResult>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        var role = await _unitOfWork.GameMember.GetRoleOfPlayer(userId, gameId);
-        if (role.Any())
-            return Ok(new ApiResult<PlayerRoleResult>()
-            {
-                IsSuccess = true,
-                Data = role.FirstOrDefault()
-            });
-        return Ok(new ApiResult<PlayerRoleResult>()
-        {
-            IsSuccess = false,
-            StatusCode = ApiResultStatusCode.NotFound,
-            Errors = new[] { "No such member found for this game" }
-        });
+        return Ok(await _gameMemberService.GetPlayerRole(userId, gameId));
     }
 }

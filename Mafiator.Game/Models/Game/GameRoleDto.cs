@@ -1,15 +1,14 @@
 ﻿using Mafiator.Common.Data.Enums;
 using MessagePack;
 
-namespace Mafiator.Game.Models.Game
-{
-    [MessagePackObject]
-    public class GameRoleDto
-    {
-        [Key(0)]
-        public GameRole? Role { get; set; }
+namespace Mafiator.Game.Models.Game;
 
-        [Key(1)]
-        public short Count { get; set; }
-    }
+[MessagePackObject]
+public sealed class GameRoleDto
+{
+    [Key(0)]
+    public GameRole? Role { get; set; }
+
+    [Key(1)]
+    public short Count { get; set; }
 }

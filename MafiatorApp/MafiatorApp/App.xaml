@@ -1,7 +1,7 @@
 ﻿<Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
-             xmlns:controls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+             xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
+             xmlns:adControls="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
              xmlns:androidSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              x:Class="MafiatorApp.App">
     <Application.Resources>
@@ -38,7 +38,7 @@
             <Color x:Key="Error">#FF204F</Color>
             <Color x:Key="Gem">#3EA163</Color>
 
-            <Style TargetType="userControls:TransitionNavigationPage">
+            <Style TargetType="controls:TransitionNavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource Day1}" />
                 <Setter Property="BarTextColor" Value="White" />
             </Style>
@@ -48,7 +48,7 @@
                         Value="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night3}}" />
                 <Setter Property="NavigationPage.HasNavigationBar" Value="False" />
             </Style>
-            <Style TargetType="userControls:ExtendedEntry">
+            <Style TargetType="controls:ExtendedEntry">
                 <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
@@ -75,7 +75,7 @@
                 <Setter Property="HasShadow" Value="True" />
                 <Setter Property="Padding" Value="8" />
             </Style>
-            <Style TargetType="userControls:Popup">
+            <Style TargetType="controls:PopupFrame">
                 <Setter Property="CornerRadius" Value="52" />
                 <Setter Property="HasShadow" Value="True" />
                 <Setter Property="Padding" Value="0" />
@@ -106,7 +106,7 @@
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="CornerRadius" Value="30" />
             </Style>
-            <Style TargetType="controls:MTAdView">
+            <Style TargetType="adControls:MTAdView">
                 <Setter Property="HeightRequest" Value="90"/>
             </Style>
         </ResourceDictionary>

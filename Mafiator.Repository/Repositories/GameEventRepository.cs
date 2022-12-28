@@ -1,5 +1,4 @@
 ﻿using Mafiator.Data.Dtos.GameEvent;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Mafiator.Repository.Repositories;

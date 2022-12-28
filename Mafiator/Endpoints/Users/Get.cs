@@ -1,15 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Users;
-using Mafiator.Data;
-using Mafiator.Service.Contracts.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Common.Data.Dtos.Users;
+using Mafiator.Service.Contracts.Users;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Users;
 
@@ -18,11 +9,11 @@ public class Get : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult<ApiResult<UserDetailsResult>>
 {
-    private readonly IIdentityService _identityService;
+    private readonly IUserService _userService;
 
-    public Get(IIdentityService identityService)
+    public Get(IUserService userService)
     {
-        _identityService = identityService;
+        _userService = userService;
     }
 
     [ApiVersion("1.0")]
@@ -32,8 +23,6 @@ public class Get : EndpointBaseAsync
     public override async Task<ActionResult<ApiResult<UserDetailsResult>>> HandleAsync(CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        var res = await _identityService.GetUser(userId);
-        res.Data.Image = Data.Constants.BlobStorageEndpoint + res.Data.Image;
-        return Ok(res);
+        return Ok(await _userService.GetDetails(userId));
     }
 }

@@ -4,14 +4,14 @@ using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Data.Dtos.User;
-using Mafiator.Entities;
 using Mafiator.Entities.Identity;
+using Mafiator.Entities.Models;
 using System;
 
 namespace Mafiator.Data;
 
 /// <summary>
-/// Custom Automapper profil used for dto conversion.
+/// Custom Automapper profile used for DTO conversion.
 /// </summary>
 public sealed class AutoMapping : Profile
 {

@@ -1,21 +1,20 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Api.Auth
+namespace Mafiator.Common.Data.Dtos.Api.Auth;
+
+/// <summary>
+/// Request to generate new token with refresh token.
+/// </summary>
+[MemoryPackable]
+public sealed partial class RefreshTokenRequest
 {
     /// <summary>
-    /// Request to generate new token with refresh token.
+    /// Jwt expired token.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class RefreshTokenRequest
-    {
-        /// <summary>
-        /// Jwt expired token.
-        /// </summary>
-        [Key(0)] public string Token { get; set; }
+    public string Token { get; set; }
 
-        /// <summary>
-        /// Refresh token needed for refresh expired token.
-        /// </summary>
-        [Key(1)] public string RefreshToken { get; set; }
-    }
+    /// <summary>
+    /// Refresh token needed for refresh expired token.
+    /// </summary>
+    public string RefreshToken { get; set; }
 }

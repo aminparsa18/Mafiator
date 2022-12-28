@@ -1,4 +1,6 @@
-﻿namespace Mafiator.Entities.Mapping;
+﻿using Mafiator.Entities.Models;
+
+namespace Mafiator.Entities.Mapping;
 
 /// <summary>
 /// Table mapping for gem.

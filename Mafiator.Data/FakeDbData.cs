@@ -1,11 +1,12 @@
 ﻿using Bogus;
 using Mafiator.Common.Helpers;
-using Mafiator.Entities;
 using Mafiator.Entities.Identity;
+using Mafiator.Entities.Models;
 using System;
 using System.Collections.Generic;
 
 namespace Mafiator.Data;
+
 public class FakeDbData
 {
     public static List<User> InitFakeUsers(int count)

@@ -1,0 +1,9 @@
+﻿global using Ardalis.ApiEndpoints;
+global using Mafiator.Api.Constants;
+global using Mafiator.Common.Data.Dtos.Api;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Swashbuckle.AspNetCore.Annotations;
+global using System.Threading;
+global using System.Threading.Tasks;

@@ -28,7 +28,6 @@ try
         .ConfigureCustomServices(builder.Configuration)
         .ConfigureCustomIdentityServices(builder.Configuration, builder.Environment);
 
-    builder.Services.AddScoped<IGameService, GameService>();
     builder.Services.AddApplicationInsightsTelemetry(options =>
     {
         options.ConnectionString = builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"];
@@ -42,11 +41,11 @@ try
         Authorization = new[]
         {
         new HangfireAuthorizationFilter()
-    }
+        }
     });
     app.Run();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     Log.Fatal(ex, $"Host terminated unexpectedly: {ex.DetailedMessage()}");
 }

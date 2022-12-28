@@ -1,6 +1,5 @@
 ﻿using Mafiator.Common.Data.Dtos.Rooms;
 using System;
-using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 

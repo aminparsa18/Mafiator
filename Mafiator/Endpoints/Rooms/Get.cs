@@ -1,15 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Rooms;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Service.Contracts.Rooms;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
@@ -18,34 +8,17 @@ public class Get : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<RoomDetailsResult>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRoomService _roomService;
 
-    public Get(IUnitOfWork unitOfWork)
+    public Get(IRoomService roomService)
     {
-        _unitOfWork = unitOfWork;
+        _roomService = roomService;
     }
 
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/rooms/{roomId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Room Endpoints" })]
-    public override async Task<ActionResult<ApiResult<RoomDetailsResult>>> HandleAsync(string roomId, CancellationToken cancellationToken = default)
-    {
-        var data = await _unitOfWork.Room.GetRoomFast(roomId);
-        if (!data.Any())
-        {
-            return Ok(new ApiResult()
-            {
-                IsSuccess = false,
-                StatusCode = ApiResultStatusCode.NotFound,
-                Errors = new[] { "Room not found." }
-            });
-        }
-
-        return Ok(new ApiResult<RoomDetailsResult>()
-        {
-            IsSuccess = true,
-            Data = data.FirstOrDefault()
-        });
-    }
+    public override async Task<ActionResult<ApiResult<RoomDetailsResult>>> HandleAsync(string roomId, CancellationToken cancellationToken = default) =>
+        Ok(await _roomService.GetDetails(roomId));
 }

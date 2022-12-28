@@ -3,7 +3,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              xmlns:local="clr-namespace:MafiatorApp.Views.LazyViews;assembly=MafiatorApp"
@@ -32,26 +32,26 @@
                                    TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}" />
                         </StackLayout>
                         <StackLayout x:Name="LoginPanel" IsVisible="False" Opacity="0" Margin="24">
-                            <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
+                            <controls:ExtendedEntry Placeholder="{xct:Translate Username}"
                                                         Text="{Binding LoginUsername.Value}"
                                                         IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
                                                         Errors="{Binding LoginUsername.Errors}" />
                             <Grid>
-                                <userControls:ExtendedEntry x:Name="LoginPassEntry"
+                                <controls:ExtendedEntry x:Name="LoginPassEntry"
                                                             Placeholder="{xct:Translate Password}"
                                                             Text="{Binding LoginPassword.Value}"
                                                             IsValid="{Binding IsLoginPasswordValid, Mode=TwoWay}"
                                                             Errors="{Binding LoginPassword.Errors}" IsPassword="True" />
-                                <userControls:ShowPasswordButton x:Name="ShowLoginPass">
-                                    <userControls:ShowPasswordButton.GestureRecognizers>
+                                <controls:ShowPasswordButton x:Name="ShowLoginPass">
+                                    <controls:ShowPasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="LoginPassVis_OnTapped"></TapGestureRecognizer>
-                                    </userControls:ShowPasswordButton.GestureRecognizers>
-                                </userControls:ShowPasswordButton>
-                                <userControls:HidePasswordButton x:Name="HideLoginPass" IsVisible="False">
-                                    <userControls:HidePasswordButton.GestureRecognizers>
+                                    </controls:ShowPasswordButton.GestureRecognizers>
+                                </controls:ShowPasswordButton>
+                                <controls:HidePasswordButton x:Name="HideLoginPass" IsVisible="False">
+                                    <controls:HidePasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="LoginPassInvis_OnTapped"></TapGestureRecognizer>
-                                    </userControls:HidePasswordButton.GestureRecognizers>
-                                </userControls:HidePasswordButton>
+                                    </controls:HidePasswordButton.GestureRecognizers>
+                                </controls:HidePasswordButton>
                             </Grid>
 
                             <Button Margin="48,8" Text="{xct:Translate Continue}" Command="{Binding LoginCommand}" />
@@ -61,7 +61,7 @@
                         </StackLayout>
                         <StackLayout x:Name="RegisterPanel" IsVisible="False" Opacity="0" Margin="24">
                             <Grid>
-                                <userControls:ExtendedEntry
+                                <controls:ExtendedEntry
                                     Text="{Binding PhoneNo.Value}"
                                     HorizontalTextAlignment="Center"
                                     IsValid="{Binding IsPhoneNoValid, Mode=TwoWay}"
@@ -84,47 +84,47 @@
                                     </Label>
                                 </StackLayout>
                             </Grid>
-                            <userControls:ExtendedEntry Placeholder="{xct:Translate Username}"
+                            <controls:ExtendedEntry Placeholder="{xct:Translate Username}"
                                                         Text="{Binding Username.Value}"
                                                         IsValid="{Binding IsUsernameValid, Mode=TwoWay}"
                                                         Errors="{Binding Username.Errors}" />
 
                             <Grid>
-                                <userControls:ExtendedEntry x:Name="RegisterPassEntry"
+                                <controls:ExtendedEntry x:Name="RegisterPassEntry"
                                                             Text="{Binding Password.Value,Mode=TwoWay}"
                                                             Placeholder="{xct:Translate Password}"
                                                             Errors="{Binding Password.Errors}" IsPassword="True"
                                                             IsValid="{Binding IsPasswordValid,Mode=TwoWay}"
                                                             HorizontalTextAlignment="Center" />
-                                <userControls:ShowPasswordButton x:Name="ShowRegisterPass">
-                                    <userControls:ShowPasswordButton.GestureRecognizers>
+                                <controls:ShowPasswordButton x:Name="ShowRegisterPass">
+                                    <controls:ShowPasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="RegisterPassVis_OnTapped"></TapGestureRecognizer>
-                                    </userControls:ShowPasswordButton.GestureRecognizers>
-                                </userControls:ShowPasswordButton>
-                                <userControls:HidePasswordButton x:Name="HideRegisterPass" IsVisible="False">
-                                    <userControls:HidePasswordButton.GestureRecognizers>
+                                    </controls:ShowPasswordButton.GestureRecognizers>
+                                </controls:ShowPasswordButton>
+                                <controls:HidePasswordButton x:Name="HideRegisterPass" IsVisible="False">
+                                    <controls:HidePasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="RegisterPassInvis_OnTapped"></TapGestureRecognizer>
-                                    </userControls:HidePasswordButton.GestureRecognizers>
-                                </userControls:HidePasswordButton>
+                                    </controls:HidePasswordButton.GestureRecognizers>
+                                </controls:HidePasswordButton>
                             </Grid>
                             <Grid>
-                                <userControls:ExtendedEntry x:Name="ConfPassEntry"
+                                <controls:ExtendedEntry x:Name="ConfPassEntry"
                                                             Text="{Binding ConfirmPassword.Value,Mode=TwoWay}"
                                                             Placeholder="{xct:Translate ConfirmPassword}"
                                                             IsPassword="True"
                                                             IsValid="{Binding IsConfirmPasswordValid,Mode=TwoWay}"
                                                             Errors="{Binding ConfirmPassword.Errors}"
                                                             HorizontalTextAlignment="Center" />
-                                <userControls:ShowPasswordButton x:Name="ShowRegisterConfirmPass">
-                                    <userControls:ShowPasswordButton.GestureRecognizers>
+                                <controls:ShowPasswordButton x:Name="ShowRegisterConfirmPass">
+                                    <controls:ShowPasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="ConfRegisterPassVis_OnTapped"></TapGestureRecognizer>
-                                    </userControls:ShowPasswordButton.GestureRecognizers>
-                                </userControls:ShowPasswordButton>
-                                <userControls:HidePasswordButton x:Name="HideRegisterConfirmPass" IsVisible="False">
-                                    <userControls:HidePasswordButton.GestureRecognizers>
+                                    </controls:ShowPasswordButton.GestureRecognizers>
+                                </controls:ShowPasswordButton>
+                                <controls:HidePasswordButton x:Name="HideRegisterConfirmPass" IsVisible="False">
+                                    <controls:HidePasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="ConfRegisterPassInvis_OnTapped"></TapGestureRecognizer>
-                                    </userControls:HidePasswordButton.GestureRecognizers>
-                                </userControls:HidePasswordButton>
+                                    </controls:HidePasswordButton.GestureRecognizers>
+                                </controls:HidePasswordButton>
                             </Grid>
                             <Button Margin="48,8" Text="{xct:Translate Continue}" Command="{Binding RegisterCommand}" />
                         </StackLayout>

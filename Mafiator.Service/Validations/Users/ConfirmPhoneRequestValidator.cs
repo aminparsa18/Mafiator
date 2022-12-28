@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Users;
 
 namespace Mafiator.Service.Validations.Users;
+
 public class ConfirmPhoneRequestValidator : AbstractValidator<ConfirmPhoneRequest>
 {
     public ConfirmPhoneRequestValidator()

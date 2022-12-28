@@ -7,23 +7,22 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Mafiator.Common.Client.Services.Votes
+namespace Mafiator.Common.Client.Services.Votes;
+
+/// <inheritdoc/>
+public class VoteApiService : IVotesApiService
 {
     /// <inheritdoc/>
-    public class VoteApiService : IVotesApiService
+    public Task<ApiResult<IEnumerable<VoteDetailsResult>>> GetVotesStatus(string gameId)
     {
-        /// <inheritdoc/>
-        public Task<ApiResult<IEnumerable<VoteDetailsResult>>> GetVotesStatus(string gameId)
-        {
-            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<VoteDetailsResult>>>(
-               new Uri($"{UrlConstants.BaseUrl}votes/{gameId}"));
-        }
+        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<VoteDetailsResult>>>(
+           new Uri($"{UrlConstants.BaseUrl}votes/{gameId}"));
+    }
 
-        /// <inheritdoc/>
-        public Task<HttpResponseMessage> SendVotes(VoteCreateRequest request)
-        {
-            return BaseHttpClient.Instance.PostAsMessagePackAsync(
-                new Uri($"{UrlConstants.BaseUrl}votes"), request);
-        }
+    /// <inheritdoc/>
+    public Task<HttpResponseMessage> SendVotes(VoteCreateRequest request)
+    {
+        return BaseHttpClient.Instance.PostAsMessagePackAsync(
+            new Uri($"{UrlConstants.BaseUrl}votes"), request);
     }
 }

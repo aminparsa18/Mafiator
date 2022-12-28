@@ -2,6 +2,7 @@
 using Android.Runtime;
 
 namespace Mafiator.Game.Platforms.Android;
+
 [Application]
 public class MainApplication : MauiApplication
 {

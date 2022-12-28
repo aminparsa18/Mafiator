@@ -1,25 +1,22 @@
 ﻿using Mafiator.Common.Data.Enums;
-using MessagePack;
+using MemoryPack;
 using System;
 
-namespace Mafiator.Common.Data.Dtos.Games
+namespace Mafiator.Common.Data.Dtos.Games;
+
+/// <summary>
+/// Room game dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class RoomGameResult
 {
     /// <summary>
-    /// Room game dto.
+    /// Game start date.
     /// </summary>
-    [MessagePackObject]
-    public sealed class RoomGameResult
-    {
-        /// <summary>
-        /// Game start date.
-        /// </summary>
-        [Key(0)]
-        public DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
-        /// <summary>
-        /// Game status.
-        /// </summary>
-        [Key(1)]
-        public GameStatus Status { get; set; }
-    }
+    /// <summary>
+    /// Game status.
+    /// </summary>
+    public GameStatus Status { get; set; }
 }

@@ -1,7 +1,5 @@
-﻿using MessagePack;
-using MessagePack.Resolvers;
+﻿using MemoryPack;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -14,15 +12,12 @@ public class Barrel : IBarrel
 {
     readonly ReaderWriterLockSlim _indexLocker;
     readonly Lazy<string> _baseDirectory;
-    private readonly MessagePackSerializerOptions _serializerSettings;
 
     private Barrel(string cacheDirectory = null)
     {
         _baseDirectory = new Lazy<string>(() => string.IsNullOrEmpty(cacheDirectory)
             ? Path.Combine(BarrelUtils.GetBasePath(ApplicationId), "MonkeyCacheFS")
             : cacheDirectory);
-        _serializerSettings =
-            ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray);
         _indexLocker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
 
@@ -49,37 +44,6 @@ public class Barrel : IBarrel
     /// <summary>
     /// Adds an entry to the barrel
     /// </summary>
-    /// <param name="key">Unique identifier for the entry</param>
-    /// <param name="data">Data object to store</param>
-    /// <param name="expireIn">Time from UtcNow to expire entry in</param>
-    /// <param name="eTag">Optional eTag information</param>
-    private void Add(string key, string data, TimeSpan expireIn, string eTag = null)
-    {
-        _indexLocker.EnterWriteLock();
-
-        try
-        {
-            var hash = Hash(key);
-            var path = Path.Combine(_baseDirectory.Value, hash);
-
-            if (!Directory.Exists(_baseDirectory.Value))
-                Directory.CreateDirectory(_baseDirectory.Value);
-
-            File.WriteAllText(path, data);
-
-            _index[key] = new Tuple<string, DateTime>(eTag ?? string.Empty, BarrelUtils.GetExpiration(expireIn));
-
-            WriteIndex();
-        }
-        finally
-        {
-            _indexLocker.ExitWriteLock();
-        }
-    }
-
-    /// <summary>
-    /// Adds an entry to the barrel
-    /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="key">Unique identifier for the entry</param>
     /// <param name="data">Data object to store</param>
@@ -89,16 +53,15 @@ public class Barrel : IBarrel
     public void Add<T>(string key,
         T data,
         TimeSpan expireIn,
-        string eTag = null,
-        MessagePackSerializerOptions options = null)
+        string eTag = null)
     {
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentException("Key can not be null or empty.", nameof(key));
 
         if (data == null)
-            throw new ArgumentNullException("Data can not be null.", nameof(data));
+            throw new ArgumentNullException(nameof(data), "Data can not be null.");
 
-        var dataMsgPack = MessagePackSerializer.Serialize(data, options ?? _serializerSettings);
+        var dataMsgPack = MemoryPackSerializer.Serialize(data);
 
         Add(key, dataMsgPack, expireIn, eTag);
     }
@@ -265,7 +228,7 @@ public class Barrel : IBarrel
     /// <param name="key">Unique identifier for the entry to get</param>
     /// <param name="options">Custom MessagePack serialization settings to use</param>
     /// <returns>The data object that was stored if found, else default(T)</returns>
-    public T Get<T>(string key, MessagePackSerializerOptions options = null)
+    public T Get<T>(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentException("Key can not be null or empty.", nameof(key));
@@ -288,7 +251,7 @@ public class Barrel : IBarrel
                     return (T) final;
                 }
 
-                result = MessagePackSerializer.Deserialize<T>(contents,options ?? _serializerSettings);
+                result = MemoryPackSerializer.Deserialize<T>(contents);
             }
         }
         finally
@@ -433,8 +396,7 @@ public class Barrel : IBarrel
 
     private static string Hash(string input)
     {
-        var md5Hasher = MD5.Create();
-        var data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
+        var data = MD5.HashData(Encoding.Default.GetBytes(input));
         return BitConverter.ToString(data);
     }
 

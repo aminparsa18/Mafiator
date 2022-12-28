@@ -1,6 +1,5 @@
-﻿namespace Mafiator.Game.Models.PipeEvents
+﻿namespace Mafiator.Game.Models.PipeEvents;
+
+public struct UpdateRoomEvent
 {
-    public struct UpdateRoomEvent
-    {
-    }
 }

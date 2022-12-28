@@ -1,13 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Service.Contracts.Games;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Games;
 
@@ -16,11 +8,11 @@ public class IsJoined : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<string>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IGameService _gameService;
 
-    public IsJoined(IUnitOfWork unitOfWork)
+    public IsJoined(IGameService gameService)
     {
-        _unitOfWork = unitOfWork;
+        _gameService = gameService;
     }
 
     [ApiVersion("1.0")]
@@ -30,11 +22,6 @@ public class IsJoined : EndpointBaseAsync
     public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        var member = await _unitOfWork.Game.IsJoinedFast(userId, gameId);
-        return Ok(new ApiResult<string>()
-        {
-            IsSuccess = true,
-            Data = member
-        });
+        return Ok(await _gameService.IsJoined(userId, gameId));
     }
 }

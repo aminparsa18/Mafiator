@@ -1,18 +1,16 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 
-namespace Mafiator.Common.Data.Dtos.Rooms
+namespace Mafiator.Common.Data.Dtos.Rooms;
+
+/// <summary>
+/// Room create result dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class RoomCreateResult
 {
     /// <summary>
-    /// Room create result dto.
+    /// Room key identifier.
     /// </summary>
-    [MessagePackObject]
-    public sealed class RoomCreateResult
-    {
-        /// <summary>
-        /// Room key identifier.
-        /// </summary>
-        [Key(0)]
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

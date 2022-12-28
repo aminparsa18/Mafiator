@@ -1,15 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Entities;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Service.Contracts.Rooms;
 using System;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
@@ -19,11 +10,11 @@ public class JoinById : EndpointBaseAsync
     .WithRequest<Guid>
     .WithActionResult<ApiResult>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRoomJoinService _roomJoinService;
 
-    public JoinById(IUnitOfWork unitOfWork)
+    public JoinById(IRoomJoinService roomJoinService)
     {
-        _unitOfWork = unitOfWork;
+        _roomJoinService = roomJoinService;
     }
 
     [ApiVersion("1.0")]
@@ -33,14 +24,6 @@ public class JoinById : EndpointBaseAsync
     public override async Task<ActionResult<ApiResult>> HandleAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        await _unitOfWork.RoomMember.AddFast(new RoomMember()
-        {
-            UserId = Guid.Parse(userId),
-            RoomId = id
-        });
-        return Ok(new ApiResult()
-        {
-            IsSuccess = true
-        });
+        return Ok(await _roomJoinService.JoinById(userId, id));
     }
 }

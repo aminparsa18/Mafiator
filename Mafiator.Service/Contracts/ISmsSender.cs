@@ -1,7 +1,6 @@
-﻿namespace Mafiator.Service.Contracts
+﻿namespace Mafiator.Service.Contracts;
+
+public interface ISmsSender
 {
-    public interface ISmsSender
-    {
-        string SendAuthSmsAsync(string code, string phoneNumber);
-    }
+    string SendAuthSmsAsync(string code, string phoneNumber);
 }

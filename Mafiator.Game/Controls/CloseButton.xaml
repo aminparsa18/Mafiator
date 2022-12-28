@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="Mafiator.Game.Controls.CloseButton">
-  <Grid effects:TouchEffect.PressedOpacity="0.2" effects:TouchEffect.PressedScale="1.8"
+             xmlns:effects="clr-namespace:MauiTouchEffect;assembly=MauiTouchEffect"
+             x:Class="Mafiator.Game.Controls.CloseButton"
+             HorizontalOptions="EndAndExpand">
+    <Grid effects:TouchEffect.PressedOpacity="0.2" effects:TouchEffect.PressedScale="1.8"
               effects:TouchEffect.AnimationEasing="Linear" effects:TouchEffect.AnimationDuration="400"
               effects:TouchEffect.Command="{Binding PopCommand}">
-            <Path
+        <Path
                 Data="M669.353,557.95a7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6,13.343,13.343,0,0,1-6.1,0,7.51,7.51,0,0,1-5.6-5.6A13.343,13.343,0,0,1,669.353,557.95Z"
                 Stroke="#ffffff"
                 StrokeThickness="3"
@@ -15,11 +16,11 @@
                 HeightRequest="34"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand">
-                <Path.RenderTransform>
-                    <TranslateTransform X="-668.245" Y="-551.245" />
-                </Path.RenderTransform>
-            </Path>
-            <Path Data="M679.768,559.232l-3.536,3.536m3.536,0-3.536-3.536"
+            <Path.RenderTransform>
+                <TranslateTransform X="-668.245" Y="-551.245" />
+            </Path.RenderTransform>
+        </Path>
+        <Path Data="M679.768,559.232l-3.536,3.536m3.536,0-3.536-3.536"
                   Stroke="#ffffff"
                   StrokeThickness="3"
                   Aspect="Uniform"
@@ -29,9 +30,9 @@
                   StrokeLineJoin="Round"
                   HorizontalOptions="CenterAndExpand"
                   VerticalOptions="CenterAndExpand">
-                <Path.RenderTransform>
-                    <TranslateTransform X="-675.171" Y="-558.171" />
-                </Path.RenderTransform>
-            </Path>
-        </Grid>
+            <Path.RenderTransform>
+                <TranslateTransform X="-675.171" Y="-558.171" />
+            </Path.RenderTransform>
+        </Path>
+    </Grid>
 </ContentView>

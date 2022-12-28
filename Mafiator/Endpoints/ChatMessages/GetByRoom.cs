@@ -1,16 +1,7 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.ChatMessages;
-using Mafiator.Data;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Common.Data.Dtos.ChatMessages;
+using Mafiator.Service.Contracts.ChatMessages;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.ChatMessages;
 
@@ -19,11 +10,11 @@ public class GetByRoom : EndpointBaseAsync
     .WithRequest<Guid>
     .WithActionResult<ApiResult<IEnumerable<ChatMessageResult>>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IChatMessageService _chatMessageService;
 
-    public GetByRoom(IUnitOfWork unitOfWork)
+    public GetByRoom(IChatMessageService chatMessageService)
     {
-        this._unitOfWork = unitOfWork;
+        _chatMessageService = chatMessageService;
     }
 
     [ApiVersion("1.0")]
@@ -32,12 +23,10 @@ public class GetByRoom : EndpointBaseAsync
     [SwaggerOperation(OperationId = nameof(GetByRoom), Tags = new[] { "Chat Messages Endpoints" })]
     public override async Task<ActionResult<ApiResult<IEnumerable<ChatMessageResult>>>> HandleAsync(Guid roomId, CancellationToken cancellationToken = default)
     {
-        var chats = await _unitOfWork.ChatMessage.GetByRoom(roomId);
-        chats.ForEach(c => c.Image = $"{Data.Constants.BlobStorageEndpoint}{c.Image}");
         return Ok(new ApiResult<List<ChatMessageResult>>()
         {
             IsSuccess = true,
-            Data = chats
+            Data = await _chatMessageService.GetByRoom(roomId)
         });
     }
 }

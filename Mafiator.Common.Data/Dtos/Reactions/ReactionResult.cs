@@ -1,30 +1,26 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 
-namespace Mafiator.Common.Data.Dtos.Reactions
+namespace Mafiator.Common.Data.Dtos.Reactions;
+
+/// <summary>
+/// Reaction dto
+/// </summary>
+[MemoryPackable]
+public sealed partial class ReactionResult
 {
     /// <summary>
-    /// Reaction dto
+    /// Reaction key Identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class ReactionResult
-    {
-        /// <summary>
-        /// Reaction key Identifier.
-        /// </summary>
-        [Key(0)]
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        /// <summary>
-        /// Title.
-        /// </summary>
-        [Key(1)]
-        public string Title { get; set; }
+    /// <summary>
+    /// Title.
+    /// </summary>
+    public string Title { get; set; }
 
-        /// <summary>
-        /// Image.
-        /// </summary>
-        [Key(2)]
-        public string Image { get; set; }
-    }
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
 }

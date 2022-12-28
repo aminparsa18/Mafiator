@@ -1,16 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
-using FluentValidation;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Users;
-using Mafiator.Service.Contracts.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Mafiator.Common.Data.Dtos.Users;
+using Mafiator.Service.Contracts.Users;
 
 namespace Mafiator.Api.Endpoints.Users;
 
@@ -20,29 +9,17 @@ public class Register : EndpointBaseAsync
     .WithRequest<RegisterUserRequest>
     .WithActionResult<ApiResult>
 {
-    private readonly IIdentityService _identityService;
-    private readonly IValidator<RegisterUserRequest> _validator;
+    private readonly IUserRegisterService _userRegisterService;
 
-    public Register(IIdentityService identityService, IValidator<RegisterUserRequest> validator)
+    public Register(IUserRegisterService userRegisterService)
     {
-        _identityService = identityService;
-        _validator = validator;
+        _userRegisterService = userRegisterService;
     }
 
     [ApiVersion("1.0")]
     [HttpPost("api/v{version:apiVersion}/users/register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(OperationId = nameof(Register), Tags = new[] { "Users Endpoints" })]
-    public override async Task<ActionResult<ApiResult>> HandleAsync(RegisterUserRequest request, CancellationToken cancellationToken = default)
-    {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-            return Ok(new ApiResult
-            {
-                StatusCode = ApiResultStatusCode.BadRequest,
-                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
-            });
-        var result = await _identityService.Register(request);
-        return Ok(result);
-    }
+    public override async Task<ActionResult<ApiResult>> HandleAsync(RegisterUserRequest request, CancellationToken cancellationToken = default) =>
+        Ok(await _userRegisterService.Register(request));
 }

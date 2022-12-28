@@ -8,7 +8,7 @@
                  xmlns:game="clr-namespace:MafiatorApp.Dtos.Game;assembly=MafiatorApp"
                  xmlns:vote="clr-namespace:MafiatorApp.Dtos.Vote;assembly=MafiatorApp"
                  xmlns:shimmerLayout="clr-namespace:MafiatorApp.UserControls.ShimmerLayout;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  x:Class="MafiatorApp.Views.CandidatesView"
@@ -30,14 +30,14 @@
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
         <StackLayout>
-            <userControls:Popup Margin="16,36">
+            <controls:PopupFrame Margin="16,36">
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="16">
                         <StackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
                             <Label Text="{Binding Title}" FontSize="Large" FontAttributes="Bold" />
                             <Label Text="{Binding SubTitle}" />
                         </StackLayout>
-                        <userControls:CircularProgressBar Stroke="18" Progress="{Binding ProgressTimer}"
+                        <controls:CircularProgressBar Stroke="18" Progress="{Binding ProgressTimer}"
                                                           VerticalOptions="Center" HorizontalOptions="EndAndExpand"
                                                           WidthRequest="60" HeightRequest="60"
                                                           Color="{StaticResource Night3}" />
@@ -262,7 +262,7 @@
                         </xct:StateLayout.StateViews>
                     </Grid>
                 </StackLayout>
-            </userControls:Popup>
+            </controls:PopupFrame>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

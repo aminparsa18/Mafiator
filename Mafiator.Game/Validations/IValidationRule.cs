@@ -1,8 +1,7 @@
-﻿namespace Mafiator.Game.Validations
+﻿namespace Mafiator.Game.Validations;
+
+public interface IValidationRule<in T>
 {
-    public interface IValidationRule<in T>
-    {
-        string ValidationMessage { get; set; }
-        bool Check(T value);
-    }
+    string ValidationMessage { get; set; }
+    bool Check(T value);
 }

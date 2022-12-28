@@ -1,7 +1,7 @@
 ﻿using Mafiator.Data;
 using Mafiator.Entities.Identity;
 using Mafiator.Service.Contracts.Identity;
-using Mafiator.Service.Contracts.Impl.Identity;
+using Mafiator.Service.Services.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -14,81 +14,81 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mafiator.IocConfig.Extensions
-{
-    public static class AddIdentityWithOptionsExtensions
-    {
-        public static IServiceCollection AddIdentityWithOptions(this IServiceCollection services,IConfiguration configuration,IWebHostEnvironment webHostEnvironment)
-        {
-            services.AddIdentity<User, Role>(
-                options =>
-                {
-                    //Configure Password
-                    options.Password.RequireDigit = true;
-                    options.Password.RequiredLength = 6;
-                    options.Password.RequiredUniqueChars = 1;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
-                    options.User.RequireUniqueEmail = false;
-                    options.SignIn.RequireConfirmedEmail = false;
-                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20);
-                    options.Lockout.MaxFailedAccessAttempts = 3;
-                })
-             .AddEntityFrameworkStores<ApplicationDbContext>()
-             .AddErrorDescriber<ApplicationIdentityErrorDescriber>()
-             .AddDefaultTokenProviders();
-            services.AddTransient<ITokenService, TokenService>();
-            // configure strongly typed settings objects
-            var appSettingsSection = configuration.GetSection("Jwt");
-            services.Configure<Jwt>(appSettingsSection);
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<Jwt>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                RequireExpirationTime = false,
-                ValidateLifetime = true
-            };
+namespace Mafiator.IocConfig.Extensions;
 
-            services.AddSingleton(tokenValidationParameters);
-            services.AddAuthentication(x =>
+public static class AddIdentityWithOptionsExtensions
+{
+    public static IServiceCollection AddIdentityWithOptions(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+    {
+        services.AddIdentity<User, Role>(
+            options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddGoogle(g =>
+                //Configure Password
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
+                options.User.RequireUniqueEmail = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+            })
+         .AddEntityFrameworkStores<ApplicationDbContext>()
+         .AddErrorDescriber<ApplicationIdentityErrorDescriber>()
+         .AddDefaultTokenProviders();
+        services.AddTransient<ITokenService, TokenService>();
+        // configure strongly typed settings objects
+        var appSettingsSection = configuration.GetSection("Jwt");
+        services.Configure<Jwt>(appSettingsSection);
+        // configure jwt authentication
+        var appSettings = appSettingsSection.Get<Jwt>();
+        var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            RequireExpirationTime = false,
+            ValidateLifetime = true
+        };
+
+        services.AddSingleton(tokenValidationParameters);
+        services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddGoogle(g =>
+        {
+            g.ClientId = "562105913185-p9mp4k328ved7hpmnd8pevruei7chejd.apps.googleusercontent.com";
+            g.ClientSecret = "_Tb1heniOnV_pOKBtFcXyPX5";
+            g.CallbackPath = "/home/AuthRedirect";
+            g.SaveTokens = true;
+        }).AddFacebook(f =>
+        {
+            f.AppId = "2790942157883682";
+            f.AppSecret = "49e5c75d1ab421c43df3fd0e0db8e307";
+            f.SaveTokens = true;
+        }).AddJwtBearer(x =>
+        {
+            x.SaveToken = true;
+            x.TokenValidationParameters = tokenValidationParameters;
+            x.Events = new JwtBearerEvents
             {
-                g.ClientId = "562105913185-p9mp4k328ved7hpmnd8pevruei7chejd.apps.googleusercontent.com";
-                g.ClientSecret = "_Tb1heniOnV_pOKBtFcXyPX5";
-                g.CallbackPath= "/home/AuthRedirect";
-                g.SaveTokens = true;
-            }).AddFacebook(f =>
-            {
-                f.AppId = "2790942157883682";
-                f.AppSecret = "49e5c75d1ab421c43df3fd0e0db8e307";
-                f.SaveTokens = true;
-            }).AddJwtBearer(x =>
-            {
-                x.SaveToken = true;
-                x.TokenValidationParameters = tokenValidationParameters;
-                x.Events = new JwtBearerEvents
+                OnAuthenticationFailed = context =>
                 {
-                    OnAuthenticationFailed = context =>
+                    if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                     {
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                        {
-                            context.Response.Headers.Add("Token-Expired", "true");
-                        }
-                        return Task.CompletedTask;
-                    },
-                    OnMessageReceived = context =>
-                    {
+                        context.Response.Headers.Add("Token-Expired", "true");
+                    }
+                    return Task.CompletedTask;
+                },
+                OnMessageReceived = context =>
+                {
                     var accessToken = context.Request.Query["access_token"];
 
                     // If the request is for our hub...
@@ -100,14 +100,13 @@ namespace Mafiator.IocConfig.Extensions
                         context.Token = accessToken;
                     }
                     return Task.CompletedTask;
-                    }
-                };
-            });
-            var keysFolder = Path.Combine(webHostEnvironment.ContentRootPath, "Keys");
-            services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
-                .SetApplicationName("Mafiator");
-            return services;
-        }
+                }
+            };
+        });
+        var keysFolder = Path.Combine(webHostEnvironment.ContentRootPath, "Keys");
+        services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+            .SetApplicationName("Mafiator");
+        return services;
     }
 }

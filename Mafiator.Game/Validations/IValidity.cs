@@ -1,7 +1,6 @@
-﻿namespace Mafiator.Game.Validations
+﻿namespace Mafiator.Game.Validations;
+
+public interface IValidity
 {
-    public interface IValidity
-    {
-        bool IsValid { get; set; }
-    }
+    bool IsValid { get; set; }
 }

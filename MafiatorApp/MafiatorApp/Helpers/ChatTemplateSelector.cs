@@ -1,6 +1,6 @@
 ﻿using Mafiator.Common.Data.Enums;
 using MafiatorApp.Dtos.Game;
-using MafiatorApp.Views.Templates;
+using MafiatorApp.Views.Controls;
 using Xamarin.Forms;
 
 namespace MafiatorApp.Helpers

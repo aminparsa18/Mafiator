@@ -1,58 +1,40 @@
 ﻿using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using MessagePack;
+using MemoryPack;
 using System.Collections.Generic;
 
-namespace Mafiator.Common.Data.Dtos.Api
+namespace Mafiator.Common.Data.Dtos.Api;
+
+/// <summary>
+/// Api result returning in controllers.
+/// </summary>
+[MemoryPackable]
+public partial class ApiResult
 {
     /// <summary>
-    /// Api result returning in controllers.
+    /// Flag indicating api call has been successfull.
     /// </summary>
-    [MessagePackObject]
-    public class ApiResult
-    {
-        /// <summary>
-        /// Flag indicating api call has been successfull.
-        /// </summary>
-        [Key(0)] public bool IsSuccess { get; set; }
-
-        /// <summary>
-        /// Api result status code.
-        /// </summary>
-        [Key(1)] public ApiResultStatusCode StatusCode { get; set; }
-
-        /// <summary>
-        /// Api result errrors.
-        /// </summary>
-        [Key(2)] public IEnumerable<string> Errors { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApiResult"/> class.
-        /// </summary>
-        public ApiResult()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApiResult"/> class.
-        /// </summary>
-        public ApiResult(bool isSuccess, ApiResultStatusCode statusCode, IEnumerable<string> erros = null)
-        {
-            IsSuccess = isSuccess;
-            StatusCode = statusCode;
-            Errors = erros;
-        }
-    }
+    public bool IsSuccess { get; set; }
 
     /// <summary>
-    /// Generic typed api result returning in controllers.
+    /// Api result status code.
     /// </summary>
-    [MessagePackObject]
-    public sealed class ApiResult<TData> : ApiResult
-        where TData : class
-    {
-        /// <summary>
-        /// Api result data.
-        /// </summary>
-        [Key(3)] public TData Data { get; set; }
-    }
+    public ApiResultStatusCode StatusCode { get; set; }
+
+    /// <summary>
+    /// Api result errrors.
+    /// </summary>
+    public IEnumerable<string> Errors { get; set; }
+}
+
+/// <summary>
+/// Generic typed api result returning in controllers.
+/// </summary>
+[MemoryPackable]
+public sealed partial class ApiResult<TData> : ApiResult
+    where TData : class
+{
+    /// <summary>
+    /// Api result data.
+    /// </summary>
+    public TData Data { get; set; }
 }

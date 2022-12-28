@@ -1,23 +1,20 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Users
+namespace Mafiator.Common.Data.Dtos.Users;
+
+/// <summary>
+/// Update profile dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class UpdateProfileRequest
 {
     /// <summary>
-    /// Update profile dto.
+    /// Name.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class UpdateProfileRequest
-    {
-        /// <summary>
-        /// Name.
-        /// </summary>
-        [Key(0)]
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        /// <summary>
-        /// Image.
-        /// </summary>
-        [Key(1)]
-        public string Image { get; set; }
-    }
+    /// <summary>
+    /// Image.
+    /// </summary>
+    public string Image { get; set; }
 }

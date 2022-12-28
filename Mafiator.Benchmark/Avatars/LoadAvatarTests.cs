@@ -4,7 +4,6 @@ using Mafiator.Common.Data.Dtos.Avatars;
 using Mafiator.Data;
 using Mafiator.Repository;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.InteropServices;
 
 namespace Mafiator.Benchmark.Avatars;
 

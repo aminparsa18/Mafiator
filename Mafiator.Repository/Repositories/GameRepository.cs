@@ -1,9 +1,7 @@
 ﻿using Mafiator.Common.Data.Dtos.GameMembers;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Common.Data.Enums;
-using Mafiator.Data.Dtos.Game;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using DateTime = System.DateTime;

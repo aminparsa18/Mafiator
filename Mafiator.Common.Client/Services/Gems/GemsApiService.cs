@@ -6,16 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mafiator.Common.Client.Services.Gems
+namespace Mafiator.Common.Client.Services.Gems;
+
+/// <inheritdoc/>
+public class GemsApiService : IGemsApiService
 {
     /// <inheritdoc/>
-    public class GemsApiService : IGemsApiService
+    public Task<ApiResult<IEnumerable<GemResult>>> GetAllGems()
     {
-        /// <inheritdoc/>
-        public Task<ApiResult<IEnumerable<GemResult>>> GetAllGems()
-        {
-            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GemResult>>>(
-                new Uri($"{UrlConstants.BaseUrl}gems"));
-        }
+        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GemResult>>>(
+            new Uri($"{UrlConstants.BaseUrl}gems"));
     }
 }

@@ -1,0 +1,33 @@
+﻿<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp" 
+             x:Class="MafiatorApp.Views.Controls.IncomingDissLikeView">
+
+    <ContentView.Resources>
+        <converters:ProfileImageConverter x:Key="ProfileImageConverter"/>
+    </ContentView.Resources>
+
+    <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackLayout>
+            <forms:CachedImage
+              Aspect="AspectFit"
+              LoadingPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+              ErrorPlaceholder="{AppThemeBinding Light=profile_day.png,Dark=profile_night.png}"
+              WidthRequest="60"
+              HeightRequest="60"
+              DownsampleToViewSize="True"
+              Margin="0,6,0,4"
+              Source="{Binding Image,Converter={StaticResource ProfileImageConverter}}" />
+            <Label Text="{Binding DisplayName}" FontAttributes="Bold"
+                 HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+
+        <Image Grid.Column="1" HorizontalOptions="StartAndExpand" Margin="0,24,0,0" Source="disslike.png" WidthRequest="48"/>
+
+    </Grid>
+</ContentView>

@@ -1,21 +1,20 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Api.Auth
+namespace Mafiator.Common.Data.Dtos.Api.Auth;
+
+/// <summary>
+/// Api result for authentication api calls.
+/// </summary>
+[MemoryPackable]
+public sealed partial class AuthResult : ApiResult
 {
     /// <summary>
-    /// Api result for authentication api calls.
+    /// Jwt token.
     /// </summary>
-    [MessagePackObject]
-    public class AuthResult : ApiResult
-    {
-        /// <summary>
-        /// Jwt token.
-        /// </summary>
-        [Key(3)] public string Token { get; set; }
+    public string Token { get; set; }
 
-        /// <summary>
-        /// Refresh token needed for refresh expired token.
-        /// </summary>
-        [Key(4)] public string RefreshToken { get; set; }
-    }
+    /// <summary>
+    /// Refresh token needed for refresh expired token.
+    /// </summary>
+    public string RefreshToken { get; set; }
 }

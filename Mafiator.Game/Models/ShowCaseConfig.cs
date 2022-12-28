@@ -1,22 +1,21 @@
-﻿namespace Mafiator.Game.Models
+﻿namespace Mafiator.Game.Models;
+
+public class ShowCaseConfig
 {
-    public class ShowCaseConfig
-    {
-        public string ViewText { get; set; }
-        public VerticalPosition TextVerticalPosition { get; set; }
-        public HorizontalPosition TextHorizontalPosition { get; set; }
-    }
+    public string ViewText { get; set; }
+    public VerticalPosition TextVerticalPosition { get; set; }
+    public HorizontalPosition TextHorizontalPosition { get; set; }
+}
 
-    public enum VerticalPosition
-    {
-        Top,
-        Bottom
-    }
+public enum VerticalPosition
+{
+    Top,
+    Bottom
+}
 
-    public enum HorizontalPosition
-    {
-        Left,
-        Center,
-        Right
-    }
+public enum HorizontalPosition
+{
+    Left,
+    Center,
+    Right
 }

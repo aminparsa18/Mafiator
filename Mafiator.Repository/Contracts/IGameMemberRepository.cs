@@ -2,7 +2,6 @@
 using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.User;
 using System;
-using System.Collections.Generic;
 
 namespace Mafiator.Repository.Contracts;
 

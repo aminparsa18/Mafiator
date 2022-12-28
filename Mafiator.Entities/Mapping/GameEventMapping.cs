@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mafiator.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mafiator.Entities.Mapping;
@@ -22,6 +23,7 @@ public class GameEventMapping : BaseEntityTypeConfiguration<GameEvent>
             .HasForeignKey(d => d.MemberId)
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_GameEvent_Member");
+
         base.Configure(builder);
     }
 }

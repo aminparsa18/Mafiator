@@ -5,10 +5,9 @@
                  xmlns:forms="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
-                 xmlns:templates="clr-namespace:MafiatorApp.Views.Templates;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  x:Class="MafiatorApp.Views.NewRoomView"
@@ -29,9 +28,9 @@
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </pages:PopupPage.Resources>
     <pages:PopupPage.Content>
-        <userControls:Popup Margin="16">
+        <controls:PopupFrame Margin="16">
             <StackLayout>
-                <userControls:PopupHeader TitleText="{xct:Translate Create}" SubTitleText="{xct:Translate NewRoom}"/>
+                <controls:PopupHeader TitleText="{xct:Translate Create}" SubTitleText="{xct:Translate NewRoom}"/>
                 <Frame Margin="16,0,8,8" Padding="4,0"
                        BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
                        HorizontalOptions="StartAndExpand">
@@ -52,7 +51,7 @@
                                TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
                     </StackLayout>
                 </Frame>
-                <userControls:ExtendedEntry
+                <controls:ExtendedEntry
                     Placeholder="{xct:Translate EnterRoomName}"
                     Text="{Binding Name.Value}"
                     IsValid="{Binding IsNameValid,Mode=TwoWay}"
@@ -60,7 +59,7 @@
                     Errors="{Binding Name.Errors}" />
 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Margin="16,0,16,16">
-                    <templates:CheckBoxView x:Name="PrivateChkBox" Text="{xct:Translate PrivateRoom}"
+                    <controls:CheckBoxView x:Name="PrivateChkBox" Text="{xct:Translate PrivateRoom}"
                                             IsChecked="{Binding IsPrivate,Mode=TwoWay}" />
                     
                     <Grid WidthRequest="30" HeightRequest="30">
@@ -162,6 +161,6 @@
                     </Frame>
                 </Grid>
             </StackLayout>
-        </userControls:Popup>
+        </controls:PopupFrame>
     </pages:PopupPage.Content>
 </pages:PopupPage>

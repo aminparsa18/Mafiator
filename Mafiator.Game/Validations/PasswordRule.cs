@@ -1,25 +1,24 @@
 ﻿using Mafiator.Game.Resources.Texts;
 using Microsoft.Extensions.Localization;
 
-namespace Mafiator.Game.Validations
+namespace Mafiator.Game.Validations;
+
+public class PasswordRule<T> : IValidationRule<T>
 {
-    public class PasswordRule<T> : IValidationRule<T>
+    public string ValidationMessage { get; set; }
+
+    public bool Check(T value)
     {
-        public string ValidationMessage { get; set; }
+        if (value == null)
+            return false;
 
-        public bool Check(T value)
-        {
-            if (value == null)
-                return false;
+        return value.ToString().Any(char.IsDigit) &&
+               value.ToString().Any(char.IsLetter) &&
+               value.ToString().Length > 5;
+    }
 
-            return value.ToString().Any(char.IsDigit) &&
-                   value.ToString().Any(char.IsLetter) &&
-                   value.ToString().Length > 5;
-        }
-
-        public PasswordRule(IStringLocalizer<AppResources> localizer)
-        {
-            ValidationMessage = localizer["InvalidPassword"];
-        }
+    public PasswordRule(IStringLocalizer<AppResources> localizer)
+    {
+        ValidationMessage = localizer["InvalidPassword"];
     }
 }

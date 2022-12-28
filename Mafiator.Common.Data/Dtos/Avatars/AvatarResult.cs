@@ -1,11 +1,9 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Avatars
+namespace Mafiator.Common.Data.Dtos.Avatars;
+
+[MemoryPackable]
+public sealed partial class AvatarResult
 {
-    [MessagePackObject()]
-    public sealed class AvatarResult
-    {
-        [Key(0)]
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

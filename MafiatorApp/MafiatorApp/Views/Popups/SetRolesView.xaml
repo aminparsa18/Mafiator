@@ -5,7 +5,7 @@
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:models="clr-namespace:MafiatorApp.Models;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
@@ -30,9 +30,9 @@
     </pages:PopupPage.Animation>
     <pages:PopupPage.Content>
         <StackLayout>
-            <userControls:Popup Margin="24,36">
+            <controls:PopupFrame Margin="24,36">
                 <StackLayout>
-                    <userControls:PopupHeader TitleText="Select" SubTitleText="Roles of game" />
+                    <controls:PopupHeader TitleText="Select" SubTitleText="Roles of game" />
                     <CollectionView
                         ItemsSource="{Binding Roles}"
                         SelectedItem="{Binding Role}"
@@ -118,7 +118,7 @@
                     </Label>
                     <Button Text="Save" Command="{Binding SetRolesCommand}" HorizontalOptions="CenterAndExpand" />
                 </StackLayout>
-            </userControls:Popup>
+            </controls:PopupFrame>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

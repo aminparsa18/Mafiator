@@ -1,15 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.GameMembers;
-using Mafiator.Data;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Mafiator.Common.Data.Dtos.GameMembers;
+using Mafiator.Service.Contracts.GameMembers;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.GameMembers;
 
@@ -18,28 +9,17 @@ public class GetByGame : EndpointBaseAsync
     .WithRequest<string>
     .WithActionResult<ApiResult<IEnumerable<GameMemberResult>>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IGameMemberService _gameMemberService;
 
-    public GetByGame(IUnitOfWork unitOfWork)
+    public GetByGame(IGameMemberService gameMemberService)
     {
-        _unitOfWork = unitOfWork;
+        _gameMemberService = gameMemberService;
     }
 
     [ApiVersion("1.0")]
     [HttpGet("api/v{version:apiVersion}/gamemembers/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(OperationId = nameof(GetByGame), Tags = new[] { "Game members Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<GameMemberResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
-    {
-        var members = await _unitOfWork.GameMember.GetByGameFast(gameId);
-        foreach (var gameMemberDto in members)
-        {
-            gameMemberDto.Image = Data.Constants.BlobStorageEndpoint + gameMemberDto.Image;
-        }
-        return Ok(new ApiResult<IEnumerable<GameMemberResult>>()
-        {
-            IsSuccess = true,
-            Data = members
-        });
-    }
+    public override async Task<ActionResult<ApiResult<IEnumerable<GameMemberResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default) =>
+        Ok(await _gameMemberService.GetByGame(gameId));
 }

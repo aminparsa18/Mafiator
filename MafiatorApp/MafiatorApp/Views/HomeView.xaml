@@ -4,9 +4,8 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:effects="clr-namespace:MafiatorApp.Effects;assembly=MafiatorApp"
              xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
-             xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+             xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
              xmlns:forms1="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-             xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
              x:Class="MafiatorApp.Views.HomeView"
@@ -250,13 +249,13 @@
                 <Frame CornerRadius="42" HorizontalOptions="CenterAndExpand" HeightRequest="146"
                        Padding="16,8">
                     <Grid ColumnDefinitions="*,*">
-                        <userControls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.MafiaWin}"
+                        <controls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.MafiaWin}"
                                                           VerticalOptions="Center" HorizontalOptions="Center"
                                                           WidthRequest="60" HeightRequest="60" Color="#FEE9D7" />
-                        <userControls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.CitizenWin}"
+                        <controls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.CitizenWin}"
                                                           VerticalOptions="Center" HorizontalOptions="Center"
                                                           WidthRequest="100" HeightRequest="100" Color="#F9BF8F" />
-                        <userControls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.TotalWin}"
+                        <controls:CircularProgressBar Stroke="15" Progress="{Binding UserStatus.TotalWin}"
                                                           VerticalOptions="Center" HorizontalOptions="Center"
                                                           WidthRequest="140" HeightRequest="140" Color="#E2434B" />
                         <StackLayout Grid.Column="1" Margin="8,0,0,0" VerticalOptions="CenterAndExpand">

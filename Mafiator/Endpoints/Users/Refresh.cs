@@ -1,15 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
-using FluentValidation;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Api.Auth;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.Service.Contracts.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Mafiator.Common.Data.Dtos.Api.Auth;
+using Mafiator.Service.Contracts.RefreshTokens;
 
 namespace Mafiator.Api.Endpoints.Users;
 
@@ -18,13 +8,11 @@ public class Refresh : EndpointBaseAsync
     .WithRequest<RefreshTokenRequest>
     .WithActionResult<AuthResult>
 {
-    private readonly IIdentityService _identityService;
-    private readonly IValidator<RefreshTokenRequest> _validator;
+    private readonly IRefreshTokenService _refreshTokenService;
 
-    public Refresh(IIdentityService identityService, IValidator<RefreshTokenRequest> validator)
+    public Refresh(IRefreshTokenService refreshTokenService)
     {
-        _identityService = identityService;
-        _validator = validator;
+        _refreshTokenService = refreshTokenService;
     }
 
     [ApiVersion("1.0")]
@@ -33,14 +21,6 @@ public class Refresh : EndpointBaseAsync
     [SwaggerOperation(OperationId = nameof(Refresh), Tags = new[] { "Users Endpoints" })]
     public override async Task<ActionResult<AuthResult>> HandleAsync(RefreshTokenRequest request, CancellationToken cancellationToken = default)
     {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-            return Ok(new ApiResult
-            {
-                StatusCode = ApiResultStatusCode.BadRequest,
-                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
-            });
-        var result = await _identityService.RefreshToken(request);
-        return Ok(result);
+        return Ok(await _refreshTokenService.Refresh(request));
     }
 }

@@ -4,7 +4,7 @@
                  xmlns:transformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                  xmlns:converters="clr-namespace:MafiatorApp.Converters;assembly=MafiatorApp"
                  xmlns:game="clr-namespace:MafiatorApp.Dtos.Game;assembly=MafiatorApp"
-                 xmlns:userControls="clr-namespace:MafiatorApp.UserControls;assembly=MafiatorApp"
+                 xmlns:controls="clr-namespace:MafiatorApp.Views.Controls;assembly=MafiatorApp"
                  xmlns:base="clr-namespace:MafiatorApp.ViewModels.Base;assembly=MafiatorApp"
                  xmlns:viewModels="clr-namespace:MafiatorApp.ViewModels;assembly=MafiatorApp"
                  xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
@@ -29,12 +29,12 @@
     </pages:PopupPage.Animation>
     <pages:PopupPage.Content>
         <StackLayout>
-            <userControls:Popup Margin="16">
+            <controls:PopupFrame Margin="16">
                 <StackLayout>
-                    <userControls:PopupHeader TitleText="Your Role" SubTitleText="in this game"/>
+                    <controls:PopupHeader TitleText="Your Role" SubTitleText="in this game"/>
                     <StackLayout>
                         <Grid>
-                            <userControls:CircularProgressBar Stroke="20" Progress="{Binding ProgressTimer}"
+                            <controls:CircularProgressBar Stroke="20" Progress="{Binding ProgressTimer}"
                                                               VerticalOptions="Center" HorizontalOptions="Center"
                                                               WidthRequest="120" HeightRequest="120"
                                                               Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"  />
@@ -63,8 +63,7 @@
                                 ItemsSource="{Binding Partners}"
                                 HeightRequest="120"
                                 Margin="16,0"
-                                SelectionMode="None"
-                               >
+                                SelectionMode="None">
                                 <CollectionView.ItemsLayout>
                                     <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
                                 </CollectionView.ItemsLayout>
@@ -111,7 +110,7 @@
                         </Frame>
                     </StackLayout>
                 </StackLayout>
-            </userControls:Popup>
+            </controls:PopupFrame>
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

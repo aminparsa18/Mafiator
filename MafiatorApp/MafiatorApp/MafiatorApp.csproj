@@ -30,7 +30,7 @@
     <PackageReference Include="BarcodeScanner.XF" Version="5.0.9" />
     <PackageReference Include="FluentFTP" Version="36.0.0" />
     <PackageReference Include="MarcTron.Admob" Version="1.6.9" />
-    <PackageReference Include="MessagePack" Version="2.4.35" />
+    <PackageReference Include="MessagePack" Version="2.4.59" />
     <PackageReference Include="MessagePipe" Version="1.7.0" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.0" />
@@ -96,37 +96,37 @@
     <Compile Update="Views\Popups\GameFinishView.xaml.cs">
       <DependentUpon>GameFinishView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Templates\IncomingDissLikeView.xaml.cs">
+    <Compile Update="Views\Controls\IncomingDissLikeView.xaml.cs">
       <DependentUpon>IncomingDissLikeView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Templates\IncomingLikeView.xaml.cs">
+    <Compile Update="Views\Controls\IncomingLikeView.xaml.cs">
       <DependentUpon>IncomingLikeView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Templates\IncomingTextView.xaml.cs">
+    <Compile Update="Views\Controls\IncomingTextView.xaml.cs">
       <DependentUpon>IncomingTextView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Templates\OutgoingDissLikeView.xaml.cs">
+    <Compile Update="Views\Controls\OutgoingDissLikeView.xaml.cs">
       <DependentUpon>OutgoingDissLikeView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Templates\OutgoingLikeView.xaml.cs">
+    <Compile Update="Views\Controls\OutgoingLikeView.xaml.cs">
       <DependentUpon>OutgoingLikeView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Templates\OutgoingTextView.xaml.cs">
+    <Compile Update="Views\Controls\OutgoingTextView.xaml.cs">
       <DependentUpon>OutgoingTextView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="UserControls\CircularProgressBar.xaml">
+    <EmbeddedResource Update="Views\Controls\CircularProgressBar.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="UserControls\HidePasswordButton.xaml">
+    <EmbeddedResource Update="Views\Controls\HidePasswordButton.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="UserControls\PopupHeader.xaml">
+    <EmbeddedResource Update="Views\Controls\PopupHeader.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="UserControls\ShowPasswordButton.xaml">
+    <EmbeddedResource Update="Views\Controls\ShowPasswordButton.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\AdsView.xaml">
@@ -198,37 +198,37 @@
     <EmbeddedResource Update="Views\Popups\GameFinishView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\CheckBoxView.xaml">
+    <EmbeddedResource Update="Views\Controls\CheckBoxView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\CloseButton.xaml">
+    <EmbeddedResource Update="Views\Controls\CloseButton.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\DecButton.xaml">
+    <EmbeddedResource Update="Views\Controls\DecButton.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\IncButton.xaml">
+    <EmbeddedResource Update="Views\Controls\IncButton.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\IncomingVideoView.xaml">
+    <EmbeddedResource Update="Views\Controls\IncomingVideoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\IncomingVoiceView.xaml">
+    <EmbeddedResource Update="Views\Controls\IncomingVoiceView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\OutgoingVideoView.xaml">
+    <EmbeddedResource Update="Views\Controls\OutgoingVideoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\OutgoingVoiceView.xaml">
+    <EmbeddedResource Update="Views\Controls\OutgoingVoiceView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\VideoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\IncomingTextView.xaml">
+    <EmbeddedResource Update="Views\Controls\IncomingTextView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Templates\OutgoingTextView.xaml">
+    <EmbeddedResource Update="Views\Controls\OutgoingTextView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\WaitingGameView.xaml">

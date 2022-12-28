@@ -1,0 +1,39 @@
+﻿<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:controls="clr-namespace:MafiatorApp.Views.Controls"
+             x:DataType="controls:IncButton"
+             x:Class="MafiatorApp.Views.Controls.IncButton">
+  <ContentView.Content>
+      <Grid effects:TouchEffect.PressedOpacity="0.2" effects:TouchEffect.PressedScale="1.8"
+            effects:TouchEffect.AnimationEasing="Linear" effects:TouchEffect.AnimationDuration="400">
+          <Path
+              Data="M595.353,557.95a7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6,13.343,13.343,0,0,1-6.1,0,7.51,7.51,0,0,1-5.6-5.6A13.343,13.343,0,0,1,595.353,557.95Z"
+              Stroke="#ffffff"
+              StrokeThickness="2"
+              Aspect="Uniform"
+              WidthRequest="30"
+              HeightRequest="30"
+              HorizontalOptions="CenterAndExpand"
+              VerticalOptions="CenterAndExpand">
+              <Path.RenderTransform>
+                    <TranslateTransform X="-594.245" Y="-551.245" />
+              </Path.RenderTransform>
+          </Path>
+            <Path Data="M606.5,561h-5m2.5,2.5v-5"
+                Stroke="#ffffff"
+                StrokeThickness="2"
+                Aspect="Uniform"
+                WidthRequest="12"
+                HeightRequest="12"
+                StrokeLineCap="Round"
+                StrokeLineJoin="Round"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand">
+              <Path.RenderTransform>
+                    <TranslateTransform X="-594.245" Y="-551.245" />
+              </Path.RenderTransform>
+          </Path>
+      </Grid>
+    </ContentView.Content>
+</ContentView>

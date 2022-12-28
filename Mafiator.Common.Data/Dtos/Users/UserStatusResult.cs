@@ -1,29 +1,25 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Users
+namespace Mafiator.Common.Data.Dtos.Users;
+
+/// <summary>
+/// User status dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class UserStatusResult
 {
     /// <summary>
-    /// User status dto.
+    /// Wins count as mafia.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class UserStatusResult
-    {
-        /// <summary>
-        /// Wins count as mafia.
-        /// </summary>
-        [Key(0)]
-        public double MafiaWin { get; set; }
+    public double MafiaWin { get; set; }
 
-        /// <summary>
-        /// Wins count as citizen.
-        /// </summary>
-        [Key(1)]
-        public double CitizenWin { get; set; }
+    /// <summary>
+    /// Wins count as citizen.
+    /// </summary>
+    public double CitizenWin { get; set; }
 
-        /// <summary>
-        /// Total wins count.
-        /// </summary>
-        [Key(2)]
-        public double TotalWin { get; set; }
-    }
+    /// <summary>
+    /// Total wins count.
+    /// </summary>
+    public double TotalWin { get; set; }
 }

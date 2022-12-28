@@ -1,24 +1,21 @@
 ﻿using Mafiator.Common.Data.Enums;
-using MessagePack;
+using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Games
+namespace Mafiator.Common.Data.Dtos.Games;
+
+/// <summary>
+/// Game role dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class GameRoleCreateRequest
 {
     /// <summary>
-    /// Game role dto.
+    /// Game role.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class GameRoleCreateRequest
-    {
-        /// <summary>
-        /// Game role.
-        /// </summary>
-        [Key(0)]
-        public GameRole Role { get; set; }
+    public GameRole Role { get; set; }
 
-        /// <summary>
-        /// Count.
-        /// </summary>
-        [Key(1)]
-        public short Count { get; set; }
-    }
+    /// <summary>
+    /// Count.
+    /// </summary>
+    public short Count { get; set; }
 }

@@ -1,12 +1,11 @@
-﻿namespace Mafiator.Game.Enums
+﻿namespace Mafiator.Game.Enums;
+
+public enum TouchActionType
 {
-    public enum TouchActionType
-    {
-        Entered,
-        Pressed,
-        Moved,
-        Released,
-        Exited,
-        Cancelled
-    }
+    Entered,
+    Pressed,
+    Moved,
+    Released,
+    Exited,
+    Cancelled
 }

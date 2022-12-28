@@ -1,18 +1,6 @@
-﻿using Ardalis.ApiEndpoints;
-using FluentValidation;
-using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
-using Mafiator.Common.Data.Dtos.Rooms;
-using Mafiator.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Linq;
+﻿using Mafiator.Common.Data.Dtos.Rooms;
+using Mafiator.Service.Contracts.Rooms;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
@@ -22,13 +10,11 @@ public class Leave : EndpointBaseAsync
     .WithRequest<LeaveRoomRequest>
     .WithActionResult<ApiResult>
 {
-    private readonly IValidator<LeaveRoomRequest> _validator;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRoomLeaveService _roomLeaveService;
 
-    public Leave(IValidator<LeaveRoomRequest> validator, IUnitOfWork unitOfWork)
+    public Leave(IRoomLeaveService roomLeaveService)
     {
-        _validator = validator;
-        _unitOfWork = unitOfWork;
+        _roomLeaveService = roomLeaveService;
     }
 
     [ApiVersion("1.0")]
@@ -37,27 +23,7 @@ public class Leave : EndpointBaseAsync
     [SwaggerOperation(OperationId = nameof(Leave), Tags = new[] { "Room Endpoints" })]
     public override async Task<ActionResult<ApiResult>> HandleAsync(LeaveRoomRequest request, CancellationToken cancellationToken = default)
     {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-            return Ok(new ApiResult
-            {
-                StatusCode = ApiResultStatusCode.BadRequest,
-                Errors = validationResult.Errors.Select(e => e.ErrorMessage)
-            });
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.Name));
-        var member = await _unitOfWork.RoomMember.Get(r => r.UserId == userId && r.RoomId == request.RoomId);
-        if (member == null)
-            return Ok(new ApiResult
-            {
-                IsSuccess = false,
-                Errors = new[] { "You are not member of this room." },
-                StatusCode = ApiResultStatusCode.BadRequest
-            });
-        _unitOfWork.RoomMember.Remove(member);
-        await _unitOfWork.Commit();
-        return Ok(new ApiResult
-        {
-            IsSuccess = true,
-        });
+        var userId = User.FindFirstValue(ClaimTypes.Name);
+        return Ok(await _roomLeaveService.Leave(userId, request));
     }
 }

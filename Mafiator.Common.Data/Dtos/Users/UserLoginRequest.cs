@@ -1,23 +1,20 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 
-namespace Mafiator.Common.Data.Dtos.Users
+namespace Mafiator.Common.Data.Dtos.Users;
+
+/// <summary>
+/// User login dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class UserLoginRequest
 {
     /// <summary>
-    /// User login dto.
+    /// Username.
     /// </summary>
-    [MessagePackObject]
-    public sealed class UserLoginRequest
-    {
-        /// <summary>
-        /// Username.
-        /// </summary>
-        [Key(0)]
-        public string Username { get; set; }
+    public string Username { get; set; }
 
-        /// <summary>
-        /// Password.
-        /// </summary>
-        [Key(1)]
-        public string Password { get; set; }
-    }
+    /// <summary>
+    /// Password.
+    /// </summary>
+    public string Password { get; set; }
 }

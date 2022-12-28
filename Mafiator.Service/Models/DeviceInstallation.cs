@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mafiator.Service.Models
+namespace Mafiator.Service.Models;
+
+public class DeviceInstallation
 {
-    public class DeviceInstallation
-    {
-        [Required]
-        public string InstallationId { get; set; }
+    [Required]
+    public string InstallationId { get; set; }
 
-        [Required]
-        public string Platform { get; set; }
+    [Required]
+    public string Platform { get; set; }
 
-        [Required]
-        public string PushChannel { get; set; }
+    [Required]
+    public string PushChannel { get; set; }
 
-        public IList<string> Tags { get; set; } = Array.Empty<string>();
-    }
+    public IList<string> Tags { get; set; } = Array.Empty<string>();
 }

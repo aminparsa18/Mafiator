@@ -1,25 +1,22 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 using System.Collections.Generic;
 
-namespace Mafiator.Common.Data.Dtos.RoomMembers
+namespace Mafiator.Common.Data.Dtos.RoomMembers;
+
+/// <summary>
+/// Add game member dto.
+/// </summary>
+[MemoryPackable]
+public sealed partial class NewMembersRequest
 {
     /// <summary>
-    /// Add game member dto.
+    /// Room key identifier.
     /// </summary>
-    [MessagePackObject()]
-    public sealed class NewMembersRequest
-    {
-        /// <summary>
-        /// Room key identifier.
-        /// </summary>
-        [Key(0)]
-        public Guid RoomId { get; set; }
+    public Guid RoomId { get; set; }
 
-        /// <summary>
-        /// List of users.
-        /// </summary>
-        [Key(1)]
-        public List<Guid> Users { get; set; }
-    }
+    /// <summary>
+    /// List of users.
+    /// </summary>
+    public List<Guid> Users { get; set; }
 }

@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.ResourceManager.Media" Version="1.0.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
-    <PackageReference Include="MailKit" Version="3.4.2" />
-    <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.1.0" />
-    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.19.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
-    <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
-    <PackageReference Include="Twilio" Version="5.81.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.ResourceManager.Media" Version="1.0.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+		<PackageReference Include="Hangfire" Version="1.7.32" />
+		<PackageReference Include="MailKit" Version="3.4.3" />
+		<PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.1.0" />
+		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.19.2" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+		<PackageReference Include="Twilio" Version="6.2.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Mafiator.Common.Server\Mafiator.Common.Server.csproj" />
-    <ProjectReference Include="..\Mafiator.Repository\Mafiator.Repository.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mafiator.Common.Server\Mafiator.Common.Server.csproj" />
+		<ProjectReference Include="..\Mafiator.Repository\Mafiator.Repository.csproj" />
+	</ItemGroup>
 
 </Project>

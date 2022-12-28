@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Mafiator.Game.Controls"
              x:Class="Mafiator.Game.Controls.PopupHeader">
     <HorizontalStackLayout>
         <VerticalStackLayout VerticalOptions="EndAndExpand" Margin="16,0,0,0">
             <Label x:Name="TitleLabel" FontSize="Large" FontAttributes="Bold" />
             <Label x:Name="SubTitleLabel" />
         </VerticalStackLayout>
-        <!--<templates:CloseButton/>-->
+            <controls:CloseButton/>
     </HorizontalStackLayout>
 </ContentView>

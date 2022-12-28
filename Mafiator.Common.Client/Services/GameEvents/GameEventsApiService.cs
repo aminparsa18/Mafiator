@@ -7,44 +7,43 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Mafiator.Common.Client.Services.GameEvents
+namespace Mafiator.Common.Client.Services.GameEvents;
+
+/// <inheritdoc/>
+public class GameEventsApiService : IGameEventsApiService
 {
     /// <inheritdoc/>
-    public class GameEventsApiService : IGameEventsApiService
+    public Task<HttpResponseMessage> FireGameEvent(GameEventRequest gameEvent)
     {
-        /// <inheritdoc/>
-        public Task<HttpResponseMessage> FireGameEvent(GameEventRequest gameEvent)
-        {
-            return BaseHttpClient.Instance.PostAsMessagePackAsync(
-                new Uri($"{UrlConstants.BaseUrl}gameevents"), gameEvent);
-        }
+        return BaseHttpClient.Instance.PostAsMessagePackAsync(
+            new Uri($"{UrlConstants.BaseUrl}gameevents"), gameEvent);
+    }
 
-        /// <inheritdoc/>
-        public Task<HttpResponseMessage> Cure(GameEventRequest gameEvent)
-        {
-            return BaseHttpClient.Instance.PostAsMessagePackAsync(
-                new Uri($"{UrlConstants.BaseUrl}gameevents/cure"), gameEvent);
-        }
+    /// <inheritdoc/>
+    public Task<HttpResponseMessage> Cure(GameEventRequest gameEvent)
+    {
+        return BaseHttpClient.Instance.PostAsMessagePackAsync(
+            new Uri($"{UrlConstants.BaseUrl}gameevents/cure"), gameEvent);
+    }
 
-        /// <inheritdoc/>
-        public Task<HttpResponseMessage> Inquiry(GameEventRequest gameEvent)
-        {
-            return BaseHttpClient.Instance.PostAsMessagePackAsync(
-                new Uri($"{UrlConstants.BaseUrl}api/GameEvent/Inquiry"), gameEvent);
-        }
+    /// <inheritdoc/>
+    public Task<HttpResponseMessage> Inquiry(GameEventRequest gameEvent)
+    {
+        return BaseHttpClient.Instance.PostAsMessagePackAsync(
+            new Uri($"{UrlConstants.BaseUrl}api/GameEvent/Inquiry"), gameEvent);
+    }
 
-        /// <inheritdoc/>
-        public Task<ApiResult<IEnumerable<GameEventResult>>> GetEventStatus(string gameId)
-        {
-            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResult>>>(
-                new Uri($"{UrlConstants.BaseUrl}gameevents/{gameId}"));
-        }
+    /// <inheritdoc/>
+    public Task<ApiResult<IEnumerable<GameEventResult>>> GetEventStatus(string gameId)
+    {
+        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResult>>>(
+            new Uri($"{UrlConstants.BaseUrl}gameevents/{gameId}"));
+    }
 
-        /// <inheritdoc/>
-        public Task<ApiResult<IEnumerable<GameEventResult>>> GetNightResult(string gameId)
-        {
-            return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResult>>>(
-                new Uri($"{UrlConstants.BaseUrl}gameevents/night/{gameId}"));
-        }
+    /// <inheritdoc/>
+    public Task<ApiResult<IEnumerable<GameEventResult>>> GetNightResult(string gameId)
+    {
+        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResult>>>(
+            new Uri($"{UrlConstants.BaseUrl}gameevents/night/{gameId}"));
     }
 }

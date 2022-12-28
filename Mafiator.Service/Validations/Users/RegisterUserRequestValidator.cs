@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Users;
 
 namespace Mafiator.Service.Validations.Users;
+
 public class RegisterUserRequestValidator : AbstractValidator<RegisterUserRequest>
 {
     public RegisterUserRequestValidator()
