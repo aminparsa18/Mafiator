@@ -2,10 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Services.Gems;
 using Mafiator.Common.Data.Dtos.Gems;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 using Plugin.InAppBilling;
 using System.Diagnostics;
 
@@ -34,8 +32,8 @@ public class StoreViewModel : ViewModelBase
 
     private readonly IGemsApiService _gemsApiService;
 
-    public StoreViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IGemsApiService gemsApiService) : base(navigationService, localizer, toastService)
+    public StoreViewModel(INavigationService navigationService, IToastService toastService, IGemsApiService gemsApiService) 
+        : base(navigationService, toastService)
     {
         _gemsApiService = gemsApiService;
         Gems = new ObservableRangeCollection<GemResult>();

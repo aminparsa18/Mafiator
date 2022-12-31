@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
              xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
              xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
-             xmlns:controls="clr-namespace:Mafiator.Game.Controls;assembly=Mafiator.Game"
+             xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+             xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+             xmlns:dtos="clr-namespace:Mafiator.Common.Data.Dtos.Countries;assembly=Mafiator.Common.Data"
+             xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"     
+             base:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Mafiator.Game.Views.LanguagesView"
              x:DataType="viewModels:LanguagesViewModel">
     <mopups:PopupPage.Animation>
@@ -18,10 +22,50 @@
             EasingOut="SinIn"
             HasBackgroundAnimation="True" />
     </mopups:PopupPage.Animation>
-    
+    <mopups:PopupPage.Resources>
+        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
+    </mopups:PopupPage.Resources>
     <controls:PopupFrame Margin="24,36">
-        <VerticalStackLayout >
-            <Label Text="sdfsdfsdf"/>
+        <VerticalStackLayout>
+            <controls:PopupHeader TitleText="{x:Static resx:AppResources.Select}"
+                                  SubTitleText="{x:Static resx:AppResources.YourLanguage}"
+                                  ShowCloseIcon="False">
+            </controls:PopupHeader>
+            <CollectionView
+                    ItemsSource="{Binding Countries}"
+                    SelectedItem="{Binding Country}"
+                    Margin="16,0"
+                    HeightRequest="200"
+                    SelectionMode="Single"
+                    SelectionChangedCommand="{Binding CountrySelectedCommand}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dtos:CountryResult">
+                        <VerticalStackLayout Margin="8">
+                            <Border Padding="8"
+                                    BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5}}">
+                                <HorizontalStackLayout>
+                                    <Image
+                                            WidthRequest="48"
+                                            HeightRequest="30"
+                                            Margin="8"
+                                            Aspect="AspectFit">
+                                        <Image.Source>
+                                            <UriImageSource Uri="{Binding Sign,Converter={StaticResource CountryCodelmageConverter}}"
+                                                            CacheValidity="30"/>
+                                        </Image.Source>
+                                    </Image>
+                                    <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" FontSize="18"
+                                               FontFamily="OpenSansSemibold"
+                                               TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                                </HorizontalStackLayout>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16"/>
+                                </Border.StrokeShape>
+                            </Border>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </controls:PopupFrame>
 </mopups:PopupPage>

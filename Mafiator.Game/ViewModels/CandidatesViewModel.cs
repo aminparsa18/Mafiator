@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Services.Votes;
@@ -16,55 +17,12 @@ using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Localization;
 using System.Windows.Input;
 
 namespace Mafiator.Game.ViewModels;
 
-public class CandidatesViewModel : ViewModelBase
+public partial class CandidatesViewModel : ViewModelBase
 {
-    private LayoutState _currentState = LayoutState.Empty;
-    public LayoutState CurrentState
-    {
-        get => _currentState;
-        set => SetProperty(ref _currentState, value);
-    }
-
-    private string _title;
-    public string Title
-    {
-        get => _title;
-        set => SetProperty(ref _title, value);
-    }
-
-    private string _subTitle;
-    public string SubTitle
-    {
-        get => _subTitle;
-        set => SetProperty(ref _subTitle, value);
-    }
-
-
-
-    private CandidateDto _candidate;
-    public CandidateDto Candidate
-    {
-        get => _candidate;
-        set => SetProperty(ref _candidate, value);
-    }
-
-    private double _progressTimer;
-    public double ProgressTimer
-    {
-        get => _progressTimer;
-        set => SetProperty(ref _progressTimer, value);
-    }
-
-    public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
-    public ObservableRangeCollection<VoteStatusResultDto> Votes { get; set; }
-    public ICommand CandidateSelectedCommand { get; set; }
-    public IAsyncRelayCommand SendVotesCommand { get; set; }
-
     private Timer _timer;
     private int _totalTime;
     private bool _advocacy;
@@ -74,15 +32,34 @@ public class CandidatesViewModel : ViewModelBase
     private readonly IPublisher<UpdateMembersEvent> _publisher;
     private readonly IVotesApiService _votesApiService;
 
+    [ObservableProperty]
+    private LayoutState _currentState = LayoutState.Empty;
 
-    public CandidatesViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
-        IMapper mapper, IPublisher<UpdateMembersEvent> publisher, IVotesApiService votesApiService) : base(navigationService, localizer, toastService)
+    [ObservableProperty]
+    private string _title;
+
+    [ObservableProperty]
+    private string _subTitle;
+
+    [ObservableProperty]
+    private CandidateDto _candidate;
+
+    [ObservableProperty]
+    private double _progressTimer;
+
+    public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
+    public ObservableRangeCollection<VoteStatusResultDto> Votes { get; set; }
+    public ICommand CandidateSelectedCommand { get; set; }
+    public IAsyncRelayCommand SendVotesCommand { get; set; }
+
+    public CandidatesViewModel(INavigationService navigationService, IToastService toastService,
+        IMapper mapper, IPublisher<UpdateMembersEvent> publisher, IVotesApiService votesApiService) : base(navigationService, toastService)
     {
         _mapper = mapper;
         _publisher = publisher;
         _votesApiService = votesApiService;
-        Title = _localizer["VotingTitle"];
-        SubTitle = _localizer["VotingSubTitle"];
+        Title = LocalizationResourceManager.Instance["VotingTitle"];
+        SubTitle = LocalizationResourceManager.Instance["VotingSubTitle"];
         Candidates = new ObservableRangeCollection<CandidateDto>();
         Votes = new ObservableRangeCollection<VoteStatusResultDto>();
         CandidateSelectedCommand = new Command(CandidateSelected);
@@ -183,8 +160,8 @@ public class CandidatesViewModel : ViewModelBase
                 }
 
             }
-            Title = _localizer["VotingResultTitle"];
-            SubTitle = _localizer["VotingResultSubTitle"];
+            Title = LocalizationResourceManager.Instance["VotingResultTitle"];
+            SubTitle = LocalizationResourceManager.Instance["VotingResultSubTitle"];
             CurrentState = LayoutState.Saving;
         }
         else
@@ -193,10 +170,9 @@ public class CandidatesViewModel : ViewModelBase
         GameHub.Instance.Remove("ShowVoteStatus");
     }
 
-
     private async Task SendVotes()
     {
-        await _navigationService.NavigateToPopupAsync<WaitingViewModel>(_localizer["SendingVotes"]);
+        await _navigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Instance["SendingVotes"]);
         var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
         var request = await _votesApiService.SendVotes(new VoteCreateRequest()
         {
@@ -205,8 +181,8 @@ public class CandidatesViewModel : ViewModelBase
             GameId = Guid.Parse(_gameId)
         });
         CurrentState = request.IsSuccessStatusCode ? LayoutState.Success : LayoutState.Error;
-        Title = _localizer["VoteSentTitle"];
-        SubTitle = _localizer["VoteSentSubTitle"];
+        Title = LocalizationResourceManager.Instance["VoteSentTitle"];
+        SubTitle = LocalizationResourceManager.Instance["VoteSentSubTitle"];
         await _navigationService.RemovePopupAsync();
     }
 

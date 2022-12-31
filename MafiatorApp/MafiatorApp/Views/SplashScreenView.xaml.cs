@@ -26,7 +26,7 @@ namespace MafiatorApp.Views
                 await Logo.FadeTo(1, 600, Easing.Linear);
                 await Logo.RelRotateTo(360, 400, Easing.Linear);
                 await AppName.FadeTo(1, 800, Easing.Linear);
-                await ((SplashScreenViewModel)this.BindingContext).Navigate();
+                await ((SplashViewModel)this.BindingContext).Navigate();
             });
         }
     }

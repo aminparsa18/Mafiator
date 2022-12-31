@@ -22,7 +22,7 @@ public class RoomMembersApiService : IRoomMembersApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<RoomMemberResult>>> GetMembersByRoom(Guid roomId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomMemberResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<RoomMemberResult>>>(
             new Uri($"{UrlConstants.BaseUrl}roommembers/{roomId}"));
     }
 }

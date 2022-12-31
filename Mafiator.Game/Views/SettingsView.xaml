@@ -1,0 +1,75 @@
+﻿<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+                  xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+                  xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+                  xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"  
+                  xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+                  x:Class="Mafiator.Game.Views.SettingsView"
+                  base:ViewModelLocator.AutoWireViewModel="True"
+                  x:DataType="viewModels:SettingsViewModel">
+    <mopups:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </mopups:PopupPage.Animation>
+    <mopups:PopupPage.Resources>
+        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
+    </mopups:PopupPage.Resources>
+    <mopups:PopupPage.Content>
+        <controls:PopupFrame Margin="24,36">
+            <VerticalStackLayout Margin="24">
+                <controls:PopupHeader TitleText="{x:Static resx:AppResources.Settings}"></controls:PopupHeader>
+                <HorizontalStackLayout Margin="16,16,16,16">
+                    <controls:CheckBoxView Text="{x:Static resx:AppResources.PlayMusic}"
+                                            IsChecked="{Binding PlayMusic,Mode=TwoWay}" />
+
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Margin="16,0,16,16">
+                    <controls:CheckBoxView Text="{x:Static resx:AppResources.PlaySound}" IsChecked="{Binding PlaySound}" />
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PlaySoundCommand}"></TapGestureRecognizer>
+                    </HorizontalStackLayout.GestureRecognizers>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Margin="16,0,16,16">
+                    <controls:CheckBoxView Text="{x:Static resx:AppResources.AllowNotifications}"
+                                            IsChecked="{Binding AllowNotification}" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Margin="16,0,16,16">
+                    <controls:CheckBoxView Text="{x:Static resx:AppResources.Autoplay}" IsChecked="{Binding AutoPlay}" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="{x:Static resx:AppResources.LanguageColon} " FontSize="16" VerticalOptions="CenterAndExpand"
+                           Margin="0,0,0,8">
+                    </Label>
+                    <Frame Margin="16,0,0,0" Padding="4,0"
+                           BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
+                           HorizontalOptions="StartAndExpand">
+                        <HorizontalStackLayout>
+                            <Image
+                                WidthRequest="48"
+                                HeightRequest="30"
+                                Margin="8,8,0,8"
+                                Aspect="AspectFit"
+                                Source="{Binding Country.Sign,Converter={StaticResource CountryCodelmageConverter}}">
+                            </Image>
+                            <Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
+                                   VerticalOptions="CenterAndExpand"
+                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                        </HorizontalStackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeLangCommand}"></TapGestureRecognizer>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </controls:PopupFrame>
+    </mopups:PopupPage.Content>
+</mopups:PopupPage>

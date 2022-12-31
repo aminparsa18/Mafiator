@@ -1,39 +1,26 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mafiator.Common.Client.Services.Games;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Models;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class SetRolesViewModel : ViewModelBase
+public partial class SetRolesViewModel : ViewModelBase
 {
+    private readonly IGamesApiService _gamesApiService;
+
+    [ObservableProperty]
     private int selectedCount;
-    public int SelectedCount
-    {
-        get => selectedCount;
-        set => SetProperty(ref selectedCount, value);
-    }
 
+    [ObservableProperty]
     private short totalCount;
-    public short TotalCount
-    {
-        get => totalCount;
-        set => SetProperty(ref totalCount, value);
-    }
 
-    public ObservableRangeCollection<NewGameRole> Roles { get; set; }
+    [ObservableProperty]
     private NewGameRole role;
-
-    public NewGameRole Role
-    {
-        get => role;
-        set => SetProperty(ref role, value);
-    }
 
     public IRelayCommand LoadRolesCommand { get; set; }
     public IRelayCommand RoleSelectedCommand { get; set; }
@@ -41,11 +28,10 @@ public class SetRolesViewModel : ViewModelBase
     public IAsyncRelayCommand PopCommand { get; set; }
     public Command<GameRole> IncCommand { get; set; }
     public Command<GameRole> DecCommand { get; set; }
+    public ObservableRangeCollection<NewGameRole> Roles { get; set; }
 
-    private readonly IGamesApiService _gamesApiService;
-
-    public SetRolesViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IGamesApiService gamesApiService) : base(navigationService, localizer, toastService)
+    public SetRolesViewModel(INavigationService navigationService, IToastService toastService, 
+        IGamesApiService gamesApiService) : base(navigationService, toastService)
     {
         _gamesApiService = gamesApiService;
         Roles = new ObservableRangeCollection<NewGameRole>();

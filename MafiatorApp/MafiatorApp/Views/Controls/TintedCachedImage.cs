@@ -1,9 +1,4 @@
-﻿using FFImageLoading.Forms;
-using FFImageLoading.Transformations;
-using FFImageLoading.Work;
-using Xamarin.Forms;
-
-namespace MafiatorApp.Views.Controls;
+﻿namespace MafiatorApp.Views.Controls;
 
 public class TintedCachedImage : CachedImage
 {

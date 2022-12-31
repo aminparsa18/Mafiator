@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Mafiator.IocConfig": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:10271;http://localhost:10273"
+    }
+  }
+}

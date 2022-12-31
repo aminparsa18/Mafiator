@@ -1,49 +1,43 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
-using Mafiator.Game.Models;
+using Mafiator.Common.Data.Dtos.Countries;
 using Mafiator.Game.Models.PipeEvents;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
 using System.Globalization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class LanguagesViewModel : ViewModelBase
+public partial class LanguagesViewModel : ViewModelBase
 {
-    public ObservableRangeCollection<Country> Countries { get; set; }
-    public IAsyncRelayCommand PopCommand { get; set; }
-    public IAsyncRelayCommand CountrySelectedCommand { get; set; }
-
-    private Country country;
-    public Country Country
-    {
-        get => country;
-        set => SetProperty(ref country, value);
-    }
-
     private readonly IAsyncPublisher<ChangeLanguageEvent> _publisher;
 
-    public LanguagesViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IAsyncPublisher<ChangeLanguageEvent> publisher) : base(navigationService, localizer, toastService)
+    [ObservableProperty]
+    private CountryResult _country;
+
+    public ObservableRangeCollection<CountryResult> Countries { get; set; }
+    public IAsyncRelayCommand PopCommand { get; set; }
+
+    public LanguagesViewModel(INavigationService navigationService, IToastService toastService,
+        IAsyncPublisher<ChangeLanguageEvent> publisher) : base(navigationService, toastService)
     {
         _publisher = publisher;
-        Countries = new ObservableRangeCollection<Country>()
+        Countries = new ObservableRangeCollection<CountryResult>()
         {
-            new() {Code = "US", Name = "English"},
-            new() {Code = "RU", Name = "Russian"}
+            new() { Sign = "US", Name = "English"},
+            new() { Sign = "RU", Name = "Russian"}
         };
         PopCommand = new AsyncRelayCommand(Pop);
-        CountrySelectedCommand = new AsyncRelayCommand(CountrySelected);
     }
 
+    [RelayCommand]
     private async Task CountrySelected()
     {
         await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Setting Language");
-        Barrel.Current.Add("Culture", Country.Code, TimeSpan.MaxValue);
-        if (Country.Code == "RU")
+        Barrel.Current.Add("Culture", Country.Sign, TimeSpan.MaxValue);
+        if (Country.Sign == "RU")
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU", false);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU", false);

@@ -9,6 +9,7 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _context;
     private readonly IDbConnection _connection;
     private IAvatarRepository _avatar;
+    private ICountryRepository _country;
     private IEventJoinRepository _eventJoin;
     private IEventRepository _event;
     private IChatMessageRepository _chatMessage;
@@ -34,6 +35,8 @@ public sealed class UnitOfWork : IUnitOfWork
     }
 
     public IAvatarRepository Avatar => _avatar ??= new AvatarRepository(_context, _connection);
+
+    public ICountryRepository Country => _country ??= new CountryRepository(_context, _connection);
 
     public IEventJoinRepository EventJoin => _eventJoin ??= new EventJoinRepository(_context, _connection);
 

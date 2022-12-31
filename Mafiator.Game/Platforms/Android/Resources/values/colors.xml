@@ -11,4 +11,8 @@
 	<color name="successColor">#388E3C</color>
 	<color name="warningColor">#FFA900</color>
 	<color name="normalColor">#353A3E</color>
+	
+	<!--Spotlight-->
+	<color name="black">#000000</color>
+	<color name="spotlight">#CC000000</color>
 </resources>

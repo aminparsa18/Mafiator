@@ -1,64 +1,44 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Rooms;
 using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Countries;
 using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Data.Dtos.Users;
-using Mafiator.Game.Models;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.Validations;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 using Plugin.MauiMTAdmob;
 
 namespace Mafiator.Game.ViewModels;
 
-public class NewRoomViewModel : ViewModelBase
+public partial class NewRoomViewModel : ViewModelBase
 {
+    private List<CountryResult> _countries;
+
+    private readonly IRoomsApiService _roomsApiService;
+    
+    [ObservableProperty]
     private ValidatableObject<string> _name;
 
-    public ValidatableObject<string> Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-
+    [ObservableProperty]
     private bool _isPrivate;
 
-    public bool IsPrivate
-    {
-        get => _isPrivate;
-        set => SetProperty(ref _isPrivate, value);
-    }
-
+    [ObservableProperty]
     private bool _isNameValid;
 
-    public bool IsNameValid
-    {
-        get => _isNameValid;
-        set => SetProperty(ref _isNameValid, value);
-    }
-
-    private Country country;
-
-    public Country Country
-    {
-        get => country;
-        set => SetProperty(ref country, value);
-    }
+    [ObservableProperty]
+    private CountryResult country;
 
     public IAsyncRelayCommand AddRoomCommand { get; set; }
     public IAsyncRelayCommand AddByCodeCommand { get; set; }
     public IAsyncRelayCommand PopCommand { get; set; }
     public IRelayCommand PrivateHelpCommand { get; set; }
 
-    private readonly IRoomsApiService _roomsApiService;
-    private List<Country> countries;
-
-    public NewRoomViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IRoomsApiService roomsApiService) : base(navigationService, localizer, toastService)
+    public NewRoomViewModel(INavigationService navigationService, IToastService toastService, 
+        IRoomsApiService roomsApiService) : base(navigationService, toastService)
     {
         _roomsApiService = roomsApiService;
         Name = new ValidatableObject<string>();
@@ -79,9 +59,9 @@ public class NewRoomViewModel : ViewModelBase
     {
         Task.Run(() =>
         {
-            countries = Barrel.Current.Get<List<Country>>("Countries");
+            _countries = Barrel.Current.Get<List<CountryResult>>("Countries");
             var code = Barrel.Current.Get<UserDetailsResult>("User")?.CountryCode;
-            Country = countries.FirstOrDefault(c => c.Code == code);
+            Country = _countries.FirstOrDefault(c => c.Code == code);
         });
     }
 
@@ -111,13 +91,13 @@ public class NewRoomViewModel : ViewModelBase
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsMessagePackAsync<ApiResult<RoomCreateResult>>();
+                var result = await response.Content.ReadAsMemoryPackAsync<ApiResult<RoomCreateResult>>();
                 if (result.IsSuccess)
                 {
                     SystemConstant.Members = null;
                     await _navigationService.RemovePopupAsync();
                     await _navigationService.RemovePopupAsync();
-                    await _navigationService.NavigateToAsync<RoomDetailViewModel>(result.Data.Id);
+                    await _navigationService.NavigateToAsync($"{nameof(RoomDetailViewModel)}?roomId=?{result.Data.Id}");
                     CrossMauiMTAdmob.Current.LoadInterstitial("");
                 }
                 else
@@ -137,7 +117,7 @@ public class NewRoomViewModel : ViewModelBase
 
     private void AddValidations()
     {
-        Name.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer) { ValidationMessage = "Enter room name" });
+        Name.Validations.Add(new IsNotNullOrEmptyRule<string>() { ValidationMessage = "Enter room name" });
     }
 
     private bool Validate()

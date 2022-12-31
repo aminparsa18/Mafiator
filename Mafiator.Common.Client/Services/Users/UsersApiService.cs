@@ -50,21 +50,21 @@ public class UsersApiService : IUsersApiService
     /// <inheritdoc/>
     public Task<ApiResult<UserDetailsResult>> GetUser()
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<UserDetailsResult>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<UserDetailsResult>>(
             new Uri($"{UrlConstants.BaseUrl}users"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<UserStatusResult>> GetUserStatus()
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<UserStatusResult>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<UserStatusResult>>(
             new Uri($"{UrlConstants.BaseUrl}users/status"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<ValidateUserResult>> ValidateUser(string userCode)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<ValidateUserResult>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<ValidateUserResult>>(
             new Uri($"{UrlConstants.BaseUrl}api/User/ValidateUser?username={userCode}"));
     }
 }

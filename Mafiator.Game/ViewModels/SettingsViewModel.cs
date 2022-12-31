@@ -1,58 +1,38 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
-using Mafiator.Game.Models;
+using Mafiator.Common.Data.Dtos.Countries;
 using Mafiator.Game.Models.PipeEvents;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
 using System.Windows.Input;
 
 namespace Mafiator.Game.ViewModels;
 
-public class SettingsViewModel : ViewModelBase
+public partial class SettingsViewModel : ViewModelBase
 {
+    private readonly ISubscriber<ChangeLanguageEvent> _subscriber;
+    private readonly IDisposable _disposable;
+
+    [ObservableProperty]
+    private bool _initial;
+
+    [ObservableProperty]
     private bool playMusic;
-    public bool PlayMusic
-    {
-        get => playMusic;
-        set
-        {
-            _ = TogglePlayMusic();
-            SetProperty(ref playMusic, value);
-        }
-    }
 
+    [ObservableProperty]
     private bool playSound;
-    public bool PlaySound
-    {
-        get => playSound;
-        set => SetProperty(ref playSound, value);
-    }
 
+    [ObservableProperty]
     private bool allowNotification;
-    public bool AllowNotification
-    {
-        get => allowNotification;
-        set => SetProperty(ref allowNotification, value);
-    }
 
+    [ObservableProperty]
     private bool autoPlay;
-    public bool Autoplay
-    {
-        get => autoPlay;
-        set => SetProperty(ref autoPlay, value);
-    }
 
-    private Country country;
-    public Country Country
-    {
-        get => country;
-        set => SetProperty(ref country, value);
-    }
+    [ObservableProperty]
+    private CountryResult country;
 
-    public bool Initial = true;
     public ICommand PlaySoundCommand { get; set; }
     public IAsyncRelayCommand PlayMusicCommand { get; set; }
     public IRelayCommand AllowNotificationCommand { get; set; }
@@ -60,11 +40,8 @@ public class SettingsViewModel : ViewModelBase
     public IAsyncRelayCommand ChangeLangCommand { get; set; }
     public IAsyncRelayCommand PopCommand { get; set; }
 
-    private readonly ISubscriber<ChangeLanguageEvent> _subscriber;
-    private readonly IDisposable _disposable;
-
-    public SettingsViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        ISubscriber<ChangeLanguageEvent> subscriber) : base(navigationService, localizer, toastService)
+    public SettingsViewModel(INavigationService navigationService, IToastService toastService, 
+        ISubscriber<ChangeLanguageEvent> subscriber) : base(navigationService, toastService)
     {
         _subscriber = subscriber;
         var bag = DisposableBag.CreateBuilder();
@@ -74,12 +51,12 @@ public class SettingsViewModel : ViewModelBase
         PlaySound = !Barrel.Current.Exists("PlaySound") || Barrel.Current.Get<bool>("PlaySound");
         AllowNotification = !Barrel.Current.Exists("AllowNotification") ||
                             Barrel.Current.Get<bool>("AllowNotification");
-        Autoplay = !Barrel.Current.Exists("Autoplay") || Barrel.Current.Get<bool>("Autoplay");
+        AutoPlay = !Barrel.Current.Exists("Autoplay") || Barrel.Current.Get<bool>("Autoplay");
         var culture = Barrel.Current.Get<string>("Culture");
         if (culture == "RU")
-            Country = new Country() { Code = culture, Name = "Russian" };
+            Country = new CountryResult() { Sign = culture, Name = "Russian" };
         else
-            Country = new Country() { Code = culture, Name = "English" };
+            Country = new CountryResult() { Sign = culture, Name = "English" };
         PopCommand = new AsyncRelayCommand(Pop);
         PlaySoundCommand = new Command(TogglePlaySound);
         PlayMusicCommand = new AsyncRelayCommand(TogglePlayMusic);
@@ -92,18 +69,18 @@ public class SettingsViewModel : ViewModelBase
     {
         var culture = Barrel.Current.Get<string>("Culture");
         if (culture == "RU")
-            Country = new Country() { Code = culture, Name = "Russian" };
+            Country = new CountryResult() { Sign = culture, Name = "Russian" };
         else
-            Country = new Country() { Code = culture, Name = "English" };
+            Country = new CountryResult() { Sign = culture, Name = "English" };
     }
 
     private async Task ChangeLang() => await _navigationService.NavigateToPopupAsync<LanguagesViewModel>();
 
-    private void ToggleAutoplay() => Autoplay = !Autoplay;
+    private void ToggleAutoplay() => AutoPlay = !AutoPlay;
 
     private async Task TogglePlayMusic()
     {
-        if (Initial) return;
+        if (_initial) return;
         //make it reverse
         //if (!PlayMusic)
         //{
@@ -128,7 +105,7 @@ public class SettingsViewModel : ViewModelBase
         Barrel.Current.Add("PlayMusic", PlayMusic, TimeSpan.FromDays(200));
         Barrel.Current.Add("PlaySound", PlaySound, TimeSpan.FromDays(200));
         Barrel.Current.Add("AllowNotification", AllowNotification, TimeSpan.FromDays(200));
-        Barrel.Current.Add("Autoplay", Autoplay, TimeSpan.FromDays(200));
+        Barrel.Current.Add("Autoplay", AutoPlay, TimeSpan.FromDays(200));
         _disposable.Dispose();
         await _navigationService.RemovePopupAsync();
     }

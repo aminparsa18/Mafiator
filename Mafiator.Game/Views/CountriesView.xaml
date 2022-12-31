@@ -1,0 +1,104 @@
+﻿<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:pages="http://rotorgames.com"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+                  xmlns:dto="clr-namespace:Mafiator.Common.Data.Dtos.Countries;assembly=Mafiator.Common.Data"
+                  xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+                  xmlns:comp="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls"
+                  xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+                  xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels" 
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts" 
+                  xmlns:shimmerLayout="clr-namespace:Mafiator.Game.Controls.ShimmerLayout"
+                  base:ViewModelLocator.AutoWireViewModel="True"
+                  x:Class="Mafiator.Game.Views.CountriesView"
+                  x:DataType="viewModels:CountriesViewModel">
+    <mopups:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </mopups:PopupPage.Animation>
+    <mopups:PopupPage.Resources>
+        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
+    </mopups:PopupPage.Resources>
+    <mopups:PopupPage.Content>
+        <controls:PopupFrame Margin="24,36">
+            <VerticalStackLayout>
+                <controls:PopupHeader TitleText="{x:Static resx:AppResources.Select}" SubTitleText="{x:Static resx:AppResources.YourCountry}"/>
+                <Grid  MinimumHeightRequest="60">
+                    <controls:ExtendedEntry  Margin="16,0"
+                                                     HeightRequest="60"
+                                                    Placeholder="{x:Static resx:AppResources.Search}"
+                                                    HorizontalTextAlignment="Center" 
+                                                    TextChanged="InputView_OnTextChanged"/>
+                    <Image Source="search.png" HorizontalOptions="EndAndExpand" WidthRequest="24" Margin="24,0"></Image>
+                </Grid>
+
+                <CollectionView
+                        ItemsSource="{Binding Countries}"
+                        SelectedItem="{Binding Country}"
+                        Margin="16,0"
+                        SelectionMode="Single"
+                        HeightRequest="300"
+                        SelectionChangedCommand="{Binding CountrySelectedCommand}">
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <shimmerLayout:ShimmerLayout Margin="0,48,0,0" Angle="-45" GradientSize="0.4"
+                                                             BackgroundGradientColor="{StaticResource Day4}"
+                                                             IsLoading="True">
+                                <Grid ColumnDefinitions="3*,2*" Padding="24">
+                                    <VerticalStackLayout Margin="24,8">
+                                        <BoxView CornerRadius="12" BackgroundColor="White" HeightRequest="24" />
+                                        <BoxView CornerRadius="12" HeightRequest="24" />
+                                        <BoxView CornerRadius="12" HeightRequest="24" />
+                                    </VerticalStackLayout>
+                                    <BoxView Grid.Column="1" CornerRadius="1000" HeightRequest="80"
+                                                 WidthRequest="80" VerticalOptions="CenterAndExpand"
+                                                 HorizontalOptions="EndAndExpand"
+                                                 BackgroundColor="{StaticResource Day5}" />
+                                    </Grid>
+                            </shimmerLayout:ShimmerLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:CountryResult">
+                            <VerticalStackLayout Margin="8">
+                                <Border Padding="8"
+                                        BackgroundColor="{AppThemeBinding Light=#ffffff,Dark={StaticResource Night5} }">
+                                    <HorizontalStackLayout>
+                                        <Image
+                                                WidthRequest="48"
+                                                HeightRequest="30"
+                                                VerticalOptions="CenterAndExpand"
+                                                Margin="8"
+                                                Aspect="AspectFit"
+                                                Source="{Binding Sign,Converter={StaticResource CountryCodelmageConverter}}">
+                                        </Image>
+
+                                        <VerticalStackLayout Margin="0,8,0,0">
+                                            <Label FontSize="Medium" FontFamily="OpenSansSemibold"
+                                                       Text="{Binding Code}"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                                            <Label Text="{Binding Name}" FontSize="16"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="16"/>
+                                    </Border.StrokeShape>
+                                </Border>
+
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </controls:PopupFrame>
+    </mopups:PopupPage.Content>
+</mopups:PopupPage>

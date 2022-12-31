@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Services.ChatMessages;
@@ -15,97 +16,56 @@ using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Localization;
 using System.Windows.Input;
 
 namespace Mafiator.Game.ViewModels;
 
-public class GameEventViewModel : ViewModelBase
+public partial class GameEventViewModel : ViewModelBase
 {
-    private LayoutState mainState = LayoutState.Empty;
-
-    public LayoutState MainState
-    {
-        get => mainState;
-        set => SetProperty(ref mainState, value);
-    }
-
-    private LayoutState sleepState;
-    public LayoutState SleepState
-    {
-        get => sleepState;
-        set => SetProperty(ref sleepState, value);
-    }
-    public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
-    public ObservableRangeCollection<GameEventResult> Results { get; set; }
-    public ObservableRangeCollection<PlayerDetails> Partners { get; set; }
-    private CandidateDto candidate;
-    public CandidateDto Candidate
-    {
-        get => candidate;
-        set => SetProperty(ref candidate, value);
-    }
-
     private Timer _timer;
     private int totalTime;
-    private double progressTimer;
-
-    public double ProgressTimer
-    {
-        get => progressTimer;
-        set => SetProperty(ref progressTimer, value);
-    }
-
-    private string title;
-
-    public string Title
-    {
-        get => title;
-        set => SetProperty(ref title, value);
-    }
-
-    private string subTitle;
-
-    public string SubTitle
-    {
-        get => subTitle;
-        set => SetProperty(ref subTitle, value);
-    }
-
-    private string playerTask;
-
-    public string PlayerTask
-    {
-        get => playerTask;
-        set => SetProperty(ref playerTask, value);
-    }
-
-    private string action;
-
-    public string Action
-    {
-        get => action;
-        set => SetProperty(ref action, value);
-    }
-
-    private bool isMafia;
-
-    public bool IsMafia
-    {
-        get => isMafia;
-        set => SetProperty(ref isMafia, value);
-    }
-
-    public ICommand CandidateSelectedCommand { get; set; }
-    public IAsyncRelayCommand ApplyCommand { get; set; }
     private string gameId;
 
     private readonly IGameEventsApiService _gameEventsApiService;
     private readonly IMapper _mapper;
     private readonly IPublisher<UpdateMembersEvent> _publisher;
 
-    public GameEventViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
-        IChatMessagesApiService chatMessagesApiService, IGameEventsApiService gameEventsApiService, IMapper mapper, IPublisher<UpdateMembersEvent> publisher):base(navigationService, localizer, toastService)
+    [ObservableProperty]
+    private LayoutState mainState = LayoutState.Empty;
+
+    [ObservableProperty]
+    private LayoutState sleepState;
+
+    [ObservableProperty]
+    private CandidateDto candidate;
+
+    [ObservableProperty]
+    private double progressTimer;
+
+    [ObservableProperty]
+    private string title;
+
+    [ObservableProperty]
+    private string subTitle;
+
+    [ObservableProperty]
+    private string playerTask;
+
+    [ObservableProperty]
+    private string action;
+
+    [ObservableProperty]
+    private bool isMafia;
+
+    public ObservableRangeCollection<CandidateDto> Candidates { get; set; }
+    public ObservableRangeCollection<GameEventResult> Results { get; set; }
+    public ObservableRangeCollection<PlayerDetails> Partners { get; set; }
+    public ICommand CandidateSelectedCommand { get; set; }
+    public IAsyncRelayCommand ApplyCommand { get; set; }
+
+    public GameEventViewModel(INavigationService navigationService, IToastService toastService, IChatMessagesApiService chatMessagesApiService,
+        IGameEventsApiService gameEventsApiService, IMapper mapper, IPublisher<UpdateMembersEvent> publisher) 
+        :base(navigationService, toastService)
     {
         _gameEventsApiService = gameEventsApiService;
         _mapper = mapper;
@@ -113,8 +73,8 @@ public class GameEventViewModel : ViewModelBase
         Candidates = new ObservableRangeCollection<CandidateDto>();
         Results = new ObservableRangeCollection<GameEventResult>();
         Partners = new ObservableRangeCollection<PlayerDetails>();
-        Title = _localizer["NightTitle"];
-        SubTitle = _localizer["NightSubTitle"];
+        Title = LocalizationResourceManager.Instance["NightTitle"];
+        SubTitle = LocalizationResourceManager.Instance["NightSubTitle"];
         CandidateSelectedCommand = new Command(CandidateSelected);
         ApplyCommand = new AsyncRelayCommand(Apply);
         _timer ??= new Timer(Callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
@@ -179,8 +139,8 @@ public class GameEventViewModel : ViewModelBase
         var status = await _gameEventsApiService.GetNightResult(gameId);
         if (status.IsSuccess)
         {
-            Title = _localizer["StatusBoard"];
-            SubTitle = _localizer["StatusBoardSub"];
+            Title = LocalizationResourceManager.Instance["StatusBoard"];
+            SubTitle = LocalizationResourceManager.Instance["StatusBoardSub"];
             Results.Clear();
             Results.AddRange(status.Data);
             if (Results.Any())
@@ -199,7 +159,7 @@ public class GameEventViewModel : ViewModelBase
 
     private async Task Apply()
     {
-        await _navigationService.NavigateToPopupAsync<WaitingViewModel>(_localizer["ApplyingTarget"]);
+        await _navigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Instance["ApplyingTarget"]);
         var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
         HttpResponseMessage request = null;
         if (player.Role == GameRole.Mafia)
@@ -238,8 +198,8 @@ public class GameEventViewModel : ViewModelBase
             MainState = request.IsSuccessStatusCode ? LayoutState.Success : LayoutState.Error;
         else
             MainState = LayoutState.Success;
-        Title = _localizer["WellDone"];
-        SubTitle = _localizer["NowWait"];
+        Title = LocalizationResourceManager.Instance["WellDone"];
+        SubTitle = LocalizationResourceManager.Instance["NowWait"];
     }
 
     public override Task InitializeAsync(object navigationData)
@@ -285,14 +245,14 @@ public class GameEventViewModel : ViewModelBase
         var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
         return player.Role switch
         {
-            GameRole.GodFather => _localizer["KillDesc"],
-            GameRole.Mafia => _localizer["MafiaDesc"],
-            GameRole.Doctor => _localizer["CureDesc"],
-            GameRole.Detective => _localizer["InquiryDesc"],
-            GameRole.Sniper => _localizer["ShootDesc"],
-            GameRole.Natasha => _localizer["SilenceDesc"],
-            GameRole.Priest => _localizer["GiveSpeechDesc"],
-            _ => _localizer["DefaultActionDesc"]
+            GameRole.GodFather => LocalizationResourceManager.Instance["KillDesc"],
+            GameRole.Mafia => LocalizationResourceManager.Instance["MafiaDesc"],
+            GameRole.Doctor => LocalizationResourceManager.Instance["CureDesc"],
+            GameRole.Detective => LocalizationResourceManager.Instance["InquiryDesc"],
+            GameRole.Sniper => LocalizationResourceManager.Instance["ShootDesc"],
+            GameRole.Natasha => LocalizationResourceManager.Instance["SilenceDesc"],
+            GameRole.Priest => LocalizationResourceManager.Instance["GiveSpeechDesc"],
+            _ => LocalizationResourceManager.Instance["DefaultActionDesc"]
         };
     }
 
@@ -301,14 +261,14 @@ public class GameEventViewModel : ViewModelBase
         var player = Barrel.Current.Get<PlayerRoleResult>("PlayerRole");
         return player.Role switch
         {
-            GameRole.GodFather => _localizer["Kill"],
-            GameRole.Mafia => _localizer["Select"],
-            GameRole.Doctor => _localizer["Cure"],
-            GameRole.Detective => _localizer["Inquiry"],
-            GameRole.Sniper => _localizer["Shoot"],
-            GameRole.Natasha => _localizer["Silence"],
-            GameRole.Priest => _localizer["GiveSpeech"],
-            _ => _localizer["Action"]
+            GameRole.GodFather => LocalizationResourceManager.Instance["Kill"],
+            GameRole.Mafia => LocalizationResourceManager.Instance["Select"],
+            GameRole.Doctor => LocalizationResourceManager.Instance["Cure"],
+            GameRole.Detective => LocalizationResourceManager.Instance["Inquiry"],
+            GameRole.Sniper => LocalizationResourceManager.Instance["Shoot"],
+            GameRole.Natasha => LocalizationResourceManager.Instance["Silence"],
+            GameRole.Priest => LocalizationResourceManager.Instance["GiveSpeech"],
+            _ => LocalizationResourceManager.Instance["Action"]
         };
     }
 

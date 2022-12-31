@@ -14,7 +14,7 @@ public class AvatarsApiService : IAvatarsApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<AvatarResult>>> GetAllAvatars()
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<AvatarResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<AvatarResult>>>(
            new Uri($"{UrlConstants.BaseUrl}avatars"));
     }
 }

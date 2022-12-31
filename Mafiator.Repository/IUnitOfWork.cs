@@ -11,6 +11,11 @@ public interface IUnitOfWork
     IAvatarRepository Avatar { get; }
 
     /// <summary>
+    /// Repository provides methods to retrieve/handle country data.
+    /// </summary>
+    ICountryRepository Country { get; }
+
+    /// <summary>
     /// Repository provides methods to retrieve/handle event join data.
     /// </summary>
     IEventJoinRepository EventJoin { get; }

@@ -21,21 +21,21 @@ public class RoomsApiService : IRoomsApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<RoomDetailsResult>>> GetMyRooms()
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomDetailsResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<RoomDetailsResult>>>(
             new Uri($"{UrlConstants.BaseUrl}rooms"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<RoomDetailsResult>> GetRoom(string roomId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<RoomDetailsResult>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<RoomDetailsResult>>(
             new Uri($"{UrlConstants.BaseUrl}rooms/{roomId}"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<string>> IsRoomJoined(string roomId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<string>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<string>>(
             new Uri($"{UrlConstants.BaseUrl}rooms/isJoined/{roomId}"));
     }
 

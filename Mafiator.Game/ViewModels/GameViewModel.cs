@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Services.GameMembers;
@@ -10,61 +11,44 @@ using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Hubs;
 using Mafiator.Game.Models.Game;
 using Mafiator.Game.Models.PipeEvents;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Localization;
 using Tuple = System.Tuple;
 
 namespace Mafiator.Game.ViewModels;
 
-public class GameViewModel : ViewModelBase
+public partial class GameViewModel : ViewModelBase
 {
-    //persists game hub state
-    private LayoutState currentState = LayoutState.Loading;
-    public LayoutState CurrentState
-    {
-        get => currentState;
-        set => SetProperty(ref currentState, value);
-    }
-
-    //
-    private bool hubConnected;
-    public bool HubConnected
-    {
-        get => hubConnected;
-        set => SetProperty(ref hubConnected, value);
-    }
-
-    //message sent on player turn
-    private string message;
-    public string Message
-    {
-        get => message;
-        set => SetProperty(ref message, value);
-    }
-
+    private bool isRecording;
     //showing while recoding audio
     private int voiceMiliSeconds;
+    private PlayerRoleResult player;
+    private string gameId;
 
+    private readonly IAudioRecorder _audioRecorder;
+    private readonly IGameMemberApiService _gameMemberApiService;
+    private readonly IMapper _mapper;
+    private readonly ISubscriber<UpdateMembersEvent> _subscriber;
+
+    //persists game hub state
+    [ObservableProperty]
+    private LayoutState currentState = LayoutState.Loading;
+
+    [ObservableProperty]
+    private bool hubConnected;
+
+    //message sent on player turn
+    [ObservableProperty]
+    private string message;
+
+    [ObservableProperty]
     private TimeSpan recordingTimer;
-    public TimeSpan RecordingTimer
-    {
-        get => recordingTimer;
-        set => SetProperty(ref recordingTimer, value);
-    }
-
-    private bool isRecording;
 
     //current member turn
+    [ObservableProperty]
     private PlayerDetails member;
-    public PlayerDetails Member
-    {
-        get => member;
-        set => SetProperty(ref member, value);
-    }
 
     private Timer _timer;
 
@@ -72,27 +56,15 @@ public class GameViewModel : ViewModelBase
     private int totalTime;
 
     //visual timer over profile picture
+    [ObservableProperty]
     private double progressTimer;
-    public double ProgressTimer
-    {
-        get => progressTimer;
-        set => SetProperty(ref progressTimer, value);
-    }
 
     //remining time for current speaking user
+    [ObservableProperty]
     private string progressString;
-    public string ProgressString
-    {
-        get => progressString;
-        set => SetProperty(ref progressString, value);
-    }
 
+    [ObservableProperty]
     private GameRole? role;
-    public GameRole? Role
-    {
-        get => role;
-        set => SetProperty(ref role, value);
-    }
 
     public event EventHandler<bool> TurnChanged;
     public ObservableRangeCollection<PlayerDetails> Members { get; set; }
@@ -108,16 +80,8 @@ public class GameViewModel : ViewModelBase
     public IAsyncRelayCommand NextCommand { get; set; }
     public IAsyncRelayCommand<string> PlayVoiceCommand { get; set; }
 
-    private readonly IAudioRecorder _audioRecorder;
-    private readonly IGameMemberApiService _gameMemberApiService;
-    private readonly IMapper _mapper;
-    private readonly ISubscriber<UpdateMembersEvent> _subscriber;
-
-    private PlayerRoleResult player;
-    private string gameId;
-
-    public GameViewModel(IAudioRecorder audioRecorder, INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
-        GameMemberApiService gameMemberApiService, IMapper mapper, ISubscriber<UpdateMembersEvent> subscriber) : base(navigationService, localizer, toastService)
+    public GameViewModel(IAudioRecorder audioRecorder, INavigationService navigationService, IToastService toastService,
+        GameMemberApiService gameMemberApiService, IMapper mapper, ISubscriber<UpdateMembersEvent> subscriber) : base(navigationService, toastService)
     {
         _audioRecorder = audioRecorder;
         _gameMemberApiService = gameMemberApiService;

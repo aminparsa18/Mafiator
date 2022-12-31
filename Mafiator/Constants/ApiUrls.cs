@@ -7,4 +7,5 @@ public class ApiUrls
 {
     public const string Prefix = "api/v{version:apiVersion}";
     public const string Avatars = $"{Prefix}/avatars";
+    public const string Countries = $"{Prefix}/countries";
 }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-android;net7.0-ios;</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios;;net7.0-android33.0</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
@@ -33,6 +33,8 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
 		<AndroidLibrary Include="Dependencies\user-messaging-platform-2.0.0.aar" Bind="false" />
+		<ProjectReference Include="..\SpotlightBinding\SpotlightBinding.csproj" />
+		<!--<ProjectReference Include="..\Spotlight.Droid\Spotlight.Droid.csproj" />-->
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -44,13 +46,257 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\arrow_up.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\barcode.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\camera.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\camera.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\chat_back.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\checked.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\chevron_left.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\chevron_left2.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\chevron_right.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\chevron_right2.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\chevron_up.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\close.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\close.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\copy.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\create_room.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\day.jpg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\disslike.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
 		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<MauiImage Update="Resources\Images\empty_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\empty_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\gem.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\gem_white.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\godfather.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\header_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\header_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\help.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\help.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\history.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\history_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\history_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\like.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\loading.gif">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\logo.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\minus.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\night.jpg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\pause.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\photo_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\photo_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\play.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\plus.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\profile_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\profile_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\record.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\room_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\room_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\scan.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\search.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\send.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\send.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\star.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\start_game.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\store_day.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\store_night.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\sug_header.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\sug_header_1.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\unchecked.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\user.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\user_add.svg">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
+		<MauiImage Update="Resources\Images\wave.png">
+		  <SubType>Designer</SubType>
+		  <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</MauiImage>
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\custom_progress_bar_dark.xml" />
+	  <MauiImage Remove="Resources\Images\custom_progress_bar_light.xml" />
+	  <MauiImage Remove="Resources\Images\dialog_bg.xml" />
+	  <MauiImage Remove="Resources\Images\ic_check_white_24dp.xml" />
+	  <MauiImage Remove="Resources\Images\ic_clear_white_24dp.xml" />
+	  <MauiImage Remove="Resources\Images\ic_error_outline_white_24dp.xml" />
+	  <MauiImage Remove="Resources\Images\ic_info_outline_white_24dp.xml" />
+	  <MauiImage Remove="Resources\Images\input_bg.xml" />
+	  <MauiImage Remove="Resources\Images\splash_screen.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -59,27 +305,137 @@
 	  <None Remove="Platforms\Android\Resources\drawable\ic_error_outline_white_24dp.xml" />
 	  <None Remove="Platforms\Android\Resources\drawable\ic_info_outline_white_24dp.xml" />
 	  <None Remove="Platforms\Android\Resources\layout\toast_layout.xml" />
+	  <None Remove="Platforms\Android\Resources\xml\file_paths.xml" />
+	  <None Remove="Resources\Images\arrow_up.png" />
+	  <None Remove="Resources\Images\barcode.png" />
+	  <None Remove="Resources\Images\camera.png" />
+	  <None Remove="Resources\Images\camera.svg" />
+	  <None Remove="Resources\Images\chat_back.svg" />
+	  <None Remove="Resources\Images\checked.svg" />
+	  <None Remove="Resources\Images\chevron_left.svg" />
+	  <None Remove="Resources\Images\chevron_left2.svg" />
+	  <None Remove="Resources\Images\chevron_right.svg" />
+	  <None Remove="Resources\Images\chevron_right2.svg" />
+	  <None Remove="Resources\Images\chevron_up.svg" />
+	  <None Remove="Resources\Images\close.png" />
+	  <None Remove="Resources\Images\close.svg" />
+	  <None Remove="Resources\Images\copy.png" />
+	  <None Remove="Resources\Images\create_room.png" />
+	  <None Remove="Resources\Images\custom_progress_bar_dark.xml" />
+	  <None Remove="Resources\Images\custom_progress_bar_light.xml" />
+	  <None Remove="Resources\Images\day.jpg" />
+	  <None Remove="Resources\Images\dialog_bg.xml" />
+	  <None Remove="Resources\Images\disslike.png" />
+	  <None Remove="Resources\Images\empty_day.png" />
+	  <None Remove="Resources\Images\empty_night.png" />
+	  <None Remove="Resources\Images\gem.png" />
+	  <None Remove="Resources\Images\gem_white.png" />
 	  <None Remove="Resources\Images\god.png" />
+	  <None Remove="Resources\Images\godfather.png" />
+	  <None Remove="Resources\Images\header_day.png" />
+	  <None Remove="Resources\Images\header_night.png" />
+	  <None Remove="Resources\Images\help.png" />
+	  <None Remove="Resources\Images\help.svg" />
+	  <None Remove="Resources\Images\history.png" />
+	  <None Remove="Resources\Images\history_day.png" />
+	  <None Remove="Resources\Images\history_night.png" />
+	  <None Remove="Resources\Images\ic_check_white_24dp.xml" />
+	  <None Remove="Resources\Images\ic_clear_white_24dp.xml" />
+	  <None Remove="Resources\Images\ic_error_outline_white_24dp.xml" />
+	  <None Remove="Resources\Images\ic_info_outline_white_24dp.xml" />
+	  <None Remove="Resources\Images\input_bg.xml" />
+	  <None Remove="Resources\Images\like.png" />
+	  <None Remove="Resources\Images\loading.gif" />
+	  <None Remove="Resources\Images\logo.png" />
+	  <None Remove="Resources\Images\minus.svg" />
+	  <None Remove="Resources\Images\night.jpg" />
+	  <None Remove="Resources\Images\pause.png" />
+	  <None Remove="Resources\Images\photo_day.png" />
+	  <None Remove="Resources\Images\photo_night.png" />
+	  <None Remove="Resources\Images\play.png" />
+	  <None Remove="Resources\Images\plus.svg" />
+	  <None Remove="Resources\Images\profile_day.png" />
+	  <None Remove="Resources\Images\profile_night.png" />
+	  <None Remove="Resources\Images\record.svg" />
+	  <None Remove="Resources\Images\room_day.png" />
+	  <None Remove="Resources\Images\room_night.png" />
+	  <None Remove="Resources\Images\scan.svg" />
+	  <None Remove="Resources\Images\search.png" />
+	  <None Remove="Resources\Images\send.png" />
+	  <None Remove="Resources\Images\send.svg" />
+	  <None Remove="Resources\Images\splash_screen.xml" />
+	  <None Remove="Resources\Images\star.png" />
+	  <None Remove="Resources\Images\start_game.png" />
+	  <None Remove="Resources\Images\store_day.png" />
+	  <None Remove="Resources\Images\store_night.png" />
+	  <None Remove="Resources\Images\sug_header.png" />
+	  <None Remove="Resources\Images\sug_header_1.png" />
+	  <None Remove="Resources\Images\unchecked.svg" />
+	  <None Remove="Resources\Images\user.svg" />
+	  <None Remove="Resources\Images\user_add.svg" />
+	  <None Remove="Resources\Images\wave.png" />
+	  <None Remove="Resources\Raw\countries.json" />
+	  <None Remove="Resources\Raw\loading.json" />
 	  <None Remove="Resources\Raw\shoot.mp3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <TransformFile Include="Resources\Images\custom_progress_bar_dark.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\custom_progress_bar_light.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\dialog_bg.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\ic_check_white_24dp.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\ic_clear_white_24dp.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\ic_error_outline_white_24dp.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\ic_info_outline_white_24dp.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\input_bg.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
+	  <TransformFile Include="Resources\Images\splash_screen.xml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+	  </TransformFile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="12.0.0" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 	  <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
-	  <PackageReference Include="CommunityToolkit.Maui" Version="3.0.0" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="3.1.0" />
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
 	  <PackageReference Include="MessagePipe" Version="1.7.4" />
-	  <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
-	  <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.3" />
-	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.0" />
-	  <PackageReference Include="Mopups" Version="1.0.4" />
+	  <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
+	  <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.1" />
+	  <PackageReference Include="Mopups" Version="1.1.0" />
 	  <PackageReference Include="Plugin.InAppBilling" Version="6.7.0" />
-	  <PackageReference Include="Plugin.Maui.Audio" Version="0.1.0-preview1" />
-	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.1" />
+	  <PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
+	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.0.2" />
 	  <PackageReference Include="Scrutor" Version="4.2.0" />
+	  <PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0-preview.61" />
+	  <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -89,18 +445,97 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Resources\Texts\AppResources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>AppResources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Texts\AppResources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Controls\Buttons\CopyButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\Buttons\HelpButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\Buttons\LiveButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\Buttons\RoundButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\Buttons\SettingButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\Buttons\ShareButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\CheckBoxView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\CircularProgressBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Controls\CloseButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\HidePasswordButton.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Controls\PopupHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Controls\ShowPasswordButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ConfirmPhoneView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CountriesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\LanguagesView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MyRoomsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\NewRoomView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProfilePictureView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\RoomDetailView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SplashView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\WaitingView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Views\LazyViews\" />
 	</ItemGroup>
 
 </Project>

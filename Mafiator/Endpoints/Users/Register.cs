@@ -3,8 +3,7 @@ using Mafiator.Service.Contracts.Users;
 
 namespace Mafiator.Api.Endpoints.Users;
 
-[Authorize]
-[Produces("application/x-msgpack")]
+//[Produces("application/x-msgpack")]
 public class Register : EndpointBaseAsync
     .WithRequest<RegisterUserRequest>
     .WithActionResult<ApiResult>

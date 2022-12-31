@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Mafiator.Common.Server": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:10275;http://localhost:10276"
+    }
+  }
+}

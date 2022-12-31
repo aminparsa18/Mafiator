@@ -385,7 +385,7 @@ public class ShimmerLayout : Grid
 
         baseLayout
             .ToSKLayout()
-            .GetChildrenSKVisualElements()
+            .GetChildrenSKVisualElements().t
             .ForEach(_childVisualElements.Add);
     }
 

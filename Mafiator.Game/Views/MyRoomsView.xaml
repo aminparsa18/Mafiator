@@ -1,0 +1,83 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+             xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"
+             xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:shimmerLayout="clr-namespace:Mafiator.Game.Controls.ShimmerLayout"
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             xmlns:room="clr-namespace:Mafiator.Common.Data.Dtos.Rooms;assembly=Mafiator.Common.Data"
+             x:Class="Mafiator.Game.Views.MyRoomsView"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:MyRoomsViewModel">
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <Grid toolkit:StateContainer.CurrentState="{Binding CurrentState}" toolkit:StateContainer.ShouldAnimateOnStateChange="False">
+                <toolkit:StateContainer.StateViews>
+                    <Grid toolkit:StateView.StateKey="None"/>
+                    <skia:SKLottieView toolkit:StateView.StateKey="Loading" 
+                                       WidthRequest="100"
+                                       HeightRequest="100"
+                                       Opacity="0.8"
+                                       RepeatCount="-1"
+                                       RepeatMode="Reverse"
+                                       Source="loading.json"
+                                       VerticalOptions="CenterAndExpand">
+                        
+                    </skia:SKLottieView>
+                    <VerticalStackLayout toolkit:StateView.StateKey="Empty" VerticalOptions="FillAndExpand" Margin="0,128,0,0" >
+                        <Image WidthRequest="120" Aspect="AspectFit" HorizontalOptions="CenterAndExpand" Source="{AppThemeBinding Light=empty_day.png, Dark=empty_night.png}" />
+                        <Label Text="{x:Static resx:AppResources.NoRoom}" Margin="0,16,0,0"
+                                   HorizontalOptions="CenterAndExpand" FontSize="18" TextColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night1}}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout toolkit:StateView.StateKey="Error" VerticalOptions="CenterAndExpand">
+                        <Label Text="{x:Static resx:AppResources.ServerError}"
+                                   HorizontalOptions="CenterAndExpand" />
+                    </VerticalStackLayout>
+                    <RefreshView toolkit:StateView.StateKey="Success" IsRefreshing="{Binding IsBusy,Mode=TwoWay}"
+                             Command="{Binding LoadRoomsCommand}"
+                             Margin="8">
+                        <CollectionView x:Name="RouteListView"
+                                    ItemsSource="{Binding Rooms}"
+                                    SelectedItem="{Binding Room}"
+                                    SelectionMode="Single"
+                                    SelectionChangedCommand="{Binding RoomSelectedCommand}">
+                            <CollectionView.Header>
+                                <VerticalStackLayout>
+                                    <Label HorizontalOptions="CenterAndExpand" FontSize="Large" FontFamily="OpenSansSemibold"
+                                       Margin="32,24,0,24" Text="{x:Static resx:AppResources.YourRooms}" TextColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night1}}"/>
+                                </VerticalStackLayout>
+                            </CollectionView.Header>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="room:RoomDetailsResult">
+                                    <VerticalStackLayout>
+                                        <Grid Margin="16,8" >
+                                            <Image Source="history.png" Aspect="Fill"/>
+                                            <VerticalStackLayout Padding="36,16">
+                                                <Label FontFamily="OpenSansSemibold" FontSize="24" Text="{Binding Name}" />
+                                                <HorizontalStackLayout>
+                                                    <Label Text="{Binding MemberCount}"
+                                                       TextColor="{StaticResource Day2}"  FontSize="16" />
+                                                    <Label Text="{x:Static resx:AppResources.MemberCount}"  FontSize="16" />
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout>
+                                                    <Label Text="{Binding GamePlayedCount}"
+                                                       TextColor="{StaticResource Day2}" FontSize="16" />
+                                                    <Label Text="{x:Static resx:AppResources.GamePlayed}"  FontSize="16" />
+                                                </HorizontalStackLayout>
+                                                <Button x:Name="LeaveBtn" HorizontalOptions="StartAndExpand" BackgroundColor="{StaticResource Error}"
+                                                    Text="{x:Static resx:AppResources.Leave}"  Padding="16,4" CornerRadius="24" CommandParameter="{Binding Id}" Clicked="LeaveBtn_OnClicked" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
+                </toolkit:StateContainer.StateViews>
+            </Grid>
+            <!--<controls:MTAdView  AdsId="{OnPlatform Android='ca-app-pub-3940256099942544/6300978111', 
+                                   iOS='ca-app-pub-3940256099942544/2934735716'}" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand"/>-->
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,23 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Services.Games;
 using Mafiator.Common.Data.Dtos.Games;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
 public class RandomViewModel : ViewModelBase
 {
+    private readonly IGamesApiService _gamesApiService;
+
     public ObservableRangeCollection<AvailableGameResult> Games { get; set; }
     public IAsyncRelayCommand LoadGamesCommand { get; set; }
     public IAsyncRelayCommand OpenRoomCommand { get; set; }
 
-    private readonly IGamesApiService _gamesApiService;
-
-    public RandomViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IGamesApiService gamesApiService) : base(navigationService, localizer, toastService)
+    public RandomViewModel(INavigationService navigationService, IToastService toastService, 
+        IGamesApiService gamesApiService) : base(navigationService, toastService)
     {
         _gamesApiService = gamesApiService;
         Games = new ObservableRangeCollection<AvailableGameResult>();
@@ -28,7 +26,7 @@ public class RandomViewModel : ViewModelBase
 
     public async Task OpenRoom(Guid roomId)
     {
-        await _navigationService.NavigateToAsync<RoomDetailViewModel>(roomId);
+        await _navigationService.NavigateToAsync($"{nameof(RoomDetailViewModel)}?roomId={roomId}");
     }
 
     private async Task LoadGames()

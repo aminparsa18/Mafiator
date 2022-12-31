@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="Mafiator.Game.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -8,7 +7,32 @@
     Shell.NavBarIsVisible="False">
 
     <ShellContent
+        ContentTemplate="{DataTemplate local:HomeView}"
+        Route="HomeViewModel" />
+    
+    <ShellContent
         ContentTemplate="{DataTemplate local:SplashView}"
-        Route="MainPage" />
+        Route="SplashViewModel" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:LoginView}"
+        Route="LoginViewModel" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:ConfirmPhoneView}"
+        Route="ConfirmPhoneViewModel" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:ProfilePictureView}"
+        Route="ProfilePictureViewModel" />
+
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:MyRoomsView}"
+        Route="MyRoomsViewModel" />
+    
+    <ShellContent
+        ContentTemplate="{DataTemplate local:SettingsView}"
+        Route="SettingsViewModel" />
 
 </Shell>

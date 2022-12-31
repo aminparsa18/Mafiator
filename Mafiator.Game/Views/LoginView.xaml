@@ -1,0 +1,176 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+             xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+             xmlns:effects="clr-namespace:MauiTouchEffect;assembly=MauiTouchEffect"
+             xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"  
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             x:Class="Mafiator.Game.Views.LoginView"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             BackgroundColor="Wheat"
+             x:DataType="viewModels:LoginViewModel">
+    <ContentPage.Resources>
+        <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <!--<xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />-->
+            <ScrollView>
+                <VerticalStackLayout x:Name="Body">
+                    <Image Source="logo.png" x:Name="Logo" Margin="0,148,0,0" TranslationY="200" WidthRequest="72" />
+                    <Grid>
+                        <VerticalStackLayout x:Name="TitlePanel">
+                            <Label Text="{x:Static resx:AppResources.AppTitle}" FontSize="Large" Margin="0,8,0,0"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}" />
+                            <Label Text="{x:Static resx:AppResources.AppSubTitle}" FontSize="Small"
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout x:Name="LoginPanel" IsVisible="False" Opacity="0" Margin="24">
+                            <controls:ExtendedEntry Placeholder="{x:Static resx:AppResources.Username}"
+                                                        Text="{Binding LoginUsername.Value}"
+                                                        IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
+                                                        Errors="{Binding LoginUsername.Errors}" />
+                            <Grid>
+                                <controls:ExtendedEntry x:Name="LoginPassEntry"
+                                                            Placeholder="{x:Static resx:AppResources.Password}"
+                                                            Text="{Binding LoginPassword.Value}"
+                                                            IsValid="{Binding IsLoginPasswordValid, Mode=TwoWay}"
+                                                            Errors="{Binding LoginPassword.Errors}" IsPassword="True" />
+                                <controls:ShowPasswordButton x:Name="ShowLoginPass">
+                                    <controls:ShowPasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="LoginPassVis_OnTapped"></TapGestureRecognizer>
+                                    </controls:ShowPasswordButton.GestureRecognizers>
+                                </controls:ShowPasswordButton>
+                                <controls:HidePasswordButton x:Name="HideLoginPass" IsVisible="False">
+                                    <controls:HidePasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="LoginPassInvis_OnTapped"></TapGestureRecognizer>
+                                    </controls:HidePasswordButton.GestureRecognizers>
+                                </controls:HidePasswordButton>
+                            </Grid>
+
+                            <Button Margin="48,8" Text="{x:Static resx:AppResources.Continue}" Command="{Binding LoginCommand}" />
+                            <Label Text="{x:Static resx:AppResources.PrivacyPolicy}" HorizontalOptions="CenterAndExpand"
+                                   Margin="0,16" FontSize="Small" />
+
+                        </VerticalStackLayout>
+                        <VerticalStackLayout x:Name="RegisterPanel" IsVisible="False" Opacity="0" Margin="24">
+                            <Grid>
+                                <controls:ExtendedEntry
+                                    Text="{Binding PhoneNo.Value}"
+                                    HorizontalTextAlignment="Center"
+                                    IsValid="{Binding IsPhoneNoValid, Mode=TwoWay}"
+                                    Errors="{Binding PhoneNo.Errors}" Keyboard="Telephone"
+                                    MaxLength="11" />
+                                <HorizontalStackLayout HorizontalOptions="StartAndExpand"
+                                             effects:TouchEffect.Command="{Binding ShowCountriesCommand}">
+                                    <Image
+                                        HorizontalOptions="StartAndExpand"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="36"
+                                        HeightRequest="30"
+                                        Margin="8,0,0,16"
+                                        Aspect="AspectFit"
+                                        Source="{Binding Country.Sign,Converter={StaticResource CountryCodelmageConverter}}">
+                                    </Image>
+                                    <Label Text="{Binding Country.Code}" FontSize="Medium" FontAttributes="Bold"
+                                           Margin="0,0,0,16" VerticalOptions="CenterAndExpand" TextColor="Black">
+                                    </Label>
+                                </HorizontalStackLayout>
+                            </Grid>
+                            <controls:ExtendedEntry Placeholder="{x:Static resx:AppResources.Username}"
+                                                        Text="{Binding Username.Value}"
+                                                        IsValid="{Binding IsUsernameValid, Mode=TwoWay}"
+                                                        Errors="{Binding Username.Errors}" />
+
+                            <Grid>
+                                <controls:ExtendedEntry x:Name="RegisterPassEntry"
+                                                            Text="{Binding Password.Value,Mode=TwoWay}"
+                                                            Placeholder="{x:Static resx:AppResources.Password}"
+                                                            Errors="{Binding Password.Errors}" IsPassword="True"
+                                                            IsValid="{Binding IsPasswordValid,Mode=TwoWay}" />
+                                <controls:ShowPasswordButton x:Name="ShowRegisterPass">
+                                    <controls:ShowPasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="RegisterPassVis_OnTapped"></TapGestureRecognizer>
+                                    </controls:ShowPasswordButton.GestureRecognizers>
+                                </controls:ShowPasswordButton>
+                                <controls:HidePasswordButton x:Name="HideRegisterPass" IsVisible="False">
+                                    <controls:HidePasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="RegisterPassInvis_OnTapped"></TapGestureRecognizer>
+                                    </controls:HidePasswordButton.GestureRecognizers>
+                                </controls:HidePasswordButton>
+                            </Grid>
+                            <Grid>
+                                <controls:ExtendedEntry x:Name="ConfPassEntry"
+                                                            Text="{Binding ConfirmPassword.Value,Mode=TwoWay}"
+                                                            Placeholder="{x:Static resx:AppResources.ConfirmPassword}"
+                                                            IsPassword="True"
+                                                            IsValid="{Binding IsConfirmPasswordValid,Mode=TwoWay}"
+                                                            Errors="{Binding ConfirmPassword.Errors}" />
+                                <controls:ShowPasswordButton x:Name="ShowRegisterConfirmPass">
+                                    <controls:ShowPasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ConfRegisterPassVis_OnTapped"></TapGestureRecognizer>
+                                    </controls:ShowPasswordButton.GestureRecognizers>
+                                </controls:ShowPasswordButton>
+                                <controls:HidePasswordButton x:Name="HideRegisterConfirmPass" IsVisible="False">
+                                    <controls:HidePasswordButton.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ConfRegisterPassInvis_OnTapped"></TapGestureRecognizer>
+                                    </controls:HidePasswordButton.GestureRecognizers>
+                                </controls:HidePasswordButton>
+                            </Grid>
+                            <Button Margin="48,8" Text="{x:Static resx:AppResources.Continue}" Command="{Binding RegisterCommand}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                   <Grid VerticalOptions="EndAndExpand" ColumnDefinitions="*,*" Margin="48,16">
+                        <Button x:Name="LoginBtn" Text="{x:Static resx:AppResources.Login}" Grid.Column="1" Margin="-16,0,16,0"
+                                BackgroundColor="#232228"
+                                Clicked="LoginBtn_OnClicked" />
+                        <Button x:Name="RegisterBtn" Text="{x:Static resx:AppResources.Register}" Margin="16,0,-16,0"
+                                BackgroundColor="#707070" Clicked="RegisterBtn_OnClicked" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto,*" Margin="48,0">
+                        <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="1"
+                                 BackgroundColor="#707070" />
+                        <Label Grid.Column="1" Text="{x:Static resx:AppResources.Or}" TextColor="#707070" Margin="8,0" />
+                        <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
+                                 HeightRequest="1" BackgroundColor="#707070" />
+                    </Grid>
+                    <!--<Button x:Name="GoogleBtn" Margin="48,16" Text="{x:Static resx:AppResources.GoogleSignIn}"
+                            Command="{Binding GoogleCommand}">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
+                                    Offset="0.0" />
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                    Offset="0.25" />
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <Button x:Name="FacebookBtn" Margin="48,0,48,16" Text="{x:Static resx:AppResources.FacebookSignIn}"
+                            Command="{Binding FacebookCommand}">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night3}}"
+                                    Offset="0.0" />
+                                <GradientStop
+                                    Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                                    Offset="0.25" />
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>-->
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

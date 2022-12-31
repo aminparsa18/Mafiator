@@ -8,14 +8,13 @@ public partial class SplashView : ContentPage
 {
     private readonly IAudioManager _audioManager;
 
-    public SplashView(IAudioManager audioManager, SplashScreenViewModel viewModel)
+    public SplashView(IAudioManager audioManager)
     {
         InitializeComponent();
         _audioManager = audioManager;
-        BindingContext = viewModel;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
         MainThread.BeginInvokeOnMainThread(async () =>
@@ -28,7 +27,7 @@ public partial class SplashView : ContentPage
             await Logo.FadeTo(1, 600, Easing.Linear);
             await Logo.RelRotateTo(360, 400, Easing.Linear);
             await AppName.FadeTo(1, 800, Easing.Linear);
-            await (BindingContext as SplashScreenViewModel).Navigate();
+            await (BindingContext as SplashViewModel).Navigate();
         });
     }
 }

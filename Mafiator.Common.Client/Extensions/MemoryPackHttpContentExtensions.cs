@@ -5,6 +5,6 @@ namespace Mafiator.Common.Client.Extensions;
 
 public static class MemoryPackHttpContentExtensions
 {
-    public static async Task<T> ReadAsMessagePackAsync<T>(this HttpContent content) =>
+    public static async Task<T> ReadAsMemoryPackAsync<T>(this HttpContent content) =>
         await content.ReadAsAsync<T>(MessagePackMediaTypeFormatter.DefaultMediaTypeFormatters).ConfigureAwait(false);
 }

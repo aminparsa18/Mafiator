@@ -117,29 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
-  </data>
-  <data name="ActionDone" xml:space="preserve">
-    <value>Role action is done. Results will be appeard at morning.</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
-  </data>
   <data name="AddFriends" xml:space="preserve">
     <value>Add Friends</value>
   </data>
   <data name="AddFriendsDesc" xml:space="preserve">
     <value>Add your friends in this room so you can be in touch and play together</value>
   </data>
-  <data name="AddRoles" xml:space="preserve">
-    <value>Add Roles</value>
-  </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Allow notifications</value>
-  </data>
-  <data name="ApplyingTarget" xml:space="preserve">
-    <value>Applying Target...</value>
   </data>
   <data name="AppSubTitle" xml:space="preserve">
     <value>Everybody has a power</value>
@@ -153,17 +138,8 @@
   <data name="Autoplay" xml:space="preserve">
     <value>Autoplay voices in game</value>
   </data>
-  <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
   <data name="Chat" xml:space="preserve">
     <value>Chat</value>
-  </data>
-  <data name="ChoosePhoto" xml:space="preserve">
-    <value>Choose Photo</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirm Password</value>
@@ -172,16 +148,7 @@
     <value>Continue</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>CREATE</value>
-  </data>
-  <data name="Cure" xml:space="preserve">
-    <value>Cure</value>
-  </data>
-  <data name="CureDesc" xml:space="preserve">
-    <value>Cure Someone</value>
-  </data>
-  <data name="DefaultActionDesc" xml:space="preserve">
-    <value>Wait for player to take their actions</value>
+    <value>Create</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
     <value>Display Name</value>
@@ -189,8 +156,11 @@
   <data name="EditProfile" xml:space="preserve">
     <value>Edit Profile</value>
   </data>
+  <data name="EmptyCode" xml:space="preserve">
+    <value>Verification code cannot be empty</value>
+  </data>
   <data name="EmptyConfirmPassword" xml:space="preserve">
-    <value>password confirmation cannot be empty</value>
+    <value>Confirm password cannot be empty</value>
   </data>
   <data name="EmptyInput" xml:space="preserve">
     <value>Input cannot be empty</value>
@@ -199,83 +169,31 @@
     <value>Password cannot be empty</value>
   </data>
   <data name="EmptyPhoneNo" xml:space="preserve">
-    <value>Phone no cannot be empty</value>
+    <value>Phone number cannot be empty</value>
   </data>
   <data name="EmptyUsername" xml:space="preserve">
     <value>Username cannot be empty</value>
   </data>
   <data name="EnterCode" xml:space="preserve">
-    <value>Enter Verification Code</value>
+    <value>Enter verification code sent to</value>
   </data>
   <data name="EnterRoomName" xml:space="preserve">
     <value>Enter Room Name</value>
   </data>
-  <data name="FacebookSignIn" xml:space="preserve">
-    <value>Sign in With Facebook</value>
-  </data>
-  <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
-  </data>
-  <data name="GameHubConnecting" xml:space="preserve">
-    <value>Connecting Game Hub...</value>
-  </data>
-  <data name="GameHubError" xml:space="preserve">
-    <value>Couldn't connect,Try Again</value>
-  </data>
   <data name="GamePlayed" xml:space="preserve">
     <value>Game Played</value>
   </data>
-  <data name="GamePlayersCount" xml:space="preserve">
-    <value>Game Players Count</value>
-  </data>
-  <data name="GameStartsAt" xml:space="preserve">
-    <value>Game Starts At</value>
-  </data>
-  <data name="GetGems" xml:space="preserve">
-    <value>Get Gems</value>
-  </data>
-  <data name="GiveSpeech" xml:space="preserve">
-    <value>Give speech</value>
-  </data>
-  <data name="GiveSpeechDesc" xml:space="preserve">
-    <value>You can give someone extra speech</value>
-  </data>
-  <data name="GoogleSignIn" xml:space="preserve">
-    <value>Sign in With Google</value>
-  </data>
   <data name="GoToGame" xml:space="preserve">
-    <value>Go To Game</value>
+    <value>Go to game</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>History</value>
   </data>
-  <data name="Inquiry" xml:space="preserve">
-    <value>Inquiry</value>
-  </data>
-  <data name="InquiryDesc" xml:space="preserve">
-    <value>Inquiry Someone</value>
-  </data>
   <data name="InvalidPassword" xml:space="preserve">
     <value>Password must contain at least 6 characters inclusing letters and digits</value>
   </data>
-  <data name="InvalidPhoneNumber" xml:space="preserve">
-    <value>Phone number format is not valid</value>
-  </data>
-  <data name="Invite" xml:space="preserve">
-    <value>Invite friends</value>
-  </data>
   <data name="Join" xml:space="preserve">
-    <value>JOIN
-</value>
-  </data>
-  <data name="Joined" xml:space="preserve">
-    <value>Joined</value>
-  </data>
-  <data name="Kill" xml:space="preserve">
-    <value>Kill</value>
-  </data>
-  <data name="KillDesc" xml:space="preserve">
-    <value>Kill Someone</value>
+    <value>Join</value>
   </data>
   <data name="LanguageColon" xml:space="preserve">
     <value>Language:</value>
@@ -283,59 +201,29 @@
   <data name="Leave" xml:space="preserve">
     <value>Leave</value>
   </data>
-  <data name="Level" xml:space="preserve">
-    <value>Level</value>
-  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
-  </data>
-  <data name="MafiaDesc" xml:space="preserve">
-    <value>Choose Someone to kill</value>
   </data>
   <data name="MemberCount" xml:space="preserve">
     <value>Member Count</value>
   </data>
   <data name="Memberss" xml:space="preserve">
-    <value>member(s)</value>
-  </data>
-  <data name="Negative" xml:space="preserve">
-    <value>Negative</value>
+    <value>Members(s)</value>
   </data>
   <data name="NewGame" xml:space="preserve">
-    <value>New Game</value>
+    <value>Start a new game</value>
   </data>
   <data name="NewRoom" xml:space="preserve">
     <value>New Room</value>
   </data>
-  <data name="Next" xml:space="preserve">
-    <value>Next</value>
-  </data>
-  <data name="NightSubTitle" xml:space="preserve">
-    <value>Play your role</value>
-  </data>
-  <data name="NightTitle" xml:space="preserve">
-    <value>It's night</value>
-  </data>
-  <data name="NoActionTitle" xml:space="preserve">
-    <value>nothing to do,keep sleeping until other players do their actions</value>
-  </data>
   <data name="NoGame" xml:space="preserve">
-    <value>No new game is scheduled to start!!!</value>
+    <value>No new game is scheduled to start!</value>
   </data>
   <data name="NoRoom" xml:space="preserve">
     <value>No Room</value>
   </data>
-  <data name="NowWait" xml:space="preserve">
-    <value>Now wait till morning</value>
-  </data>
   <data name="Or" xml:space="preserve">
-    <value>OR</value>
-  </data>
-  <data name="OutOfGameTitle" xml:space="preserve">
-    <value>you're fuckin outta this game,just chill</value>
-  </data>
-  <data name="PartnersChoice" xml:space="preserve">
-    <value>Your partners choice</value>
+    <value>Or</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
@@ -346,20 +234,17 @@
   <data name="PlaySound" xml:space="preserve">
     <value>Play Sound</value>
   </data>
-  <data name="Positive" xml:space="preserve">
-    <value>Positive</value>
-  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
   <data name="PrivateRoom" xml:space="preserve">
     <value>Private Room</value>
   </data>
-  <data name="PublicLiveStream" xml:space="preserve">
-    <value>Public Live Stream</value>
-  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
+  </data>
+  <data name="RegisteringAccount" xml:space="preserve">
+    <value>We're registering your account</value>
   </data>
   <data name="Resend" xml:space="preserve">
     <value>Resend Code</value>
@@ -370,23 +255,8 @@
   <data name="RoomCode" xml:space="preserve">
     <value>Room Code</value>
   </data>
-  <data name="RoomCodeDesc" xml:space="preserve">
-    <value>Scan room barcode to join immediately</value>
-  </data>
   <data name="Rooms" xml:space="preserve">
-    <value>ROOMS</value>
-  </data>
-  <data name="ScanBarcode" xml:space="preserve">
-    <value>Scan Barcode</value>
-  </data>
-  <data name="ScanBarcodeDesc" xml:space="preserve">
-    <value>Scan User Code using scanner</value>
-  </data>
-  <data name="ScheduleGame" xml:space="preserve">
-    <value>Schedule Game</value>
-  </data>
-  <data name="Score" xml:space="preserve">
-    <value>Score</value>
+    <value>Rooms</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
@@ -397,125 +267,53 @@
   <data name="SelectAvatar" xml:space="preserve">
     <value>Select Avatar</value>
   </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="SendingVotes" xml:space="preserve">
-    <value>Sending votes...</value>
-  </data>
-  <data name="SendVotes" xml:space="preserve">
-    <value>Send Votes</value>
+  <data name="ServerError" xml:space="preserve">
+    <value>OOPS!!Server error occured. Please try again later</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>Set</value>
   </data>
+  <data name="SetPP" xml:space="preserve">
+    <value>Updating Profile Picture...</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="Shoot" xml:space="preserve">
-    <value>Shoot</value>
-  </data>
-  <data name="ShootDesc" xml:space="preserve">
-    <value>You can shoot or not</value>
-  </data>
   <data name="SignOut" xml:space="preserve">
-    <value>Sign Out</value>
-  </data>
-  <data name="Silence" xml:space="preserve">
-    <value>Silence</value>
+    <value>Sign out</value>
   </data>
   <data name="Skip" xml:space="preserve">
     <value>Skip</value>
   </data>
-  <data name="SpecifyRoles" xml:space="preserve">
-    <value>Specify Roles of Players</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="StatusBoard" xml:space="preserve">
-    <value>Status Board</value>
-  </data>
-  <data name="StatusBoardSub" xml:space="preserve">
-    <value>Let's see what happened last night</value>
-  </data>
-  <data name="SthError" xml:space="preserve">
-    <value>Something bad happened,Try again later</value>
-  </data>
-  <data name="SthWrong" xml:space="preserve">
-    <value>Something went wrong :(</value>
-  </data>
   <data name="Store" xml:space="preserve">
     <value>Store</value>
-  </data>
-  <data name="SwipeToCancel" xml:space="preserve">
-    <value>Swipe to cancel...</value>
-  </data>
-  <data name="TimeLeft" xml:space="preserve">
-    <value>Time left:</value>
   </data>
   <data name="TotalWin" xml:space="preserve">
     <value>Total win</value>
   </data>
-  <data name="TypeMessage" xml:space="preserve">
-    <value>Type Your message...</value>
-  </data>
   <data name="UploadPP" xml:space="preserve">
     <value>Upload Profile Picture</value>
-  </data>
-  <data name="UserCode" xml:space="preserve">
-    <value>User Code</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="ValidatingCode" xml:space="preserve">
+    <value>Validating verification code...</value>
+  </data>
   <data name="VerificationCode" xml:space="preserve">
     <value>Verification Code</value>
   </data>
-  <data name="VoteReceived" xml:space="preserve">
-    <value>Your vote is received,The Result will be appeard after time out.</value>
-  </data>
-  <data name="Voters" xml:space="preserve">
-    <value>Voters : </value>
-  </data>
-  <data name="VoteSentSubTitle" xml:space="preserve">
-    <value>Waiting for other players...</value>
-  </data>
-  <data name="VoteSentTitle" xml:space="preserve">
-    <value>Your votes are received</value>
-  </data>
-  <data name="VotingResultSubTitle" xml:space="preserve">
-    <value>Most voted on top</value>
-  </data>
-  <data name="VotingResultTitle" xml:space="preserve">
-    <value>Voting result</value>
-  </data>
-  <data name="VotingSubTitle" xml:space="preserve">
-    <value>Select players you want to vote out</value>
-  </data>
-  <data name="VotingTitle" xml:space="preserve">
-    <value>Voting Time!</value>
-  </data>
-  <data name="WaitingForAll" xml:space="preserve">
-    <value>Waiting for all to join...</value>
-  </data>
-  <data name="WellDone" xml:space="preserve">
-    <value>Well done</value>
-  </data>
   <data name="WinAsCitizen" xml:space="preserve">
-    <value>Win as Citizen</value>
+    <value>Win as citizen</value>
   </data>
   <data name="WinAsMafia" xml:space="preserve">
     <value>Win as mafia</value>
   </data>
   <data name="YourCountry" xml:space="preserve">
-    <value>your country</value>
-  </data>
-  <data name="YourFriends" xml:space="preserve">
-    <value>Your Friends</value>
+    <value>Your country</value>
   </data>
   <data name="YourLanguage" xml:space="preserve">
-    <value>Your Language</value>
+    <value>Your language</value>
   </data>
   <data name="YourRooms" xml:space="preserve">
     <value>Rooms you play in</value>

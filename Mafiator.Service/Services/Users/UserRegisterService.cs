@@ -45,7 +45,7 @@ public class UserRegisterService : IUserRegisterService
            "SELECT TOP 1 * FROM [Users] WHERE Username = @username", new { username = request.Username });
         if (users.Any())
         {
-            return new AuthResult()
+            return new ApiResult()
             {
                 StatusCode = ApiResultStatusCode.Conflict,
                 Errors = new[] { "User already exist." }

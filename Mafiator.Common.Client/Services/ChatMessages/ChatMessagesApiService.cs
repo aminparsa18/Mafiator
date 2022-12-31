@@ -14,7 +14,7 @@ public class ChatMessagesApiService : IChatMessagesApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<ChatMessageResult>>> GetChatByRoom(string roomId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<ChatMessageResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<ChatMessageResult>>>(
            new Uri($"{UrlConstants.BaseUrl}chatMessages/{roomId}"));
     }
 }

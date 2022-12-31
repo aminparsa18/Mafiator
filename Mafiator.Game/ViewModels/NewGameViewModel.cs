@@ -1,59 +1,40 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Games;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Game.Models;
 using Mafiator.Game.Models.PipeEvents;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.Validations;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
 using Plugin.MauiMTAdmob;
 
 namespace Mafiator.Game.ViewModels;
 
-public class NewGameViewModel : ViewModelBase
+public partial class NewGameViewModel : ViewModelBase
 {
-    private ValidatableObject<short> capacity;
-    public ValidatableObject<short> Capacity
-    {
-        get => capacity;
-        set => SetProperty(ref capacity, value);
-    }
+    private Guid _roomId;
 
+    private readonly IGamesApiService _gamesApiService;
+    private readonly IPublisher<UpdateRoomEvent> _publisher;
+    
+    [ObservableProperty]
+    private ValidatableObject<short> capacity;
+
+    [ObservableProperty]
     private bool isCapacityValid;
 
-    public bool IsCapacityValid
-    {
-        get => isCapacityValid;
-        set => SetProperty(ref isCapacityValid, value);
-    }
-
+    [ObservableProperty]
     private bool isImmediate;
 
-    public bool IsImmediate
-    {
-        get => isImmediate;
-        set => SetProperty(ref isImmediate, value);
-    }
-
+    [ObservableProperty]
     private bool isPublic;
 
-    public bool IsPublic
-    {
-        get => isPublic;
-        set => SetProperty(ref isPublic, value);
-    }
+    [ObservableProperty]
     private DateTime? date = DateTime.Now;
-
-    public DateTime? Date
-    {
-        get => date;
-        set => SetProperty(ref date, value);
-    }
 
     public ObservableRangeCollection<NewGameRole> Roles { get; set; }
     public IAsyncRelayCommand SetRolesCommand { get; set; }
@@ -61,12 +42,8 @@ public class NewGameViewModel : ViewModelBase
     public IAsyncRelayCommand PopCommand { get; set; }
     public IRelayCommand PublicHelpCommand { get; set; }
 
-    private readonly IGamesApiService _gamesApiService;
-    private readonly IPublisher<UpdateRoomEvent> _publisher;
-    private Guid _roomId;
-
-    public NewGameViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
-        IGamesApiService gamesApiService, IPublisher<UpdateRoomEvent> publisher) : base(navigationService, localizer, toastService)
+    public NewGameViewModel(INavigationService navigationService, IToastService toastService,
+        IGamesApiService gamesApiService, IPublisher<UpdateRoomEvent> publisher) : base(navigationService, toastService)
     {
         _gamesApiService = gamesApiService;
         _publisher = publisher;
@@ -121,7 +98,7 @@ public class NewGameViewModel : ViewModelBase
         });
         if (response.IsSuccessStatusCode)
         {
-            var result = await response.Content.ReadAsMessagePackAsync<ApiResult<GameCreateResult>>();
+            var result = await response.Content.ReadAsMemoryPackAsync<ApiResult<GameCreateResult>>();
             if (result.IsSuccess)
             {
                 SystemConstant.SelectedRoles = null;

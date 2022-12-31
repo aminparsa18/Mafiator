@@ -2,12 +2,14 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Avatars;
 using Mafiator.Common.Client.Services.Users;
 using Mafiator.Common.Data.Dtos.Api;
+using Mafiator.Common.Data.Dtos.Avatars;
 using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Game.Models;
 using Mafiator.Game.Models.PipeEvents;
@@ -16,80 +18,48 @@ using Mafiator.Game.Services;
 using Mafiator.Game.Validations;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
 using System.Web;
 
 namespace Mafiator.Game.ViewModels;
 
-public class ProfilePictureViewModel : ViewModelBase
+public partial class ProfilePictureViewModel : ViewModelBase
 {
-    private ValidatableObject<string> _displayName;
-
-    public ValidatableObject<string> DisplayName
-    {
-        get => _displayName;
-        set => SetProperty(ref _displayName, value);
-    }
-
-    private bool _isDisplayNameValid = true;
-
-    public bool IsDisplayNameValid
-    {
-        get => _isDisplayNameValid;
-        set => SetProperty(ref _isDisplayNameValid, value);
-    }
-
-    private string name;
-
-    public string Name
-    {
-        get => name;
-        set => SetProperty(ref name, value);
-    }
-
-    private Avatar avatar;
-
-    public Avatar Avatar
-    {
-        get => avatar;
-        set => SetProperty(ref avatar, value);
-    }
-
-    private ImageSource image = "choose_photo.png";
-
-    public ImageSource Image
-    {
-        get => image;
-        set => SetProperty(ref image, value);
-    }
-
-    private bool photoSet;
-
-    public bool PhotoSet
-    {
-        get => photoSet;
-        set => SetProperty(ref photoSet, value);
-    }
-
-    public ObservableRangeCollection<Avatar> Avatars { get; set; }
-    public IAsyncRelayCommand LoadAvatarsCommand { get; set; }
-    public IAsyncRelayCommand AvatarSelectedCommand { get; set; }
-    public IAsyncRelayCommand SkipCommand { get; set; }
-    public IAsyncRelayCommand ChoosePhotoCommand { get; set; }
-    public IAsyncRelayCommand SetPhotoCommand { get; set; }
-
-    private IEnumerable<Avatar> avatars;
-    private FileResult photo;
-    private bool isEdit;
+    private IEnumerable<AvatarResult> _avatars;
+    private FileResult _photo;
+    private bool _isEdit;
 
     private readonly IAvatarsApiService _avatarsApiService;
     private readonly IMapper _mapper;
     private readonly IPublisher<UpdateProfileEvent> _publisher;
     private readonly IUsersApiService _usersApiService;
 
-    public ProfilePictureViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IAvatarsApiService avatarsApiService, IMapper mapper, IPublisher<UpdateProfileEvent> publisher, IUsersApiService usersApiService)
-        : base (navigationService, localizer, toastService)
+    [ObservableProperty]
+    private ValidatableObject<string> _displayName;
+
+    [ObservableProperty]
+    private bool _isDisplayNameValid = true;
+
+    [ObservableProperty]
+    private string name;
+
+    [ObservableProperty]
+    private Avatar avatar;
+
+    [ObservableProperty]
+    private ImageSource image = "choose_photo.png";
+
+    [ObservableProperty]
+    private bool photoSet;
+
+    public ObservableRangeCollection<AvatarResult> Avatars { get; set; }
+    public IAsyncRelayCommand LoadAvatarsCommand { get; set; }
+    public IAsyncRelayCommand AvatarSelectedCommand { get; set; }
+    public IAsyncRelayCommand SkipCommand { get; set; }
+    public IAsyncRelayCommand ChoosePhotoCommand { get; set; }
+    public IAsyncRelayCommand SetPhotoCommand { get; set; }
+
+    public ProfilePictureViewModel(INavigationService navigationService, IToastService toastService, IAvatarsApiService avatarsApiService,
+        IMapper mapper, IPublisher<UpdateProfileEvent> publisher, IUsersApiService usersApiService) : base(navigationService, toastService)
     {
         _avatarsApiService = avatarsApiService;
         _mapper = mapper;
@@ -99,7 +69,7 @@ public class ProfilePictureViewModel : ViewModelBase
         SkipCommand = new AsyncRelayCommand(Skip);
         ChoosePhotoCommand = new AsyncRelayCommand(ChoosePhoto);
         SetPhotoCommand = new AsyncRelayCommand(SetPhoto);
-        Avatars = new ObservableRangeCollection<Avatar>();
+        Avatars = new ObservableRangeCollection<AvatarResult>();
         LoadAvatarsCommand = new AsyncRelayCommand(LoadAvatars);
         LoadAvatarsCommand.ExecuteAsync(null);
         AvatarSelectedCommand = new AsyncRelayCommand(AvatarSelected);
@@ -110,18 +80,14 @@ public class ProfilePictureViewModel : ViewModelBase
     {
         if (navigationData is not bool)
             return base.InitializeAsync(navigationData);
-        isEdit = true;
+        _isEdit = true;
         var user = Barrel.Current.Get<UserDetailsResult>("User");
         DisplayName.Value = user.DisplayName;
         // Image = ImageSource.FromUri(new Uri(user.Image));
-
         return base.InitializeAsync(navigationData);
     }
 
-    private void AddValidations()
-    {
-        DisplayName.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer));
-    }
+    private void AddValidations() => DisplayName.Validations.Add(new IsNotNullOrEmptyRule<string>());
 
     private async Task SetPhoto()
     {
@@ -131,9 +97,9 @@ public class ProfilePictureViewModel : ViewModelBase
             var blobServiceClient = new BlobServiceClient(
                 "DefaultEndpointsProtocol=https;AccountName=mftor;AccountKey=pLoQjG6uKWpWe1vG+iVU+zKjYRpuM/tPKACmd/kM/AuBXHHfsvLOGKXsq96BusnCfrx/4St1INHVk4tibVLElA==;EndpointSuffix=core.windows.net");
             var blobContainerClient = blobServiceClient.GetBlobContainerClient("avatars");
-            var blobClient = blobContainerClient.GetBlobClient(HttpUtility.UrlEncode(photo.FileName));
-            await blobClient.UploadAsync(File.OpenRead(photo.FullPath), new BlobUploadOptions());
-            await SetProfilePicture(HttpUtility.UrlEncode(photo.FileName));
+            var blobClient = blobContainerClient.GetBlobClient(HttpUtility.UrlEncode(_photo.FileName));
+            await blobClient.UploadAsync(File.OpenRead(_photo.FullPath), new BlobUploadOptions());
+            await SetProfilePicture(HttpUtility.UrlEncode(_photo.FileName));
         }
         catch (RequestFailedException)
         {
@@ -154,14 +120,14 @@ public class ProfilePictureViewModel : ViewModelBase
             //}
             // else
             //{
-            photo = await MediaPicker.PickPhotoAsync();
+            _photo = await MediaPicker.PickPhotoAsync();
             //    //  await NavigationService.NavigateToPopupAsync<CropImageViewModel>(photo.FullPath);
             //}
 
-            if (photo == null)
+            if (_photo == null)
                 return;
             PhotoSet = true;
-            Image = ImageSource.FromFile(photo.FullPath);
+            Image = ImageSource.FromFile(_photo.FullPath);
         }
         catch (Exception e)
         {
@@ -174,7 +140,7 @@ public class ProfilePictureViewModel : ViewModelBase
     {
         if (!ValidateUpdate())
             return;
-        await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Changing profile picture");
+        await _navigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Instance["SetPP"]);
         var response = await _usersApiService.UpdateProfile(new UpdateProfileRequest()
         {
             Image = Path.GetFileName(new Uri(Avatar.Name).LocalPath),
@@ -183,25 +149,25 @@ public class ProfilePictureViewModel : ViewModelBase
         await _navigationService.RemovePopupAsync();
         if (response.IsSuccessStatusCode)
         {
-            var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+            var result = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
             if (result.IsSuccess)
             {
                 Barrel.Current.Add("UserImage", Avatar.Name, TimeSpan.FromDays(180));
                 Barrel.Current.Empty("User");
-                if (isEdit)
+                if (_isEdit)
                 {
                     _publisher.Publish(new UpdateProfileEvent());
                     await _navigationService.RemoveLastFromBackStackAsync();
                 }
                 else
-                    await _navigationService.NavigateToAsync<HomeViewModel>();
+                    await _navigationService.NavigateToAsync(nameof(HomeViewModel));
             }
             else
                 _toastService.ShortAlert(result.Errors.ToString(), MessageType.Error);
         }
         else
         {
-            var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+            var result = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
             _toastService.ShortAlert(result.Errors.ToString(), MessageType.Error);
         }
     }
@@ -211,9 +177,9 @@ public class ProfilePictureViewModel : ViewModelBase
         var response = await _avatarsApiService.GetAllAvatars();
         if (response.IsSuccess)
         {
-            avatars = _mapper.Map<IEnumerable<Avatar>>(response.Data);
+            _avatars = response.Data;
             Avatars.Clear();
-            Avatars.AddRange(avatars);
+            Avatars.AddRange(_avatars);
         }
         else
             _toastService.ShortAlert(response.Errors.ToString(), MessageType.Error);
@@ -221,13 +187,12 @@ public class ProfilePictureViewModel : ViewModelBase
 
     private async Task Skip()
     {
-        if (isEdit)
+        if (_isEdit)
             await _navigationService.RemoveLastFromBackStackAsync();
         else
         {
-            await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Starting Game...");
-            await _navigationService
-                .NavigateToAsync<HomeViewModel>(); // new TransitionNavigationPage(new HomeView());
+            await _navigationService.NavigateToPopupAsync<WaitingViewModel>("...");
+            await _navigationService.NavigateToAsync(nameof(HomeViewModel));
             await _navigationService.RemovePopupAsync();
         }
     }
@@ -243,7 +208,7 @@ public class ProfilePictureViewModel : ViewModelBase
             Image = image,
             Name = DisplayName.Value
         });
-        var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+        var result = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
         if (response.IsSuccessStatusCode)
         {
             if (result.IsSuccess)
@@ -252,10 +217,10 @@ public class ProfilePictureViewModel : ViewModelBase
                 Barrel.Current.Empty("User");
                 _publisher.Publish(new UpdateProfileEvent());
                 await _navigationService.RemovePopupAsync();
-                if (isEdit)
+                if (_isEdit)
                     await _navigationService.RemoveLastFromBackStackAsync();
                 else
-                    await _navigationService.NavigateToAsync<HomeViewModel>();
+                    await _navigationService.NavigateToAsync(nameof(HomeViewModel));
             }
             else
             {

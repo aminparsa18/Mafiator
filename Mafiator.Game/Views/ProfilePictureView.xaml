@@ -1,0 +1,149 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             xmlns:models="clr-namespace:Mafiator.Game.Models"
+             xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+             xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"  
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Mafiator.Game.Views.ProfilePictureView"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:ProfilePictureViewModel">
+    <ContentPage.Content>
+        <Grid>
+            <!--<xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />-->
+            <Grid x:Name="ProfileGrid" Margin="36,64,36,36" VerticalOptions="StartAndExpand" Padding="0,0,0,136" >
+                <Frame x:Name="AvatarFrame" IsVisible="False"  CornerRadius="20" VerticalOptions="EndAndExpand"
+                       Padding="16">
+                    <VerticalStackLayout>
+                        <HorizontalStackLayout>
+                            <Path Data="M310.5,640l-5-5,5-5"
+                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
+                                 StrokeThickness="3"
+                                 Aspect="Uniform"
+                                 WidthRequest="28"
+                                 HeightRequest="28"
+                                 Margin="8,0,0,0"
+                                 StrokeLineCap="Round"
+                                 StrokeLineJoin="Round"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalOptions="CenterAndExpand">
+                                <Path.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="PreviousTap" Tapped="PreviousTap_OnTapped"></TapGestureRecognizer>
+                                </Path.GestureRecognizers>
+                            </Path>
+                            <CarouselView
+                               x:Name="AvatarView"
+                               ItemsSource="{Binding Avatars}"
+                               CurrentItem="{Binding Avatar,Mode=TwoWay}"
+                               HeightRequest="80"
+                               Loop="True"
+                               CurrentItemChanged="CarouselView_OnCurrentItemChanged">
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Avatar">
+                                        <ContentView>
+                                            <Grid>
+                                                <toolkit:AvatarView
+                                                    WidthRequest="72"
+                                                    HeightRequest="72"
+                                                    CornerRadius="100"
+                                                    BorderWidth="0"
+                                                    Padding="-4"
+                                                    ImageSource="{Binding Name}">
+                                                </toolkit:AvatarView>
+                                            </Grid>
+                                        </ContentView>
+                                    </DataTemplate>
+                                </CarouselView.ItemTemplate>
+                            </CarouselView>
+                            <Path Data="M379.5,630l5,5-5,5"
+                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
+                                 StrokeThickness="3"
+                                 Aspect="Uniform"
+                                 WidthRequest="28"
+                                 HeightRequest="28"
+                                 Margin="0,0,8,0"
+                                 StrokeLineCap="Round"
+                                 StrokeLineJoin="Round"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalOptions="CenterAndExpand">
+                                
+                                <Path.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="NextTap" Tapped="NextTap_OnTapped"></TapGestureRecognizer>
+                                </Path.GestureRecognizers>
+                            </Path>
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                                Offset="0.0" />
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                                Offset="0.25" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                </Frame>
+
+                <Frame CornerRadius="20" Padding="16,24">
+                    <VerticalStackLayout Padding="24" HorizontalOptions="CenterAndExpand">
+                        <controls:ExtendedEntry Placeholder="{x:Static resx:AppResources.DisplayName}"
+                                                    Text="{Binding DisplayName.Value}"
+                                                    IsValid="{Binding IsDisplayNameValid, Mode=TwoWay}"
+                                                    Errors="{Binding DisplayName.Errors}" />
+                        <Label Margin="0,0,0,16" HorizontalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.UploadPP}" />
+                        <Image
+                            x:Name="CachedImage"
+                            WidthRequest="120"
+                            HeightRequest="120"
+                            Margin="8"
+                            Aspect="AspectFit"
+                            Source="{Binding Image}">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChoosePhotoCommand}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Button Text="{x:Static resx:AppResources.Set}" IsVisible="{Binding PhotoSet}" Command="{Binding SetPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
+
+                        <HorizontalStackLayout Margin="0,16,0,0" >
+                            <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="CenterAndExpand"
+                                     BackgroundColor="White" />
+                            <Label Margin="8" Text="{x:Static resx:AppResources.Or}" />
+                            <BoxView HeightRequest="1" VerticalOptions="CenterAndExpand"
+                                     HorizontalOptions="FillAndExpand"
+                                     BackgroundColor="White" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout>
+                            <Switch Toggled="Switch_OnToggled" Margin="0,0,8,0" />
+                            <Label Text="{x:Static resx:AppResources.SelectAvatar}" FontSize="Medium" VerticalOptions="CenterAndExpand" />
+                        </HorizontalStackLayout>
+
+                        <Label Margin="0,16,0,0" FontSize="14" Padding="12" HorizontalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.Skip}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SkipCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Button Text="{x:Static resx:AppResources.Set}" Command="{Binding AvatarSelectedCommand}" HorizontalOptions="CenterAndExpand"></Button>
+
+                    </VerticalStackLayout>
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                                Offset="0.0" />
+                            <GradientStop
+                                Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                                Offset="0.25" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                </Frame>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

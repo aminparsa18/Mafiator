@@ -5,6 +5,5 @@ public partial class CloseButton : ContentView
 	public CloseButton()
 	{
 		InitializeComponent();
-
     }
 }

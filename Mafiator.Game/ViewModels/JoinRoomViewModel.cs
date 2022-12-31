@@ -1,31 +1,26 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Rooms;
 using Mafiator.Common.Data.Dtos.Api;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.Validations;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class JoinRoomViewModel : ViewModelBase
+public partial class JoinRoomViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private ValidatableObject<string> _code;
-    public ValidatableObject<string> Code
-    {
-        get => _code;
-        set => SetProperty(ref _code, value);
-    }
+
+    private readonly IRoomsApiService _roomsApiService;
 
     public IAsyncRelayCommand PopCommand { get; set; }
     public IAsyncRelayCommand JoinRoomCommand { get; set; }
 
-    private readonly IRoomsApiService _roomsApiService;
-
-    public JoinRoomViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
-        IRoomsApiService roomsApiService) : base(navigationService, localizer, toastService)
+    public JoinRoomViewModel(INavigationService navigationService, IToastService toastService,
+        IRoomsApiService roomsApiService) : base(navigationService, toastService)
     {
         _roomsApiService = roomsApiService;
         Code = new ValidatableObject<string>();
@@ -39,12 +34,12 @@ public class JoinRoomViewModel : ViewModelBase
         var request = await _roomsApiService.JoinRoom(Code.Value);
         if (request.IsSuccessStatusCode)
         {
-            var result = await request.Content.ReadAsMessagePackAsync<ApiResult<string>>();
+            var result = await request.Content.ReadAsMemoryPackAsync<ApiResult<string>>();
             if (result.IsSuccess)
             {
                 await _navigationService.RemovePopupAsync();
                 await _navigationService.RemovePopupAsync();
-                await _navigationService.NavigateToAsync<RoomDetailViewModel>(Guid.Parse(result.Data));
+                await _navigationService.NavigateToAsync($"{nameof(RoomDetailViewModel)}?roomId={Guid.Parse(result.Data)}");
             }
             else
             {

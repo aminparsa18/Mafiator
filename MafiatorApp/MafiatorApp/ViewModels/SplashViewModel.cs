@@ -1,22 +1,14 @@
-﻿using Mafiator.Common.Client.Cache;
-using MafiatorApp.Models.PipeEvents;
+﻿using MafiatorApp.Models.PipeEvents;
 using MafiatorApp.ViewModels.Base;
-using MediaManager;
-using MediaManager.Playback;
-using MessagePipe;
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace MafiatorApp.ViewModels
 {
-    public class SplashScreenViewModel : ViewModelBase
+    public class SplashViewModel : ViewModelBase
     {
         private readonly IAsyncSubscriber<ChangeLanguageEvent> _subscriber;
         private readonly IDisposable _disposable;
 
-        public SplashScreenViewModel(IAsyncSubscriber<ChangeLanguageEvent> subscriber)
+        public SplashViewModel(IAsyncSubscriber<ChangeLanguageEvent> subscriber)
         {
             _subscriber = subscriber;
             var bag = DisposableBag.CreateBuilder();

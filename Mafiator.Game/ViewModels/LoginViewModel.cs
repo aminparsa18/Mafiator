@@ -1,135 +1,81 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Users;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Api.Auth;
+using Mafiator.Common.Data.Dtos.Countries;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Users;
-using Mafiator.Game.Models;
 using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.Validations;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
 using Microsoft.AppCenter.Crashes;
-using Microsoft.Extensions.Localization;
 using System.Net.Http.Headers;
 
 namespace Mafiator.Game.ViewModels;
 
-public class LoginViewModel : ViewModelBase
+public partial class LoginViewModel : ViewModelBase
 {
-    private readonly ISubscriber<Country> _subscriber;
+    private readonly ISubscriber<CountryResult> _subscriber;
     private readonly IUsersApiService _usersApiService;
 
+    [ObservableProperty]
     private ValidatableObject<string> _loginUsername;
 
-    public ValidatableObject<string> LoginUsername
-    {
-        get => _loginUsername;
-        set => SetProperty(ref _loginUsername, value);
-    }
-
+    [ObservableProperty]
     private ValidatableObject<string> _loginPassword;
 
-    public ValidatableObject<string> LoginPassword
-    {
-        get => _loginPassword;
-        set => SetProperty(ref _loginPassword, value);
-    }
-
+    [ObservableProperty]
     private ValidatableObject<string> _phoneNo;
-    public ValidatableObject<string> PhoneNo
-    {
-        get => _phoneNo;
-        set => SetProperty(ref _phoneNo, value);
-    }
 
+    [ObservableProperty]
     private ValidatableObject<string> _username;
-    public ValidatableObject<string> Username
-    {
-        get => _username;
-        set => SetProperty(ref _username, value);
-    }
 
+    [ObservableProperty]
     private ValidatableObject<string> _password;
-    public ValidatableObject<string> Password
-    {
-        get => _password;
-        set => SetProperty(ref _password, value);
-    }
 
+    [ObservableProperty]
     private ValidatableObject<string> _confirmPassword;
-    public ValidatableObject<string> ConfirmPassword
-    {
-        get => _confirmPassword;
-        set => SetProperty(ref _confirmPassword, value);
-    }
 
+    [ObservableProperty]
     private bool _isLoginPhoneNoValid = true;
-    public bool IsLoginPhoneNoValid
-    {
-        get => _isLoginPhoneNoValid;
-        set => SetProperty(ref _isLoginPhoneNoValid, value);
-    }
 
+    [ObservableProperty]
     private bool _isLoginPasswordValid = true;
-    public bool IsLoginPasswordValid
-    {
-        get => _isLoginPasswordValid;
-        set => SetProperty(ref _isLoginPasswordValid, value);
-    }
 
+    [ObservableProperty]
     private bool _isPhoneNoValid = true;
-    public bool IsPhoneNoValid
-    {
-        get => _isPhoneNoValid;
-        set => SetProperty(ref _isPhoneNoValid, value);
-    }
 
+    [ObservableProperty]
     private bool _isPasswordValid = true;
-    public bool IsPasswordValid
-    {
-        get => _isPasswordValid;
-        set => SetProperty(ref _isPasswordValid, value);
-    }
 
+    [ObservableProperty]
     private bool _isConfirmPasswordValid = true;
-    public bool IsConfirmPasswordValid
-    {
-        get => _isConfirmPasswordValid;
-        set => SetProperty(ref _isConfirmPasswordValid, value);
-    }
 
+    [ObservableProperty]
     private bool _isUsernameValid = true;
-    public bool IsUsernameValid
-    {
-        get => _isUsernameValid;
-        set => SetProperty(ref _isUsernameValid, value);
-    }
 
-    private Country country = new()
+    [ObservableProperty]
+    private CountryResult _country = new()
     {
         Name = "United States",
-        Code = "US",
-        DialCode = "+1"
+        Sign = "US",
+        Code = "+1"
     };
-
-    public Country Country
-    {
-        get => country;
-        set => SetProperty(ref country, value);
-    }
+    
     public IAsyncRelayCommand LoginCommand { get; set; }
     public IAsyncRelayCommand RegisterCommand { get; set; }
     public IAsyncRelayCommand GoogleCommand { get; set; }
     public IAsyncRelayCommand FacebookCommand { get; set; }
     public IAsyncRelayCommand ShowCountriesCommand { get; set; }
 
-    public LoginViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        ISubscriber<Country> subscriber, IUsersApiService usersApiService) : base(navigationService, localizer, toastService)
+    public LoginViewModel(INavigationService navigationService, IToastService toastService, ISubscriber<CountryResult> subscriber, IUsersApiService usersApiService) 
+        : base(navigationService, toastService)
     {
         _subscriber = subscriber;
         _usersApiService = usersApiService;
@@ -180,21 +126,21 @@ public class LoginViewModel : ViewModelBase
 
     private void AddValidations()
     {
-        LoginUsername.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer)
-        { ValidationMessage = _localizer["EmptyUsername"] });
+        LoginUsername.Validations.Add(new IsNotNullOrEmptyRule<string>()
+        { ValidationMessage = LocalizationResourceManager.Instance["EmptyUsername"] });
         //LoginPhoneNo.Validations.Add(new PhoneNoRule<string>());
-        LoginPassword.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer)
-        { ValidationMessage = _localizer["EmptyPassword"] });
-        PhoneNo.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer)
-        { ValidationMessage = _localizer["EmptyPhoneNo"] });
-        Username.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer)
-        { ValidationMessage = _localizer["EmptyUsername"] });
-        Password.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer)
-        { ValidationMessage = _localizer["EmptyPassword"] });
-        Password.Validations.Add(new PasswordRule<string>(_localizer));
-        ConfirmPassword.Validations.Add(new IsNotNullOrEmptyRule<string>(_localizer)
-        { ValidationMessage = _localizer["EmptyConfirmPassword"] });
-        ConfirmPassword.Validations.Add(new PasswordRule<string>(_localizer));
+        LoginPassword.Validations.Add(new IsNotNullOrEmptyRule<string>()
+        { ValidationMessage = LocalizationResourceManager.Instance["EmptyPassword"] });
+        PhoneNo.Validations.Add(new IsNotNullOrEmptyRule<string>()
+        { ValidationMessage = LocalizationResourceManager.Instance["EmptyPhoneNo"] });
+        Username.Validations.Add(new IsNotNullOrEmptyRule<string>()
+        { ValidationMessage = LocalizationResourceManager.Instance["EmptyUsername"] });
+        Password.Validations.Add(new IsNotNullOrEmptyRule<string>()
+        { ValidationMessage = LocalizationResourceManager.Instance["EmptyPassword"] });
+        Password.Validations.Add(new PasswordRule<string>());
+        ConfirmPassword.Validations.Add(new IsNotNullOrEmptyRule<string>()
+        { ValidationMessage = LocalizationResourceManager.Instance["EmptyConfirmPassword"] });
+        ConfirmPassword.Validations.Add(new PasswordRule<string>());
     }
 
     private async Task Login()
@@ -213,18 +159,18 @@ public class LoginViewModel : ViewModelBase
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsMessagePackAsync<AuthResult>();
+                    var result = await response.Content.ReadAsMemoryPackAsync<AuthResult>();
                     if (result.IsSuccess)
                     {
                         Barrel.Current.Add("Token", result.Token, TimeSpan.FromMinutes(20));
                         Barrel.Current.Add("RefreshToken", result.RefreshToken, TimeSpan.FromDays(150));
                         BaseHttpClient.Instance.DefaultRequestHeaders.Authorization =
                             new AuthenticationHeaderValue("Bearer", result.Token);
-                        await _navigationService.NavigateToAsync<HomeViewModel>();
+                        await _navigationService.NavigateToAsync(nameof(HomeViewModel));
                     }
                     else if (result.StatusCode == ApiResultStatusCode.Forbidden)
                     {
-                        await _navigationService.NavigateToAsync<ConfirmPhoneViewModel>(result.Token);
+                        await _navigationService.NavigateToAsync($"{nameof(ConfirmPhoneViewModel)}?phoneNo={result.Token}");
                         _toastService.ShortAlert(string.Join(",", result.Errors), MessageType.Error);
                     }
                     else
@@ -245,7 +191,7 @@ public class LoginViewModel : ViewModelBase
                     {"Task", nameof(Login)},
                     {"Sender", nameof(LoginViewModel)}
                 });
-                _toastService.ShortAlert("OOPS!!Server error occured. Please try again later", MessageType.Error);
+                _toastService.ShortAlert(LocalizationResourceManager.Instance["ServerError"], MessageType.Error);
             }
 
             await _navigationService.RemovePopupAsync();
@@ -257,21 +203,22 @@ public class LoginViewModel : ViewModelBase
         var isValid = ValidateRegister();
         if (isValid)
         {
-            await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Registering your account");
+            await _navigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Instance["RegisteringAccount"]);
             try
             {
                 var response = await _usersApiService.RegisterUser(new RegisterUserRequest()
                 {
                     Username = Username.Value,
-                    PhoneNumber = Country.DialCode + PhoneNo.Value,
+                    PhoneNumber = Country.Code + PhoneNo.Value,
                     Password = Password.Value,
-                    CountryCode = Country.Code
+                    CountryCode = Country.Sign
                 });
-                var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+                var ss = await response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
                 if (response.IsSuccessStatusCode)
                 {
                     if (result.IsSuccess)
-                        await _navigationService.NavigateToAsync<ConfirmPhoneViewModel>(Country.DialCode + PhoneNo.Value);
+                        await _navigationService.NavigateToAsync($"{nameof(ConfirmPhoneViewModel)}?phoneNo={Uri.EscapeDataString(Country.Code + PhoneNo.Value)}");
                     else
                     {
                         _toastService.ShortAlert(string.Join(',', result.Errors), MessageType.Error);
@@ -289,8 +236,7 @@ public class LoginViewModel : ViewModelBase
                     {"Task", nameof(Register)},
                     {"Sender", nameof(LoginViewModel)}
                 });
-                _toastService.ShortAlert("OOPS!!Server error occured. Please try again later",
-                    MessageType.Error);
+                _toastService.ShortAlert(LocalizationResourceManager.Instance["ServerError"], MessageType.Error);
             }
 
             await _navigationService.RemovePopupAsync();
@@ -307,7 +253,7 @@ public class LoginViewModel : ViewModelBase
     private bool ValidateRegister()
     {
         if (Password.Value != ConfirmPassword.Value)
-            _toastService.ShortAlert(_localizer["PasswordNotMatch"], MessageType.Error);
+            _toastService.ShortAlert(LocalizationResourceManager.Instance["PasswordNotMatch"], MessageType.Error);
         IsPhoneNoValid = PhoneNo.Validate();
         IsUsernameValid = Username.Validate();
         IsPasswordValid = Password.Validate();

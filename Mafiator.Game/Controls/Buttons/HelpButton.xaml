@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Mafiator.Game.Controls.Buttons"
+             x:Class="Mafiator.Game.Controls.Buttons.HelpButton">
+    <buttons:RoundButton x:Name="HelpBtn" Margin="4,0">
+        <Grid WidthRequest="48" HeightRequest="48">
+            <Path
+                        Data="M822.95,569.647a7.51,7.51,0,0,1-5.6-5.6,13.343,13.343,0,0,1,0-6.1,7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6A13.343,13.343,0,0,1,822.95,569.647Z"
+                        Stroke="#FFF"
+                        StrokeThickness="3"
+                        WidthRequest="32"
+                        Aspect="Uniform">
+            </Path>
+            <Path Data="M824,559v-.5a2,2,0,0,1,2-2h0a2,2,0,0,1,2,2v.121a2.12,2.12,0,0,1-.621,1.5L826,561.5"
+                          Stroke="#fff"
+                          StrokeThickness="3"
+                          Aspect="Uniform"
+                          HorizontalOptions="CenterAndExpand"
+                          VerticalOptions="StartAndExpand"
+                          Margin="0,14,0,0"
+                          WidthRequest="12"
+                          HeightRequest="12"
+                          StrokeLineCap="Round"
+                          StrokeLineJoin="Round">
+            </Path>
+            <Path Data=" M 0, 1 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0"
+                          Stroke="#fff"
+                          Fill="#fff"
+                          HorizontalOptions="CenterAndExpand"
+                          Margin="0,14,0,0"
+                          WidthRequest="4"
+                          StrokeThickness="2"
+                          Aspect="Uniform">
+
+            </Path>
+        </Grid>
+        <buttons:RoundButton.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding HelpCommand}"></TapGestureRecognizer>
+        </buttons:RoundButton.GestureRecognizers>
+    </buttons:RoundButton>
+</ContentView>

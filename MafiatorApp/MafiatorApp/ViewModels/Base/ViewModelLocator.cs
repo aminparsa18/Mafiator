@@ -47,7 +47,7 @@ namespace MafiatorApp.ViewModels.Base
             {
                 e.EnableAutoRegistration = true;
             });
-            services.Scan(scan => scan.FromAssemblyOf<SplashScreenViewModel>()
+            services.Scan(scan => scan.FromAssemblyOf<SplashViewModel>()
                 .AddClasses().AsSelf().WithTransientLifetime());
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<INavigationService,NavigationService>();

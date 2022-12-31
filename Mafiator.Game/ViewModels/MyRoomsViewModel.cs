@@ -1,42 +1,32 @@
 ﻿using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Rooms;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Rooms;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class MyRoomsViewModel : ViewModelBase
+public partial class MyRoomsViewModel : ViewModelBase
 {
+    private readonly IRoomsApiService _roomsApiService;
+
+    [ObservableProperty]
     private LayoutState _currentState;
-    public LayoutState CurrentState
-    {
-        get => _currentState;
-        set => SetProperty(ref _currentState, value);
-    }
 
+    [ObservableProperty]
     private RoomDetailsResult _room;
-
-    public RoomDetailsResult Room
-    {
-        get => _room;
-        set => SetProperty(ref _room, value);
-    }
 
     public ObservableRangeCollection<RoomDetailsResult> Rooms { get; set; }
     public IAsyncRelayCommand LoadRoomsCommand { get; set; }
     public IAsyncRelayCommand RoomSelectedCommand { get; set; }
     public IAsyncRelayCommand AddRoomCommand { get; set; }
 
-    private readonly IRoomsApiService _roomsApiService;
-
-    public MyRoomsViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IRoomsApiService roomsApiService) : base(navigationService, localizer, toastService)
+    public MyRoomsViewModel(INavigationService navigationService, IToastService toastService, 
+        IRoomsApiService roomsApiService) : base(navigationService, toastService)
     {
         _roomsApiService = roomsApiService;
         Rooms = new ObservableRangeCollection<RoomDetailsResult>();
@@ -51,14 +41,15 @@ public class MyRoomsViewModel : ViewModelBase
     {
         if (Room == null)
             return;
-        await _navigationService.NavigateToAsync<RoomDetailViewModel>(Room);
+        await _navigationService.NavigateToAsync(nameof(RoomDetailViewModel), new Dictionary<string, object> { 
+            ["Room"] = Room
+        });
         Room = null;
     }
 
     private async Task LoadRooms()
     {
         CurrentState = LayoutState.Loading;
-        IsBusy = true;
         var rooms = await _roomsApiService.GetMyRooms();
         if (rooms.IsSuccess)
         {
@@ -71,8 +62,6 @@ public class MyRoomsViewModel : ViewModelBase
             CurrentState = LayoutState.Error;
             _toastService.ShortAlert(rooms.Errors.ToString(), MessageType.Error);
         }
-
-        IsBusy = false;
     }
 
     public async Task Leave(string roomId)
@@ -84,7 +73,7 @@ public class MyRoomsViewModel : ViewModelBase
         });
         if (response.IsSuccessStatusCode)
         {
-            var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+            var result = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
             if (result.IsSuccess)
                 await LoadRoomsCommand.ExecuteAsync(null);
             else

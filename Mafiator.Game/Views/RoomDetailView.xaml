@@ -1,0 +1,230 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:buttons="clr-namespace:Mafiator.Game.Controls.Buttons"
+             xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+             xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"  
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels" 
+             xmlns:room="clr-namespace:Mafiator.Common.Data.Dtos.RoomMembers;assembly=Mafiator.Common.Data"
+             xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+             x:Class="Mafiator.Game.Views.RoomDetailView"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:RoomDetailViewModel">
+    <ContentPage.Resources>
+        <converters:RoleNameConverter x:Key="RoleNameConverter" />
+        <converters:RoleImageConverter x:Key="RoleImageConverter" />
+        <converters:ToggleConverter x:Key="ToggleConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <Grid>
+                <Frame Margin="16,16,16,36" Padding="16,16,16,24">
+                    <HorizontalStackLayout>
+                        <Image
+                        x:Name="CachedImage"
+                        Margin="0,0,8,0"
+                        Aspect="AspectFit"
+                        WidthRequest="80"
+                        HeightRequest="80"
+                        Source="god.png" />
+                        <VerticalStackLayout VerticalOptions="CenterAndExpand">
+                            <Label FontFamily="OpenSansSemibold" FontSize="24"
+                               TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}"
+                               Text="{Binding Room.Name}" />
+                            <Label TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{x:Static resx:AppResources.GamePlayed}" />
+                                        <Span Text=" : " />
+                                        <Span Text="{Binding Room.GamePlayedCount}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{x:Static resx:AppResources.RoomCode}" />
+                                        <Span Text=" : " />
+                                        <Span x:Name="RoomCodeSpan" Text="{Binding Room.Code}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </VerticalStackLayout>
+                        <StackLayout HorizontalOptions="EndAndExpand" Padding="4,0">
+                            <buttons:ShareButton />
+                            <buttons:CopyButton />
+                        </StackLayout>
+                    </HorizontalStackLayout>
+                    <Frame.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                            <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                            Offset="0.0" />
+                            <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                            Offset="0.25" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                </Frame>
+                <Grid ColumnDefinitions="*,*,*"  VerticalOptions="EndAndExpand">
+                    <Button Grid.Column="0" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Gem}"
+                                Text="{x:Static resx:AppResources.Chat}" Padding="16,4" CornerRadius="24" Command="{Binding ChatCommand}"  />
+
+                    <Button Grid.Column="1" HorizontalOptions="CenterAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Day3},Dark={StaticResource Night2}}"
+                                Text="{x:Static resx:AppResources.NewGame}" IsVisible="{Binding NewGameAvailable}" Padding="16,4" CornerRadius="24" Command="{Binding NewGameCommand}"  />
+
+                    <Button Grid.Column="2" HorizontalOptions="CenterAndExpand" BackgroundColor="#FFD460"
+                                Text="{x:Static resx:AppResources.Join}" IsVisible="{Binding IsJoined,Converter={StaticResource ToggleConverter}}" Padding="16,4" CornerRadius="24" Command="{Binding JoinCommand}"  />
+                    <Button Grid.Column="2" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
+                                Text="{x:Static resx:AppResources.Leave}" IsVisible="{Binding CanLeave}" Padding="16,4" CornerRadius="24" Command="{Binding LeaveCommand}"  />
+                </Grid>
+
+            </Grid>
+
+            <Grid toolkit:StateContainer.CurrentState="{Binding CurrentState}">
+                <toolkit:StateContainer.StateViews>
+                    <Grid toolkit:StateView.StateKey="None"/>
+                    <skia:SKLottieView toolkit:StateView.StateKey="Loading" 
+                                       WidthRequest="100"
+                                       HeightRequest="100"
+                                       Opacity="0.8"
+                                       RepeatCount="-1"
+                                       RepeatMode="Reverse"
+                                       Source="loading.json"
+                                       VerticalOptions="CenterAndExpand"/>
+                    <VerticalStackLayout toolkit:StateView.StateKey="Empty" Margin="0,16">
+                        <Image WidthRequest="120" Aspect="AspectFit" HorizontalOptions="CenterAndExpand"
+                                   Source="{AppThemeBinding Light=empty_night.png, Dark=empty_day.png}" />
+                        <Label Text="{x:Static resx:AppResources.NoGame}" Margin="0,16,0,0"
+                                   HorizontalOptions="CenterAndExpand" FontSize="Medium"
+                                   TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout toolkit:StateView.StateKey="Error" VerticalOptions="CenterAndExpand">
+                        <Label Text="{x:Static resx:AppResources.ServerError}"
+                                   HorizontalOptions="CenterAndExpand" />
+                    </VerticalStackLayout>
+
+
+                    <StackLayout toolkit:StateView.StateKey="Success" Margin="0,8,0,0" >
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="Medium" FontFamily="{StaticResource BoldFont}" TextColor="{StaticResource Error}" Text="{Binding RemainingTime}"></Label>
+                        <Label HorizontalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.RolesInGame}"
+                                      Margin="0,16,0,0" TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}"></Label>
+                        <CollectionView
+                        ItemsSource="{Binding Roles}"
+                        SelectedItem="{Binding Role}"
+                        HeightRequest="160"
+                        Margin="16"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding RoleChangeCommand}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal"></LinearItemsLayout>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Margin="8">
+                                        <Frame CornerRadius="36"  HorizontalOptions="CenterAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night2} }">
+                                            <StackLayout>
+                                                <Image
+                                        x:Name="ProfileImage"
+                                        WidthRequest="90"
+                                        HeightRequest="90"
+                                        Margin="8"
+                                        Aspect="AspectFit"
+                                        Source="{Binding Role,Converter={StaticResource RoleImageConverter}}">
+                                                </Image>
+                                                <Label Text="{Binding Role,Converter={StaticResource RoleNameConverter}}" FontSize="16" FontFamily="{StaticResource BoldFont}"
+                                           TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" HorizontalOptions="CenterAndExpand" />
+
+                                            </StackLayout>
+                                        </Frame>
+
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource Error}"
+                                        Text="{x:Static resx:AppResources.GoToGame}"  Padding="36,4" CornerRadius="24" Command="{Binding GoToGameCommand}"  />
+                    </StackLayout>
+                </toolkit:StateContainer.StateViews>
+            </Grid>
+
+            <VerticalStackLayout VerticalOptions="EndAndExpand" Padding="8,12,8,0" Margin="0,0,0,-4">
+                <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                    <Frame BackgroundColor="#707070" Padding="12,8" CornerRadius="24">
+                        <HorizontalStackLayout>
+                            <Image WidthRequest="18" HeightRequest="18" Source="user.png" />
+                            <Label TextColor="White" VerticalOptions="CenterAndExpand">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Members.Count}" />
+                                        <Span Text="{x:Static resx:AppResources.Memberss}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Frame>
+                    <Image IsVisible="{Binding Room.IsAdmin}" WidthRequest="24" HeightRequest="24" Margin="12,4,0,0" Source="user_add.svg">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AddMemberCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </HorizontalStackLayout>
+                <CollectionView
+                    ItemsSource="{Binding Members}"
+                    HeightRequest="120"
+                    Margin="8,8,8,0"
+                    SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="room:RoomMemberResult">
+                            <StackLayout>
+                                <Image
+                                    x:Name="CachedImage"
+                                    Margin="0,0,0,4"
+                                    Aspect="Fill"
+                                    WidthRequest="60"
+                                    HeightRequest="60"
+                                    Source="{Binding Image}">
+                                </Image>
+                                <Label Text="{Binding Name}" FontAttributes="Bold"
+                                       HorizontalOptions="CenterAndExpand" />
+                                <!--<Label TextColor="#F8D291" HorizontalOptions="CenterAndExpand">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Played:" />
+                                                <Span Text="{Binding TotalGame}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label TextColor="#91F8AA" HorizontalOptions="CenterAndExpand">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Level:" />
+                                                <Span Text="{Binding Level}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>-->
+
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <VerticalStackLayout.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
+                            Offset="0.0" />
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day2},Dark={StaticResource Night2}}"
+                            Offset="0.25" />
+                    </LinearGradientBrush>
+                </VerticalStackLayout.Background>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

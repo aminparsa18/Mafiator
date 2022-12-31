@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Extensions;
 using Mafiator.Common.Client.Services.Games;
@@ -11,77 +12,45 @@ using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Models.Game;
 using Mafiator.Game.Models.PipeEvents;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class RoomDetailViewModel : ViewModelBase
+public partial class RoomDetailViewModel : ViewModelBase
 {
-    public ObservableRangeCollection<RoomMemberResult> Members { get; set; }
-    public ObservableRangeCollection<GameRoleDto> Roles { get; set; }
+    private ApiResult<AppointedGameResult> waiting;
 
+    private readonly IGamesApiService _gamesApiService;
+    private readonly IRoomsApiService _roomsApiService;
+    private readonly IRoomMembersApiService _roomMembersApiService;
+    private readonly ISubscriber<UpdateRoomEvent> _subscriber;
+
+    [ObservableProperty]
     private RoomDetailsResult room;
 
-    public RoomDetailsResult Room
-    {
-        get => room;
-        set => SetProperty(ref room, value);
-    }
-
+    [ObservableProperty]
     private GameRoleDto role;
 
-    public GameRoleDto Role
-    {
-        get => role;
-        set => SetProperty(ref role, value);
-    }
-
+    [ObservableProperty]
     private bool newGameAvailable;
 
-    public bool NewGameAvailable
-    {
-        get => newGameAvailable;
-        set => SetProperty(ref newGameAvailable, value);
-    }
-
+    [ObservableProperty]
     private bool isJoined = true;
 
-    public bool IsJoined
-    {
-        get => isJoined;
-        set => SetProperty(ref isJoined, value);
-    }
-
+    [ObservableProperty]
     private bool canLeave;
 
-    public bool CanLeave
-    {
-        get => canLeave;
-        set => SetProperty(ref canLeave, true);
-    }
-
+    [ObservableProperty]
     private string remainingTime;
 
-    public string RemainingTime
-    {
-        get => remainingTime;
-        set => SetProperty(ref remainingTime, value);
-    }
-
+    [ObservableProperty]
     private LayoutState currentState;
-
-    public LayoutState CurrentState
-    {
-        get => currentState;
-        set => SetProperty(ref currentState, value);
-    }
 
     public IAsyncRelayCommand LoadDataCommand { get; set; }
     public IAsyncRelayCommand AddMemberCommand { get; set; }
+    public IAsyncRelayCommand CopyCommand { get; set; }
     public IAsyncRelayCommand QrCommand { get; set; }
     public IAsyncRelayCommand NewGameCommand { get; set; }
     public IAsyncRelayCommand ChatCommand { get; set; }
@@ -89,17 +58,12 @@ public class RoomDetailViewModel : ViewModelBase
     public IAsyncRelayCommand RoleChangeCommand { get; set; }
     public IAsyncRelayCommand JoinCommand { get; set; }
     public IAsyncRelayCommand LeaveCommand { get; set; }
+    public ObservableRangeCollection<RoomMemberResult> Members { get; set; }
+    public ObservableRangeCollection<GameRoleDto> Roles { get; set; }
 
-    private readonly IGamesApiService _gamesApiService;
-    private readonly IRoomsApiService _roomsApiService;
-    private readonly IRoomMembersApiService _roomMembersApiService;
-    private readonly ISubscriber<UpdateRoomEvent> _subscriber;
-
-    private ApiResult<AppointedGameResult> waiting;
-
-    public RoomDetailViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
+    public RoomDetailViewModel(INavigationService navigationService, IToastService toastService, 
         IGamesApiService gamesApiService, IRoomsApiService roomsApiService, IRoomMembersApiService roomMembersApiService, 
-        ISubscriber<UpdateRoomEvent> subscriber) : base(navigationService, localizer, toastService)
+        ISubscriber<UpdateRoomEvent> subscriber) : base(navigationService, toastService)
     {
         _gamesApiService = gamesApiService;
         _roomsApiService = roomsApiService;
@@ -109,6 +73,7 @@ public class RoomDetailViewModel : ViewModelBase
         Roles = new ObservableRangeCollection<GameRoleDto>();
         LoadDataCommand = new AsyncRelayCommand(LoadData);
         AddMemberCommand = new AsyncRelayCommand(AddMember);
+        CopyCommand = new AsyncRelayCommand(Copy);
         QrCommand = new AsyncRelayCommand(GenerateQr);
         NewGameCommand = new AsyncRelayCommand(StartNewGame);
         GoToGameCommand = new AsyncRelayCommand(GoToGame);
@@ -119,7 +84,7 @@ public class RoomDetailViewModel : ViewModelBase
         _subscriber.Subscribe(async s => await LoadDataCommand.ExecuteAsync(null));
     }
 
-    private async Task Chat() => await _navigationService.NavigateToAsync<ChatViewModel>(Members.ToList());
+    private async Task Chat() => await _navigationService.NavigateToAsync($"{nameof(ChatViewModel)}?roomId={room.Id}");
 
     private async Task RoleChanged() => await _navigationService.NavigateToPopupAsync<PlayerRoleViewModel>(Tuple.Create(Role.Role, false));
 
@@ -129,7 +94,7 @@ public class RoomDetailViewModel : ViewModelBase
         var request = await _roomsApiService.JoinRoom(Room.Code);
         if (request.IsSuccessStatusCode)
         {
-            var result = await request.Content.ReadAsMessagePackAsync<ApiResult<string>>();
+            var result = await request.Content.ReadAsMemoryPackAsync<ApiResult<string>>();
             if (result.IsSuccess)
                 await LoadDataCommand.ExecuteAsync(null);
             else
@@ -155,7 +120,7 @@ public class RoomDetailViewModel : ViewModelBase
         });
         if (response.IsSuccessStatusCode)
         {
-            var result = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+            var result = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
             if (result.IsSuccess)
             {
                 _toastService.ShortAlert("You left the room", MessageType.Success);
@@ -173,9 +138,18 @@ public class RoomDetailViewModel : ViewModelBase
         await _navigationService.RemovePopupAsync();
     }
 
-    private async Task GoToGame() => await _navigationService.NavigateToAsync<WaitingGameViewModel>(waiting.Data);
+    private async Task GoToGame() => await _navigationService.NavigateToAsync(nameof(WaitingGameViewModel), new Dictionary<string, object>
+    {
+        ["AppointedGame"] = waiting.Data
+    });
 
     private async Task StartNewGame() => await _navigationService.NavigateToPopupAsync<NewGameViewModel>(Room.Id);
+
+    private async Task Copy()
+    {
+        await Clipboard.SetTextAsync(Room.Code);
+        _toastService.ShortAlert("Code copied to clipboard", MessageType.Success);
+    }
 
     private async Task GenerateQr()
     {

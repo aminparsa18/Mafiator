@@ -24,8 +24,6 @@ public class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<AvatarResult>> GetAllDtosFast()
-    {
-        return await Connection.ExecuteQueryAsync<AvatarResult>("SELECT Name FROM [Avatar]");
-    }
+    public Task<IEnumerable<AvatarResult>> GetAllDtosFast() => 
+        Connection.ExecuteQueryAsync<AvatarResult>("SELECT Name FROM [Avatar]");
 }

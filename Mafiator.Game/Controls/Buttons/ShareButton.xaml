@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Mafiator.Game.Controls.Buttons"
+             x:Class="Mafiator.Game.Controls.Buttons.ShareButton">
+    <buttons:RoundButton Margin="4,0">
+            <Path
+                        Data="M1044.11,257.329l.35-.661Zm9.32,4.98-.35.661Zm0,5.406.35.662Zm-9.32,4.958-.35-.662h0Zm-3.96-3.627-.72-.216Zm-.01-8.1-.72.215Zm4.19,4.815a.75.75,0,0,0,0-1.5Zm-.57-7.775,9.32,4.979.71-1.323-9.33-4.979Zm9.32,9.062-9.32,4.958.7,1.324,9.32-4.958Zm-12.22,2.209,1.22-4.03-1.44-.432-1.21,4.03Zm1.22-4.461-1.22-4.065-1.44.43,1.22,4.065Zm-.72.965h2.97v-1.5h-2.97Zm2.4,6.245a1.906,1.906,0,0,1-2.25-.3,2.359,2.359,0,0,1-.65-2.447l-1.43-.432a3.866,3.866,0,0,0,1.06,3.986,3.412,3.412,0,0,0,3.97.519Zm9.32-9.041a2.366,2.366,0,0,1,0,4.083l.7,1.324a3.864,3.864,0,0,0,.01-6.73Zm-8.62-6.3a3.408,3.408,0,0,0-3.97.513,3.848,3.848,0,0,0-1.07,3.985l1.44-.43a2.355,2.355,0,0,1,.64-2.447,1.921,1.921,0,0,1,2.26-.3Z"
+                        Stroke="#FFF"
+                        StrokeThickness="0.5"
+                        Fill="#fff"
+                        Margin="4,0,0,0"
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="28"
+                        HeightRequest="28"
+                        Aspect="Uniform">
+            </Path>
+    </buttons:RoundButton>
+</ContentView>

@@ -18,16 +18,16 @@ public class ChatTemplateSelector : DataTemplateSelector
 
     public ChatTemplateSelector()
     {
-        _incomingTextDataTemplate = new DataTemplate(typeof(IncomingTextView));
-        _outgoingTextDataTemplate = new DataTemplate(typeof(OutgoingTextView));
-        _incomingVoiceDataTemplate = new DataTemplate(typeof(IncomingVoiceView));
-        _outgoingVoiceDataTemplate = new DataTemplate(typeof(OutgoingVoiceView));
-        _incomingVideoDataTemplate = new DataTemplate(typeof(IncomingVideoView));
-        _outgoingVideoDataTemplate = new DataTemplate(typeof(OutgoingVideoView));
-        _incomingLikeDataTemplate = new DataTemplate(typeof(IncomingLikeView));
-        _outgoingLikeDataTemplate = new DataTemplate(typeof(OutgoingLikeView));
-        _incomingDissLikeDataTemplate = new DataTemplate(typeof(IncomingDissLikeView));
-        _outgoingDissLikeDataTemplate = new DataTemplate(typeof(OutgoingDissLikeView));
+        //_incomingTextDataTemplate = new DataTemplate(typeof(IncomingTextView));
+        //_outgoingTextDataTemplate = new DataTemplate(typeof(OutgoingTextView));
+        //_incomingVoiceDataTemplate = new DataTemplate(typeof(IncomingVoiceView));
+        //_outgoingVoiceDataTemplate = new DataTemplate(typeof(OutgoingVoiceView));
+        //_incomingVideoDataTemplate = new DataTemplate(typeof(IncomingVideoView));
+        //_outgoingVideoDataTemplate = new DataTemplate(typeof(OutgoingVideoView));
+        //_incomingLikeDataTemplate = new DataTemplate(typeof(IncomingLikeView));
+        //_outgoingLikeDataTemplate = new DataTemplate(typeof(OutgoingLikeView));
+        //_incomingDissLikeDataTemplate = new DataTemplate(typeof(IncomingDissLikeView));
+        //_outgoingDissLikeDataTemplate = new DataTemplate(typeof(OutgoingDissLikeView));
     }
 
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)

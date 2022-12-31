@@ -1,35 +1,28 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Services.Users;
 using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Data.Dtos.Users;
 using Mafiator.Game.Models.PipeEvents;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class HomeViewModel : ViewModelBase
+public partial class HomeViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private UserDetailsResult user = Barrel.Current.Get<UserDetailsResult>("User");
 
-    public UserDetailsResult User
-    {
-        get => user;
-        set => SetProperty(ref user, value);
-    }
-
+    [ObservableProperty]
     private RoomDetailsResult room;
 
-    public RoomDetailsResult Room
-    {
-        get => room;
-        set => SetProperty(ref room, value);
-    }
+    private readonly ISubscriber<UpdateProfileEvent> _subscriber;
+    private readonly IUsersApiService _usersApiService;
+    private readonly IDisposable _disposable;
 
     public UserStatusResult UserStatus { get; set; }
     public IAsyncRelayCommand LoadDataCommand { get; set; }
@@ -43,12 +36,8 @@ public class HomeViewModel : ViewModelBase
     public IAsyncRelayCommand EditProfileCommand { get; set; }
     public IAsyncRelayCommand SignOutCommand { get; set; }
 
-    private readonly ISubscriber<UpdateProfileEvent> _subscriber;
-    private readonly IUsersApiService _usersApiService;
-    private readonly IDisposable _disposable;
-
-    public HomeViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService,
-        ISubscriber<UpdateProfileEvent> subscriber, IUsersApiService usersApiService) : base(navigationService, localizer, toastService)
+    public HomeViewModel(INavigationService navigationService, IToastService toastService,
+        ISubscriber<UpdateProfileEvent> subscriber, IUsersApiService usersApiService) : base(navigationService, toastService)
     {
         _subscriber = subscriber;
         _usersApiService = usersApiService;
@@ -68,25 +57,13 @@ public class HomeViewModel : ViewModelBase
         LoadDataCommand.ExecuteAsync(null);
     }
 
-    private async Task EditProfile()
-    {
-        await _navigationService.NavigateToAsync<ProfilePictureViewModel>(parameter: true);
-    }
+    private async Task EditProfile() => await _navigationService.NavigateToAsync($"{nameof(ProfilePictureViewModel)}?idEdit={true}");
 
-    private async Task Store()
-    {
-        await _navigationService.NavigateToAsync<StoreViewModel>();
-    }
+    private async Task Store() => await _navigationService.NavigateToAsync(nameof(StoreViewModel));
 
-    private static async Task Help()
-    {
-        await Launcher.OpenAsync(new Uri("https://mafiator.com/game-en.pdf"));
-    }
+    private static async Task Help() => await Launcher.OpenAsync(new Uri("https://mafiator.com/game-en.pdf"));
 
-    private async Task Settings()
-    {
-        await _navigationService.NavigateToPopupAsync<SettingsViewModel>();
-    }
+    private async Task Settings() => await _navigationService.NavigateToPopupAsync<SettingsViewModel>();
 
     private async Task SignOut()
     {
@@ -95,29 +72,19 @@ public class HomeViewModel : ViewModelBase
         Barrel.Current.Empty("User");
         BaseHttpClient.Instance.DefaultRequestHeaders.Authorization = null;
         await _navigationService.RemovePopupAsync();
-        await _navigationService.NavigateToAsync<LoginViewModel>(true);
+        await _navigationService.NavigateToAsync(nameof(LoginViewModel));
     }
 
-    private async Task AddRoom()
-    {
-        await _navigationService.NavigateToPopupAsync<NewRoomViewModel>();
-    }
+    private async Task AddRoom() => await _navigationService.NavigateToPopupAsync<NewRoomViewModel>();
 
-    private async Task RoomHistory()
-    {
-        await _navigationService.NavigateToAsync<MyRoomsViewModel>();
-    }
+    private async Task RoomHistory() => await _navigationService.NavigateToAsync(nameof(MyRoomsViewModel));
 
     private async Task JoinRoom()
     {
         await _navigationService.NavigateToPopupAsync<JoinRoomViewModel>();
     }
 
-
-    private async Task Random()
-    {
-        await _navigationService.NavigateToAsync<RandomViewModel>();
-    }
+    private async Task Random() => await _navigationService.NavigateToAsync(nameof(RandomViewModel));
 
     private async Task LoadData()
     {

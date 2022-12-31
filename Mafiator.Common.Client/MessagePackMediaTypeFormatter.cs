@@ -15,7 +15,7 @@ public class MessagePackMediaTypeFormatter : MediaTypeFormatter
 {
     private static readonly MediaTypeHeaderValue _contentTypeMediaTypeHeader = MediaTypeHeaderValue.Parse(MemoryPackHttpClientExtensions.ContentTypeString);
 
-    public static readonly MessagePackMediaTypeFormatter DefaultInstance = new MessagePackMediaTypeFormatter();
+    public static readonly MessagePackMediaTypeFormatter DefaultInstance = new();
 
     public static readonly MediaTypeFormatter[] DefaultMediaTypeFormatters = { DefaultInstance };
 

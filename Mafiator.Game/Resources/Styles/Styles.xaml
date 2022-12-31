@@ -3,14 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Mafiator.Game.Controls;assembly=Mafiator.Game">
 
-    <!--<Style TargetType="Page" ApplyToDerivedTypes="True">
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
-    </Style>
-
+    
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
-        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray950}}" />
-        <Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource White}}" />
+        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource Day3}, Dark={StaticResource Night3}}" />
+        <!--<Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource White}}" />
         <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
         <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
@@ -18,8 +14,8 @@
         <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
         <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
         <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
-        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
-    </Style>-->
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />-->
+    </Style>
 
     <!--<Style TargetType="userControls:TransitionNavigationPage">
         <Setter Property="BarBackgroundColor" Value="{StaticResource Day1}" />
@@ -47,21 +43,24 @@
     </Style>
     <Style TargetType="Picker">
         <Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
-    </Style>
+    </Style>-->
+    
     <Style TargetType="Label">
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="FontFamily" Value="{StaticResource NormalFont}"></Setter>
+        <Setter Property="FontFamily" Value="OpenSansRegular"></Setter>
         <Setter Property="TextColor" Value="White" />
-    </Style>-->
+    </Style>
+    
     <Style TargetType="Frame">
         <Setter Property="CornerRadius" Value="16" />
         <Setter Property="HasShadow" Value="True" />
         <Setter Property="Padding" Value="8" />
     </Style>
+    
     <Style TargetType="controls:PopupFrame">
-        <Setter Property="CornerRadius" Value="52" />
+        <Setter Property="CornerRadius" Value="48" />
         <Setter Property="HasShadow" Value="True" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="16" />
         <Setter Property="VerticalOptions" Value="CenterAndExpand" />
         <Setter Property="Background" >
             <LinearGradientBrush StartPoint="0,0"
@@ -75,6 +74,7 @@
             </LinearGradientBrush>
         </Setter>
     </Style>
+    
     <Style TargetType="Button">
         <Setter Property="CornerRadius" Value="14" />
         <!--<Setter Property="androidSpecific:Button.UseDefaultShadow" Value="True" />-->
@@ -85,6 +85,7 @@
         <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}" />
     </Style>
+    
     <Style TargetType="ImageButton">
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="CornerRadius" Value="30" />

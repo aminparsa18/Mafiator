@@ -36,14 +36,14 @@ public class GameEventsApiService : IGameEventsApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<GameEventResult>>> GetEventStatus(string gameId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<GameEventResult>>>(
             new Uri($"{UrlConstants.BaseUrl}gameevents/{gameId}"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<GameEventResult>>> GetNightResult(string gameId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<GameEventResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<GameEventResult>>>(
             new Uri($"{UrlConstants.BaseUrl}gameevents/night/{gameId}"));
     }
 }

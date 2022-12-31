@@ -21,35 +21,35 @@ public class GamesApiService : IGamesApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<AvailableGameResult>>> GetAvailableGames()
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<AvailableGameResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<AvailableGameResult>>>(
            new Uri($"{UrlConstants.BaseUrl}games/availables"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<RoomGameResult>>> GetGamesByRoom(string roomId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<RoomGameResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<RoomGameResult>>>(
            new Uri($"{UrlConstants.BaseUrl}games/{roomId}"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<AppointedGameResult>> GetAppointedGameDetails(string gameId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<AppointedGameResult>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<AppointedGameResult>>(
             new Uri($"{UrlConstants.BaseUrl}games/appointed-details/{gameId}"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<AppointedGameResult>> GetAppointedGame(string roomId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<AppointedGameResult>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<AppointedGameResult>>(
             new Uri($"{UrlConstants.BaseUrl}games/appointed/{roomId}"));
     }
 
     /// <inheritdoc/>
     public Task<ApiResult<string>> IsGameJoined(string gameId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<string>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<string>>(
             new Uri($"{UrlConstants.BaseUrl}games/isJoined/{gameId}"));
     }
 

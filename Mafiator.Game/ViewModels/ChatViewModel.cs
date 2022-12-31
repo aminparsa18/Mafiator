@@ -1,50 +1,38 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Services.ChatMessages;
 using Mafiator.Common.Data.Dtos.ChatMessages;
 using Mafiator.Common.Data.Dtos.RoomMembers;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Hubs;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class ChatViewModel : ViewModelBase
+public partial class ChatViewModel : ViewModelBase
 {
-    private bool hubConnected;
-    public bool HubConnected
-    {
-        get => hubConnected;
-        set => SetProperty(ref hubConnected, value);
-    }
+    private string roomId;
+
+    private readonly IChatMessagesApiService _chatMessagesApiService;
+
+    [ObservableProperty]
+    private bool _hubConnected;
 
     //message sent on player turn
+    [ObservableProperty]
     private string message;
 
-    public string Message
-    {
-        get => message;
-        set => SetProperty(ref message, value);
-    }
-
+    [ObservableProperty]
     private TimeSpan recordingTimer;
-    public TimeSpan RecordingTimer
-    {
-        get => recordingTimer;
-        set => SetProperty(ref recordingTimer, value);
-    }
 
-    private string roomId;
     public ObservableRangeCollection<ChatMessageResult> Messages { get; set; }
     public ObservableRangeCollection<RoomMemberResult> Members { get; set; }
     public IAsyncRelayCommand SendMessageCommand { get; set; }
 
-    private readonly IChatMessagesApiService _chatMessagesApiService;
-
-    public ChatViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, IChatMessagesApiService chatMessagesApiService) : base(navigationService, localizer, toastService)
+    public ChatViewModel(INavigationService navigationService, IToastService toastService, IChatMessagesApiService chatMessagesApiService) 
+        : base(navigationService, toastService)
     {
         _chatMessagesApiService = chatMessagesApiService;
         Messages = new ObservableRangeCollection<ChatMessageResult>();

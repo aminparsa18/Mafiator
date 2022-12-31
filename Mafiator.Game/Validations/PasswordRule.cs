@@ -1,5 +1,4 @@
 ﻿using Mafiator.Game.Resources.Texts;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.Validations;
 
@@ -17,8 +16,8 @@ public class PasswordRule<T> : IValidationRule<T>
                value.ToString().Length > 5;
     }
 
-    public PasswordRule(IStringLocalizer<AppResources> localizer)
+    public PasswordRule()
     {
-        ValidationMessage = localizer["InvalidPassword"];
+        ValidationMessage = LocalizationResourceManager.Instance["InvalidPassword"];
     }
 }

@@ -5,18 +5,19 @@ using Android.OS;
 using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
-using MauiTouchEffect.Enums;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using System.ComponentModel;
 using AView = Android.Views.View;
 using Color = Android.Graphics.Color;
 using Mview = Microsoft.Maui.Controls.View;
+using Mcolor = Microsoft.Maui.Graphics.Color;
+using MauiTouchEffect.Enums;
 
 namespace MauiTouchEffect.Platforms.Android;
 
 public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffect
 {
-    static readonly Microsoft.Maui.Graphics.Color defaultNativeAnimationColor = new Microsoft.Maui.Graphics.Color(128, 128, 128, 64);
+    private static readonly Mcolor defaultNativeAnimationColor = new(128, 128, 128, 64);
 
     AccessibilityManager accessibilityManager;
     AccessibilityListener accessibilityListener;

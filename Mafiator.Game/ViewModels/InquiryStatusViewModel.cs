@@ -1,24 +1,19 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Mafiator.Game.Resources.Texts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class InquiryStatusViewModel : ViewModelBase
+public partial class InquiryStatusViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private bool _inquiry;
-    public bool Inquiry
-    {
-        get => _inquiry;
-        set => SetProperty(ref _inquiry, value);
-    }
 
     public IAsyncRelayCommand PopCommand { get; set; }
 
-    public InquiryStatusViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService)
-        : base(navigationService, localizer, toastService)
+    public InquiryStatusViewModel(INavigationService navigationService, IToastService toastService)
+        : base(navigationService, toastService)
     {
         PopCommand = new AsyncRelayCommand(Pop);
     }

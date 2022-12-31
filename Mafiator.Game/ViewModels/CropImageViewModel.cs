@@ -1,20 +1,15 @@
-﻿using Mafiator.Game.Resources.Texts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class CropImageViewModel : ViewModelBase
+public partial class CropImageViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private ImageSource _imageSource;
-    public ImageSource ImageSource
-    {
-        get => _imageSource;
-        set => SetProperty(ref _imageSource, value);
-    }
 
-    public CropImageViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService) : base(navigationService, localizer, toastService)
+    public CropImageViewModel(INavigationService navigationService, IToastService toastService) : base(navigationService, toastService)
     {
     }
 

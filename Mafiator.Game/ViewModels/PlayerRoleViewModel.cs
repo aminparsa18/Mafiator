@@ -1,57 +1,40 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Services.GameMembers;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Models.Game;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class PlayerRoleViewModel : ViewModelBase
+public partial class PlayerRoleViewModel : ViewModelBase
 {
     private int timer;
-    private double progressTimer;
-    public double ProgressTimer
-    {
-        get => progressTimer;
-        set => SetProperty(ref progressTimer, value);
-    }
-
-    private bool canClose;
-    public bool CanClose
-    {
-        get => canClose;
-        set => SetProperty(ref canClose, value);
-    }
-
-    private bool isMafia;
-    public bool IsMafia
-    {
-        get => isMafia;
-        set => SetProperty(ref isMafia, value);
-    }
-
     private string gameId;
     private bool first;
-    private GameRole? role;
-
-    public GameRole? Role
-    {
-        get => role;
-        set => SetProperty(ref role, value);
-    }
-
     private bool fromDetail;
-    public IAsyncRelayCommand PopCommand { get; set; }
-    public ObservableRangeCollection<PartnerDto> Partners { get; set; }
 
     private readonly IGameMemberApiService _gameMemberApiService;
 
-    public PlayerRoleViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IGameMemberApiService gameMemberApiService) : base(navigationService, localizer, toastService)
+    [ObservableProperty]
+    private GameRole? role;
+
+    [ObservableProperty]
+    private double progressTimer;
+
+    [ObservableProperty]
+    private bool canClose;
+
+    [ObservableProperty]
+    private bool isMafia;
+
+    public IAsyncRelayCommand PopCommand { get; set; }
+    public ObservableRangeCollection<PartnerDto> Partners { get; set; }
+
+    public PlayerRoleViewModel(INavigationService navigationService, IToastService toastService, 
+        IGameMemberApiService gameMemberApiService) : base(navigationService, toastService)
     {
         _gameMemberApiService = gameMemberApiService;
         Partners = new ObservableRangeCollection<PartnerDto>();

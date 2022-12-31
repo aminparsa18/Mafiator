@@ -1,38 +1,35 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Mafiator.Common.Client;
-using Mafiator.Game.Models;
-using Mafiator.Game.Resources.Texts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Mafiator.Common.Client.Services.Countries;
+using Mafiator.Common.Data.Dtos.Countries;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
-using Microsoft.Extensions.Localization;
-using System.Text.Json;
 
 namespace Mafiator.Game.ViewModels;
 
-public class CountriesViewModel : ViewModelBase
+public partial class CountriesViewModel : ViewModelBase
 {
+    private List<CountryResult> _countries;
 
-    public ObservableRangeCollection<Country> Countries { get; set; }
+    private readonly ICountriesApiService _countriesApiService;
+    private readonly IPublisher<CountryResult> _publisher;
+
+    [ObservableProperty]
+    private CountryResult _country;
+
+    public ObservableRangeCollection<CountryResult> Countries { get; set; }
     public IAsyncRelayCommand PopCommand { get; set; }
     public IAsyncRelayCommand LoadDataCommand { get; set; }
     public IAsyncRelayCommand CountrySelectedCommand { get; set; }
 
-    private Country _country;
-    public Country Country
+    public CountriesViewModel(INavigationService navigationService, IToastService toastService, ICountriesApiService countriesApiService,
+        IPublisher<CountryResult> publisher) : base(navigationService, toastService)
     {
-        get => _country;
-        set => SetProperty(ref _country, value);
-    }
-
-    private readonly IPublisher<Country> _publisher;
-
-    private List<Country> _countries;
-    public CountriesViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer,
-        IToastService toastService, IPublisher<Country> publisher) : base(navigationService, localizer, toastService)
-    {
+        _countriesApiService = countriesApiService;
         _publisher = publisher;
-        Countries = new ObservableRangeCollection<Country>();
+        _countries = new List<CountryResult>();
+        Countries = new ObservableRangeCollection<CountryResult>();
         LoadDataCommand = new AsyncRelayCommand(LoadData);
         LoadDataCommand.ExecuteAsync(null);
         PopCommand = new AsyncRelayCommand(Pop);
@@ -49,10 +46,12 @@ public class CountriesViewModel : ViewModelBase
 
     private async Task LoadData()
     {
-        var json = await BaseHttpClient.Instance.GetStringAsync("https://filebin.net/868ee5vt07j21ndf/countries.json");
-        //var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MafiatorApp.countries.json");
-        _countries = JsonSerializer.Deserialize<List<Country>>(json);
-        Countries.AddRange(_countries);
+        var res = await _countriesApiService.GetAllCountries();
+        if (res.IsSuccess)
+        {
+            _countries.AddRange(res.Data);
+            Countries.AddRange(_countries);
+        }
     }
 
     public void Filter(string criteria)

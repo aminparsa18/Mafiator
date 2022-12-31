@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Mafiator.Game.Controls.Buttons"
+             xmlns:effects="clr-namespace:MauiTouchEffect;assembly=MauiTouchEffect"
+             x:Class="Mafiator.Game.Controls.Buttons.SettingButton">
+    <buttons:RoundButton Margin="4,0" effects:TouchEffect.Command="{Binding SettingsCommand}" >
+        <Path
+                Data="M610.48,493.537H613M596.68,487l-1.68.044m1.68-.044a2.4,2.4,0,1,0,2.4-2.4A2.4,2.4,0,0,0,596.68,487Zm5.489.044H613m-8.2-6.493H595m18,0h-2.52M595,493.537h9.8m5.079.063a2.4,2.4,0,1,1-2.4-2.4A2.4,2.4,0,0,1,609.88,493.6Zm0-13.2a2.4,2.4,0,1,1-2.4-2.4A2.4,2.4,0,0,1,609.88,480.4Z"
+                Stroke="#FFF"
+                StrokeThickness="2"
+                WidthRequest="24"
+                HeightRequest="24"
+                HorizontalOptions="CenterAndExpand"
+                Aspect="Uniform"
+                StrokeLineCap="Round">
+        </Path>
+    </buttons:RoundButton>
+</ContentView>

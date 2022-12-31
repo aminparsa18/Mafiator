@@ -1,6 +1,7 @@
 ﻿using Mafiator.Common.Extensions;
 using Mafiator.Data;
 using Mafiator.Entities.Identity;
+using Mafiator.Repository;
 using Mafiator.Service.Contracts.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,15 @@ public class IdentityDbInitializer : IIdentityDbInitializer
     private readonly ILogger<IdentityDbInitializer> _logger;
     private readonly IApplicationRoleManager _roleManager;
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly IUnitOfWork _unitOfWork;
 
     public IdentityDbInitializer(
         IIdentityService applicationUserManager,
         IServiceScopeFactory scopeFactory,
         IApplicationRoleManager roleManager,
         //IOptionsSnapshot<SiteSettings> adminUserSeedOptions,
-        ILogger<IdentityDbInitializer> logger
+        ILogger<IdentityDbInitializer> logger,
+        IUnitOfWork unitOfWork
         )
     {
         _applicationUserManager = applicationUserManager;
@@ -32,6 +35,7 @@ public class IdentityDbInitializer : IIdentityDbInitializer
         _roleManager = roleManager;
         //_adminUserSeedOptions = adminUserSeedOptions;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>

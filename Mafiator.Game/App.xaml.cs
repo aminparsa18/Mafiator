@@ -48,4 +48,10 @@ public partial class App : Application
 
         MainPage = new AppShell();// NavigationPage(new SplashScreenView(uri));
     }
+
+    public static Color GetColorFromResource(string key)
+    {
+        var color = Current.Resources.MergedDictionaries.FirstOrDefault()[key];
+        return color != null ? (Color)color : throw new ArgumentNullException($"color resource with key : {key} not found");
+    }
 }

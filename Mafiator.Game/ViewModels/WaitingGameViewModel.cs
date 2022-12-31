@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Cache;
 using Mafiator.Common.Client.Extensions;
@@ -9,77 +10,51 @@ using Mafiator.Common.Data.Dtos.GameMembers;
 using Mafiator.Common.Data.Dtos.Games;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Hubs;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class WaitingGameViewModel : ViewModelBase
+public partial class WaitingGameViewModel : ViewModelBase
 {
+    //to handle hub connection
+    private CancellationTokenSource cts;
+
+    private readonly IGamesApiService _gamesApiService;
+    private readonly IGameMemberApiService _gameMemberApiService;
+
     //current state of SignalR Game Hub
+    [ObservableProperty]
     private LayoutState currentState = LayoutState.Loading;
-    public LayoutState CurrentState
-    {
-        get => currentState;
-        set => SetProperty(ref currentState, value);
-    }
 
     //detail of occuring game
     private AppointedGameResult waiting;
 
     //total capacity of game
+    [ObservableProperty]
     private int total;
-    public int Total
-    {
-        get => total;
-        set => SetProperty(ref total, value);
-    }
 
     //indicates progress of join to game
+    [ObservableProperty]
     private double capacityPercentage;
-    public double CapacityPercentage
-    {
-        get => capacityPercentage;
-        set => SetProperty(ref capacityPercentage, value);
-    }
 
+    [ObservableProperty]
     private bool isJoined = true;
-    public bool IsJoined
-    {
-        get => isJoined;
-        set => SetProperty(ref isJoined, value);
-    }
 
+    [ObservableProperty]
     private bool canLeave;
-    public bool CanLeave
-    {
-        get => canLeave;
-        set => SetProperty(ref canLeave, value);
-    }
 
+    [ObservableProperty]
     private string leaveText;
-    public string LeaveText
-    {
-        get => leaveText;
-        set => SetProperty(ref leaveText, value);
-    }
 
     public IAsyncRelayCommand InviteCommand { get; set; }
     public IAsyncRelayCommand JoinGameCommand { get; set; }
     public IAsyncRelayCommand LeaveGameCommand { get; set; }
     public ObservableRangeCollection<WaitingPlayerResult> Members { get; set; }
 
-    private readonly IGamesApiService _gamesApiService;
-    private readonly IGameMemberApiService _gameMemberApiService;
-
-    //to handle hub connection
-    private CancellationTokenSource cts;
-
-    public WaitingGameViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IGamesApiService gamesApiService, IGameMemberApiService gameMemberApiService) : base(navigationService, localizer, toastService)
+    public WaitingGameViewModel(INavigationService navigationService, IToastService toastService, IGamesApiService gamesApiService,
+        IGameMemberApiService gameMemberApiService) : base(navigationService, toastService)
     {
         _gamesApiService = gamesApiService;
         _gameMemberApiService = gameMemberApiService;
@@ -104,7 +79,7 @@ public class WaitingGameViewModel : ViewModelBase
     {
         if (waiting.Status == GameStatus.Playing)
         {
-            await _navigationService.NavigateToAsync<GameViewModel>(waiting.Id.ToString());
+            await _navigationService.NavigateToAsync($"{nameof(GameViewModel)}?gameId={waiting.Id}");
             GameHub.Instance.Remove("Join");
             GameHub.Instance.Remove("StartGame");
             return;
@@ -114,7 +89,7 @@ public class WaitingGameViewModel : ViewModelBase
         var request = await _gamesApiService.LeaveGame(waiting.Id.ToString());
         if (request.IsSuccessStatusCode)
         {
-            var response = await request.Content.ReadAsMessagePackAsync<ApiResult>();
+            var response = await request.Content.ReadAsMemoryPackAsync<ApiResult>();
             if (response.IsSuccess)
             {
                 CanLeave = false;
@@ -137,7 +112,7 @@ public class WaitingGameViewModel : ViewModelBase
         var request = await _gamesApiService.JoinGame(waiting.Id.ToString());
         if (request.IsSuccessStatusCode)
         {
-            var response = await request.Content.ReadAsMessagePackAsync<ApiResult>();
+            var response = await request.Content.ReadAsMemoryPackAsync<ApiResult>();
             if (response.IsSuccess)
             {
                 CanLeave = true;
@@ -191,7 +166,7 @@ public class WaitingGameViewModel : ViewModelBase
         {
             Barrel.Current.Add("IngestUrl", ingestUrl, TimeSpan.FromHours(3));
             Barrel.Current.Add("PreviewUrl", previewUrl, TimeSpan.FromHours(3));
-            await _navigationService.NavigateToAsync<GameViewModel>(waiting.Id.ToString());
+            await _navigationService.NavigateToAsync($"{nameof(GameViewModel)}?gameId={waiting.Id}");
             GameHub.Instance.Remove("Join");
             GameHub.Instance.Remove("StartGame");
         });

@@ -1,21 +1,16 @@
-﻿using Mafiator.Game.Resources.Texts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class WaitingViewModel : ViewModelBase
+public partial class WaitingViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private string message;
-    public string Message
-    {
-        get => message;
-        set => SetProperty(ref message, value);
-    }
 
-    public WaitingViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService)
-        : base(navigationService, localizer, toastService)
+    public WaitingViewModel(INavigationService navigationService, IToastService toastService)
+        : base(navigationService, toastService)
     {
 
     }

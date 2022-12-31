@@ -1,0 +1,39 @@
+﻿<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+                  base:ViewModelLocator.AutoWireViewModel="True"
+                  x:Class="Mafiator.Game.Views.WaitingView"
+                  x:DataType="viewModels:WaitingViewModel">
+    <mopups:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SpringOut"
+            EasingOut="SpringIn"
+            HasBackgroundAnimation="True" />
+    </mopups:PopupPage.Animation>
+    <mopups:PopupPage.Content>
+            <Frame Margin="36" VerticalOptions="CenterAndExpand">
+                <StackLayout>
+                    <ActivityIndicator IsRunning="True" HorizontalOptions="CenterAndExpand" />
+                    <Label Text="{Binding Message}" HorizontalOptions="CenterAndExpand"/>
+                </StackLayout>
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                            Offset="0.0" />
+                        <GradientStop
+                            Color="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
+                            Offset="0.25" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+            </Frame>
+    </mopups:PopupPage.Content>
+</mopups:PopupPage>

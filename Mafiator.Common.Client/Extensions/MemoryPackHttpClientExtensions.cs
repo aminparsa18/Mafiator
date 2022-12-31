@@ -52,7 +52,7 @@ public static class MemoryPackHttpClientExtensions
         var response = await RefreshToken(refreshTokenRequest);
         if (response.IsSuccessStatusCode)
         {
-            var data = await response.Content.ReadAsMessagePackAsync<AuthResult>();
+            var data = await response.Content.ReadAsMemoryPackAsync<AuthResult>();
             if (!data.IsSuccess)
                 return new ApiResult() { IsSuccess = false, Errors = data.Errors };
             Barrel.Current.Add("Token", data.Token, TimeSpan.FromMinutes(6));
@@ -63,7 +63,7 @@ public static class MemoryPackHttpClientExtensions
         }
         else
         {
-            var data = await response.Content.ReadAsMessagePackAsync<ApiResult>();
+            var data = await response.Content.ReadAsMemoryPackAsync<ApiResult>();
             return new ApiResult() { IsSuccess = false, Errors = data.Errors };
         }
     }
@@ -93,7 +93,7 @@ public static class MemoryPackHttpClientExtensions
     /// <param name="client">client to call</param>
     /// <param name="requestUri">Uri to call</param>
     /// <returns>Deserialized object.</returns>
-    public static async Task<T> GetFromMessagePackAsync<T>(this HttpClient client, Uri requestUri)
+    public static async Task<T> GetFromMemoryPackAsync<T>(this HttpClient client, Uri requestUri)
     {
         if (client == null)
             throw new ArgumentNullException(nameof(client));
@@ -107,7 +107,7 @@ public static class MemoryPackHttpClientExtensions
             return await client.SendAsync(request, context);
         }, CancellationToken.None).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsMessagePackAsync<T>();
+        return await response.Content.ReadAsMemoryPackAsync<T>();
     }
 
     /// <summary>

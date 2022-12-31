@@ -1,0 +1,51 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+             xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+             xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts" 
+             xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             x:Class="Mafiator.Game.Views.ConfirmPhoneView"
+             base:ViewModelLocator.AutoWireViewModel="True"
+             BackgroundColor="White"
+             x:DataType="viewModels:ConfirmPhoneViewModel">
+    <ContentPage.Content>
+        <Grid>
+            <!--<xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />-->
+            <VerticalStackLayout Margin="24">
+            <Image Source="logo.png" x:Name="Logo" Margin="0,16,0,16" WidthRequest="72" />
+            <Label  HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{x:Static resx:AppResources.EnterCode}" />
+                            <Span Text="&#x0a;"/>
+                            <Span Text="{Binding PhoneNo}" TextColor="Red" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <controls:ExtendedEntry Margin="24" Text="{Binding Code.Value}" MaxLength="6"
+                                    IsValid="{Binding IsCodeValid, Mode=TwoWay}"
+                                    Placeholder="{x:Static resx:AppResources.VerificationCode}"
+                                    Keyboard="Numeric"
+                                    HorizontalTextAlignment="Center" />
+                <Button Text="{x:Static resx:AppResources.Continue}"  Command="{Binding ConfirmCommand}"
+                    Margin="24" >
+               
+            </Button>
+            <Label HorizontalOptions="CenterAndExpand" x:Name="TimeLbl" />
+                <Button x:Name="ResendBtn" Text="{x:Static resx:AppResources.Resend}" Command="{Binding ConfirmCommand}"
+                    Margin="24" IsEnabled="False" IsVisible="False">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="1,1">
+                        <GradientStop Color="#17161B"
+                                      Offset="0.0" />
+                        <GradientStop Color="#707070"
+                                      Offset="1.0" />
+
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </VerticalStackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -16,6 +16,7 @@ public class ApplicationDbContext:IdentityDbContext<User, Role, Guid, UserClaim,
     }
 
     public virtual DbSet<Avatar> Avatar{ get; set; }
+    public virtual DbSet<Country> Country { get; set; }
     public virtual DbSet<Event> Event{ get; set; }
     public virtual DbSet<EventJoin> EventJoin{ get; set; }
     public virtual DbSet<ChatMessage> ChatMessage{ get; set; }

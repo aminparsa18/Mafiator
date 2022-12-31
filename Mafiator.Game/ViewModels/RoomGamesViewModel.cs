@@ -1,35 +1,31 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mafiator.Common.Client.Services.Games;
 using Mafiator.Common.Data.Enums;
-using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
-using Microsoft.Extensions.Localization;
 
 namespace Mafiator.Game.ViewModels;
 
-public class RoomGamesViewModel : ViewModelBase
+public partial class RoomGamesViewModel : ViewModelBase
 {
-    private bool noGame = true;
-    public bool NoGame
-    {
-        get => noGame;
-        set => SetProperty(ref noGame, value);
-    }
-
     private Guid _roomId;
-    public IAsyncRelayCommand AddGameCommand { get; set; }
 
     private readonly IGamesApiService _gamesApiService;
 
-    public RoomGamesViewModel(INavigationService navigationService, IStringLocalizer<AppResources> localizer, IToastService toastService, 
-        IGamesApiService gamesApiService) : base(navigationService, localizer, toastService)
+    [ObservableProperty]
+    private bool noGame = true;
+
+    public IAsyncRelayCommand AddGameCommand { get; set; }
+
+    public RoomGamesViewModel(INavigationService navigationService, IToastService toastService, IGamesApiService gamesApiService) 
+        : base(navigationService, toastService)
     {
         _gamesApiService = gamesApiService;
         AddGameCommand = new AsyncRelayCommand(AddGame);
     }
 
-    private async Task AddGame() => await _navigationService.NavigateToAsync<NewGameViewModel>(_roomId);
+    private async Task AddGame() => await _navigationService.NavigateToAsync($"{nameof(NewGameViewModel)}?roomId={_roomId}");
 
     private async Task LoadGames(string roomId)
     {

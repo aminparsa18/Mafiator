@@ -15,7 +15,7 @@ public class VoteApiService : IVotesApiService
     /// <inheritdoc/>
     public Task<ApiResult<IEnumerable<VoteDetailsResult>>> GetVotesStatus(string gameId)
     {
-        return BaseHttpClient.Instance.GetFromMessagePackAsync<ApiResult<IEnumerable<VoteDetailsResult>>>(
+        return BaseHttpClient.Instance.GetFromMemoryPackAsync<ApiResult<IEnumerable<VoteDetailsResult>>>(
            new Uri($"{UrlConstants.BaseUrl}votes/{gameId}"));
     }
 
