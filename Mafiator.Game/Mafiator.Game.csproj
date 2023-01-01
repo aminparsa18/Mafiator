@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-ios;;net7.0-android33.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios;net7.0-android33.0</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
@@ -33,8 +33,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
 		<AndroidLibrary Include="Dependencies\user-messaging-platform-2.0.0.aar" Bind="false" />
-		<ProjectReference Include="..\SpotlightBinding\SpotlightBinding.csproj" />
-		<!--<ProjectReference Include="..\Spotlight.Droid\Spotlight.Droid.csproj" />-->
+		<AndroidLibrary Include="Native\spotlight-2.0.5.aar" Bind="true" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -441,9 +440,10 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Mafiator.Common.Client\Mafiator.Common.Client.csproj" />
 	  <ProjectReference Include="..\Mafiator.Common.Data\Mafiator.Common.Data.csproj" />
+	  <ProjectReference Include="..\MauiSpotlight\MauiSpotlight.csproj" />
 	  <ProjectReference Include="..\MauiTouchEffect\MauiTouchEffect.csproj" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <Compile Update="Resources\Texts\AppResources.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -503,6 +503,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HomeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\JoinRoomView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LanguagesView.xaml">

@@ -313,6 +313,15 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logging in....
+        /// </summary>
+        internal static string LoggingIn {
+            get {
+                return ResourceManager.GetString("LoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         internal static string Login {
@@ -475,11 +484,29 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scan room barcode to join immediately.
+        /// </summary>
+        internal static string RoomCodeDesc {
+            get {
+                return ResourceManager.GetString("RoomCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rooms.
         /// </summary>
         internal static string Rooms {
             get {
                 return ResourceManager.GetString("Rooms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan Barcode.
+        /// </summary>
+        internal static string ScanBarcode {
+            get {
+                return ResourceManager.GetString("ScanBarcode", resourceCulture);
             }
         }
         

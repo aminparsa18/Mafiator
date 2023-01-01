@@ -64,7 +64,7 @@ public interface IRoomRepository : IBaseRepository<Room>
     /// <param name="userId">User key identifier.</param>
     /// <param name="roomId">Room key identifier.</param>
     /// <returns>Room member.</returns>
-    Task<string> IsJoinedFast(string userId, string roomId);
+    Task<Guid?> IsJoinedFast(string userId, string roomId);
 
     /// <summary>
     /// Retrievs room identifier by code.

@@ -1,4 +1,5 @@
 ﻿using Mafiator.Common.Client.Cache;
+using Mafiator.Game.ViewModels;
 
 namespace Mafiator.Game.Views;
 
@@ -8,9 +9,11 @@ public partial class RoomDetailView : ContentPage
     {
         InitializeComponent();
     }
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
+        Dispatcher.Dispatch(async () => await ((RoomDetailViewModel)BindingContext).InitializeAsync());
+
         //if (!Barrel.Current.Exists("RoomDetailTut"))
         //{
         //    await Task.Delay(1000);

@@ -36,13 +36,13 @@ try
     WebApplication app = builder.Build();
 
     app.AddCustomMiddleware();
-    app.UseHangfireDashboard("/hangfire", new DashboardOptions
-    {
-        Authorization = new[]
-        {
-        new HangfireAuthorizationFilter()
-        }
-    });
+    //app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    //{
+    //    Authorization = new[]
+    //    {
+    //    new HangfireAuthorizationFilter()
+    //    }
+    //});
     app.Run();
 }
 catch (Exception ex)

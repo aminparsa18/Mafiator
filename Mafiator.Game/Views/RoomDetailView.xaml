@@ -17,7 +17,7 @@
         <converters:ToggleConverter x:Key="ToggleConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
-        <VerticalStackLayout>
+        <Grid RowDefinitions="Auto, *, Auto">
             <Grid>
                 <Frame Margin="16,16,16,36" Padding="16,16,16,24">
                     <HorizontalStackLayout>
@@ -83,7 +83,7 @@
 
             </Grid>
 
-            <Grid toolkit:StateContainer.CurrentState="{Binding CurrentState}">
+            <Grid Grid.Row="1" toolkit:StateContainer.CurrentState="{Binding CurrentState}" VerticalOptions="CenterAndExpand">
                 <toolkit:StateContainer.StateViews>
                     <Grid toolkit:StateView.StateKey="None"/>
                     <skia:SKLottieView toolkit:StateView.StateKey="Loading" 
@@ -106,9 +106,8 @@
                                    HorizontalOptions="CenterAndExpand" />
                     </VerticalStackLayout>
 
-
                     <StackLayout toolkit:StateView.StateKey="Success" Margin="0,8,0,0" >
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="Medium" FontFamily="{StaticResource BoldFont}" TextColor="{StaticResource Error}" Text="{Binding RemainingTime}"></Label>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="Medium" FontFamily="OpenSansSemibold" TextColor="{StaticResource Error}" Text="{Binding RemainingTime}"></Label>
                         <Label HorizontalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.RolesInGame}"
                                       Margin="0,16,0,0" TextColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Day1}}"></Label>
                         <CollectionView
@@ -134,7 +133,7 @@
                                         Aspect="AspectFit"
                                         Source="{Binding Role,Converter={StaticResource RoleImageConverter}}">
                                                 </Image>
-                                                <Label Text="{Binding Role,Converter={StaticResource RoleNameConverter}}" FontSize="16" FontFamily="{StaticResource BoldFont}"
+                                                <Label Text="{Binding Role,Converter={StaticResource RoleNameConverter}}" FontSize="16" FontFamily="OpenSansSemibold"
                                            TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" HorizontalOptions="CenterAndExpand" />
 
                                             </StackLayout>
@@ -150,7 +149,7 @@
                 </toolkit:StateContainer.StateViews>
             </Grid>
 
-            <VerticalStackLayout VerticalOptions="EndAndExpand" Padding="8,12,8,0" Margin="0,0,0,-4">
+            <VerticalStackLayout Grid.Row="2" VerticalOptions="EndAndExpand" Padding="8,12,8,0" Margin="0,0,0,-4">
                 <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
                     <Frame BackgroundColor="#707070" Padding="12,8" CornerRadius="24">
                         <HorizontalStackLayout>
@@ -214,8 +213,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                 <VerticalStackLayout.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,1">
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop
                             Color="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night3}}"
                             Offset="0.0" />
@@ -225,6 +223,6 @@
                     </LinearGradientBrush>
                 </VerticalStackLayout.Background>
             </VerticalStackLayout>
-        </VerticalStackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

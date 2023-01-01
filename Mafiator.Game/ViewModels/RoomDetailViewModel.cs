@@ -18,6 +18,8 @@ using MessagePipe;
 
 namespace Mafiator.Game.ViewModels;
 
+[QueryProperty(nameof(RoomId), "roomId")]
+[QueryProperty(nameof(Room), "Room")]
 public partial class RoomDetailViewModel : ViewModelBase
 {
     private ApiResult<AppointedGameResult> waiting;
@@ -26,6 +28,9 @@ public partial class RoomDetailViewModel : ViewModelBase
     private readonly IRoomsApiService _roomsApiService;
     private readonly IRoomMembersApiService _roomMembersApiService;
     private readonly ISubscriber<UpdateRoomEvent> _subscriber;
+
+    [ObservableProperty]
+    private string _roomId;
 
     [ObservableProperty]
     private RoomDetailsResult room;
@@ -46,7 +51,7 @@ public partial class RoomDetailViewModel : ViewModelBase
     private string remainingTime;
 
     [ObservableProperty]
-    private LayoutState currentState;
+    private LayoutState currentState = LayoutState.Loading;
 
     public IAsyncRelayCommand LoadDataCommand { get; set; }
     public IAsyncRelayCommand AddMemberCommand { get; set; }
@@ -166,7 +171,6 @@ public partial class RoomDetailViewModel : ViewModelBase
 
     private async Task LoadData()
     {
-        CurrentState = LayoutState.Loading;
         var members = await _roomMembersApiService.GetMembersByRoom(Room.Id);
         if (members.IsSuccess)
         {
@@ -214,21 +218,19 @@ public partial class RoomDetailViewModel : ViewModelBase
         }
     }
 
-    public override async Task InitializeAsync(object navigationData)
+    public async Task InitializeAsync()
     {
-        if (navigationData is Guid roomId)
+        if (!string.IsNullOrEmpty(RoomId))
         {
-            ApiResult<RoomDetailsResult> response = await _roomsApiService.GetRoom(roomId.ToString());
+            ApiResult<RoomDetailsResult> response = await _roomsApiService.GetRoom(RoomId.ToString());
             if (response.IsSuccess)
             {
-                response.Data.Id = roomId;
+                response.Data.Id = Guid.Parse(RoomId);
                 Room = response.Data;
             }
             else
                 _toastService.ShortAlert(response.Errors.ToString(), MessageType.Error);
         }
-        else if (navigationData is RoomDetailsResult navigatedRoom)
-            Room = navigatedRoom;
 
         await LoadData();
     }

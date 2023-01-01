@@ -7,10 +7,6 @@
     Shell.NavBarIsVisible="False">
 
     <ShellContent
-        ContentTemplate="{DataTemplate local:HomeView}"
-        Route="HomeViewModel" />
-    
-    <ShellContent
         ContentTemplate="{DataTemplate local:SplashView}"
         Route="SplashViewModel" />
 
@@ -26,10 +22,17 @@
         ContentTemplate="{DataTemplate local:ProfilePictureView}"
         Route="ProfilePictureViewModel" />
 
+    <ShellContent
+        ContentTemplate="{DataTemplate local:HomeView}"
+        Route="HomeViewModel" />
 
     <ShellContent
         ContentTemplate="{DataTemplate local:MyRoomsView}"
         Route="MyRoomsViewModel" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:RoomDetailView}"
+        Route="RoomDetailViewModel" />
     
     <ShellContent
         ContentTemplate="{DataTemplate local:SettingsView}"

@@ -111,9 +111,9 @@ public sealed class RoomRepository : BaseRepository<Room>, IRoomRepository
     }
 
     /// <inheritdoc/>
-    public Task<string> IsJoinedFast(string userId, string roomId)
+    public Task<Guid?> IsJoinedFast(string userId, string roomId)
     {
-        return Connection.ExecuteScalarAsync<string>(
+        return Connection.ExecuteScalarAsync<Guid?>(
             @"SELECT TOP(1) [r].[Id]
                   FROM [dbo].[RoomMember] AS [r]
                   WHERE ([r].[UserId] = @userId) AND ([r].[RoomId] = @roomId)", new { userId, roomId });

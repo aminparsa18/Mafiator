@@ -201,6 +201,9 @@
   <data name="Leave" xml:space="preserve">
     <value>Leave</value>
   </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Logging in...</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
@@ -255,8 +258,14 @@
   <data name="RoomCode" xml:space="preserve">
     <value>Room Code</value>
   </data>
+  <data name="RoomCodeDesc" xml:space="preserve">
+    <value>Scan room barcode to join immediately</value>
+  </data>
   <data name="Rooms" xml:space="preserve">
     <value>Rooms</value>
+  </data>
+  <data name="ScanBarcode" xml:space="preserve">
+    <value>Scan Barcode</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

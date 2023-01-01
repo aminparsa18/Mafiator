@@ -35,15 +35,15 @@
                        HorizontalOptions="StartAndExpand">
                     <HorizontalStackLayout>
                         <Image
-                            WidthRequest="60"
-                            HeightRequest="40"
+                            WidthRequest="48"
+                            HeightRequest="30"
                             Margin="8,8,0,8"
                             Aspect="AspectFit"
-                            Source="{Binding Country.Sign,Converter={StaticResource CountryCodelmageConverter}}">
+                            Source="{Binding CountryCode,Converter={StaticResource CountryCodelmageConverter}}">
                         </Image>
-                        <Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
+                        <!--<Label Text="{Binding Country.Name}" FontAttributes="Bold" FontSize="16" Margin="0,0,8,0"
                                VerticalOptions="CenterAndExpand"
-                               TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />
+                               TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}" />-->
                     </HorizontalStackLayout>
                 </Frame>
                 <controls:ExtendedEntry
@@ -120,7 +120,7 @@
                             <VerticalStackLayout
                                 BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
                                 HeightRequest="48">
-                                <Label VerticalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.Create}"
+                                <Label VerticalOptions="CenterAndExpand" Margin="0,6,0,0" Text="{x:Static resx:AppResources.Create}"
                                        HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding AddRoomCommand}" />

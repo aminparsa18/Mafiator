@@ -30,7 +30,7 @@ public class RoomJoinService : IRoomJoinService
             };
         }
         var member = await _unitOfWork.Room.IsJoinedFast(userId.ToString(), roomId);
-        if (!string.IsNullOrEmpty(member))
+        if (member != null)
             return new ApiResult<string>
             {
                 IsSuccess = false,

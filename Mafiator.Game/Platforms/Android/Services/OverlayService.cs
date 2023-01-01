@@ -1,11 +1,10 @@
-﻿using Android.Views;
-using Android.Views.Animations;
+﻿using Android.Views.Animations;
 using Android.Widget;
-using Com.Takusemba.Spotlight;
-using Com.Takusemba.Spotlight.Effet;
-using Com.Takusemba.Spotlight.Shape;
-using Mafiator.Game.Models;
+using Mafiator.Game.Platforms.Android.Services.Toasts;
 using Mafiator.Game.Services;
+using MauiSpotlight.Platforms.Android;
+using MauiSpotlight.Platforms.Android.Effects;
+using MauiSpotlight.Platforms.Android.Shapes;
 using Button = Android.Widget.Button;
 
 namespace Mafiator.Game.Droid.Services;
@@ -20,7 +19,7 @@ public class OverlayService : IOverlayService
         _targets = new List<Target>();
     }
 
-    public void AddOverlay(Dictionary<Microsoft.Maui.Controls.View, string> targets, ShowCaseConfig config)
+    public void AddOverlay(Dictionary<View, string> targets)
     {
         _targets.Clear();
 

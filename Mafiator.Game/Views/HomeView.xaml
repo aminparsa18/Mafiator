@@ -16,7 +16,7 @@
                 <HorizontalStackLayout x:Name="SettingGrid" Margin="0,36" HorizontalOptions="CenterAndExpand">
                     <buttons:SettingButton />
                     <buttons:LiveButton />
-                    <buttons:HelpButton />
+                    <buttons:HelpButton x:Name="HelpBtn" />
                     <buttons:ShareButton />
                 </HorizontalStackLayout>
 

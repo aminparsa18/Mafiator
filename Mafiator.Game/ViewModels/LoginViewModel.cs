@@ -148,7 +148,7 @@ public partial class LoginViewModel : ViewModelBase
         var isValid = ValidateLogin();
         if (isValid)
         {
-            await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Logging in...");
+            await _navigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Instance["LoggingIn"]);
             try
             {
                 var response = await _usersApiService.Login(new UserLoginRequest()

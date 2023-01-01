@@ -4,6 +4,6 @@ namespace Mafiator.Game.Services;
 
 public interface IOverlayService
 {
-		void AddOverlay(Dictionary<View,string>targets, ShowCaseConfig config);
+		void AddOverlay(Dictionary<View,string>targets);
 		//void HideOverlay();
 	}

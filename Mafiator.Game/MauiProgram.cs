@@ -2,6 +2,7 @@
 using Mafiator.Game.Platforms.Android;
 using MauiTouchEffect.Platforms.Android;
 using MafiatorApp.Droid.Effects;
+using Mafiator.Game.Droid.Services;
 #endif
 using CommunityToolkit.Maui;
 using Mafiator.Common.Data.Dtos.Avatars;
@@ -48,10 +49,7 @@ public static class MauiProgram
 #endif
             });
 
-        builder.Services.AddMessagePipe(e =>
-        {
-            e.EnableAutoRegistration = true;
-        });
+        builder.Services.AddMessagePipe(e => e.EnableAutoRegistration = true);
 
         builder.Services.AddSingleton(AudioManager.Current);
 
@@ -65,6 +63,7 @@ public static class MauiProgram
 
 #if __ANDROID__
         builder.Services.AddSingleton<IToastService, ToastService>();
+        builder.Services.AddTransient<IOverlayService, OverlayService>();
 #endif
         builder.Services.AddAutoMapper(cfg =>
         {

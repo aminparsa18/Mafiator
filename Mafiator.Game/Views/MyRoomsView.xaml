@@ -11,20 +11,18 @@
              base:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:MyRoomsViewModel">
     <ContentPage.Content>
-        <VerticalStackLayout>
-            <Grid toolkit:StateContainer.CurrentState="{Binding CurrentState}" toolkit:StateContainer.ShouldAnimateOnStateChange="False">
+            <Grid VerticalOptions="CenterAndExpand" toolkit:StateContainer.CurrentState="{Binding CurrentState}" toolkit:StateContainer.ShouldAnimateOnStateChange="False">
                 <toolkit:StateContainer.StateViews>
                     <Grid toolkit:StateView.StateKey="None"/>
-                    <skia:SKLottieView toolkit:StateView.StateKey="Loading" 
-                                       WidthRequest="100"
+                    <VerticalStackLayout toolkit:StateView.StateKey="Loading" VerticalOptions="FillAndExpand">
+                        <skia:SKLottieView WidthRequest="100"
                                        HeightRequest="100"
                                        Opacity="0.8"
                                        RepeatCount="-1"
                                        RepeatMode="Reverse"
                                        Source="loading.json"
-                                       VerticalOptions="CenterAndExpand">
-                        
-                    </skia:SKLottieView>
+                                       VerticalOptions="CenterAndExpand" />
+                    </VerticalStackLayout>
                     <VerticalStackLayout toolkit:StateView.StateKey="Empty" VerticalOptions="FillAndExpand" Margin="0,128,0,0" >
                         <Image WidthRequest="120" Aspect="AspectFit" HorizontalOptions="CenterAndExpand" Source="{AppThemeBinding Light=empty_day.png, Dark=empty_night.png}" />
                         <Label Text="{x:Static resx:AppResources.NoRoom}" Margin="0,16,0,0"
@@ -78,6 +76,5 @@
             </Grid>
             <!--<controls:MTAdView  AdsId="{OnPlatform Android='ca-app-pub-3940256099942544/6300978111', 
                                    iOS='ca-app-pub-3940256099942544/2934735716'}" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand"/>-->
-        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

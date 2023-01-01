@@ -30,7 +30,7 @@ public partial class NewRoomViewModel : ViewModelBase
     private bool _isNameValid;
 
     [ObservableProperty]
-    private CountryResult country;
+    private string _countryCode;
 
     public IAsyncRelayCommand AddRoomCommand { get; set; }
     public IAsyncRelayCommand AddByCodeCommand { get; set; }
@@ -60,8 +60,7 @@ public partial class NewRoomViewModel : ViewModelBase
         Task.Run(() =>
         {
             _countries = Barrel.Current.Get<List<CountryResult>>("Countries");
-            var code = Barrel.Current.Get<UserDetailsResult>("User")?.CountryCode;
-            Country = _countries.FirstOrDefault(c => c.Code == code);
+            CountryCode = Barrel.Current.Get<UserDetailsResult>("User")?.CountryCode;
         });
     }
 
@@ -86,7 +85,7 @@ public partial class NewRoomViewModel : ViewModelBase
                 Name = Name.Value,
                 IsPrivate = IsPrivate,
                 Users = SystemConstant.Members.Select(s => s.Id).ToList(),
-                Country = Country.Code
+                Country = CountryCode
             });
 
             if (response.IsSuccessStatusCode)
@@ -97,7 +96,7 @@ public partial class NewRoomViewModel : ViewModelBase
                     SystemConstant.Members = null;
                     await _navigationService.RemovePopupAsync();
                     await _navigationService.RemovePopupAsync();
-                    await _navigationService.NavigateToAsync($"{nameof(RoomDetailViewModel)}?roomId=?{result.Data.Id}");
+                    await _navigationService.NavigateToAsync($"{nameof(RoomDetailViewModel)}?roomId={result.Data.Id}");
                     CrossMauiMTAdmob.Current.LoadInterstitial("");
                 }
                 else

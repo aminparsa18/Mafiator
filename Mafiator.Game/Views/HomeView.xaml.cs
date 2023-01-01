@@ -1,4 +1,6 @@
 ﻿using Mafiator.Common.Client.Cache;
+using Mafiator.Game.Models;
+using Mafiator.Game.Services;
 using Plugin.InAppBilling;
 
 namespace Mafiator.Game.Views;
@@ -7,37 +9,39 @@ public partial class HomeView : ContentPage
 {
     private readonly Color dayColor;
     private readonly Color nightColor;
+    private readonly IOverlayService _overlayService;
 
     private bool once;
 
-    public HomeView()
+    public HomeView(IOverlayService overlayService)
     {
         InitializeComponent();
         dayColor = App.GetColorFromResource("Day4");
         nightColor = App.GetColorFromResource("Night4");
+        _overlayService = overlayService;
         ProfileImage.BorderColor =
         Application.Current.RequestedTheme == AppTheme.Dark ? nightColor : dayColor;
         Application.Current.RequestedThemeChanged += ThemeChanged;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        if (!Barrel.Current.Exists("HomeTut"))
+        // if (!Barrel.Current.Exists("HomeTut"))
+        //{
+        // await Task.Delay(1000);
+        Dispatcher.DispatchDelayed(TimeSpan.FromSeconds(2), () =>
         {
-            await Task.Delay(1000);
-            //var targets = new Dictionary<View, string>()
-            //{
-            //    {ProfileImage,"Tap or swipe up for profile status"},
-            //};
-            //var overlay = new Overlay();
-            //overlay.Show(targets, new ShowCaseConfig()
-            //{
-            //    TextHorizontalPosition = HorizontalPosition.Center,
-            //    TextVerticalPosition = VerticalPosition.Top
-            //});
+            var targets = new Dictionary<View, string>()
+            {
+                {ProfileImage,"Tap or swipe up for profile status"},
+                {HelpBtn, "Get help" }
+            };
+            _overlayService.AddOverlay(targets);
+        });
+           
             Barrel.Current.Add("HomeTut",true,TimeSpan.FromDays(200));
-        }
+       // }
     }
 
     private void ThemeChanged(object sender, AppThemeChangedEventArgs e)

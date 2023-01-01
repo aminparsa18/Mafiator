@@ -54,7 +54,7 @@ public class RoomService : IRoomService
         return new ApiResult<string>
         {
             IsSuccess = true,
-            Data = member
+            Data = member?.ToString()
         };
     }
 }
