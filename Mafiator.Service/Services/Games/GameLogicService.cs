@@ -3,6 +3,7 @@ using Mafiator.Common.Data.Enums;
 using Mafiator.Data.Dtos.GameEvent;
 using Mafiator.Data.Extensions;
 using Mafiator.Repository;
+using Mafiator.Repository.Cache;
 using Mafiator.Service.Contracts;
 using Mafiator.Service.Contracts.Games;
 using Mafiator.Service.Hubs;

@@ -53,7 +53,7 @@
                     Margin="16,0"
                     Errors="{Binding Name.Errors}" />
 
-                <HorizontalStackLayout HorizontalOptions="StartAndExpand" Margin="16,0,16,16">
+                <HorizontalStackLayout HorizontalOptions="StartAndExpand" Margin="16">
                     <controls:CheckBoxView x:Name="PrivateChkBox" Text="{x:Static resx:AppResources.PrivateRoom}"
                                             IsChecked="{Binding IsPrivate,Mode=TwoWay}" />
 

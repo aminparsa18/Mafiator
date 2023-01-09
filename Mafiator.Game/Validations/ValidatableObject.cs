@@ -2,31 +2,18 @@
 
 namespace Mafiator.Game.Validations;
 
-public class ValidatableObject<T> : ObservableObject, IValidity
+public partial class ValidatableObject<T> : ObservableObject, IValidity
 {
+    [ObservableProperty]
     private List<string> _errors;
+
+    [ObservableProperty]
     private T _value;
+
+    [ObservableProperty]
     private bool _isValid;
 
     public List<IValidationRule<T>> Validations { get; }
-
-    public List<string> Errors
-    {
-        get => _errors;
-        set => SetProperty(ref _errors, value);
-    }
-
-    public T Value
-    {
-        get => _value;
-        set => SetProperty(ref _value, value);
-    }
-
-    public bool IsValid
-    {
-        get => _isValid;
-        set => SetProperty(ref _isValid, value);
-    }
 
     public ValidatableObject()
     {
@@ -37,15 +24,9 @@ public class ValidatableObject<T> : ObservableObject, IValidity
 
     public bool Validate()
     {
-        Errors.Clear();
         var errors = Validations.Where(v => !v.Check(Value)).Select(v => v.ValidationMessage);
-        foreach (var error in errors)
-        {
-            Errors.Add(error);
-        }
-
+        Errors = errors.ToList();
         IsValid = !Errors.Any();
-
         return IsValid;
     }
 }

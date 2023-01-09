@@ -3,7 +3,9 @@
 public class LongPressCompletedEventArgs : System.EventArgs
 {
     internal LongPressCompletedEventArgs(object parameter)
-        => Parameter = parameter;
+    {
+        Parameter = parameter;
+    }
 
     public object Parameter { get; }
 }

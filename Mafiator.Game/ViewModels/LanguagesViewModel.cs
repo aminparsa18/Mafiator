@@ -18,7 +18,6 @@ public partial class LanguagesViewModel : ViewModelBase
     private CountryResult _country;
 
     public ObservableRangeCollection<CountryResult> Countries { get; set; }
-    public IAsyncRelayCommand PopCommand { get; set; }
 
     public LanguagesViewModel(INavigationService navigationService, IToastService toastService,
         IAsyncPublisher<ChangeLanguageEvent> publisher) : base(navigationService, toastService)
@@ -29,7 +28,6 @@ public partial class LanguagesViewModel : ViewModelBase
             new() { Sign = "US", Name = "English"},
             new() { Sign = "RU", Name = "Russian"}
         };
-        PopCommand = new AsyncRelayCommand(Pop);
     }
 
     [RelayCommand]
@@ -52,5 +50,6 @@ public partial class LanguagesViewModel : ViewModelBase
         await _navigationService.RemovePopupAsync();
     }
 
+    [RelayCommand]
     private async Task Pop() => await _navigationService.RemovePopupAsync();
 }

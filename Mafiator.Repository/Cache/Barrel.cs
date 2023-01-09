@@ -67,6 +67,37 @@ public class Barrel : IBarrel
     }
 
     /// <summary>
+    /// Adds an entry to the barrel
+    /// </summary>
+    /// <param name="key">Unique identifier for the entry</param>
+    /// <param name="data">Data object to store</param>
+    /// <param name="expireIn">Time from UtcNow to expire entry in</param>
+    /// <param name="eTag">Optional eTag information</param>
+    void Add(string key, byte[] data, TimeSpan expireIn, string eTag = null)
+    {
+        _indexLocker.EnterWriteLock();
+
+        try
+        {
+            var hash = Hash(key);
+            var path = Path.Combine(_baseDirectory.Value, hash);
+
+            if (!Directory.Exists(_baseDirectory.Value))
+                Directory.CreateDirectory(_baseDirectory.Value);
+
+            File.WriteAllBytes(path, data);
+
+            _index[key] = new Tuple<string, DateTime>(eTag ?? string.Empty, BarrelUtils.GetExpiration(expireIn));
+
+            WriteIndex();
+        }
+        finally
+        {
+            _indexLocker.ExitWriteLock();
+        }
+    }
+
+    /// <summary>
     /// Empties all specified entries regardless if they are expired.
     /// Throws an exception if any deletions fail and rolls back changes.
     /// </summary>

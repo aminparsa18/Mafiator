@@ -1,0 +1,15 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Mafiator.Game.Controls.Buttons"
+             x:Class="Mafiator.Game.Controls.Buttons.PreviousButton">
+    <Path Data="M310.5,640l-5-5,5-5"
+                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
+                                 StrokeThickness="3"
+                                 Aspect="Uniform"
+                                 WidthRequest="28"
+                                 HeightRequest="28"
+                                 StrokeLineCap="Round"
+                                 StrokeLineJoin="Round"
+                                 HorizontalOptions="CenterAndExpand"/>
+
+</ContentView>

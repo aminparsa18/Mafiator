@@ -6,6 +6,7 @@ using Mafiator.Common.Extensions;
 using Mafiator.Common.Server.Media;
 using Mafiator.Data;
 using Mafiator.Repository;
+using Mafiator.Repository.Cache;
 using Mafiator.Service.Contracts;
 using Mafiator.Service.Contracts.Avatars;
 using Mafiator.Service.Hubs;
@@ -34,7 +35,9 @@ public static class ServiceCollectionExtentions
 {
     public static IServiceCollection ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
     {
-      //  services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
+        Barrel.ApplicationId = "MafiatorAPi";
+
+       //  services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
        // services.AddHangfireServer();
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
@@ -127,6 +130,11 @@ public static class ServiceCollectionExtentions
         .AddClasses().AsImplementedInterfaces().WithScopedLifetime());
         services.AddSingleton<INotificationService, NotificationHubService>();
         services.AddDistributedMemoryCache();
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetSection("Redis").GetValue<string>("Connection");
+            options.InstanceName = configuration.GetSection("Redis").GetValue<string>("InstanceName");
+        });
         services.AddOptions<NotificationHubOptions>()
             .Configure(configuration.GetSection("NotificationHub").Bind)
             .ValidateDataAnnotations();

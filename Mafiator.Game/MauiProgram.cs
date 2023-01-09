@@ -20,6 +20,8 @@ using Plugin.MauiMTAdmob;
 using Mafiator.Common.Client.Services.Users;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Mafiator.Game.Effects;
+using ZXing.Net.Maui.Controls;
+using Mafiator.Game.Controls;
 
 namespace Mafiator.Game;
 
@@ -32,6 +34,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseBarcodeReader()
             .UseMauiCommunityToolkit()
             .ConfigureMopups()
             .UseSkiaSharp()
@@ -48,6 +51,17 @@ public static class MauiProgram
                 effects.Add<ShadowEffect, LabelShadowEffect>();
 #endif
             });
+
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+        {
+#if __ANDROID__
+            if (view is BorderlessEntry)
+            {
+                handler.PlatformView.Background = null;
+               // handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+            }
+#endif
+        });
 
         builder.Services.AddMessagePipe(e => e.EnableAutoRegistration = true);
 

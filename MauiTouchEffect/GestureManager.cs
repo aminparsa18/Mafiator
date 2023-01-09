@@ -4,36 +4,29 @@ using static System.Math;
 
 namespace MauiTouchEffect;
 
-sealed class GestureManager
+internal sealed class GestureManager
 {
-    const int animationProgressDelay = 10;
-
-    Color defaultBackgroundColor;
-
-    CancellationTokenSource longPressTokenSource;
-
-    CancellationTokenSource animationTokenSource;
-
-    Func<TouchEffect, TouchState, HoverState, int, Easing, CancellationToken, Task> animationTaskFactory;
-
-    double? durationMultiplier;
-
-    double animationProgress;
-
-    TouchState animationState;
+    private const int animationProgressDelay = 10;
+    private Color defaultBackgroundColor;
+    private CancellationTokenSource longPressTokenSource;
+    private CancellationTokenSource animationTokenSource;
+    private Func<TouchEffect, TouchState, HoverState, int, Easing, CancellationToken, Task> animationTaskFactory;
+    private double? durationMultiplier;
+    private double animationProgress;
+    private TouchState animationState;
 
     internal void HandleTouch(TouchEffect sender, TouchStatus status)
     {
         if (sender.IsDisabled)
             return;
 
-        var canExecuteAction = sender.CanExecute;
+        bool canExecuteAction = sender.CanExecute;
         if (status != TouchStatus.Started || canExecuteAction)
         {
             if (!canExecuteAction)
                 status = TouchStatus.Canceled;
 
-            var state = status == TouchStatus.Started
+            TouchState state = status == TouchStatus.Started
                 ? TouchState.Pressed
                 : TouchState.Normal;
 
@@ -43,13 +36,13 @@ sealed class GestureManager
                 animationState = state;
             }
 
-            var isToggled = sender.IsToggled;
+            bool? isToggled = sender.IsToggled;
             if (isToggled.HasValue)
             {
                 if (status != TouchStatus.Started)
                 {
-                    durationMultiplier = animationState == TouchState.Pressed && !isToggled.Value ||
-                        animationState == TouchState.Normal && isToggled.Value
+                    durationMultiplier = (animationState == TouchState.Pressed && !isToggled.Value) ||
+                        (animationState == TouchState.Normal && isToggled.Value)
                         ? 1 - animationProgress
                         : animationProgress;
 
@@ -92,7 +85,7 @@ sealed class GestureManager
         if (!sender.Element?.IsEnabled ?? true)
             return;
 
-        var hoverState = status == HoverStatus.Entered
+        HoverState hoverState = status == HoverStatus.Entered
             ? HoverState.Hovered
             : HoverState.Normal;
 
@@ -111,15 +104,15 @@ sealed class GestureManager
 
     internal async Task ChangeStateAsync(TouchEffect sender, bool animated)
     {
-        var status = sender.Status;
-        var state = sender.State;
-        var hoverState = sender.HoverState;
+        TouchStatus status = sender.Status;
+        TouchState state = sender.State;
+        HoverState hoverState = sender.HoverState;
 
         AbortAnimations(sender);
         animationTokenSource = new CancellationTokenSource();
-        var token = animationTokenSource.Token;
+        CancellationToken token = animationTokenSource.Token;
 
-        var isToggled = sender.IsToggled;
+        bool? isToggled = sender.IsToggled;
 
         if (sender.Element != null)
             UpdateVisualState(sender.Element, state, hoverState);
@@ -133,22 +126,22 @@ sealed class GestureManager
                     : TouchState.Normal;
             }
 
-            var durationMultiplier = this.durationMultiplier;
+            double? durationMultiplier = this.durationMultiplier;
             this.durationMultiplier = null;
 
             await RunAnimationTask(sender, state, hoverState, animationTokenSource.Token, durationMultiplier.GetValueOrDefault()).ConfigureAwait(false);
             return;
         }
 
-        var pulseCount = sender.PulseCount;
+        int pulseCount = sender.PulseCount;
 
-        if (pulseCount == 0 || state == TouchState.Normal && !isToggled.HasValue)
+        if (pulseCount == 0 || (state == TouchState.Normal && !isToggled.HasValue))
         {
             if (isToggled.HasValue)
             {
                 state =
-                    status == TouchStatus.Started && isToggled.Value ||
-                    status != TouchStatus.Started && !isToggled.Value
+                    (status == TouchStatus.Started && isToggled.Value) ||
+                    (status != TouchStatus.Started && !isToggled.Value)
                     ? TouchState.Normal
                     : TouchState.Pressed;
             }
@@ -158,7 +151,7 @@ sealed class GestureManager
         }
         do
         {
-            var rippleState = isToggled.HasValue && isToggled.Value
+            TouchState rippleState = isToggled.HasValue && isToggled.Value
                 ? TouchState.Normal
                 : TouchState.Pressed;
 
@@ -191,7 +184,7 @@ sealed class GestureManager
             return;
 
         longPressTokenSource = new CancellationTokenSource();
-        Task.Delay(sender.LongPressDuration, longPressTokenSource.Token).ContinueWith(t =>
+        _ = Task.Delay(sender.LongPressDuration, longPressTokenSource.Token).ContinueWith(t =>
         {
             if (t.IsFaulted && t.Exception != null)
                 throw t.Exception;
@@ -223,7 +216,7 @@ sealed class GestureManager
 
     internal void OnTapped(TouchEffect sender)
     {
-        if (!sender.CanExecute || sender.LongPressCommand != null && sender.InteractionStatus == TouchInteractionStatus.Completed)
+        if (!sender.CanExecute || (sender.LongPressCommand != null && sender.InteractionStatus == TouchInteractionStatus.Completed))
             return;
 
         if (Device.RuntimePlatform == Device.Android)
@@ -235,13 +228,13 @@ sealed class GestureManager
         sender.RaiseCompleted();
     }
 
-    void HandleCollectionViewSelection(TouchEffect sender)
+    private void HandleCollectionViewSelection(TouchEffect sender)
     {
-        if (!sender.Element.TryFindParentElementWithParentOfType(out var result, out CollectionView parent))
+        if (!sender.Element.TryFindParentElementWithParentOfType(out VisualElement result, out CollectionView parent))
             return;
 
-        var collectionView = parent ?? throw new NullReferenceException();
-        var item = result?.BindingContext ?? result ?? throw new NullReferenceException();
+        CollectionView collectionView = parent ?? throw new NullReferenceException();
+        object item = result?.BindingContext ?? result ?? throw new NullReferenceException();
 
         switch (collectionView.SelectionMode)
         {
@@ -249,10 +242,10 @@ sealed class GestureManager
                 collectionView.SelectedItem = item;
                 break;
             case SelectionMode.Multiple:
-                var selectedItems = collectionView.SelectedItems?.ToList() ?? new List<object>();
+                List<object> selectedItems = collectionView.SelectedItems?.ToList() ?? new List<object>();
 
                 if (selectedItems.Contains(item))
-                    selectedItems.Remove(item);
+                    _ = selectedItems.Remove(item);
                 else
                     selectedItems.Add(item);
 
@@ -266,14 +259,14 @@ sealed class GestureManager
         animationTokenSource?.Cancel();
         animationTokenSource?.Dispose();
         animationTokenSource = null;
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (element == null)
             return;
 
         element.AbortAnimations();
     }
 
-    void UpdateStatusAndState(TouchEffect sender, TouchStatus status, TouchState state)
+    private void UpdateStatusAndState(TouchEffect sender, TouchStatus status, TouchState state)
     {
         sender.Status = status;
         sender.RaiseStatusChanged();
@@ -285,30 +278,30 @@ sealed class GestureManager
         }
     }
 
-    void UpdateVisualState(VisualElement visualElement, TouchState touchState, HoverState hoverState)
+    private void UpdateVisualState(VisualElement visualElement, TouchState touchState, HoverState hoverState)
     {
-        var state = touchState == TouchState.Pressed
+        string state = touchState == TouchState.Pressed
             ? TouchEffect.PressedVisualState
             : hoverState == HoverState.Hovered
                 ? TouchEffect.HoveredVisualState
                 : TouchEffect.UnpressedVisualState;
 
-        VisualStateManager.GoToState(visualElement, state);
+        _ = VisualStateManager.GoToState(visualElement, state);
     }
 
-    async Task SetBackgroundImageAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
+    private async Task SetBackgroundImageAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
     {
-        var normalBackgroundImageSource = sender.NormalBackgroundImageSource;
-        var pressedBackgroundImageSource = sender.PressedBackgroundImageSource;
-        var hoveredBackgroundImageSource = sender.HoveredBackgroundImageSource;
+        ImageSource normalBackgroundImageSource = sender.NormalBackgroundImageSource;
+        ImageSource pressedBackgroundImageSource = sender.PressedBackgroundImageSource;
+        ImageSource hoveredBackgroundImageSource = sender.HoveredBackgroundImageSource;
 
         if (normalBackgroundImageSource == null &&
             pressedBackgroundImageSource == null &&
             hoveredBackgroundImageSource == null)
             return;
 
-        var aspect = sender.BackgroundImageAspect;
-        var source = normalBackgroundImageSource;
+        Aspect aspect = sender.BackgroundImageAspect;
+        ImageSource source = normalBackgroundImageSource;
         if (touchState == TouchState.Pressed)
         {
             if (sender.Element?.IsSet(TouchEffect.PressedBackgroundImageAspectProperty) ?? false)
@@ -350,25 +343,25 @@ sealed class GestureManager
         }
     }
 
-    Task SetBackgroundColor(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetBackgroundColor(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalBackgroundColor = sender.NormalBackgroundColor;
-        var pressedBackgroundColor = sender.PressedBackgroundColor;
-        var hoveredBackgroundColor = sender.HoveredBackgroundColor;
+        Color normalBackgroundColor = sender.NormalBackgroundColor;
+        Color pressedBackgroundColor = sender.PressedBackgroundColor;
+        Color hoveredBackgroundColor = sender.HoveredBackgroundColor;
 
         if (sender.Element == null
-            || normalBackgroundColor == Colors.Transparent
+            || (normalBackgroundColor == Colors.Transparent
                 && pressedBackgroundColor == Colors.Transparent
-                && hoveredBackgroundColor == Colors.Transparent)
+                && hoveredBackgroundColor == Colors.Transparent))
         {
             return Task.FromResult(false);
         }
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (defaultBackgroundColor == default)
             defaultBackgroundColor = element.BackgroundColor;
 
-        var color = GetBackgroundColor(normalBackgroundColor);
+        Color color = GetBackgroundColor(normalBackgroundColor);
 
         if (touchState == TouchState.Pressed)
             color = GetBackgroundColor(pressedBackgroundColor);
@@ -385,25 +378,25 @@ sealed class GestureManager
         return element.ColorTo(color, (uint)duration, easing);
     }
 
-    Task SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalOpacity = sender.NormalOpacity;
-        var pressedOpacity = sender.PressedOpacity;
-        var hoveredOpacity = sender.HoveredOpacity;
+        double normalOpacity = sender.NormalOpacity;
+        double pressedOpacity = sender.PressedOpacity;
+        double hoveredOpacity = sender.HoveredOpacity;
 
         if (Abs(normalOpacity - 1) <= double.Epsilon &&
             Abs(pressedOpacity - 1) <= double.Epsilon &&
             Abs(hoveredOpacity - 1) <= double.Epsilon)
             return Task.FromResult(false);
 
-        var opacity = normalOpacity;
+        double opacity = normalOpacity;
 
         if (touchState == TouchState.Pressed)
             opacity = pressedOpacity;
         else if (hoverState == HoverState.Hovered && (sender.Element?.IsSet(TouchEffect.HoveredOpacityProperty) ?? false))
             opacity = hoveredOpacity;
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (duration <= 0 && element != null)
         {
             element.AbortAnimations();
@@ -414,25 +407,25 @@ sealed class GestureManager
         return element.FadeTo(opacity, (uint)Abs(duration), easing);
     }
 
-    Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalScale = sender.NormalScale;
-        var pressedScale = sender.PressedScale;
-        var hoveredScale = sender.HoveredScale;
+        double normalScale = sender.NormalScale;
+        double pressedScale = sender.PressedScale;
+        double hoveredScale = sender.HoveredScale;
 
         if (Abs(normalScale - 1) <= double.Epsilon &&
             Abs(pressedScale - 1) <= double.Epsilon &&
             Abs(hoveredScale - 1) <= double.Epsilon)
             return Task.FromResult(false);
 
-        var scale = normalScale;
+        double scale = normalScale;
 
         if (touchState == TouchState.Pressed)
             scale = pressedScale;
         else if (hoverState == HoverState.Hovered && (sender.Element?.IsSet(TouchEffect.HoveredScaleProperty) ?? false))
             scale = hoveredScale;
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (element == null)
             return Task.FromResult(false);
 
@@ -454,15 +447,15 @@ sealed class GestureManager
         return animationCompletionSource.Task;
     }
 
-    Task SetTranslation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetTranslation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalTranslationX = sender.NormalTranslationX;
-        var pressedTranslationX = sender.PressedTranslationX;
-        var hoveredTranslationX = sender.HoveredTranslationX;
+        double normalTranslationX = sender.NormalTranslationX;
+        double pressedTranslationX = sender.PressedTranslationX;
+        double hoveredTranslationX = sender.HoveredTranslationX;
 
-        var normalTranslationY = sender.NormalTranslationY;
-        var pressedTranslationY = sender.PressedTranslationY;
-        var hoveredTranslationY = sender.HoveredTranslationY;
+        double normalTranslationY = sender.NormalTranslationY;
+        double pressedTranslationY = sender.PressedTranslationY;
+        double hoveredTranslationY = sender.HoveredTranslationY;
 
         if (Abs(normalTranslationX) <= double.Epsilon
             && Abs(pressedTranslationX) <= double.Epsilon
@@ -474,8 +467,8 @@ sealed class GestureManager
             return Task.FromResult(false);
         }
 
-        var translationX = normalTranslationX;
-        var translationY = normalTranslationY;
+        double translationX = normalTranslationX;
+        double translationY = normalTranslationY;
 
         if (touchState == TouchState.Pressed)
         {
@@ -491,7 +484,7 @@ sealed class GestureManager
                 translationY = hoveredTranslationY;
         }
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (duration <= 0 && element != null)
         {
             element.AbortAnimations();
@@ -503,11 +496,11 @@ sealed class GestureManager
         return element?.TranslateTo(translationX, translationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
-    Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalRotation = sender.NormalRotation;
-        var pressedRotation = sender.PressedRotation;
-        var hoveredRotation = sender.HoveredRotation;
+        double normalRotation = sender.NormalRotation;
+        double pressedRotation = sender.PressedRotation;
+        double hoveredRotation = sender.HoveredRotation;
 
         if (Abs(normalRotation) <= double.Epsilon
             && Abs(pressedRotation) <= double.Epsilon
@@ -516,14 +509,14 @@ sealed class GestureManager
             return Task.FromResult(false);
         }
 
-        var rotation = normalRotation;
+        double rotation = normalRotation;
 
         if (touchState == TouchState.Pressed)
             rotation = pressedRotation;
         else if (hoverState == HoverState.Hovered && (sender.Element?.IsSet(TouchEffect.HoveredRotationProperty) ?? false))
             rotation = hoveredRotation;
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (duration <= 0 && element != null)
         {
             element.AbortAnimations();
@@ -534,25 +527,25 @@ sealed class GestureManager
         return element?.RotateTo(rotation, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
-    Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalRotationX = sender.NormalRotationX;
-        var pressedRotationX = sender.PressedRotationX;
-        var hoveredRotationX = sender.HoveredRotationX;
+        double normalRotationX = sender.NormalRotationX;
+        double pressedRotationX = sender.PressedRotationX;
+        double hoveredRotationX = sender.HoveredRotationX;
 
         if (Abs(normalRotationX) <= double.Epsilon &&
             Abs(pressedRotationX) <= double.Epsilon &&
             Abs(hoveredRotationX) <= double.Epsilon)
             return Task.FromResult(false);
 
-        var rotationX = normalRotationX;
+        double rotationX = normalRotationX;
 
         if (touchState == TouchState.Pressed)
             rotationX = pressedRotationX;
         else if (hoverState == HoverState.Hovered && (sender.Element?.IsSet(TouchEffect.HoveredRotationXProperty) ?? false))
             rotationX = hoveredRotationX;
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (duration <= 0 && element != null)
         {
             element.AbortAnimations();
@@ -563,25 +556,25 @@ sealed class GestureManager
         return element?.RotateXTo(rotationX, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
-    Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalRotationY = sender.NormalRotationY;
-        var pressedRotationY = sender.PressedRotationY;
-        var hoveredRotationY = sender.HoveredRotationY;
+        double normalRotationY = sender.NormalRotationY;
+        double pressedRotationY = sender.PressedRotationY;
+        double hoveredRotationY = sender.HoveredRotationY;
 
         if (Abs(normalRotationY) <= double.Epsilon &&
             Abs(pressedRotationY) <= double.Epsilon &&
             Abs(hoveredRotationY) <= double.Epsilon)
             return Task.FromResult(false);
 
-        var rotationY = normalRotationY;
+        double rotationY = normalRotationY;
 
         if (touchState == TouchState.Pressed)
             rotationY = pressedRotationY;
         else if (hoverState == HoverState.Hovered && (sender.Element?.IsSet(TouchEffect.HoveredRotationYProperty) ?? false))
             rotationY = hoveredRotationY;
 
-        var element = sender.Element;
+        VisualElement element = sender.Element;
         if (duration <= 0 && element != null)
         {
             element.AbortAnimations();
@@ -592,18 +585,18 @@ sealed class GestureManager
         return element?.RotateYTo(rotationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
-    Color GetBackgroundColor(Color color)
+    private Color GetBackgroundColor(Color color)
         => color != Colors.Transparent
             ? color
             : defaultBackgroundColor;
 
-    Task RunAnimationTask(TouchEffect sender, TouchState touchState, HoverState hoverState, CancellationToken token, double? durationMultiplier = null)
+    private Task RunAnimationTask(TouchEffect sender, TouchState touchState, HoverState hoverState, CancellationToken token, double? durationMultiplier = null)
     {
         if (sender.Element == null)
             return Task.FromResult(false);
 
-        var duration = sender.AnimationDuration;
-        var easing = sender.AnimationEasing;
+        int duration = sender.AnimationDuration;
+        Easing easing = sender.AnimationEasing;
 
         if (touchState == TouchState.Pressed)
         {
@@ -650,7 +643,7 @@ sealed class GestureManager
                 animationProgress = 0;
                 animationState = touchState;
 
-                for (var progress = animationProgressDelay; progress < duration; progress += animationProgressDelay)
+                for (int progress = animationProgressDelay; progress < duration; progress += animationProgressDelay)
                 {
                     await Task.Delay(animationProgressDelay).ConfigureAwait(false);
                     if (token.IsCancellationRequested)

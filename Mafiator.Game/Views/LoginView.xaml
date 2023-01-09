@@ -6,6 +6,7 @@
              xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
              xmlns:effects="clr-namespace:MauiTouchEffect;assembly=MauiTouchEffect"
              xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"  
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
              x:Class="Mafiator.Game.Views.LoginView"
              base:ViewModelLocator.AutoWireViewModel="True"
@@ -16,7 +17,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
-            <!--<xct:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />-->
+            <!--<toolkit:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />-->
             <ScrollView>
                 <VerticalStackLayout x:Name="Body">
                     <Image Source="logo.png" x:Name="Logo" Margin="0,148,0,0" TranslationY="200" WidthRequest="72" />
@@ -30,23 +31,24 @@
                                    HorizontalOptions="CenterAndExpand"
                                    TextColor="{AppThemeBinding Light={StaticResource Day1},Dark={StaticResource Night5}}" />
                         </VerticalStackLayout>
-                        <VerticalStackLayout x:Name="LoginPanel" IsVisible="False" Opacity="0" Margin="24">
+                        <VerticalStackLayout x:Name="LoginPanel" IsVisible="False" Spacing="16" Opacity="0" Margin="24">
                             <controls:ExtendedEntry Placeholder="{x:Static resx:AppResources.Username}"
-                                                        Text="{Binding LoginUsername.Value}"
-                                                        IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
-                                                        Errors="{Binding LoginUsername.Errors}" />
+                                                    Text="{Binding LoginUsername.Value}"
+                                                    IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
+                                                    Errors="{Binding LoginUsername.Errors}"/>
                             <Grid>
                                 <controls:ExtendedEntry x:Name="LoginPassEntry"
                                                             Placeholder="{x:Static resx:AppResources.Password}"
                                                             Text="{Binding LoginPassword.Value}"
                                                             IsValid="{Binding IsLoginPasswordValid, Mode=TwoWay}"
-                                                            Errors="{Binding LoginPassword.Errors}" IsPassword="True" />
+                                                            Errors="{Binding LoginPassword.Errors}"
+                                                            IsPassword="True" />
                                 <controls:ShowPasswordButton x:Name="ShowLoginPass">
                                     <controls:ShowPasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="LoginPassVis_OnTapped"></TapGestureRecognizer>
                                     </controls:ShowPasswordButton.GestureRecognizers>
                                 </controls:ShowPasswordButton>
-                                <controls:HidePasswordButton x:Name="HideLoginPass" IsVisible="False">
+                                <controls:HidePasswordButton x:Name="HideLoginPass" VerticalOptions="CenterAndExpand" IsVisible="False">
                                     <controls:HidePasswordButton.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="LoginPassInvis_OnTapped"></TapGestureRecognizer>
                                     </controls:HidePasswordButton.GestureRecognizers>
@@ -58,29 +60,29 @@
                                    Margin="0,16" FontSize="Small" />
 
                         </VerticalStackLayout>
-                        <VerticalStackLayout x:Name="RegisterPanel" IsVisible="False" Opacity="0" Margin="24">
+                        <VerticalStackLayout x:Name="RegisterPanel" IsVisible="False" Spacing="16" Opacity="0" Margin="24">
                             <Grid>
                                 <controls:ExtendedEntry
                                     Text="{Binding PhoneNo.Value}"
-                                    HorizontalTextAlignment="Center"
                                     IsValid="{Binding IsPhoneNoValid, Mode=TwoWay}"
-                                    Errors="{Binding PhoneNo.Errors}" Keyboard="Telephone"
+                                    Errors="{Binding PhoneNo.Errors}"
+                                    Keyboard="Telephone"
                                     MaxLength="11" />
-                                <HorizontalStackLayout HorizontalOptions="StartAndExpand"
-                                             effects:TouchEffect.Command="{Binding ShowCountriesCommand}">
+                                <Grid ColumnDefinitions="*,*" HorizontalOptions="StartAndExpand" 
+                                      effects:TouchEffect.Command="{Binding ShowCountriesCommand}">
                                     <Image
                                         HorizontalOptions="StartAndExpand"
                                         VerticalOptions="CenterAndExpand"
-                                        WidthRequest="36"
+                                        WidthRequest="30"
                                         HeightRequest="30"
                                         Margin="8,0,0,16"
                                         Aspect="AspectFit"
                                         Source="{Binding Country.Sign,Converter={StaticResource CountryCodelmageConverter}}">
                                     </Image>
-                                    <Label Text="{Binding Country.Code}" FontSize="Medium" FontAttributes="Bold"
-                                           Margin="0,0,0,16" VerticalOptions="CenterAndExpand" TextColor="Black">
+                                    <Label Grid.Column="1" Text="{Binding Country.Code}" FontSize="Medium" FontAttributes="Bold"
+                                           Margin="6,0,0,16" VerticalOptions="CenterAndExpand" TextColor="Black">
                                     </Label>
-                                </HorizontalStackLayout>
+                                </Grid>
                             </Grid>
                             <controls:ExtendedEntry Placeholder="{x:Static resx:AppResources.Username}"
                                                         Text="{Binding Username.Value}"
@@ -140,7 +142,7 @@
                         <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
                                  HeightRequest="1" BackgroundColor="#707070" />
                     </Grid>
-                    <!--<Button x:Name="GoogleBtn" Margin="48,16" Text="{x:Static resx:AppResources.GoogleSignIn}"
+                    <Button x:Name="GoogleBtn" Margin="48,16" Text="{x:Static resx:AppResources.GoogleSignIn}"
                             Command="{Binding GoogleCommand}">
                         <Button.Background>
                             <LinearGradientBrush StartPoint="0,0"
@@ -167,10 +169,9 @@
                                     Offset="0.25" />
                             </LinearGradientBrush>
                         </Button.Background>
-                    </Button>-->
+                    </Button>
                 </VerticalStackLayout>
             </ScrollView>
-
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -28,18 +28,16 @@ public partial class ConfirmPhoneViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isCodeValid;
 
-    public IAsyncRelayCommand ConfirmCommand { get; set; }
-
     public ConfirmPhoneViewModel(INavigationService navigationService, IToastService toastService, IUsersApiService usersApiService) 
         : base(navigationService, toastService)
     {
         _usersApiService = usersApiService;
-        ConfirmCommand = new AsyncRelayCommand(Confirm);
         Code = new ValidatableObject<string>();
         AddValidations();
         IsCodeValid = true;
     }
 
+    [RelayCommand]
     private async Task Confirm()
     {
         var isValid = CodeValidate();

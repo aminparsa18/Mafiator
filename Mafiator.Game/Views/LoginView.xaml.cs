@@ -29,7 +29,7 @@ public partial class LoginView : ContentPage
     private void RegisterBtn_OnClicked(object sender, EventArgs e)
     {
         RegisterBtn.BackgroundColor = Colors.Black;
-        LoginBtn.BackgroundColor = Color.FromHex("#232228");
+        LoginBtn.BackgroundColor = Color.FromArgb("#232228");
         if (isInit)
         {
             RegisterPanel.IsVisible = true;
@@ -61,7 +61,7 @@ public partial class LoginView : ContentPage
     private void LoginBtn_OnClicked(object sender, EventArgs e)
     {
         LoginBtn.BackgroundColor = Colors.Black;
-        RegisterBtn.BackgroundColor = Color.FromHex("#707070");
+        RegisterBtn.BackgroundColor = Color.FromArgb("#707070");
         if (isInit)
         {
             LoginPanel.IsVisible = true;

@@ -18,6 +18,6 @@ public partial class CountriesView : PopupPage
 
     private void InputView_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        ((CountriesViewModel) this.BindingContext).Filter(e.NewTextValue);
+        ((CountriesViewModel)this.BindingContext).Filter(e.NewTextValue);
     }
 }

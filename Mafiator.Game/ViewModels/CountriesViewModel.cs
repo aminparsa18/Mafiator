@@ -19,9 +19,6 @@ public partial class CountriesViewModel : ViewModelBase
     private CountryResult _country;
 
     public ObservableRangeCollection<CountryResult> Countries { get; set; }
-    public IAsyncRelayCommand PopCommand { get; set; }
-    public IAsyncRelayCommand LoadDataCommand { get; set; }
-    public IAsyncRelayCommand CountrySelectedCommand { get; set; }
 
     public CountriesViewModel(INavigationService navigationService, IToastService toastService, ICountriesApiService countriesApiService,
         IPublisher<CountryResult> publisher) : base(navigationService, toastService)
@@ -30,20 +27,20 @@ public partial class CountriesViewModel : ViewModelBase
         _publisher = publisher;
         _countries = new List<CountryResult>();
         Countries = new ObservableRangeCollection<CountryResult>();
-        LoadDataCommand = new AsyncRelayCommand(LoadData);
         LoadDataCommand.ExecuteAsync(null);
-        PopCommand = new AsyncRelayCommand(Pop);
-        CountrySelectedCommand = new AsyncRelayCommand(CountrySelected);
     }
 
+    [RelayCommand]
     private async Task CountrySelected()
     {
         _publisher.Publish(Country);
         await _navigationService.RemovePopupAsync();
     }
 
+    [RelayCommand]
     private async Task Pop() => await _navigationService.RemovePopupAsync();
 
+    [RelayCommand]
     private async Task LoadData()
     {
         var res = await _countriesApiService.GetAllCountries();

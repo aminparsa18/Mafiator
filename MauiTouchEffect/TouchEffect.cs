@@ -2,8 +2,8 @@
 using MauiTouchEffect.EventArgs;
 using MauiTouchEffect.Extentions;
 using System.Windows.Input;
-using Mview = Microsoft.Maui.Controls.View;
 using Mcolor = Microsoft.Maui.Graphics.Color;
+using Mview = Microsoft.Maui.Controls.View;
 #if __ANDROID__
 using MauiTouchEffect.Platforms.Android;
 #endif
@@ -480,14 +480,9 @@ public class TouchEffect : RoutingEffect
         typeof(TouchEffect),
         default(bool),
         propertyChanged: TryGenerateEffect);
-
-#pragma warning disable SA1000 // Keywords should be spaced correctly
-    readonly GestureManager gestureManager = new();
-
-    readonly WeakEventManager weakEventManager = new();
-#pragma warning restore SA1000 // Keywords should be spaced correctly
-
-    VisualElement? element;
+    private readonly GestureManager gestureManager = new();
+    private readonly WeakEventManager weakEventManager = new();
+    private VisualElement? element;
 
     public TouchEffect()
         : base()
@@ -512,46 +507,22 @@ public class TouchEffect : RoutingEffect
     public static void SetShouldMakeChildrenInputTransparent(BindableObject bindable, bool value)
         => bindable?.SetValue(ShouldMakeChildrenInputTransparentProperty, value);
 
-    public static ICommand GetCommand(BindableObject bindable)
-    {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (ICommand)bindable.GetValue(CommandProperty);
-    }
+    public static ICommand GetCommand(BindableObject bindable) => bindable == null ? throw new ArgumentNullException(nameof(bindable)) : (ICommand)bindable.GetValue(CommandProperty);
 
     public static void SetCommand(BindableObject bindable, ICommand value)
         => bindable?.SetValue(CommandProperty, value);
 
-    public static ICommand GetLongPressCommand(BindableObject bindable)
-    {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (ICommand)bindable.GetValue(LongPressCommandProperty);
-    }
+    public static ICommand GetLongPressCommand(BindableObject bindable) => bindable == null ? throw new ArgumentNullException(nameof(bindable)) : (ICommand)bindable.GetValue(LongPressCommandProperty);
 
     public static void SetLongPressCommand(BindableObject bindable, ICommand value)
         => bindable?.SetValue(LongPressCommandProperty, value);
 
-    public static object? GetCommandParameter(BindableObject bindable)
-    {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return bindable.GetValue(CommandParameterProperty);
-    }
+    public static object? GetCommandParameter(BindableObject bindable) => bindable == null ? throw new ArgumentNullException(nameof(bindable)) : bindable.GetValue(CommandParameterProperty);
 
     public static void SetCommandParameter(BindableObject bindable, object value)
         => bindable?.SetValue(CommandParameterProperty, value);
 
-    public static object? GetLongPressCommandParameter(BindableObject bindable)
-    {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return bindable.GetValue(LongPressCommandParameterProperty);
-    }
+    public static object? GetLongPressCommandParameter(BindableObject bindable) => bindable == null ? throw new ArgumentNullException(nameof(bindable)) : bindable.GetValue(LongPressCommandParameterProperty);
 
     public static void SetLongPressCommandParameter(BindableObject bindable, object value)
         => bindable?.SetValue(LongPressCommandParameterProperty, value);
@@ -742,13 +713,7 @@ public class TouchEffect : RoutingEffect
     public static void SetAnimationDuration(BindableObject bindable, int value)
         => bindable?.SetValue(AnimationDurationProperty, value);
 
-    public static Easing? GetAnimationEasing(BindableObject bindable)
-    {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (Easing?)bindable.GetValue(AnimationEasingProperty);
-    }
+    public static Easing? GetAnimationEasing(BindableObject bindable) => bindable == null ? throw new ArgumentNullException(nameof(bindable)) : (Easing?)bindable.GetValue(AnimationEasingProperty);
 
     public static void SetAnimationEasing(BindableObject bindable, Easing? value)
         => bindable?.SetValue(AnimationEasingProperty, value);
@@ -761,10 +726,9 @@ public class TouchEffect : RoutingEffect
 
     public static Easing? GetPressedAnimationEasing(BindableObject bindable)
     {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (Easing?)bindable.GetValue(PressedAnimationEasingProperty);
+        return bindable == null
+            ? throw new ArgumentNullException(nameof(bindable))
+            : (Easing?)bindable.GetValue(PressedAnimationEasingProperty);
     }
 
     public static void SetPressedAnimationEasing(BindableObject bindable, Easing? value)
@@ -778,10 +742,9 @@ public class TouchEffect : RoutingEffect
 
     public static Easing? GetNormalAnimationEasing(BindableObject bindable)
     {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (Easing?)bindable.GetValue(NormalAnimationEasingProperty);
+        return bindable == null
+            ? throw new ArgumentNullException(nameof(bindable))
+            : (Easing?)bindable.GetValue(NormalAnimationEasingProperty);
     }
 
     public static void SetNormalAnimationEasing(BindableObject bindable, Easing? value)
@@ -795,10 +758,9 @@ public class TouchEffect : RoutingEffect
 
     public static Easing? GetHoveredAnimationEasing(BindableObject bindable)
     {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (Easing?)bindable.GetValue(HoveredAnimationEasingProperty);
+        return bindable == null
+            ? throw new ArgumentNullException(nameof(bindable))
+            : (Easing?)bindable.GetValue(HoveredAnimationEasingProperty);
     }
 
     public static void SetHoveredAnimationEasing(BindableObject bindable, Easing? value)
@@ -810,13 +772,7 @@ public class TouchEffect : RoutingEffect
     public static void SetPulseCount(BindableObject bindable, int value)
         => bindable?.SetValue(PulseCountProperty, value);
 
-    public static bool? GetIsToggled(BindableObject bindable)
-    {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (bool?)bindable.GetValue(IsToggledProperty);
-    }
+    public static bool? GetIsToggled(BindableObject bindable) => bindable == null ? throw new ArgumentNullException(nameof(bindable)) : (bool?)bindable.GetValue(IsToggledProperty);
 
     public static void SetIsToggled(BindableObject bindable, bool? value)
         => bindable?.SetValue(IsToggledProperty, value);
@@ -859,10 +815,9 @@ public class TouchEffect : RoutingEffect
 
     public static ImageSource? GetNormalBackgroundImageSource(BindableObject bindable)
     {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (ImageSource?)bindable.GetValue(NormalBackgroundImageSourceProperty);
+        return bindable == null
+            ? throw new ArgumentNullException(nameof(bindable))
+            : (ImageSource?)bindable.GetValue(NormalBackgroundImageSourceProperty);
     }
 
     public static void SetNormalBackgroundImageSource(BindableObject bindable, ImageSource value)
@@ -870,10 +825,9 @@ public class TouchEffect : RoutingEffect
 
     public static ImageSource? GetHoveredBackgroundImageSource(BindableObject bindable)
     {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (ImageSource?)bindable.GetValue(HoveredBackgroundImageSourceProperty);
+        return bindable == null
+            ? throw new ArgumentNullException(nameof(bindable))
+            : (ImageSource?)bindable.GetValue(HoveredBackgroundImageSourceProperty);
     }
 
     public static void SetHoveredBackgroundImageSource(BindableObject bindable, ImageSource value)
@@ -881,10 +835,9 @@ public class TouchEffect : RoutingEffect
 
     public static ImageSource? GetPressedBackgroundImageSource(BindableObject bindable)
     {
-        if (bindable == null)
-            throw new ArgumentNullException(nameof(bindable));
-
-        return (ImageSource?)bindable.GetValue(PressedBackgroundImageSourceProperty);
+        return bindable == null
+            ? throw new ArgumentNullException(nameof(bindable))
+            : (ImageSource?)bindable.GetValue(PressedBackgroundImageSourceProperty);
     }
 
     public static void SetPressedBackgroundImageSource(BindableObject bindable, ImageSource value)
@@ -920,26 +873,26 @@ public class TouchEffect : RoutingEffect
     public static void SetShouldSetImageOnAnimationEnd(BindableObject bindable, bool value)
         => bindable?.SetValue(ShouldSetImageOnAnimationEndProperty, value);
 
-    static void TryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+    private static void TryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
     {
         if (bindable is not VisualElement view || view.Effects.OfType<TouchEffect>().Any())
             return;
         view.Effects.Add(new TouchEffect { IsAutoGenerated = true });
     }
 
-    static void ForceUpdateStateAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+    private static void ForceUpdateStateAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
     {
         GetFrom(bindable)?.ForceUpdateState();
         TryGenerateEffect(bindable, oldValue, newValue);
     }
 
-    static void ForceUpdateStateWithoutAnimationAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+    private static void ForceUpdateStateWithoutAnimationAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
     {
         GetFrom(bindable)?.ForceUpdateState();
         TryGenerateEffect(bindable, oldValue, newValue);
     }
 
-    static void SetChildrenInputTransparentAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+    private static void SetChildrenInputTransparentAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
     {
         GetFrom(bindable)?.SetChildrenInputTransparent((bool)newValue);
         TryGenerateEffect(bindable, oldValue, newValue);
@@ -1118,7 +1071,7 @@ public class TouchEffect : RoutingEffect
                 if (!IsAutoGenerated)
                 {
                     IsUsed = true;
-                    foreach (var effect in value.Effects.OfType<TouchEffect>())
+                    foreach (TouchEffect effect in value.Effects.OfType<TouchEffect>())
                         effect.IsDisabled = effect != this;
                 }
 
@@ -1129,13 +1082,13 @@ public class TouchEffect : RoutingEffect
 
     internal static TouchEffect? GetFrom(BindableObject bindable)
     {
-        var effects = (bindable as VisualElement)?.Effects?.OfType<TouchEffect>();
+        IEnumerable<TouchEffect> effects = (bindable as VisualElement)?.Effects?.OfType<TouchEffect>();
         return effects?.FirstOrDefault(x => !x.IsAutoGenerated) ?? effects?.FirstOrDefault();
     }
 
     internal static TouchEffect? PickFrom(BindableObject bindable)
     {
-        var effects = (bindable as VisualElement)?.Effects?.OfType<TouchEffect>();
+        IEnumerable<TouchEffect> effects = (bindable as VisualElement)?.Effects?.OfType<TouchEffect>();
         return effects?.FirstOrDefault(x => !x.IsAutoGenerated && !x.IsUsed)
             ?? effects?.FirstOrDefault(x => x.IsAutoGenerated)
             ?? effects?.FirstOrDefault();
@@ -1174,22 +1127,22 @@ public class TouchEffect : RoutingEffect
 
     internal void RaiseCompleted()
     {
-        var element = Element;
+        VisualElement element = Element;
         if (element == null)
             return;
 
-        var parameter = CommandParameter;
+        object parameter = CommandParameter;
         Command?.Execute(parameter);
         weakEventManager.HandleEvent(element, new TouchCompletedEventArgs(parameter), nameof(Completed));
     }
 
     internal void RaiseLongPressCompleted()
     {
-        var element = Element;
+        VisualElement element = Element;
         if (element == null)
             return;
 
-        var parameter = LongPressCommandParameter ?? CommandParameter;
+        object parameter = LongPressCommandParameter ?? CommandParameter;
         LongPressCommand?.Execute(parameter);
         weakEventManager.HandleEvent(element, new LongPressCompletedEventArgs(parameter), nameof(LongPressCompleted));
     }
@@ -1210,7 +1163,7 @@ public class TouchEffect : RoutingEffect
         gestureManager.HandleLongPress(this);
     }
 
-    void SetChildrenInputTransparent(bool value)
+    private void SetChildrenInputTransparent(bool value)
     {
         if (Element is not Layout layout)
             return;
@@ -1219,13 +1172,13 @@ public class TouchEffect : RoutingEffect
         if (!value)
             return;
         layout.InputTransparent = false;
-        foreach (var view in layout.Children)
+        foreach (IView view in layout.Children)
             OnLayoutChildAdded(layout, new ElementEventArgs((Element)view));
 
         layout.ChildAdded += OnLayoutChildAdded;
     }
 
-    void OnLayoutChildAdded(object? sender, ElementEventArgs e)
+    private void OnLayoutChildAdded(object? sender, ElementEventArgs e)
     {
         if (e.Element is not Mview view)
             return;
@@ -1236,7 +1189,7 @@ public class TouchEffect : RoutingEffect
             return;
         }
 
-        var effect = GetFrom(view);
+        TouchEffect effect = GetFrom(view);
         view.InputTransparent = effect?.Element == null || !effect.IsAvailable;
     }
 }

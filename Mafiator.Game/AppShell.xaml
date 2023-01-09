@@ -5,7 +5,11 @@
     xmlns:local="clr-namespace:Mafiator.Game.Views"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
-
+    
+    <ShellContent
+        ContentTemplate="{DataTemplate local:HomeView}"
+        Route="HomeViewModel" />
+    
     <ShellContent
         ContentTemplate="{DataTemplate local:SplashView}"
         Route="SplashViewModel" />
@@ -33,7 +37,11 @@
     <ShellContent
         ContentTemplate="{DataTemplate local:RoomDetailView}"
         Route="RoomDetailViewModel" />
-    
+
+    <ShellContent
+        ContentTemplate="{DataTemplate local:BarcodeScannerView}"
+        Route="BarcodeScannerViewModel" />
+
     <ShellContent
         ContentTemplate="{DataTemplate local:SettingsView}"
         Route="SettingsViewModel" />

@@ -21,22 +21,18 @@ public partial class MyRoomsViewModel : ViewModelBase
     private RoomDetailsResult _room;
 
     public ObservableRangeCollection<RoomDetailsResult> Rooms { get; set; }
-    public IAsyncRelayCommand LoadRoomsCommand { get; set; }
-    public IAsyncRelayCommand RoomSelectedCommand { get; set; }
-    public IAsyncRelayCommand AddRoomCommand { get; set; }
 
     public MyRoomsViewModel(INavigationService navigationService, IToastService toastService, 
         IRoomsApiService roomsApiService) : base(navigationService, toastService)
     {
         _roomsApiService = roomsApiService;
         Rooms = new ObservableRangeCollection<RoomDetailsResult>();
-        LoadRoomsCommand = new AsyncRelayCommand(LoadRooms);
-        RoomSelectedCommand = new AsyncRelayCommand(RoomSelected);
-        AddRoomCommand = new AsyncRelayCommand(AddRoom);
     }
 
+    [RelayCommand]
     private async Task AddRoom() => await _navigationService.NavigateToPopupAsync<NewRoomViewModel>();
 
+    [RelayCommand]
     private async Task RoomSelected()
     {
         if (Room == null)
@@ -47,6 +43,7 @@ public partial class MyRoomsViewModel : ViewModelBase
         Room = null;
     }
 
+    [RelayCommand]
     private async Task LoadRooms()
     {
         CurrentState = LayoutState.Loading;

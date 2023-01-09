@@ -10,6 +10,7 @@
                   xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels" 
                   xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
                   xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts" 
+                  xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                   xmlns:shimmerLayout="clr-namespace:Mafiator.Game.Controls.ShimmerLayout"
                   base:ViewModelLocator.AutoWireViewModel="True"
                   x:Class="Mafiator.Game.Views.CountriesView"
@@ -34,12 +35,11 @@
                 <Grid  MinimumHeightRequest="60">
                     <controls:ExtendedEntry  Margin="16,0"
                                                      HeightRequest="60"
-                                                    Placeholder="{x:Static resx:AppResources.Search}"
-                                                    HorizontalTextAlignment="Center" 
-                                                    TextChanged="InputView_OnTextChanged"/>
+                                                     Placeholder="{x:Static resx:AppResources.Search}"
+                                                     TextChanged="InputView_OnTextChanged" />
+
                     <Image Source="search.png" HorizontalOptions="EndAndExpand" WidthRequest="24" Margin="24,0"></Image>
                 </Grid>
-
                 <CollectionView
                         ItemsSource="{Binding Countries}"
                         SelectedItem="{Binding Country}"

@@ -1,4 +1,5 @@
 ﻿using Mafiator.Common.Data.Dtos.Avatars;
+using Mafiator.Repository.Cache;
 using System.Data;
 using System.Linq;
 
@@ -25,5 +26,5 @@ public class AvatarRepository : BaseRepository<Avatar>, IAvatarRepository
 
     /// <inheritdoc/>
     public Task<IEnumerable<AvatarResult>> GetAllDtosFast() => 
-        Connection.ExecuteQueryAsync<AvatarResult>("SELECT Name FROM [Avatar]");
+        Connection.ExecuteQueryAsync<AvatarResult>("SELECT Name FROM [Avatar]", cacheKey:"avatars", cache:CacheFactory.GetCache());
 }

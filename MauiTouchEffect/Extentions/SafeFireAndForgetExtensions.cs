@@ -3,7 +3,7 @@
 /// <summary>
 /// Extension methods for System.Threading.Tasks.Task and System.Threading.Tasks.ValueTask
 /// </summary>
-static class SafeFireAndForgetExtensions
+internal static class SafeFireAndForgetExtensions
 {
     /// <summary>
     /// Safely execute the ValueTask without waiting for it to complete before moving to the next line of code; commonly known as "Fire And Forget". Inspired by John Thiriet's blog post, "Removing Async Void": https://johnthiriet.com/removing-async-void/.
@@ -43,7 +43,7 @@ static class SafeFireAndForgetExtensions
     internal static void SafeFireAndForget<TException>(this Task task, in Action<TException>? onException = null, in bool continueOnCapturedContext = false) where TException : Exception =>
         HandleSafeFireAndForget(task, continueOnCapturedContext, onException);
 
-    static async void HandleSafeFireAndForget<TException>(ValueTask valueTask, bool continueOnCapturedContext, Action<TException>? onException) where TException : Exception
+    private static async void HandleSafeFireAndForget<TException>(ValueTask valueTask, bool continueOnCapturedContext, Action<TException>? onException) where TException : Exception
     {
         try
         {
@@ -55,7 +55,7 @@ static class SafeFireAndForgetExtensions
         }
     }
 
-    static async void HandleSafeFireAndForget<TException>(Task task, bool continueOnCapturedContext, Action<TException>? onException) where TException : Exception
+    private static async void HandleSafeFireAndForget<TException>(Task task, bool continueOnCapturedContext, Action<TException>? onException) where TException : Exception
     {
         try
         {

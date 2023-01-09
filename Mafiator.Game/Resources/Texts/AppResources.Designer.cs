@@ -79,6 +79,15 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Roles.
+        /// </summary>
+        internal static string AddRoles {
+            get {
+                return ResourceManager.GetString("AddRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow notifications.
         /// </summary>
         internal static string AllowNotifications {
@@ -156,6 +165,15 @@ namespace Mafiator.Game.Resources.Texts {
         internal static string Create {
             get {
                 return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating Room....
+        /// </summary>
+        internal static string CreatingRoom {
+            get {
+                return ResourceManager.GetString("CreatingRoom", resourceCulture);
             }
         }
         
@@ -250,11 +268,56 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign in with Facebook.
+        /// </summary>
+        internal static string FacebookSignIn {
+            get {
+                return ResourceManager.GetString("FacebookSignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game is being played. Hurry up!!.
+        /// </summary>
+        internal static string GameIsBeingPlayed {
+            get {
+                return ResourceManager.GetString("GameIsBeingPlayed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Game Played.
         /// </summary>
         internal static string GamePlayed {
             get {
                 return ResourceManager.GetString("GamePlayed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Players Count.
+        /// </summary>
+        internal static string GamePlayersCount {
+            get {
+                return ResourceManager.GetString("GamePlayersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Starts At.
+        /// </summary>
+        internal static string GameStartsAt {
+            get {
+                return ResourceManager.GetString("GameStartsAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in with Google.
+        /// </summary>
+        internal static string GoogleSignIn {
+            get {
+                return ResourceManager.GetString("GoogleSignIn", resourceCulture);
             }
         }
         
@@ -291,6 +354,15 @@ namespace Mafiator.Game.Resources.Texts {
         internal static string Join {
             get {
                 return ResourceManager.GetString("Join", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Joining Room....
+        /// </summary>
+        internal static string JoiningRoom {
+            get {
+                return ResourceManager.GetString("JoiningRoom", resourceCulture);
             }
         }
         
@@ -354,6 +426,15 @@ namespace Mafiator.Game.Resources.Texts {
         internal static string NewGame {
             get {
                 return ResourceManager.GetString("NewGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New game is waiting for members to start..
+        /// </summary>
+        internal static string NewGameIsWaiting {
+            get {
+                return ResourceManager.GetString("NewGameIsWaiting", resourceCulture);
             }
         }
         
@@ -439,6 +520,24 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Members can only join using invitation link.
+        /// </summary>
+        internal static string PrivateRoomHint {
+            get {
+                return ResourceManager.GetString("PrivateRoomHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public Live Stream.
+        /// </summary>
+        internal static string PublicLiveStream {
+            get {
+                return ResourceManager.GetString("PublicLiveStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register.
         /// </summary>
         internal static string Register {
@@ -511,6 +610,15 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schedule Game.
+        /// </summary>
+        internal static string ScheduleGame {
+            get {
+                return ResourceManager.GetString("ScheduleGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         internal static string Search {
@@ -574,6 +682,15 @@ namespace Mafiator.Game.Resources.Texts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Signing Out....
+        /// </summary>
+        internal static string SigningOut {
+            get {
+                return ResourceManager.GetString("SigningOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign out.
         /// </summary>
         internal static string SignOut {
@@ -588,6 +705,24 @@ namespace Mafiator.Game.Resources.Texts {
         internal static string Skip {
             get {
                 return ResourceManager.GetString("Skip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify Roles of Players.
+        /// </summary>
+        internal static string SpecifyRoles {
+            get {
+                return ResourceManager.GetString("SpecifyRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
             }
         }
         

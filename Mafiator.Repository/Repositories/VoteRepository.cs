@@ -1,5 +1,6 @@
 ﻿using Mafiator.Common.Data.Dtos.Votes;
 using Mafiator.Data.Dtos.Vote;
+using Mafiator.Repository.Cache;
 using System.Data;
 
 namespace Mafiator.Repository.Repositories;

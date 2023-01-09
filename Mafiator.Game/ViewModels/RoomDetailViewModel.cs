@@ -12,6 +12,7 @@ using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Data.Enums;
 using Mafiator.Game.Models.Game;
 using Mafiator.Game.Models.PipeEvents;
+using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
@@ -22,7 +23,7 @@ namespace Mafiator.Game.ViewModels;
 [QueryProperty(nameof(Room), "Room")]
 public partial class RoomDetailViewModel : ViewModelBase
 {
-    private ApiResult<AppointedGameResult> waiting;
+    private AppointedGameResult _appointedGame;
 
     private readonly IGamesApiService _gamesApiService;
     private readonly IRoomsApiService _roomsApiService;
@@ -33,36 +34,26 @@ public partial class RoomDetailViewModel : ViewModelBase
     private string _roomId;
 
     [ObservableProperty]
-    private RoomDetailsResult room;
+    private RoomDetailsResult _room;
 
     [ObservableProperty]
-    private GameRoleDto role;
+    private GameRoleDto _role;
 
     [ObservableProperty]
-    private bool newGameAvailable;
+    private bool _newGameAvailable;
 
     [ObservableProperty]
-    private bool isJoined = true;
+    private bool _isJoined = true;
 
     [ObservableProperty]
-    private bool canLeave;
+    private bool _canLeave;
 
     [ObservableProperty]
-    private string remainingTime;
+    private string _remainingTime;
 
     [ObservableProperty]
-    private LayoutState currentState = LayoutState.Loading;
+    private LayoutState _currentState = LayoutState.Loading;
 
-    public IAsyncRelayCommand LoadDataCommand { get; set; }
-    public IAsyncRelayCommand AddMemberCommand { get; set; }
-    public IAsyncRelayCommand CopyCommand { get; set; }
-    public IAsyncRelayCommand QrCommand { get; set; }
-    public IAsyncRelayCommand NewGameCommand { get; set; }
-    public IAsyncRelayCommand ChatCommand { get; set; }
-    public IAsyncRelayCommand GoToGameCommand { get; set; }
-    public IAsyncRelayCommand RoleChangeCommand { get; set; }
-    public IAsyncRelayCommand JoinCommand { get; set; }
-    public IAsyncRelayCommand LeaveCommand { get; set; }
     public ObservableRangeCollection<RoomMemberResult> Members { get; set; }
     public ObservableRangeCollection<GameRoleDto> Roles { get; set; }
 
@@ -76,23 +67,16 @@ public partial class RoomDetailViewModel : ViewModelBase
         _subscriber = subscriber;
         Members = new ObservableRangeCollection<RoomMemberResult>();
         Roles = new ObservableRangeCollection<GameRoleDto>();
-        LoadDataCommand = new AsyncRelayCommand(LoadData);
-        AddMemberCommand = new AsyncRelayCommand(AddMember);
-        CopyCommand = new AsyncRelayCommand(Copy);
-        QrCommand = new AsyncRelayCommand(GenerateQr);
-        NewGameCommand = new AsyncRelayCommand(StartNewGame);
-        GoToGameCommand = new AsyncRelayCommand(GoToGame);
-        LeaveCommand = new AsyncRelayCommand(Leave);
-        JoinCommand = new AsyncRelayCommand(Join);
-        RoleChangeCommand = new AsyncRelayCommand(RoleChanged);
-        ChatCommand = new AsyncRelayCommand(Chat);
         _subscriber.Subscribe(async s => await LoadDataCommand.ExecuteAsync(null));
     }
 
-    private async Task Chat() => await _navigationService.NavigateToAsync($"{nameof(ChatViewModel)}?roomId={room.Id}");
+    [RelayCommand]
+    private async Task Chat() => await _navigationService.NavigateToAsync($"{nameof(ChatViewModel)}?roomId={_room.Id}");
 
-    private async Task RoleChanged() => await _navigationService.NavigateToPopupAsync<PlayerRoleViewModel>(Tuple.Create(Role.Role, false));
+    [RelayCommand]
+    private async Task RoleSelected() => await _navigationService.NavigateToPopupAsync<PlayerRoleViewModel>(Tuple.Create(Role.Role, false));
 
+    [RelayCommand]
     private async Task Join()
     {
         await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Joining Room...");
@@ -116,6 +100,7 @@ public partial class RoomDetailViewModel : ViewModelBase
         await _navigationService.RemovePopupAsync();
     }
 
+    [RelayCommand]
     private async Task Leave()
     {
         await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Leaving...");
@@ -143,22 +128,26 @@ public partial class RoomDetailViewModel : ViewModelBase
         await _navigationService.RemovePopupAsync();
     }
 
+    [RelayCommand]
     private async Task GoToGame() => await _navigationService.NavigateToAsync(nameof(WaitingGameViewModel), new Dictionary<string, object>
     {
-        ["AppointedGame"] = waiting.Data
+        ["AppointedGame"] = _appointedGame
     });
 
-    private async Task StartNewGame() => await _navigationService.NavigateToPopupAsync<NewGameViewModel>(Room.Id);
+    [RelayCommand]
+    private async Task NewGame() => await _navigationService.NavigateToPopupAsync<NewGameViewModel>(Room.Id);
 
+    [RelayCommand]
     private async Task Copy()
     {
         await Clipboard.SetTextAsync(Room.Code);
         _toastService.ShortAlert("Code copied to clipboard", MessageType.Success);
     }
 
-    private async Task GenerateQr()
+    [RelayCommand]
+    private async Task Share()
     {
-        await Share.RequestAsync(new ShareTextRequest()
+        await Microsoft.Maui.ApplicationModel.DataTransfer.Share.RequestAsync(new ShareTextRequest()
         {
             Subject = "Join Room",
             Text = "Join Mafiator Room",
@@ -167,8 +156,10 @@ public partial class RoomDetailViewModel : ViewModelBase
         });
     }
 
+    [RelayCommand]
     private async Task AddMember() => await _navigationService.NavigateToPopupAsync<NewMemberViewModel>(Room.Id);
 
+    [RelayCommand]
     private async Task LoadData()
     {
         var members = await _roomMembersApiService.GetMembersByRoom(Room.Id);
@@ -178,20 +169,21 @@ public partial class RoomDetailViewModel : ViewModelBase
             Members.AddRange(members.Data);
         }
 
-        waiting = await _gamesApiService.GetAppointedGame(Room.Id.ToString());
-        if (waiting.IsSuccess)
+        var response = await _gamesApiService.GetAppointedGame(Room.Id.ToString());
+        if (response.IsSuccess)
         {
-            CurrentState = waiting.Data == null ? LayoutState.Empty : LayoutState.Success;
-            if (waiting.Data == null && Room.IsAdmin)
+            _appointedGame = response.Data;
+            CurrentState = _appointedGame == null ? LayoutState.Empty : LayoutState.Success;
+            if (_appointedGame == null && Room.IsAdmin)
                 NewGameAvailable = true;
             else
-                newGameAvailable = false;
-            if (waiting.Data != null)
+                NewGameAvailable = false;
+            if (_appointedGame != null)
             {
-                RemainingTime = waiting.Data.Status == GameStatus.NotStarted
-                    ? "New game is waiting for members to start"
-                    : "Game is being played";
-                Roles.AddRange(waiting.Data.Roles.Select(s => new GameRoleDto()
+                RemainingTime = _appointedGame.Status == GameStatus.NotStarted
+                    ? LocalizationResourceManager.Instance["NewGameIsWaiting"]
+                    : LocalizationResourceManager.Instance["GameIsBeingPlayed"];
+                Roles.AddRange(_appointedGame.Roles.Select(s => new GameRoleDto()
                 {
                     Role = s
                 }));

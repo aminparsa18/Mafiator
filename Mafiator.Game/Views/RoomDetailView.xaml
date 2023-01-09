@@ -116,7 +116,7 @@
                         HeightRequest="160"
                         Margin="16"
                         SelectionMode="Single"
-                        SelectionChangedCommand="{Binding RoleChangeCommand}">
+                        SelectionChangedCommand="{Binding RoleSelectedCommand}">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Horizontal"></LinearItemsLayout>
                             </CollectionView.ItemsLayout>

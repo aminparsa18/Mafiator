@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Azure;
+﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -22,14 +21,13 @@ using System.Web;
 
 namespace Mafiator.Game.ViewModels;
 
+[QueryProperty(nameof(IsEdit), "isEdit")]
 public partial class ProfilePictureViewModel : ViewModelBase
 {
     private IEnumerable<AvatarResult> _avatars;
     private FileResult _photo;
-    private bool _isEdit;
 
     private readonly IAvatarsApiService _avatarsApiService;
-    private readonly IMapper _mapper;
     private readonly IPublisher<UpdateProfileEvent> _publisher;
     private readonly IUsersApiService _usersApiService;
 
@@ -40,56 +38,38 @@ public partial class ProfilePictureViewModel : ViewModelBase
     private bool _isDisplayNameValid = true;
 
     [ObservableProperty]
-    private string name;
+    private string _name;
 
     [ObservableProperty]
-    private Avatar avatar;
+    private Avatar _avatar;
 
     [ObservableProperty]
-    private ImageSource image = "choose_photo.png";
+    private ImageSource _image = Application.Current.RequestedTheme == AppTheme.Dark ? "photo_night.png" : "photo_day.png";
 
     [ObservableProperty]
-    private bool photoSet;
+    private bool _photoSet;
+
+    [ObservableProperty]
+    private bool _isEdit;
 
     public ObservableRangeCollection<AvatarResult> Avatars { get; set; }
-    public IAsyncRelayCommand LoadAvatarsCommand { get; set; }
-    public IAsyncRelayCommand AvatarSelectedCommand { get; set; }
-    public IAsyncRelayCommand SkipCommand { get; set; }
-    public IAsyncRelayCommand ChoosePhotoCommand { get; set; }
-    public IAsyncRelayCommand SetPhotoCommand { get; set; }
 
     public ProfilePictureViewModel(INavigationService navigationService, IToastService toastService, IAvatarsApiService avatarsApiService,
-        IMapper mapper, IPublisher<UpdateProfileEvent> publisher, IUsersApiService usersApiService) : base(navigationService, toastService)
+        IPublisher<UpdateProfileEvent> publisher, IUsersApiService usersApiService) : base(navigationService, toastService)
     {
         _avatarsApiService = avatarsApiService;
-        _mapper = mapper;
         _publisher = publisher;
         _usersApiService = usersApiService;
         DisplayName = new ValidatableObject<string>();
-        SkipCommand = new AsyncRelayCommand(Skip);
-        ChoosePhotoCommand = new AsyncRelayCommand(ChoosePhoto);
-        SetPhotoCommand = new AsyncRelayCommand(SetPhoto);
         Avatars = new ObservableRangeCollection<AvatarResult>();
-        LoadAvatarsCommand = new AsyncRelayCommand(LoadAvatars);
         LoadAvatarsCommand.ExecuteAsync(null);
-        AvatarSelectedCommand = new AsyncRelayCommand(AvatarSelected);
         AddValidations();
-    }
-
-    public override Task InitializeAsync(object navigationData)
-    {
-        if (navigationData is not bool)
-            return base.InitializeAsync(navigationData);
-        _isEdit = true;
-        var user = Barrel.Current.Get<UserDetailsResult>("User");
-        DisplayName.Value = user.DisplayName;
-        // Image = ImageSource.FromUri(new Uri(user.Image));
-        return base.InitializeAsync(navigationData);
     }
 
     private void AddValidations() => DisplayName.Validations.Add(new IsNotNullOrEmptyRule<string>());
 
-    private async Task SetPhoto()
+    [RelayCommand]
+    private async Task UploadPhoto()
     {
         await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Uploading Image...");
         try
@@ -108,6 +88,7 @@ public partial class ProfilePictureViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async Task ChoosePhoto()
     {
         try
@@ -136,6 +117,7 @@ public partial class ProfilePictureViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async Task AvatarSelected()
     {
         if (!ValidateUpdate())
@@ -154,7 +136,7 @@ public partial class ProfilePictureViewModel : ViewModelBase
             {
                 Barrel.Current.Add("UserImage", Avatar.Name, TimeSpan.FromDays(180));
                 Barrel.Current.Empty("User");
-                if (_isEdit)
+                if (IsEdit)
                 {
                     _publisher.Publish(new UpdateProfileEvent());
                     await _navigationService.RemoveLastFromBackStackAsync();
@@ -172,6 +154,7 @@ public partial class ProfilePictureViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async Task LoadAvatars()
     {
         var response = await _avatarsApiService.GetAllAvatars();
@@ -185,9 +168,10 @@ public partial class ProfilePictureViewModel : ViewModelBase
             _toastService.ShortAlert(response.Errors.ToString(), MessageType.Error);
     }
 
+    [RelayCommand]
     private async Task Skip()
     {
-        if (_isEdit)
+        if (IsEdit)
             await _navigationService.RemoveLastFromBackStackAsync();
         else
         {
@@ -197,7 +181,16 @@ public partial class ProfilePictureViewModel : ViewModelBase
         }
     }
 
-    public void RefreshImage() => Name = Barrel.Current.Get<string>("UserImage");
+    public void RefreshImage()
+    {
+        Name = Barrel.Current.Get<string>("UserImage");
+        if (IsEdit)
+        {
+            var user = Barrel.Current.Get<UserDetailsResult>("User");
+            DisplayName.Value = user.DisplayName;
+            //Image = ImageSource.FromUri(new Uri(user.Image));
+        }
+    }
 
     public async Task SetProfilePicture(string image)
     {
@@ -213,11 +206,11 @@ public partial class ProfilePictureViewModel : ViewModelBase
         {
             if (result.IsSuccess)
             {
-                Barrel.Current.Add("UserImage", name, TimeSpan.FromDays(180));
+                Barrel.Current.Add("UserImage", Name, TimeSpan.FromDays(180));
                 Barrel.Current.Empty("User");
                 _publisher.Publish(new UpdateProfileEvent());
                 await _navigationService.RemovePopupAsync();
-                if (_isEdit)
+                if (IsEdit)
                     await _navigationService.RemoveLastFromBackStackAsync();
                 else
                     await _navigationService.NavigateToAsync(nameof(HomeViewModel));

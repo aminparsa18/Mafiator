@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
              xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+             xmlns:buttons="clr-namespace:Mafiator.Game.Controls.Buttons"
              xmlns:models="clr-namespace:Mafiator.Game.Models"
              xmlns:controls="clr-namespace:Mafiator.Game.Controls"
              xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"  
@@ -17,21 +18,11 @@
                        Padding="16">
                     <VerticalStackLayout>
                         <HorizontalStackLayout>
-                            <Path Data="M310.5,640l-5-5,5-5"
-                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
-                                 StrokeThickness="3"
-                                 Aspect="Uniform"
-                                 WidthRequest="28"
-                                 HeightRequest="28"
-                                 Margin="8,0,0,0"
-                                 StrokeLineCap="Round"
-                                 StrokeLineJoin="Round"
-                                 HorizontalOptions="CenterAndExpand"
-                                 VerticalOptions="CenterAndExpand">
-                                <Path.GestureRecognizers>
+                            <buttons:PreviousButton>
+                                <buttons:PreviousButton.GestureRecognizers>
                                     <TapGestureRecognizer x:Name="PreviousTap" Tapped="PreviousTap_OnTapped"></TapGestureRecognizer>
-                                </Path.GestureRecognizers>
-                            </Path>
+                                </buttons:PreviousButton.GestureRecognizers>
+                            </buttons:PreviousButton>
                             <CarouselView
                                x:Name="AvatarView"
                                ItemsSource="{Binding Avatars}"
@@ -56,24 +47,12 @@
                                     </DataTemplate>
                                 </CarouselView.ItemTemplate>
                             </CarouselView>
-                            <Path Data="M379.5,630l5,5-5,5"
-                                 Stroke="{AppThemeBinding Light=#fff,Dark=#363853}"
-                                 StrokeThickness="3"
-                                 Aspect="Uniform"
-                                 WidthRequest="28"
-                                 HeightRequest="28"
-                                 Margin="0,0,8,0"
-                                 StrokeLineCap="Round"
-                                 StrokeLineJoin="Round"
-                                 HorizontalOptions="CenterAndExpand"
-                                 VerticalOptions="CenterAndExpand">
-                                
-                                <Path.GestureRecognizers>
+                            <buttons:NextButton>
+                                <buttons:NextButton.GestureRecognizers>
                                     <TapGestureRecognizer x:Name="NextTap" Tapped="NextTap_OnTapped"></TapGestureRecognizer>
-                                </Path.GestureRecognizers>
-                            </Path>
+                                </buttons:NextButton.GestureRecognizers>
+                            </buttons:NextButton>
                         </HorizontalStackLayout>
-
                     </VerticalStackLayout>
                     <Frame.Background>
                         <LinearGradientBrush StartPoint="0,0"
@@ -107,17 +86,18 @@
                             </Image.GestureRecognizers>
                         </Image>
 
-                        <Button Text="{x:Static resx:AppResources.Set}" IsVisible="{Binding PhotoSet}" Command="{Binding SetPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
+                        <Button Text="{x:Static resx:AppResources.Set}" IsVisible="{Binding PhotoSet}" Command="{Binding UploadPhotoCommand}" HorizontalOptions="CenterAndExpand"></Button>
 
-                        <HorizontalStackLayout Margin="0,16,0,0" >
+                        <Grid ColumnDefinitions="*,Auto,*" Margin="0,16,0,0" >
                             <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand"
                                      VerticalOptions="CenterAndExpand"
                                      BackgroundColor="White" />
-                            <Label Margin="8" Text="{x:Static resx:AppResources.Or}" />
+                            <Label Grid.Column="1" Margin="8" Text="{x:Static resx:AppResources.Or}" />
                             <BoxView HeightRequest="1" VerticalOptions="CenterAndExpand"
                                      HorizontalOptions="FillAndExpand"
+                                     Grid.Column="2"
                                      BackgroundColor="White" />
-                        </HorizontalStackLayout>
+                        </Grid>
                         <HorizontalStackLayout>
                             <Switch Toggled="Switch_OnToggled" Margin="0,0,8,0" />
                             <Label Text="{x:Static resx:AppResources.SelectAvatar}" FontSize="Medium" VerticalOptions="CenterAndExpand" />
@@ -144,6 +124,7 @@
                     </Frame.Background>
                 </Frame>
             </Grid>
+            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

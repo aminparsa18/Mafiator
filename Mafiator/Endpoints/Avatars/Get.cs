@@ -1,5 +1,6 @@
 ﻿using Mafiator.Common.Data.Dtos.Avatars;
 using Mafiator.Service.Contracts.Avatars;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.Avatars;

@@ -1,0 +1,116 @@
+﻿<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+                 xmlns:models="clr-namespace:Mafiator.Game.Models"
+                 xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+                 xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+                 xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+                 xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                 xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"
+                 x:Class="Mafiator.Game.Views.SetRolesView"
+                 base:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="viewModels:SetRolesViewModel">
+    <mopups:PopupPage.Resources>
+        <converters:RoleNameConverter x:Key="RoleNameConverter" />
+        <converters:RoleImageConverter x:Key="RoleImageConverter" />
+        <converters:ToggleConverter x:Key="ToggleConverter" />
+    </mopups:PopupPage.Resources>
+    <mopups:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </mopups:PopupPage.Animation>
+    <mopups:PopupPage.Content>
+        <VerticalStackLayout>
+            <controls:PopupFrame Margin="24,36">
+                <StackLayout>
+                    <controls:PopupHeader TitleText="{x:Static resx:AppResources.Select}" SubTitleText="Roles of game" />
+                    <CollectionView
+                        ItemsSource="{Binding Roles}"
+                        SelectedItem="{Binding Role}"
+                        Margin="16,0"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding RoleSelectedCommand}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="16"
+                                             VerticalItemSpacing="16" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:NewGameRole">
+                                <StackLayout>
+                                    <Frame CornerRadius="45" HorizontalOptions="CenterAndExpand"
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4} }">
+                                        <StackLayout>
+                                            <Image
+                                                x:Name="ProfileImage"
+                                                WidthRequest="90"
+                                                HeightRequest="90"
+                                                Margin="8"
+                                                Aspect="AspectFit"
+                                                Source="{Binding Role,Converter={StaticResource RoleImageConverter}}">
+                                            </Image>
+                                            <Label Text="{Binding Role,Converter={StaticResource RoleNameConverter}}"
+                                                   FontSize="16" FontFamily="OpenSansSemibold"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
+                                                   HorizontalOptions="CenterAndExpand" />
+                                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand"
+                                                         IsVisible="{Binding AllowInc}">
+                                                <!--<templates:IncButton effects:TouchEffect.CommandParameter="{Binding Role}"  effects:TouchEffect.Command="{Binding Source={x:Reference SetRolesPopup} , Path=BindingContext.IncCommand}"/>-->
+                                                <Image Source="plus.png" WidthRequest="30"
+                                                                       x:Name="IncBtn">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="IncBtn_OnClicked"
+                                                                              CommandParameter="{Binding Role}">
+                                                        </TapGestureRecognizer>
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Label Text="{Binding Count,Mode=TwoWay}"
+                                                       FontFamily="OpenSansSemibold"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Night5},Dark=#ffffff}"
+                                                       Margin="6,0"
+                                                       VerticalOptions="CenterAndExpand" />
+                                                <!--<templates:DecButton 
+                                                    effects:TouchEffect.CommandParameter="{Binding Role}" />-->
+                                                <Image Source="minus.png"
+                                                                       WidthRequest="30"
+                                                                       x:Name="DecBtn">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="DecBtn_OnClicked"
+                                                                              CommandParameter="{Binding Role}" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </StackLayout>
+                                            <Image Source="unchecked.png"
+                                                                   WidthRequest="24"
+                                                                   IsVisible="{Binding Selected,Converter={StaticResource ToggleConverter}}" />
+                                            <Image Source="checked.png"
+                                                                   WidthRequest="24" IsVisible="{Binding Selected}" />
+                                        </StackLayout>
+                                    </Frame>
+
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Label HorizontalOptions="CenterAndExpand" FontSize="16">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding SelectedCount}" />
+                                <Span Text=" of " />
+                                <Span Text="{Binding TotalCount}" />
+                                <Span Text=" roles are selected" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Button Text="Save" Command="{Binding SetRolesCommand}" HorizontalOptions="CenterAndExpand" />
+                </StackLayout>
+            </controls:PopupFrame>
+        </VerticalStackLayout>
+    </mopups:PopupPage.Content>
+</mopups:PopupPage>

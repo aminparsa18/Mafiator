@@ -27,13 +27,13 @@ public static partial class VisualElementExtension
         _ = element ?? throw new ArgumentNullException(nameof(element));
 
         element.CancelAnimations();
-        element.AbortAnimation(nameof(ColorTo));
+        _ = element.AbortAnimation(nameof(ColorTo));
 
         if (otherAnimationNames == null)
             return;
 
-        foreach (var name in otherAnimationNames)
-            element.AbortAnimation(name);
+        foreach (string name in otherAnimationNames)
+            _ = element.AbortAnimation(name);
     }
 
     internal static bool TryFindParentElementWithParentOfType<T>(this VisualElement element, out VisualElement result, out T parent) where T : VisualElement

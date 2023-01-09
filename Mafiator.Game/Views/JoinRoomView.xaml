@@ -23,57 +23,47 @@
     </mopups:PopupPage.Animation>
     <mopups:PopupPage.Content>
             <controls:PopupFrame Margin="16">
-                <StackLayout>
+                <VerticalStackLayout>
                     <controls:PopupHeader TitleText="Join" SubTitleText="room"/>
-                    <StackLayout Margin="16">
+                    <VerticalStackLayout Margin="16">
                     <controls:ExtendedEntry
                         x:Name="NameInput"
                         Text="{Binding Code.Value,Mode=TwoWay}"
-                        Placeholder="{x:Static resx:AppResources.RoomCode}"
-                        FontSize="Medium">
-                        <controls:ExtendedEntry.HorizontalOptions>
-                            <OnIdiom
-                                x:TypeArguments="LayoutOptions"
-                                Desktop="Center"
-                                Tablet="Center"
-                                Phone="FillAndExpand" />
-                        </controls:ExtendedEntry.HorizontalOptions>
-                        <controls:ExtendedEntry.WidthRequest>
-                            <OnIdiom
-                                x:TypeArguments="x:Double"
-                                Desktop="350"
-                                Tablet="320" />
-                        </controls:ExtendedEntry.WidthRequest>
-                    </controls:ExtendedEntry>
-                    <StackLayout Orientation="Horizontal" Margin="8">
-                        <BoxView HeightRequest="1" Margin="4,0" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" BackgroundColor="White"></BoxView>
-                        <Label Text="{x:Static resx:AppResources.Or}" ></Label>
-                            <BoxView HeightRequest="1" Margin="4,0" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" BackgroundColor="White"></BoxView>
-                    </StackLayout>
-                    </StackLayout>
+                        Placeholder="{x:Static resx:AppResources.RoomCode}"/>
+                    <Grid ColumnDefinitions="*,Auto,*" Margin="8">
+                        <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="1"
+                                 BackgroundColor="White" />
+                        <Label Grid.Column="1" Text="{x:Static resx:AppResources.Or}"  Margin="8,0" />
+                        <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
+                                 HeightRequest="1" BackgroundColor="White" />
+                    </Grid>
+                </VerticalStackLayout>
                     <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}" CornerRadius="52" Padding="0">
-                        <StackLayout>
-                            <StackLayout Padding="16">
-                                <StackLayout Orientation="Horizontal">
+                        <VerticalStackLayout>
+                            <VerticalStackLayout Padding="16">
+                                <HorizontalStackLayout>
                                 <Label Text="{x:Static resx:AppResources.ScanBarcode}" FontSize="Large" FontAttributes="Bold" />
                                     <Image Source="scan.png" WidthRequest="36" HeightRequest="36" HorizontalOptions="EndAndExpand"
                                                            Margin="16,0" >
                                     </Image>
-                                </StackLayout>
+                                </HorizontalStackLayout>
                                 <Label
                                     Text="{x:Static resx:AppResources.RoomCodeDesc}"
                                     FontSize="Small" />
-                            </StackLayout>
-                            <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}" HeightRequest="48">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ScanBarcodeCommand}"/>
+                            </VerticalStackLayout.GestureRecognizers>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}" HeightRequest="48">
                             <Label VerticalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.Join}"
                                        HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
-                                <StackLayout.GestureRecognizers>
+                            <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding JoinRoomCommand}"></TapGestureRecognizer>
-                                </StackLayout.GestureRecognizers>
-                            </StackLayout>
-                        </StackLayout>
+                                </VerticalStackLayout.GestureRecognizers>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
                     </Frame>
-                </StackLayout>
+                </VerticalStackLayout>
             </controls:PopupFrame>
     </mopups:PopupPage.Content>
 </mopups:PopupPage>

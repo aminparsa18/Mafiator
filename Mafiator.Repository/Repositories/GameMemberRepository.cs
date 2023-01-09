@@ -1,6 +1,7 @@
 ﻿using Mafiator.Common.Data.Dtos.GameMembers;
 using Mafiator.Data.Dtos.Game;
 using Mafiator.Data.Dtos.User;
+using Mafiator.Repository.Cache;
 using System;
 using System.Data;
 using System.Linq;

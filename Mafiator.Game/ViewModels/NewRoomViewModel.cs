@@ -7,6 +7,7 @@ using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Countries;
 using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Common.Data.Dtos.Users;
+using Mafiator.Game.Resources.Texts;
 using Mafiator.Game.Services;
 using Mafiator.Game.Validations;
 using Mafiator.Game.ViewModels.Base;
@@ -16,8 +17,6 @@ namespace Mafiator.Game.ViewModels;
 
 public partial class NewRoomViewModel : ViewModelBase
 {
-    private List<CountryResult> _countries;
-
     private readonly IRoomsApiService _roomsApiService;
     
     [ObservableProperty]
@@ -30,12 +29,7 @@ public partial class NewRoomViewModel : ViewModelBase
     private bool _isNameValid;
 
     [ObservableProperty]
-    private string _countryCode;
-
-    public IAsyncRelayCommand AddRoomCommand { get; set; }
-    public IAsyncRelayCommand AddByCodeCommand { get; set; }
-    public IAsyncRelayCommand PopCommand { get; set; }
-    public IRelayCommand PrivateHelpCommand { get; set; }
+    private string _countryCode = Barrel.Current.Get<UserDetailsResult>("User")?.CountryCode;
 
     public NewRoomViewModel(INavigationService navigationService, IToastService toastService, 
         IRoomsApiService roomsApiService) : base(navigationService, toastService)
@@ -43,43 +37,24 @@ public partial class NewRoomViewModel : ViewModelBase
         _roomsApiService = roomsApiService;
         Name = new ValidatableObject<string>();
         AddValidations();
-        AddRoomCommand = new AsyncRelayCommand(AddRoom);
-        AddByCodeCommand = new AsyncRelayCommand(AddByCode);
-        PopCommand = new AsyncRelayCommand(Pop);
-        PrivateHelpCommand = new RelayCommand(PrivateHelp);
-        LoadData();
     }
 
-    private void PrivateHelp()
-    {
-        _toastService.ShortAlert("Members can only join using invitation link", MessageType.Info);
-    }
+    [RelayCommand]
+    private void PrivateHelp() => _toastService.ShortAlert(LocalizationResourceManager.Instance["PrivateRoomHint"], MessageType.Info);
 
-    private void LoadData()
-    {
-        Task.Run(() =>
-        {
-            _countries = Barrel.Current.Get<List<CountryResult>>("Countries");
-            CountryCode = Barrel.Current.Get<UserDetailsResult>("User")?.CountryCode;
-        });
-    }
+    [RelayCommand]
+    private async Task AddByCode() => await _navigationService.NavigateToPopupAsync<NewMemberViewModel>();
 
-    private async Task AddByCode()
-    {
-        await _navigationService.NavigateToPopupAsync<NewMemberViewModel>();
-    }
+    [RelayCommand]
+    private async Task Pop() => await _navigationService.RemovePopupAsync();
 
-    private async Task Pop()
-    {
-        await _navigationService.RemovePopupAsync();
-    }
-
+    [RelayCommand]
     private async Task AddRoom()
     {
         var isValid = Validate();
         if (isValid)
         {
-            await _navigationService.NavigateToPopupAsync<WaitingViewModel>("Creating Room...");
+            await _navigationService.NavigateToPopupAsync<WaitingViewModel>(LocalizationResourceManager.Instance["CreatingRoom"]);
             var response = await _roomsApiService.AddRoom(new RoomCreateRequest()
             {
                 Name = Name.Value,
@@ -114,10 +89,7 @@ public partial class NewRoomViewModel : ViewModelBase
         }
     }
 
-    private void AddValidations()
-    {
-        Name.Validations.Add(new IsNotNullOrEmptyRule<string>() { ValidationMessage = "Enter room name" });
-    }
+    private void AddValidations() => Name.Validations.Add(new IsNotNullOrEmptyRule<string>() { ValidationMessage = LocalizationResourceManager.Instance["EnterRoomName"] });
 
     private bool Validate()
     {

@@ -1,6 +1,6 @@
 ﻿namespace MauiTouchEffect.Enums;
 
-sealed class EffectIds
+internal sealed class EffectIds
 {
     /// <summary>
     /// The Base Resolution Group Name For Effects

@@ -1,0 +1,140 @@
+﻿<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:converters="clr-namespace:Mafiator.Game.Converters"
+                 xmlns:controls="clr-namespace:Mafiator.Game.Controls"
+                 xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+                 xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
+                 xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                 xmlns:resx="clr-namespace:Mafiator.Game.Resources.Texts"
+                 x:Class="Mafiator.Game.Views.NewGameView"
+                 CloseWhenBackgroundIsClicked="True"
+                 base:ViewModelLocator.AutoWireViewModel="true"
+                 x:DataType="viewModels:NewGameViewModel">
+    <mopups:PopupPage.Resources>
+        <converters:ToggleConverter x:Key="ToggleConverter" />
+    </mopups:PopupPage.Resources>
+    <mopups:PopupPage.Animation>
+        <animations:MoveAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="400"
+            DurationOut="400"
+            EasingIn="SpringOut"
+            EasingOut="SpringIn"
+            HasBackgroundAnimation="True" />
+    </mopups:PopupPage.Animation>
+    <mopups:PopupPage.Content>
+        <controls:PopupFrame Margin="16">
+            <VerticalStackLayout>
+                <controls:PopupHeader TitleText="{x:Static resx:AppResources.Start}" SubTitleText="{x:Static resx:AppResources.NewGame}"/>
+                <controls:ExtendedEntry
+                        Keyboard="Numeric"
+                        Placeholder="{x:Static resx:AppResources.GamePlayersCount}"
+                        Text="{Binding Capacity.Value}"
+                        IsValid="{Binding IsCapacityValid,Mode=TwoWay}"
+                        Margin="16,0"
+                        Errors="{Binding Capacity.Errors}" />
+                <Label Text="Start Now" HorizontalOptions="CenterAndExpand" FontSize="18" FontFamily="OpenSansSemibold"></Label>
+
+                <Grid ColumnDefinitions="*,Auto,*" Margin="48,6">
+                    <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="1"
+                                 BackgroundColor="#fff" />
+                    <Label Grid.Column="1" Text="{x:Static resx:AppResources.Or}"  Margin="8,0" />
+                    <BoxView Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"
+                                 HeightRequest="1" BackgroundColor="#fff" />
+                </Grid>
+                <controls:CheckBoxView  Margin="16,0,16,16" Text="{x:Static resx:AppResources.ScheduleGame}"
+                                                IsChecked="{Binding IsImmediate,Mode=TwoWay}" />
+
+                <Grid ColumnDefinitions="*,*" IsVisible="{Binding IsImmediate}">
+                    <DatePicker IsVisible="true" Date="{Binding Date,Mode=TwoWay}"
+                                    Unfocused="GameDatePicker_OnUnfocused" x:Name="GameDatePicker" />
+                    <TimePicker Grid.Column="1" x:Name="GameTimePicker" IsVisible="true"
+                                PropertyChanged="GameTimePicker_OnPropertyChanged"
+                                Unfocused="GameTimePicker_OnUnfocused" />
+                    <!--<controls:ExtendedEntry
+                            x:Name="DateInput"
+                            IsVisible="false"
+                            Placeholder="{x:Static resx:AppResources.GameStartsAt}"
+                            Text="{Binding Date}"
+                            Margin="16,0"
+                            Focused="DateInput_OnFocused" />-->
+                </Grid>
+                <HorizontalStackLayout Margin="16,0,16,16">
+                    <controls:CheckBoxView Text="{x:Static resx:AppResources.PublicLiveStream}"
+                                                IsChecked="{Binding IsPublic,Mode=TwoWay}" />
+
+                    <Grid WidthRequest="30" HeightRequest="30">
+                        <Path
+                        Data="M822.95,569.647a7.51,7.51,0,0,1-5.6-5.6,13.343,13.343,0,0,1,0-6.1,7.51,7.51,0,0,1,5.6-5.6,13.343,13.343,0,0,1,6.1,0,7.51,7.51,0,0,1,5.6,5.6,13.343,13.343,0,0,1,0,6.1,7.51,7.51,0,0,1-5.6,5.6A13.343,13.343,0,0,1,822.95,569.647Z"
+                        Stroke="#FFF"
+                        StrokeThickness="2"
+                        Aspect="Uniform">
+                        </Path>
+                        <Path Data=" M 0, 1 a 1,1 0 1,0 2,0 a 1,1 0 1,0 -2,0"
+                          Stroke="#fff"
+                          Fill="#fff"
+                          HorizontalOptions="CenterAndExpand"
+                          Margin="0,14,0,0"
+                          WidthRequest="4"
+                          StrokeThickness="2"
+                          Aspect="Uniform">
+                           
+                        </Path>
+                        <Path Data="M824,559v-.5a2,2,0,0,1,2-2h0a2,2,0,0,1,2,2v.121a2.12,2.12,0,0,1-.621,1.5L826,561.5"
+                          Stroke="#fff"
+                          StrokeThickness="2"
+                          Aspect="Uniform"
+                          HorizontalOptions="CenterAndExpand"
+                          VerticalOptions="StartAndExpand"
+                          Margin="0,8,0,0"
+                          WidthRequest="12"
+                          HeightRequest="12"
+                          StrokeLineCap="Round"
+                          StrokeLineJoin="Round">
+                           
+
+                        </Path>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PublicHelpCommand}"></TapGestureRecognizer>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </HorizontalStackLayout>
+                
+
+
+                <Grid VerticalOptions="EndAndExpand">
+                    <Frame
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Day4},Dark={StaticResource Night4}}"
+                            CornerRadius="52" Padding="0">
+                        <VerticalStackLayout>
+                            <VerticalStackLayout Padding="16">
+                                <HorizontalStackLayout>
+                                    <Label Text="{x:Static resx:AppResources.AddRoles}" FontSize="Large" FontFamily="OpenSansSemibold"/>
+                                    <Image Source="arrow_up.png" HorizontalOptions="EndAndExpand" Margin="16,0" />
+                                </HorizontalStackLayout>
+                                <Label
+                                        Text="{x:Static resx:AppResources.SpecifyRoles}"
+                                        FontSize="Small" />
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="AddByCodeTap" Command="{Binding SetRolesCommand}" />
+                                </VerticalStackLayout.GestureRecognizers>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Day5},Dark={StaticResource Night5}}"
+                                    HeightRequest="48">
+                                <Label VerticalOptions="CenterAndExpand" Text="{x:Static resx:AppResources.Start}"
+                                           HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large" />
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SaveGameCommand}" />
+                                </VerticalStackLayout.GestureRecognizers>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+            </VerticalStackLayout>
+        </controls:PopupFrame>
+    </mopups:PopupPage.Content>
+</mopups:PopupPage>

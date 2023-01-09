@@ -25,8 +25,7 @@
             <controls:ExtendedEntry Margin="24" Text="{Binding Code.Value}" MaxLength="6"
                                     IsValid="{Binding IsCodeValid, Mode=TwoWay}"
                                     Placeholder="{x:Static resx:AppResources.VerificationCode}"
-                                    Keyboard="Numeric"
-                                    HorizontalTextAlignment="Center" />
+                                    Keyboard="Numeric"/>
                 <Button Text="{x:Static resx:AppResources.Continue}"  Command="{Binding ConfirmCommand}"
                     Margin="24" >
                

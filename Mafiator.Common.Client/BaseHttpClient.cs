@@ -9,7 +9,7 @@ namespace Mafiator.Common.Client;
 public class BaseHttpClient
 {
     private static HttpClient _instance;
-    private static readonly object Padlock = new object();
+    private static readonly object _padlock = new();
 
     private BaseHttpClient()
     {
@@ -19,7 +19,7 @@ public class BaseHttpClient
     {
         get
         {
-            lock (Padlock)
+            lock (_padlock)
             {
                 return _instance ??= CreateInstance();
             }
@@ -36,6 +36,6 @@ public class BaseHttpClient
         }
 
         client.AddDefaultMessagePackAcceptHeader();
-        return new HttpClient();
+        return client;
     }
 }

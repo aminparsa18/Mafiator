@@ -1,0 +1,12 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+             xmlns:base="clr-namespace:Mafiator.Game.ViewModels.Base"
+             x:Class="Mafiator.Game.Views.BarcodeScannerView"
+             base:ViewModelLocator.AutoWireViewModel="true">
+    <ContentPage.Content>
+        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <zxing:CameraBarcodeReaderView CameraLocation="Rear" IsDetecting="True" BarcodesDetected="CameraBarcodeReaderView_BarcodesDetected" />
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

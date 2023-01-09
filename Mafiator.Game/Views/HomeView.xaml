@@ -21,7 +21,7 @@
                 </HorizontalStackLayout>
 
                 <Grid Padding="16,0" 
-                  ColumnDefinitions="*,*" RowDefinitions="*,*">
+                  ColumnDefinitions="*,*" RowDefinitions="*,*,*">
                     <Grid.ColumnSpacing>
                         <x:OnIdiom Phone="16" Tablet="24"></x:OnIdiom>
                     </Grid.ColumnSpacing>
@@ -57,9 +57,6 @@
                             <Label Text="{x:Static resx:AppResources.ARoom}" FontSize="28">
                             </Label>
                         </VerticalStackLayout>
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer x:Name="JoinRoomTapped"  />
-                        </Grid.GestureRecognizers>
                     </Grid>
 
                     <Grid Grid.Row="1" Grid.Column="1"
@@ -76,19 +73,16 @@
                             </Label>
                         </VerticalStackLayout>
                     </Grid>
-                    <!--<Grid Grid.Row="2"  Grid.ColumnSpan="2" 
+                    <Grid Grid.Row="2"  Grid.ColumnSpan="2" 
                           effects:TouchEffect.Command="{Binding StoreCommand}"
                           effects:TouchEffect.PressedScale="1.05"
                           effects:TouchEffect.PressedOpacity="0.8"
                           effects:TouchEffect.AnimationEasing="{x:Static Easing.Linear}">
-                        <Frame Padding="0" CornerRadius="16" BackgroundColor="Transparent">
                             <Image Source="{AppThemeBinding Light=store_day.png, Dark=store_night.png}"
                                    Aspect="Fill" />
-                        </Frame>
-
-                        <Label Text="{x:Static resx:AppResources.Store}" Margin="24,12" VerticalOptions="EndAndExpand" FontSize="32" FontAttributes="Bold" FontFamily="{StaticResource BoldFont}">
+                        <Label Text="{x:Static resx:AppResources.Store}" Margin="24,12" VerticalOptions="EndAndExpand" FontSize="32" FontAttributes="Bold" FontFamily="OpenSansSemibold">
                         </Label>
-                    </Grid>-->
+                    </Grid>
                 </Grid>
             </VerticalStackLayout>
 

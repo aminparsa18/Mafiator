@@ -1,6 +1,5 @@
 ﻿using Android.Views.Animations;
 using Android.Widget;
-using Mafiator.Game.Platforms.Android.Services.Toasts;
 using Mafiator.Game.Services;
 using MauiSpotlight.Platforms.Android;
 using MauiSpotlight.Platforms.Android.Effects;

@@ -1,5 +1,3 @@
-using Hangfire;
-using Mafiator.Api;
 using Mafiator.Common.Extensions;
 using Mafiator.IocConfig.Extensions;
 using Mafiator.IocConfig.Middleware;
@@ -32,6 +30,7 @@ try
     {
         options.ConnectionString = builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"];
     });
+
 
     WebApplication app = builder.Build();
 

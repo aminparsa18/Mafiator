@@ -13,7 +13,7 @@ public partial class ProfilePictureView : ContentPage
     {
         base.OnAppearing();
         //LazyVideo.LoadViewAsync();
-        ((ProfilePictureViewModel) BindingContext).RefreshImage();
+        Dispatcher.Dispatch(()=>((ProfilePictureViewModel) BindingContext).RefreshImage());
     }
 
     private void CarouselView_OnCurrentItemChanged(object sender, CurrentItemChangedEventArgs e)

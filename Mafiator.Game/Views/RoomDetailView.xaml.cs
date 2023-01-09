@@ -1,5 +1,4 @@
-﻿using Mafiator.Common.Client.Cache;
-using Mafiator.Game.ViewModels;
+﻿using Mafiator.Game.ViewModels;
 
 namespace Mafiator.Game.Views;
 

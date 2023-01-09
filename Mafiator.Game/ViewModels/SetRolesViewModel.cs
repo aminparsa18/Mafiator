@@ -14,20 +14,14 @@ public partial class SetRolesViewModel : ViewModelBase
     private readonly IGamesApiService _gamesApiService;
 
     [ObservableProperty]
-    private int selectedCount;
+    private int _selectedCount;
 
     [ObservableProperty]
-    private short totalCount;
+    private short _totalCount;
 
     [ObservableProperty]
-    private NewGameRole role;
+    private NewGameRole _role;
 
-    public IRelayCommand LoadRolesCommand { get; set; }
-    public IRelayCommand RoleSelectedCommand { get; set; }
-    public IAsyncRelayCommand SetRolesCommand { get; set; }
-    public IAsyncRelayCommand PopCommand { get; set; }
-    public Command<GameRole> IncCommand { get; set; }
-    public Command<GameRole> DecCommand { get; set; }
     public ObservableRangeCollection<NewGameRole> Roles { get; set; }
 
     public SetRolesViewModel(INavigationService navigationService, IToastService toastService, 
@@ -35,14 +29,9 @@ public partial class SetRolesViewModel : ViewModelBase
     {
         _gamesApiService = gamesApiService;
         Roles = new ObservableRangeCollection<NewGameRole>();
-        LoadRolesCommand = new RelayCommand(LoadRoles);
-        RoleSelectedCommand = new RelayCommand(RoleSelected);
-        SetRolesCommand = new AsyncRelayCommand(SetRoles);
-        PopCommand = new AsyncRelayCommand(Pop);
-        IncCommand = new Command<GameRole>(Increment);
-        DecCommand = new Command<GameRole>(Decrement);
     }
 
+    [RelayCommand]
     private void RoleSelected()
     {
         if (Role == null) return;
@@ -60,6 +49,7 @@ public partial class SetRolesViewModel : ViewModelBase
         Role = null;
     }
 
+    [RelayCommand]
     private void LoadRoles()
     {
         IsBusy = true;
@@ -89,8 +79,10 @@ public partial class SetRolesViewModel : ViewModelBase
         IsBusy = false;
     }
 
+    [RelayCommand]
     private async Task Pop() => await _navigationService.RemovePopupAsync();
 
+    [RelayCommand]
     private async Task SetRoles()
     {
         if (TotalCount != SelectedCount)
@@ -124,7 +116,8 @@ public partial class SetRolesViewModel : ViewModelBase
         return base.InitializeAsync(navigationData);
     }
 
-    internal void Increment(GameRole role)
+    [RelayCommand]
+    public void Increment(GameRole role)
     {
         if (TotalCount == SelectedCount)
             return;
@@ -134,7 +127,8 @@ public partial class SetRolesViewModel : ViewModelBase
             SelectedCount++;
     }
 
-    internal void Decrement(GameRole role)
+    [RelayCommand]
+    public void Decrement(GameRole role)
     {
         var selected = Roles.FirstOrDefault(r => r.Role == role);
         if (selected.Count == 1) return;

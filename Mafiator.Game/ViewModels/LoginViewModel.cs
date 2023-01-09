@@ -68,22 +68,11 @@ public partial class LoginViewModel : ViewModelBase
         Code = "+1"
     };
     
-    public IAsyncRelayCommand LoginCommand { get; set; }
-    public IAsyncRelayCommand RegisterCommand { get; set; }
-    public IAsyncRelayCommand GoogleCommand { get; set; }
-    public IAsyncRelayCommand FacebookCommand { get; set; }
-    public IAsyncRelayCommand ShowCountriesCommand { get; set; }
-
     public LoginViewModel(INavigationService navigationService, IToastService toastService, ISubscriber<CountryResult> subscriber, IUsersApiService usersApiService) 
         : base(navigationService, toastService)
     {
         _subscriber = subscriber;
         _usersApiService = usersApiService;
-        LoginCommand = new AsyncRelayCommand(Login);
-        RegisterCommand = new AsyncRelayCommand(Register);
-        GoogleCommand = new AsyncRelayCommand(Google);
-        FacebookCommand = new AsyncRelayCommand(Facebook);
-        ShowCountriesCommand = new AsyncRelayCommand(ShowCountries);
         LoginUsername = new ValidatableObject<string>();
         LoginPassword = new ValidatableObject<string>();
         Username = new ValidatableObject<string>();
@@ -94,9 +83,11 @@ public partial class LoginViewModel : ViewModelBase
         subscriber.Subscribe(c => Country = c);
     }
 
+    [RelayCommand]
     private async Task ShowCountries() => await _navigationService.NavigateToPopupAsync<CountriesViewModel>();
 
-    private static async Task Google()
+    [RelayCommand]
+    private async Task Google()
     {
         try
         {
@@ -110,6 +101,7 @@ public partial class LoginViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private static async Task Facebook()
     {
         try
@@ -143,6 +135,7 @@ public partial class LoginViewModel : ViewModelBase
         ConfirmPassword.Validations.Add(new PasswordRule<string>());
     }
 
+    [RelayCommand]
     private async Task Login()
     {
         var isValid = ValidateLogin();
@@ -198,6 +191,7 @@ public partial class LoginViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async Task Register()
     {
         var isValid = ValidateRegister();

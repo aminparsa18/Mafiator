@@ -22,25 +22,21 @@ public partial class NewGameViewModel : ViewModelBase
     private readonly IPublisher<UpdateRoomEvent> _publisher;
     
     [ObservableProperty]
-    private ValidatableObject<short> capacity;
+    private ValidatableObject<short> _capacity;
 
     [ObservableProperty]
-    private bool isCapacityValid;
+    private bool _isCapacityValid;
 
     [ObservableProperty]
-    private bool isImmediate;
+    private bool _isImmediate;
 
     [ObservableProperty]
-    private bool isPublic;
+    private bool _isPublic;
 
     [ObservableProperty]
-    private DateTime? date = DateTime.Now;
+    private DateTime? _date = DateTime.Now;
 
     public ObservableRangeCollection<NewGameRole> Roles { get; set; }
-    public IAsyncRelayCommand SetRolesCommand { get; set; }
-    public IAsyncRelayCommand SaveGameCommand { get; set; }
-    public IAsyncRelayCommand PopCommand { get; set; }
-    public IRelayCommand PublicHelpCommand { get; set; }
 
     public NewGameViewModel(INavigationService navigationService, IToastService toastService,
         IGamesApiService gamesApiService, IPublisher<UpdateRoomEvent> publisher) : base(navigationService, toastService)
@@ -49,17 +45,12 @@ public partial class NewGameViewModel : ViewModelBase
         _publisher = publisher;
         Capacity = new ValidatableObject<short> { Value = 6 };
         Roles = new ObservableRangeCollection<NewGameRole>();
-        SetRolesCommand = new AsyncRelayCommand(SetRoles);
-        SaveGameCommand = new AsyncRelayCommand(SaveGame);
-        PublicHelpCommand = new RelayCommand(PublicHelp);
-        PopCommand = new AsyncRelayCommand(Pop);
     }
 
-    private void PublicHelp()
-    {
-        _toastService.ShortAlert("Everyone can observe your game live as guests", MessageType.Info);
-    }
+    [RelayCommand]
+    private void PublicHelp() => _toastService.ShortAlert("Everyone can observe your game live as guests", MessageType.Info);
 
+    [RelayCommand]
     private async Task Pop()
     {
         SystemConstant.SelectedRoles = null;
@@ -74,6 +65,7 @@ public partial class NewGameViewModel : ViewModelBase
         return base.InitializeAsync(navigationData);
     }
 
+    [RelayCommand]
     private async Task SaveGame()
     {
         if (Capacity.Value < 6)
@@ -120,6 +112,7 @@ public partial class NewGameViewModel : ViewModelBase
         await _navigationService.RemovePopupAsync();
     }
 
+    [RelayCommand]
     private async Task SetRoles()
     {
         if (Capacity.Value < 6)
@@ -128,11 +121,6 @@ public partial class NewGameViewModel : ViewModelBase
             await _navigationService.NavigateToPopupAsync<SetRolesViewModel>(Capacity.Value);
     }
 
-    public void RefreshRoles()
-    {
-        Roles.Clear();
-        Roles.AddRange(SystemConstant.SelectedRoles);
-    }
 
     public void SetTime(in TimeSpan time)
     {
