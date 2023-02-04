@@ -4,6 +4,7 @@ using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using Mafiator.Benchmark;
+using Mafiator.Benchmark.Avatars;
 
 ServiceProviderFactory.BuildServiceProvider();
 
@@ -13,4 +14,4 @@ var config = new ManualConfig()
       .AddLogger(ConsoleLogger.Default)
       .AddColumnProvider(DefaultColumnProviders.Instance);
 
-BenchmarkRunner.Run<SerializationBenchmark>(config);
+BenchmarkRunner.Run<GuidBenchmark>(config);

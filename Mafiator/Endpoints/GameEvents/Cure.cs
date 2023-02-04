@@ -4,11 +4,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.GameEvents;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Cure : EndpointBaseAsync
-    .WithRequest<GameEventRequest>
-    .WithActionResult<ApiResult>
+public class Cure : Endpoint<GameEventRequest,ApiResult>
 {
     private readonly IGameEventCureService _gameEventCureService;
 
@@ -17,13 +13,20 @@ public class Cure : EndpointBaseAsync
         _gameEventCureService = gameEventCureService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/gameevents/cure")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Cure), Tags = new[] { "Game Event Endpoints" })]
-    public override async Task<ActionResult<ApiResult>> HandleAsync(GameEventRequest request, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Post("api/v1/gameevents/cure");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.GameEvents));
+    }
+
+    public override async Task HandleAsync(GameEventRequest request, CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _gameEventCureService.Cure(userId, request));
+        await SendMemoryPackAsync(await _gameEventCureService.Cure(userId, request), cancellation: ct);
     }
 }

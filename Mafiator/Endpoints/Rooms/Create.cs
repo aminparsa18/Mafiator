@@ -4,11 +4,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Create : EndpointBaseAsync
-    .WithRequest<RoomCreateRequest>
-    .WithActionResult<ApiResult<RoomCreateResult>>
+public class Create : Endpoint<RoomCreateRequest, ApiResult<RoomCreateResult>>
 {
     private readonly IRoomCreateService _roomCreateService;
 
@@ -17,13 +13,20 @@ public class Create : EndpointBaseAsync
         _roomCreateService = roomCreateService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/rooms")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Room Endpoints" })]
-    public override async Task<ActionResult<ApiResult<RoomCreateResult>>> HandleAsync(RoomCreateRequest request, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Post("api/v1/rooms");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d =>d.Produces(200).WithTags(EndpointsTags.Rooms));
+    }
+
+    public override async Task HandleAsync(RoomCreateRequest request, CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _roomCreateService.Create(userId, request));
+        await SendMemoryPackAsync(await _roomCreateService.Create(userId, request));
     }
 }

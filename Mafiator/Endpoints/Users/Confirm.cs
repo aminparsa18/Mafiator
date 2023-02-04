@@ -4,10 +4,7 @@ using Mafiator.Service.Contracts.Users;
 
 namespace Mafiator.Api.Endpoints.Users;
 
-[Produces("application/x-msgpack")]
-public class Confirm : EndpointBaseAsync
-    .WithRequest<ConfirmPhoneRequest>
-    .WithActionResult<AuthResult>
+public class Confirm : Endpoint<ConfirmPhoneRequest,AuthResult>
 {
     private readonly IUserConfirmService _userConfirmService;
 
@@ -16,10 +13,17 @@ public class Confirm : EndpointBaseAsync
         _userConfirmService = userConfirmService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/users/confirm")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Confirm), Tags = new[] { "Users Endpoints" })]
-    public override async Task<ActionResult<AuthResult>> HandleAsync(ConfirmPhoneRequest request, CancellationToken cancellationToken = default) =>
-        Ok(await _userConfirmService.Confirm(request));
+    public override void Configure()
+    {
+        Post("api/v1/users/confirm");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Users));
+    }
+
+    public override async Task HandleAsync(ConfirmPhoneRequest request, CancellationToken ct) =>
+        await SendMemoryPackAsync(await _userConfirmService.Confirm(request), cancellation: ct);
 }

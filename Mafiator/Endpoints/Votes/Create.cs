@@ -3,11 +3,7 @@ using Mafiator.Service.Contracts.Votes;
 
 namespace Mafiator.Api.Endpoints.Votes;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Create : EndpointBaseAsync
-    .WithRequest<VoteCreateRequest>
-    .WithActionResult<ApiResult>
+public class Create : Endpoint<VoteCreateRequest,ApiResult>
 {
     private readonly IVoteCreateService _voteCreateService;
 
@@ -16,10 +12,17 @@ public class Create : EndpointBaseAsync
         _voteCreateService = voteCreateService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/votes")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Votes Endpoints" })]
-    public override async Task<ActionResult<ApiResult>> HandleAsync(VoteCreateRequest request, CancellationToken cancellationToken = default) =>
-        Ok(await _voteCreateService.Create(request));
+    public override void Configure()
+    {
+        Post("api/v1/votes");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Votes));
+    }
+
+    public override async Task HandleAsync(VoteCreateRequest request, CancellationToken ct) => 
+        await SendMemoryPackAsync(await _voteCreateService.Create(request), cancellation: ct);
 }

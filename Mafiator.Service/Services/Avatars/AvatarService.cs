@@ -20,7 +20,7 @@ public class AvatarService : IAvatarService
         IEnumerable<AvatarResult> avatars = await _unitOfWork.Avatar.GetAllDtosFast();
 
         // Set full uri path on avatar name.
-        foreach (var avatar in avatars)
+        foreach (AvatarResult avatar in avatars)
         {
             avatar.Name = string.Join(Data.Constants.BlobStorageEndpoint, avatar.Name);
         }

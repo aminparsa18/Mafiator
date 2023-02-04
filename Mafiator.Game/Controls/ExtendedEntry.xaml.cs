@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls.Shapes;
 using System.Runtime.CompilerServices;
 
 namespace Mafiator.Game.Controls;
@@ -7,17 +8,14 @@ public partial class ExtendedEntry : ContentView
     public ExtendedEntry()
     {
         InitializeComponent();
+        BindingContext = this;
+        EntryControl.Text = Text;
     }
 
     public static event EventHandler<TextChangedEventArgs> TextChanged;
 
     public static readonly BindableProperty PlaceholderProperty =
-       BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(ExtendedEntry), "", propertyChanged: PlaceholderChanged);
-
-    private static void PlaceholderChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        ((ExtendedEntry)bindable).FindByName<Label>(nameof(PlaceHolderLabel)).Text = newValue?.ToString();
-    }
+       BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(ExtendedEntry), "");
 
     public string Placeholder
     {
@@ -26,11 +24,20 @@ public partial class ExtendedEntry : ContentView
     }
 
     public static readonly BindableProperty TextProperty =
-       BindableProperty.Create(nameof(Text), typeof(string), typeof(ExtendedEntry), "", propertyChanged: TextPropertyChanged);
+       BindableProperty.Create(nameof(Text), typeof(string), typeof(ExtendedEntry), "", BindingMode.OneWayToSource);
+
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+        if (propertyName == TextProperty.PropertyName)
+        {
+            EntryControl.Text = Text;
+        }
+    }
 
     private static void TextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        ((ExtendedEntry)bindable).FindByName<BorderlessEntry>(nameof(EntryControl)).Text = newValue?.ToString();
+        //((ExtendedEntry)bindable).FindByName<BorderlessEntry>(nameof(EntryControl)).Text = newValue?.ToString();
         TextChanged?.Invoke(bindable, new TextChangedEventArgs(oldValue?.ToString(), newValue?.ToString()));
     }
 
@@ -41,12 +48,7 @@ public partial class ExtendedEntry : ContentView
     }
 
     public static readonly BindableProperty IsPasswordProperty =
-       BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(ExtendedEntry), false, propertyChanged: IsPasswordChanged);
-
-    private static void IsPasswordChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        ((ExtendedEntry)bindable).FindByName<BorderlessEntry>(nameof(EntryControl)).IsPassword = (bool)newValue;
-    }
+       BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(ExtendedEntry), false);
 
     public bool IsPassword
     {
@@ -55,12 +57,7 @@ public partial class ExtendedEntry : ContentView
     }
 
     public static readonly BindableProperty KeyboardProperty =
-      BindableProperty.Create(nameof(Keyboard), typeof(Keyboard), typeof(ExtendedEntry), Keyboard.Default, propertyChanged: KeyboardChanged);
-
-    private static void KeyboardChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        ((ExtendedEntry)bindable).FindByName<BorderlessEntry>(nameof(EntryControl)).Keyboard = (Keyboard)newValue;
-    }
+      BindableProperty.Create(nameof(Keyboard), typeof(Keyboard), typeof(ExtendedEntry), Keyboard.Default);
 
     public Keyboard Keyboard
     {
@@ -69,12 +66,7 @@ public partial class ExtendedEntry : ContentView
     }
 
     public static readonly BindableProperty MaxLengthProperty =
-      BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ExtendedEntry), int.MaxValue, propertyChanged: MaxLengthChanged);
-
-    private static void MaxLengthChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        ((ExtendedEntry)bindable).FindByName<BorderlessEntry>(nameof(EntryControl)).MaxLength = (int)newValue;
-    }
+      BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ExtendedEntry), int.MaxValue);
 
     public int MaxLength
     {
@@ -88,7 +80,7 @@ public partial class ExtendedEntry : ContentView
     private static void IsValidChanged(BindableObject bindable, object oldValue, object newValue)
     {
         // implement when is not valid
-        ((ExtendedEntry)bindable).FindByName<Border>(nameof(EntryBorder)).Stroke = (bool)newValue ? Colors.Green : Colors.Red;
+      //  ((ExtendedEntry)bindable).FindByName<Border>(nameof(EntryBorder)).Stroke = (bool)newValue ? Colors.Green : Colors.Red;
     }
 
     public bool IsValid
@@ -114,7 +106,8 @@ public partial class ExtendedEntry : ContentView
         {
             errorLabel.IsVisible = true;
             errorLabel.Text = errors[0];
-        }else
+        }
+        else
             errorLabel.IsVisible = false;
     }
 
@@ -130,5 +123,10 @@ public partial class ExtendedEntry : ContentView
             return;
         PlaceHolderLabel.ScaleTo(1, 250, Easing.Linear);
         PlaceHolderLabel.TranslateTo(0, 0, 250, Easing.CubicIn);
+    }
+
+    private void EntryControl_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        Text = e.NewTextValue;
     }
 }

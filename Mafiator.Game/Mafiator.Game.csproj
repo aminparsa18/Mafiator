@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-ios;net7.0-android33.0</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.22621.0</TargetFrameworks>-->
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -362,7 +362,10 @@
 		<None Remove="Resources\Images\user_add.svg" />
 		<None Remove="Resources\Images\wave.png" />
 		<None Remove="Resources\Raw\countries.json" />
+		<None Remove="Resources\Raw\day.mp4" />
 		<None Remove="Resources\Raw\loading.json" />
+		<None Remove="Resources\Raw\mafia1.mp3" />
+		<None Remove="Resources\Raw\night.mp4" />
 		<None Remove="Resources\Raw\shoot.mp3" />
 	</ItemGroup>
 
@@ -406,16 +409,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="12.0.0" />
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="3.1.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="1.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+		<PackageReference Include="MagicOnion.Client" Version="5.0.3" />
 		<PackageReference Include="MessagePipe" Version="1.7.4" />
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
 		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.2" />
 		<PackageReference Include="Mopups" Version="1.1.0" />
 		<PackageReference Include="Plugin.InAppBilling" Version="6.7.0" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />

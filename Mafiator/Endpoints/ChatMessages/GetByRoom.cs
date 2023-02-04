@@ -5,10 +5,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.ChatMessages;
 
-[Authorize]
-public class GetByRoom : EndpointBaseAsync
-    .WithRequest<Guid>
-    .WithActionResult<ApiResult<IEnumerable<ChatMessageResult>>>
+public class GetByRoom : EndpointWithoutRequest<ApiResult<IEnumerable<ChatMessageResult>>>
 {
     private readonly IChatMessageService _chatMessageService;
 
@@ -17,16 +14,24 @@ public class GetByRoom : EndpointBaseAsync
         _chatMessageService = chatMessageService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/chatMessages/{roomId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetByRoom), Tags = new[] { "Chat Messages Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<ChatMessageResult>>>> HandleAsync(Guid roomId, CancellationToken cancellationToken = default)
+    public override void Configure()
     {
-        return Ok(new ApiResult<List<ChatMessageResult>>()
+        Get("api/v1/chatMessages/{roomId}");
+        Summary(s =>
+        {
+            s.Summary = "Get messages by room";
+            s.Description = "Retrieves all chat messages in a room";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.ChatMessages));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string roomId = Route<string>("roomId");
+        await SendMemoryPackAsync(new ApiResult<IEnumerable<ChatMessageResult>>()
         {
             IsSuccess = true,
-            Data = await _chatMessageService.GetByRoom(roomId)
-        });
+            Data = await _chatMessageService.GetByRoom(Guid.Parse(roomId))
+        }, cancellation: ct);
     }
 }

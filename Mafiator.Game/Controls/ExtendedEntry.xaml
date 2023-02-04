@@ -7,13 +7,18 @@
         <Grid>
             <Border x:Name="EntryBorder" StrokeThickness="1" Padding="8,0" BackgroundColor="{AppThemeBinding Light={StaticResource Day1}, Dark={StaticResource Night1}}">
                 <controls:BorderlessEntry x:Name="EntryControl" 
+                                          IsPassword="{Binding IsPassword}"
+                                          MaxLength="{Binding MaxLength}"
+                                          Keyboard="{Binding Keyboard}"
+                                          TextChanged="EntryControl_TextChanged"
                                           Focused="EntryControl_Focused" 
-                                          Unfocused="EntryControl_Unfocused"/>
+                                          Unfocused="EntryControl_Unfocused">
+                </controls:BorderlessEntry>
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="36" />
                 </Border.StrokeShape>
             </Border>
-            <Label x:Name="PlaceHolderLabel" Margin="16,0" VerticalOptions="CenterAndExpand" TextColor="{StaticResource PlaceHolderColor}"/>
+            <Label x:Name="PlaceHolderLabel" Text="{Binding Placeholder}" Margin="16,0" VerticalOptions="CenterAndExpand" TextColor="{StaticResource PlaceHolderColor}"/>
         </Grid>
         <Label x:Name="ErrorLabel" Margin="16,0" IsVisible="False" TextColor="{StaticResource Error}"/>
     </VerticalStackLayout>

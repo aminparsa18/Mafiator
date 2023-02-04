@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.RoomMembers;
 
-[Authorize]
-public class GetByRoom : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<IEnumerable<RoomMemberResult>>>
+public class GetByRoom : EndpointWithoutRequest<ApiResult<IEnumerable<RoomMemberResult>>>
 {
     private readonly IRoomMemberService _roomMemberService;
 
@@ -16,12 +13,20 @@ public class GetByRoom : EndpointBaseAsync
         _roomMemberService = roomMemberService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/roommembers/{roomId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetByRoom), Tags = new[] { "Room member Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<RoomMemberResult>>>> HandleAsync(string roomId, CancellationToken cancellationToken = default)
+    public override void Configure()
     {
-        return Ok(await _roomMemberService.GetByRoom(roomId));
+        Get("api/v1/games/roommembers/{roomId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.RoomMembers));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string roomId = Route<string>("roomId");
+        await SendMemoryPackAsync(await _roomMemberService.GetByRoom(roomId), cancellation: ct);
     }
 }

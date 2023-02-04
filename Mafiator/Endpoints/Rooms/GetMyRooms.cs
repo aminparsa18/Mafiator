@@ -1,13 +1,11 @@
 ﻿using Mafiator.Common.Data.Dtos.Rooms;
 using Mafiator.Service.Contracts.Rooms;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
-[Authorize]
-public class GetMyRooms : EndpointBaseAsync
-    .WithoutRequest
-    .WithActionResult<ApiResult<RoomDetailsResult>>
+public class GetMyRooms : EndpointWithoutRequest<ApiResult<IEnumerable<RoomDetailsResult>>>
 {
     private readonly IRoomService _roomService;
 
@@ -16,13 +14,20 @@ public class GetMyRooms : EndpointBaseAsync
         _roomService = roomService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/rooms")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetMyRooms), Tags = new[] { "Room Endpoints" })]
-    public override async Task<ActionResult<ApiResult<RoomDetailsResult>>> HandleAsync(CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Get("api/v1/rooms");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Rooms));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _roomService.GetMyRooms(userId));
+        await SendMemoryPackAsync(await _roomService.GetMyRooms(userId), cancellation: ct);
     }
 }

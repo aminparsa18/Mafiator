@@ -1,5 +1,6 @@
-﻿using FluentValidation;
-using Hangfire;
+﻿using FastEndpoints;
+using FastEndpoints.Swagger;
+using FluentValidation;
 using Mafiator.Common.Data.Dtos.Api;
 using Mafiator.Common.Data.Dtos.Data.Dtos.Api;
 using Mafiator.Common.Extensions;
@@ -13,7 +14,6 @@ using Mafiator.Service.Hubs;
 using Mafiator.Service.Models;
 using Mafiator.Service.Services;
 using Mafiator.Service.Validations.Users;
-using MemoryPack.AspNetCoreMvcFormatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -22,11 +22,12 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using RepoDb;
 using Serilog;
-using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Net;
 
 namespace Mafiator.IocConfig.Extensions;
@@ -37,8 +38,8 @@ public static class ServiceCollectionExtentions
     {
         Barrel.ApplicationId = "MafiatorAPi";
 
-       //  services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
-       // services.AddHangfireServer();
+        //  services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("HangfireContext")));
+        // services.AddHangfireServer();
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("MafiatorContext")).EnableSensitiveDataLogging());
         RepoDb.GlobalConfiguration.Setup().UseSqlServer();
@@ -52,11 +53,11 @@ public static class ServiceCollectionExtentions
 
         services.AddControllers(options =>
         {
-            options.InputFormatters.Insert(0, new MemoryPackInputFormatter());
+           // options.InputFormatters.Insert(0, new MemoryPackInputFormatter());
             // If checkContentType: true then can output multiple format(JSON/MemoryPack, etc...). default is false.
-            options.OutputFormatters.Insert(0, new MemoryPackOutputFormatter(checkContentType: false));
+           // options.OutputFormatters.Insert(0, new MemoryPackOutputFormatter(checkContentType: false));
         }).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
-
+        services.AddFastEndpoints();
         services.AddApiVersioning(options =>
         {
             options.ReportApiVersions = true;
@@ -68,55 +69,40 @@ public static class ServiceCollectionExtentions
 
     public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
     {
-        services.AddSwaggerGen(options =>
+        services.AddSwaggerDoc(document =>
         {
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            document.AddSecurity("Bearer", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
-                Description =
-                    "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                Type = OpenApiSecuritySchemeType.ApiKey,
                 Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        },
-                        Scheme = "oauth2",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header,
-                    },
-                    new List<string>()
-                }
-            });
-            options.IgnoreObsoleteActions();
-            options.IgnoreObsoleteProperties();
-            options.EnableAnnotations();
 
-            options.SwaggerDoc("v1", new OpenApiInfo
+            document.OperationProcessors.Add(
+                new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+
+            document.IgnoreObsoleteProperties = true;
+
+            document.Version = "v1";
+            document.PostProcess = process =>
             {
-                Version = "v1",
-                Title = "Mafiator API",
-                Description = "legendary online game forever",
-                License = new OpenApiLicense
+                process.Info.Version = "v1";
+                process.Info.Title = "Mafiator API";
+                process.Info.Description = "Legendary online game";
+                process.Info.License = new OpenApiLicense
                 {
                     Name = "MIT License",
-                    Url = new System.Uri("https://opensource.org/licenses/MIT")
-                },
-                Contact = new OpenApiContact
+                    Url = "https://opensource.org/licenses/MIT"
+                };
+                process.Info.Contact = new OpenApiContact
                 {
                     Name = "Amin Parsa",
                     Email = "aminparsa18@gmail.com",
-                    Url = new System.Uri("https://aminparsa.me")
-                }
-            });
-        });
+                    Url = "https://aminparsa.me"
+                };
+            };
+        }, excludeNonFastEndpoints: true, tagIndex: 0);
         return services;
     }
 
@@ -145,7 +131,7 @@ public static class ServiceCollectionExtentions
 
         services.AddSignalR().AddMessagePackProtocol()
             .AddAzureSignalR("Endpoint=https://mftor.service.signalr.net;AccessKey=/bXupX8SacE1iztiuK/ZqxdZopEVKtaYTUVb3xUjs9U=;Version=1.0;");
-     
+
         return services;
     }
 
@@ -165,7 +151,7 @@ public static class ServiceCollectionExtentions
             {
                 await context.HttpContext.Response.WriteAsync(new ApiResult()
                 {
-                    Errors = new[] {"Token not validated"},
+                    Errors = new[] { "Token not validated" },
                     StatusCode = ApiResultStatusCode.Unauthorized
                 }.ToString());
             }
@@ -173,7 +159,7 @@ public static class ServiceCollectionExtentions
             {
                 await context.HttpContext.Response.WriteAsync(new ApiResult()
                 {
-                    Errors = new[] {"Internal Error"},
+                    Errors = new[] { "Internal Error" },
                     StatusCode = ApiResultStatusCode.ServerError
                 }.ToString());
             }
@@ -182,7 +168,7 @@ public static class ServiceCollectionExtentions
         {
             appError.Run(async context =>
             {
-                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/x-msgpack";
                 var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                 if (contextFeature != null)
@@ -192,11 +178,26 @@ public static class ServiceCollectionExtentions
                 }
             });
         });
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseFastEndpoints(c =>
+        {
+            c.Serializer.Options.PropertyNamingPolicy = null;
+
+            c.Endpoints.ShortNames = false;
+            c.Endpoints.Filter = ep => ep.EndpointTags?.Contains("exclude") is not true;
+            //c.Endpoints.Configurator = (ep) =>
+            //{
+            //    ep.AddApiExplorerGroupName();
+            //};
+
+            c.Versioning.Prefix = "v";
+            //c.Versioning.DefaultVersion = 1;
+
+        });
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
@@ -204,8 +205,8 @@ public static class ServiceCollectionExtentions
             endpoints.MapHub<GameHub>("/gamehub");
             endpoints.MapHub<RoomHub>("/roomhub");
         });
+       
         app.CallDbInitializer();
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerGen();
     }
 }

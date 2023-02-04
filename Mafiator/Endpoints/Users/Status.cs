@@ -4,10 +4,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.Users;
 
-[Authorize]
-public class Status : EndpointBaseAsync
-    .WithoutRequest
-    .WithActionResult<ApiResult<UserStatusResult>>
+public class Status : EndpointWithoutRequest<ApiResult<UserStatusResult>>
 {
     private readonly IUserService _userService;
 
@@ -16,13 +13,20 @@ public class Status : EndpointBaseAsync
         _userService = userService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/users/status")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Status), Tags = new[] { "Users Endpoints" })]
-    public override async Task<ActionResult<ApiResult<UserStatusResult>>> HandleAsync(CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Get("api/v1/users/status");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Users));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _userService.GetStatus(userId));
+        await SendMemoryPackAsync(await _userService.GetStatus(userId), cancellation: ct);
     }
 }

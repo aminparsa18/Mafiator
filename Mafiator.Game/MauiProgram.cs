@@ -36,6 +36,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseBarcodeReader()
             .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkitMediaElement()
             .ConfigureMopups()
             .UseSkiaSharp()
             .UseMauiMTAdmob()

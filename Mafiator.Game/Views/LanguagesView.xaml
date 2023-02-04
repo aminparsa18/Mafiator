@@ -48,11 +48,8 @@
                                             WidthRequest="48"
                                             HeightRequest="30"
                                             Margin="8"
-                                            Aspect="AspectFit">
-                                        <Image.Source>
-                                            <UriImageSource Uri="{Binding Sign,Converter={StaticResource CountryCodelmageConverter}}"
-                                                            CacheValidity="30"/>
-                                        </Image.Source>
+                                            Aspect="AspectFit"
+                                            Source="{Binding Sign,Converter={StaticResource CountryCodelmageConverter}}">
                                     </Image>
                                     <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" FontSize="18"
                                                FontFamily="OpenSansSemibold"

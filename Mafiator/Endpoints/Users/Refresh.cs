@@ -4,9 +4,7 @@ using Mafiator.Service.Contracts.RefreshTokens;
 namespace Mafiator.Api.Endpoints.Users;
 
 [Produces("application/x-msgpack")]
-public class Refresh : EndpointBaseAsync
-    .WithRequest<RefreshTokenRequest>
-    .WithActionResult<AuthResult>
+public class Refresh : Endpoint<RefreshTokenRequest,AuthResult>
 {
     private readonly IRefreshTokenService _refreshTokenService;
 
@@ -15,12 +13,17 @@ public class Refresh : EndpointBaseAsync
         _refreshTokenService = refreshTokenService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/users/refresh")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Refresh), Tags = new[] { "Users Endpoints" })]
-    public override async Task<ActionResult<AuthResult>> HandleAsync(RefreshTokenRequest request, CancellationToken cancellationToken = default)
+    public override void Configure()
     {
-        return Ok(await _refreshTokenService.Refresh(request));
+        Post("api/v1/users/refresh");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Users));
     }
+
+    public override async Task HandleAsync(RefreshTokenRequest request, CancellationToken ct) => 
+        await SendMemoryPackAsync(await _refreshTokenService.Refresh(request), cancellation: ct);
 }

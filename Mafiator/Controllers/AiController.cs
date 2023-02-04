@@ -2,6 +2,7 @@
 using Mafiator.Common.Data.Dtos.Api;
 //using MafiatorML.Model;
 using Microsoft.AspNetCore.Mvc;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 
 namespace Mafiator.Api.Controllers
 {

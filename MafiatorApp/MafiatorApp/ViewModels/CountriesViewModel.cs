@@ -58,6 +58,7 @@ namespace MafiatorApp.ViewModels
             countries = JsonSerializer.Deserialize<List<Country>>(json);
             var tt = sw.ElapsedMilliseconds;
             Countries.AddRange(countries);
+            AppNotificationManager
         }
 
         public void Filter(string criteria)

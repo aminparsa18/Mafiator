@@ -1,10 +1,10 @@
-﻿using MessagePack;
+﻿//using MessagePack;
 
 namespace Mafiator.Benchmark.Models;
 
-[MessagePackObject()]
+//[MessagePackObject()]
 public sealed class MessagePackObject
 {
-    [Key(0)]
+  //  [Key(0)]
     public string Name { get; set; }
 }

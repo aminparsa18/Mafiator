@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.GameEvents;
 
-[Authorize]
-public class Get : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<GameEventResult>>
+public class Get : EndpointWithoutRequest<ApiResult<IEnumerable<GameEventResult>>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -16,16 +13,24 @@ public class Get : EndpointBaseAsync
         _unitOfWork = unitOfWork;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/gameevents/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Game Event Endpoints" })]
-    public override async Task<ActionResult<ApiResult<GameEventResult>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
+    public override void Configure()
     {
-        return Ok(new ApiResult<IEnumerable<GameEventResult>>()
+        Get("api/v1/gameevents/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.GameEvents));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(new ApiResult<IEnumerable<GameEventResult>>()
         {
             IsSuccess = true,
             Data = await _unitOfWork.GameEvent.GetByGame(gameId)
-        });
+        }, cancellation: ct);
     }
 }

@@ -5,9 +5,7 @@ using System;
 namespace Mafiator.Api.Endpoints.Games;
 
 [Authorize]
-public class GetAppointedDetails : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<AppointedGameResult>>
+public class GetAppointedDetails : EndpointWithoutRequest<ApiResult<AppointedGameResult>>
 {
     private readonly IGameService _gameService;
 
@@ -16,10 +14,20 @@ public class GetAppointedDetails : EndpointBaseAsync
         _gameService = gameService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/games/appointed-details/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetAppointedDetails), Tags = new[] { "Game Endpoints" })]
-    public override async Task<ActionResult<ApiResult<AppointedGameResult>>> HandleAsync(string gameId, CancellationToken cancellationToken = default) => 
-        Ok(await _gameService.GetAppointedDetails(Guid.Parse(gameId)));
+    public override void Configure()
+    {
+        Get("api/v1/games/appointed-details/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Games));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(await _gameService.GetAppointedDetails(Guid.Parse(gameId)), cancellation: ct);
+    }
 }

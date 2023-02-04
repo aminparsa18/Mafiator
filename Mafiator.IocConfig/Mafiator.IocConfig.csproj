@@ -5,15 +5,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FastEndpoints.Swagger" Version="5.7.0" />
 		<PackageReference Include="MemoryPack.AspNetCoreMvcFormatter" Version="1.9.7" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.1" />
+		<PackageReference Include="NSwag.AspNetCore" Version="13.18.2" />
 		<PackageReference Include="Scrutor" Version="4.2.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>

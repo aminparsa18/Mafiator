@@ -25,6 +25,9 @@ public partial class LoginViewModel : ViewModelBase
     private readonly IUsersApiService _usersApiService;
 
     [ObservableProperty]
+    private string _kir;
+
+    [ObservableProperty]
     private ValidatableObject<string> _loginUsername;
 
     [ObservableProperty]

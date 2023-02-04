@@ -2,7 +2,6 @@
 using BenchmarkDotNet.Engines;
 using Mafiator.Benchmark.Models;
 using MemoryPack;
-using MessagePack;
 using System.Text.Json;
 
 namespace Mafiator.Benchmark;
@@ -24,8 +23,8 @@ public class SerializationBenchmark
     [Benchmark]
     public string SerializeJson() => JsonSerializer.Serialize(_messagePackObject);
 
-    [Benchmark]
-    public byte[] SerializeMessagePack() => MessagePackSerializer.Serialize(_messagePackObject);
+    //[Benchmark]
+    //public byte[] SerializeMessagePack() => MessagePackSerializer.Serialize(_messagePackObject);
 
     [Benchmark]
     public byte[] SerializeMemoryPack() => MemoryPackSerializer.Serialize(_memoryPackObject);

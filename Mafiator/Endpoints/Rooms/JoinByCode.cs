@@ -3,11 +3,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class JoinByCode : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<string>>
+public class JoinByCode : EndpointWithoutRequest<ApiResult<string>>
 {
     private readonly IRoomJoinService _roomJoinService;
 
@@ -16,13 +12,21 @@ public class JoinByCode : EndpointBaseAsync
         _roomJoinService = roomJoinService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/rooms/join/code/{code}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(JoinByCode), Tags = new[] { "Room Endpoints" })]
-    public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string code, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Post("api/v1/rooms/join/code/{code}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Rooms));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _roomJoinService.JoinByCode(userId, code));
+        string code = Route<string>("code");
+        await SendMemoryPackAsync(await _roomJoinService.JoinByCode(userId, code), cancellation: ct);
     }
 }

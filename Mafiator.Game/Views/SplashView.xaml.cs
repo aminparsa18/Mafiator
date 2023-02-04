@@ -17,7 +17,7 @@ public partial class SplashView : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        MainThread.BeginInvokeOnMainThread(async () =>
+        Dispatcher.Dispatch(async () =>
         {
             if (!Barrel.Current.Exists("PlaySound") || Barrel.Current.Get<bool>("PlaySound"))
             {

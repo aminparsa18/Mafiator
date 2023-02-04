@@ -4,9 +4,7 @@ using System.Security.Claims;
 namespace Mafiator.Api.Endpoints.Games;
 
 [Authorize]
-public class IsJoined : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<string>>
+public class IsJoined : EndpointWithoutRequest<ApiResult<string>>
 {
     private readonly IGameService _gameService;
 
@@ -15,13 +13,21 @@ public class IsJoined : EndpointBaseAsync
         _gameService = gameService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/games/isJoined/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(IsJoined), Tags = new[] { "Game Endpoints" })]
-    public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Get("api/v1/games/isJoined/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Games));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _gameService.IsJoined(userId, gameId));
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(await _gameService.IsJoined(userId, gameId), cancellation: ct);
     }
 }

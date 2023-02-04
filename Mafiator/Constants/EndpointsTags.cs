@@ -1,4 +1,4 @@
-﻿namespace MasterDataService.API.Constants;
+﻿namespace Mafiator.API.Constants;
 
 /// <summary>
 /// Contains endpoint tags.
@@ -6,26 +6,38 @@
 public class EndpointsTags
 {
     // Item endpoint tags.
-    public const string Items = "Item";
-    public const string ItemsRecent = "Items recent";
+    public const string Avatars = "Avatars";
 
-    // Product endpoint tags.
-    public const string Products = "Products";
-    public const string ProductsRecent = "Products recent";
+    // Game members endpoint tags.
+    public const string GameMembers = "Game Members";
 
-    // MachineType endpoint tags.
-    public const string MachineTypes = "Machine types";
-    public const string MachineTypesRecent = "Machine types recent";
+    // Game events endpoint tags.
+    public const string GameEvents = "Game Events";
 
-    // Patient endpoint tags.
-    public const string Patients = "Patients";
+    // Reactions endpoint tags.
+    public const string Reactions = "Reactions";
 
-    // Recent endpoint tags.
-    public const string Recents = "Recents";
+    // Countries endpoint tags.
+    public const string Countries = "Countries";
 
-    // System data endpoint tags.
-    public const string SystemData = "System data";
+    // Gems endpoint tags.
+    public const string Gems = "Gems";
 
-    // Text endpoint tags.
-    public const string Texts = "Texts";
+    // Chat messages endpoint tags.
+    public const string ChatMessages = "Chat Messages";
+
+    // Games endpoint tags.
+    public const string Games = "Games";
+
+    // Room members endpoint tags.
+    public const string RoomMembers = "Room Members";
+
+    // Rooms endpoint tags.
+    public const string Rooms = "Rooms";
+
+    // Users endpoint tags.
+    public const string Users = "Users";
+
+    // Votes endpoint tags.
+    public const string Votes = "Votes";
 }

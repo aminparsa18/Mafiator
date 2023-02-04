@@ -3,11 +3,7 @@ using Mafiator.Service.Contracts.RoomMembers;
 
 namespace Mafiator.Api.Endpoints.RoomMembers;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Create : EndpointBaseAsync
-    .WithRequest<NewMembersRequest>
-    .WithActionResult<ApiResult>
+public class Create : Endpoint<NewMembersRequest,ApiResult>
 {
     private readonly IRoomMemberCreateService _roomMemberCreateService;
 
@@ -16,10 +12,17 @@ public class Create : EndpointBaseAsync
         _roomMemberCreateService = roomMemberCreateService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/roommembers")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Room member Endpoints" })]
-    public override async Task<ActionResult<ApiResult>> HandleAsync(NewMembersRequest request, CancellationToken cancellationToken = default) =>
-        Ok(await _roomMemberCreateService.Create(request));
+    public override void Configure()
+    {
+        Post("api/v1/roommembers");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.RoomMembers));
+    }
+
+    public override async Task HandleAsync(NewMembersRequest request, CancellationToken ct) =>
+        await SendMemoryPackAsync(await _roomMemberCreateService.Create(request), cancellation: ct);
 }

@@ -10,14 +10,17 @@
              xmlns:viewModels="clr-namespace:Mafiator.Game.ViewModels"
              x:Class="Mafiator.Game.Views.LoginView"
              base:ViewModelLocator.AutoWireViewModel="True"
-             BackgroundColor="Wheat"
              x:DataType="viewModels:LoginViewModel">
     <ContentPage.Resources>
         <converters:CountryCodelmageConverter x:Key="CountryCodelmageConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
-            <!--<toolkit:LazyView x:Name="LazyVideo" x:TypeArguments="local:LazyVideoView" />-->
+            <toolkit:MediaElement
+                Aspect="AspectFill"
+                ShouldShowPlaybackControls="False"
+                ShouldAutoPlay="True"
+                Source="embed://day.mp4" />
             <ScrollView>
                 <VerticalStackLayout x:Name="Body">
                     <Image Source="logo.png" x:Name="Logo" Margin="0,148,0,0" TranslationY="200" WidthRequest="72" />
@@ -33,7 +36,7 @@
                         </VerticalStackLayout>
                         <VerticalStackLayout x:Name="LoginPanel" IsVisible="False" Spacing="16" Opacity="0" Margin="24">
                             <controls:ExtendedEntry Placeholder="{x:Static resx:AppResources.Username}"
-                                                    Text="{Binding LoginUsername.Value}"
+                                                    Text="{Binding Kir}"
                                                     IsValid="{Binding IsLoginPhoneNoValid, Mode=TwoWay}"
                                                     Errors="{Binding LoginUsername.Errors}"/>
                             <Grid>

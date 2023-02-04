@@ -4,10 +4,12 @@ using Mafiator.Common.Data.Dtos.Avatars;
 using Mafiator.Data;
 using Mafiator.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.InteropServices;
 
 namespace Mafiator.Benchmark.Avatars;
 
 [SimpleJob(RunStrategy.ColdStart, launchCount: 20)]
+[MemoryDiagnoser]
 public class LoadAvatarTests
 {
     private List<AvatarResult> MockAvatarData;
@@ -44,7 +46,7 @@ public class LoadAvatarTests
         await _unitOfWork.Avatar.GetAllDtos();
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void IterateAvatars()
     {
         foreach (var avatar in MockAvatarData)
@@ -58,7 +60,16 @@ public class LoadAvatarTests
     {
         foreach (var avatar in MockAvatarData)
         {
-            avatar.Name = string.Join(Constants.BlobStorageEndpoint,avatar.Name);
+            avatar.Name = string.Join(Constants.BlobStorageEndpoint, avatar.Name);
+        }
+    }
+
+    [Benchmark]
+    public void IterateAvatarsFast3()
+    {
+        foreach (var avatar in CollectionsMarshal.AsSpan(MockAvatarData))
+        {
+            avatar.Name = string.Join(Constants.BlobStorageEndpoint, avatar.Name);
         }
     }
 }

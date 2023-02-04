@@ -52,3 +52,8 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+namespace Mafiator.Api
+{
+    public partial class Program { }
+}

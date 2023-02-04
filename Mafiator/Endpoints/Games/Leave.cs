@@ -3,11 +3,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.Games;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Leave : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<string>>
+public class Leave : EndpointWithoutRequest<ApiResult>
 {
     private readonly IGameLeaveService _gameLeaveService;
 
@@ -16,13 +12,21 @@ public class Leave : EndpointBaseAsync
         _gameLeaveService = gameLeaveService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/games/leave/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Leave), Tags = new[] { "Game Endpoints" })]
-    public override async Task<ActionResult<ApiResult<string>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Post("api/v1/games/leave/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Games));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _gameLeaveService.Leave(userId, gameId));
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(await _gameLeaveService.Leave(userId, gameId), cancellation: ct);
     }
 }

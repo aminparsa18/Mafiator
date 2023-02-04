@@ -1,11 +1,16 @@
-﻿namespace Mafiator.Game.Views;
+﻿using Plugin.Maui.Audio;
+using AudioPlayer = Mafiator.Game.Helpers.AudioPlayer;
+
+namespace Mafiator.Game.Views;
 
 public partial class LoginView : ContentPage
 {
     private bool isInit;
+    private readonly IAudioManager _audioManager;
 
-    public LoginView()
+    public LoginView(IAudioManager audioManager)
     {
+        _audioManager = audioManager;
         InitializeComponent();
     }
 
@@ -13,8 +18,9 @@ public partial class LoginView : ContentPage
     {
         base.OnAppearing();
         //LazyVideo.LoadViewAsync();
-        Dispatcher.Dispatch(() =>
+        Dispatcher.DispatchAsync(async () =>
         {
+            await AudioPlayer.Play();
             var a = new Animation
             {
                 {0, 1, new Animation(v => Logo.TranslationY = v, 200, 0, Easing.SpringOut)},

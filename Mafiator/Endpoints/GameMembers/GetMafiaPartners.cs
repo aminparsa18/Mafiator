@@ -5,10 +5,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.GameMembers;
 
-[Authorize]
-public class GetMafiaPartners : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<IEnumerable<PlayerRoleResult>>>
+public class GetMafiaPartners : EndpointWithoutRequest<ApiResult<IEnumerable<PlayerRoleResult>>>
 {
     private readonly IGameMemberService _gameMemberService;
 
@@ -17,13 +14,21 @@ public class GetMafiaPartners : EndpointBaseAsync
         _gameMemberService = gameMemberService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/gamemembers/mafia-partners/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetMafiaPartners), Tags = new[] { "Game members Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<PlayerRoleResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Get("api/v1/gamemembers/mafia-partners/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.GameMembers));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _gameMemberService.GetMafiaPartners(userId, gameId));
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(await _gameMemberService.GetMafiaPartners(userId, gameId), cancellation: ct);
     }
 }

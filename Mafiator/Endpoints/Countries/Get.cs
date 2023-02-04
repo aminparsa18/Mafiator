@@ -4,9 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.Countries;
 
-public class Get : EndpointBaseAsync
-    .WithoutRequest
-    .WithActionResult<ApiResult<IEnumerable<CountryResult>>>
+public class Get : EndpointWithoutRequest<ApiResult<IEnumerable<CountryResult>>>
 {
     private readonly ICountryService _countryService;
 
@@ -15,17 +13,24 @@ public class Get : EndpointBaseAsync
         _countryService = countryService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet(ApiUrls.Countries)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(ApiUrls.Countries), Tags = new[] { "Countries Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<CountryResult>>>> HandleAsync(CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Get(ApiUrls.Countries);
+        Summary(s =>
+        {
+            s.Summary = "Get countries";
+            s.Description = "Retrieves all country data";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Countries));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var countries = await _countryService.GetAll();
-        return Ok(new ApiResult<IEnumerable<CountryResult>>
+        await SendMemoryPackAsync(new ApiResult<IEnumerable<CountryResult>>
         {
             Data = countries,
             IsSuccess = true
-        });
+        }, cancellation: ct);
     }
 }

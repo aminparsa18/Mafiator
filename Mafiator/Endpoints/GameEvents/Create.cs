@@ -3,11 +3,7 @@ using Mafiator.Service.Contracts.GameEvents;
 
 namespace Mafiator.Api.Endpoints.GameEvents;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Create : EndpointBaseAsync
-    .WithRequest<GameEventRequest>
-    .WithActionResult<ApiResult>
+public class Create : Endpoint<GameEventRequest,ApiResult>
 {
     private readonly IGameEventCreateService _gameEventCreateService;
 
@@ -16,10 +12,17 @@ public class Create : EndpointBaseAsync
         _gameEventCreateService = gameEventCreateService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPost("api/v{version:apiVersion}/gameevents")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Create), Tags = new[] { "Game Events Endpoints" })]
-    public override async Task<ActionResult<ApiResult>> HandleAsync(GameEventRequest request, CancellationToken cancellationToken = default) =>
-        Ok(await _gameEventCreateService.Create(request));
+    public override void Configure()
+    {
+        Post("api/v1/gameevents");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.GameEvents));
+    }
+
+    public override async Task HandleAsync(GameEventRequest request, CancellationToken ct) => 
+        await SendMemoryPackAsync(await _gameEventCreateService.Create(request), cancellation: ct);
 }

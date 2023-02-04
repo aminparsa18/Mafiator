@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.Games;
 
-[Authorize]
-public class GetByRoom : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<IEnumerable<RoomGameResult>>>
+public class GetByRoom : EndpointWithoutRequest<ApiResult<IEnumerable<RoomGameResult>>>
 {
     private readonly IGameService _gameService;
 
@@ -16,10 +13,20 @@ public class GetByRoom : EndpointBaseAsync
         _gameService = gameService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/games/{roomId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetByRoom), Tags = new[] { "Game Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<RoomGameResult>>>> HandleAsync(string roomId, CancellationToken cancellationToken = default) =>
-        Ok(await _gameService.GetByRoom(roomId));
+    public override void Configure()
+    {
+        Get("api/v1/games/{roomId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Games));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string roomId = Route<string>("roomId");
+        await SendMemoryPackAsync(await _gameService.GetByRoom(roomId), cancellation: ct);
+    }
 }

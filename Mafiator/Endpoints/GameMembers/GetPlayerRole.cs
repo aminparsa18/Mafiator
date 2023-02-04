@@ -4,10 +4,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.GameMembers;
 
-[Authorize]
-public class GetPlayerRole : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<PlayerRoleResult>>
+public class GetPlayerRole : EndpointWithoutRequest<ApiResult<PlayerRoleResult>>
 {
     private readonly IGameMemberService _gameMemberService;
 
@@ -16,13 +13,21 @@ public class GetPlayerRole : EndpointBaseAsync
         _gameMemberService = gameMemberService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/gamemembers/role/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetPlayerRole), Tags = new[] { "Game members Endpoints" })]
-    public override async Task<ActionResult<ApiResult<PlayerRoleResult>>> HandleAsync(string gameId, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Get("api/v1/gamemembers/role/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.GameMembers));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _gameMemberService.GetPlayerRole(userId, gameId));
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(await _gameMemberService.GetPlayerRole(userId, gameId), cancellation: ct);
     }
 }

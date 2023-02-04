@@ -1,14 +1,11 @@
-﻿using Mafiator.Common.Data.Dtos.Reactions;
+﻿using FastEndpoints;
+using Mafiator.Common.Data.Dtos.Reactions;
 using Mafiator.Repository;
 using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.Reactions;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Get : EndpointBaseAsync
-    .WithoutRequest
-    .WithActionResult<ApiResult<IEnumerable<ReactionResult>>>
+public class Get : EndpointWithoutRequest<ApiResult<IEnumerable<ReactionResult>>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -17,16 +14,23 @@ public class Get : EndpointBaseAsync
         _unitOfWork = unitOfWork;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/reactions")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Reaction Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<ReactionResult>>>> HandleAsync(CancellationToken cancellationToken = default)
+    public override void Configure()
     {
-        return Ok(new ApiResult<IEnumerable<ReactionResult>>()
+        Get("api/v1/reactions");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Reactions));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        await SendMemoryPackAsync(new ApiResult<IEnumerable<ReactionResult>>()
         {
             IsSuccess = true,
             Data = await _unitOfWork.Reaction.GetAllDtos()
-        });
+        }, cancellation: ct);
     }
 }

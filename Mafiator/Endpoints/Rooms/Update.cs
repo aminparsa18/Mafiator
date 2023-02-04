@@ -4,11 +4,7 @@ using System.Security.Claims;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
-[Authorize]
-[Produces("application/x-msgpack")]
-public class Update : EndpointBaseAsync
-    .WithRequest<UpdateRoomNameRequest>
-    .WithActionResult<ApiResult>
+public class Update : Endpoint<UpdateRoomNameRequest,ApiResult>
 {
     private readonly IRoomUpdateService _roomUpdateService;
 
@@ -17,13 +13,20 @@ public class Update : EndpointBaseAsync
         _roomUpdateService = roomUpdateService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpPut("api/v{version:apiVersion}/rooms")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Update), Tags = new[] { "Room Endpoints" })]
-    public override async Task<ActionResult<ApiResult>> HandleAsync(UpdateRoomNameRequest request, CancellationToken cancellationToken = default)
+    public override void Configure()
+    {
+        Put("api/v1/rooms");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Rooms));
+    }
+
+    public override async Task HandleAsync(UpdateRoomNameRequest request, CancellationToken ct)
     {
         var userId = User.FindFirstValue(ClaimTypes.Name);
-        return Ok(await _roomUpdateService.Update(userId, request));
+        await SendMemoryPackAsync(await _roomUpdateService.Update(userId, request), cancellation: ct);
     }
 }

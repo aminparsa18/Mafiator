@@ -19,20 +19,20 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 {
     private static readonly Mcolor defaultNativeAnimationColor = new(128, 128, 128, 64);
 
-    AccessibilityManager accessibilityManager;
-    AccessibilityListener accessibilityListener;
-    TouchEffect effect;
+    AccessibilityManager? accessibilityManager;
+    AccessibilityListener? accessibilityListener;
+    TouchEffect? effect;
     bool isHoverSupported;
-    RippleDrawable ripple;
-    AView rippleView;
+    RippleDrawable? ripple;
+    AView? rippleView;
     float startX;
     float startY;
-    Microsoft.Maui.Graphics.Color rippleColor;
-    int rippleRadius = -1;
+    Mcolor? _rippleColor;
+    int _rippleRadius = -1;
 
-    AView View => Control ?? Container;
+    AView _view => Control ?? Container;
 
-    ViewGroup Group => (Container ?? Control) as ViewGroup;
+    ViewGroup? _group => (Container ?? Control) as ViewGroup;
 
     internal bool IsCanceled { get; set; }
 
@@ -43,14 +43,14 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     bool IsForegroundRippleWithTapGestureRecognizer
         => ripple != null &&
             ripple.IsAlive() &&
-            View.IsAlive() &&
-            View.Foreground == ripple &&
+            _view.IsAlive() &&
+            _view.Foreground == ripple &&
             Element is Mview view &&
             view.GestureRecognizers.Any(gesture => gesture is TapGestureRecognizer);
 
     protected override void OnAttached()
     {
-        if (View == null)
+        if (_view == null)
             return;
 
         effect = TouchEffect.PickFrom(Element);
@@ -59,10 +59,10 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
         effect.Element = (VisualElement)Element;
 
-        View.Touch += OnTouch;
+        _view.Touch += OnTouch;
         UpdateClickHandler();
 
-        accessibilityManager = View.Context?.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
+        accessibilityManager = _view.Context?.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
         if (accessibilityManager != null)
         {
             accessibilityListener = new AccessibilityListener(this);
@@ -73,28 +73,28 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop || !effect.NativeAnimation)
             return;
 
-        View.Clickable = true;
-        View.LongClickable = true;
+        _view.Clickable = true;
+        _view.LongClickable = true;
         CreateRipple();
 
-        if (Group == null)
+        if (_group == null)
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
-                View.Foreground = ripple;
+                _view.Foreground = ripple;
 
             return;
         }
 
-        rippleView = new FrameLayout(Group.Context ?? throw new NullReferenceException())
+        rippleView = new FrameLayout(_group.Context ?? throw new NullReferenceException())
         {
             LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
             Clickable = false,
             Focusable = false,
             Enabled = false,
         };
-        View.LayoutChange += OnLayoutChange;
+        _view.LayoutChange += OnLayoutChange;
         rippleView.Background = ripple;
-        Group.AddView(rippleView);
+        _group.AddView(rippleView);
         rippleView.BringToFront();
     }
 
@@ -114,14 +114,14 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
                 accessibilityListener = null;
             }
 
-            if (View != null)
+            if (_view != null)
             {
-                View.LayoutChange -= OnLayoutChange;
-                View.Touch -= OnTouch;
-                View.Click -= OnClick;
+                _view.LayoutChange -= OnLayoutChange;
+                _view.Touch -= OnTouch;
+                _view.Click -= OnClick;
 
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.M && View.Foreground == ripple)
-                    View.Foreground = null;
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.M && _view.Foreground == ripple)
+                    _view.Foreground = null;
             }
 
             effect.Element = null;
@@ -131,7 +131,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
             {
                 rippleView.Pressed = false;
                 rippleView.Background = null;
-                Group?.RemoveView(rippleView);
+                _group?.RemoveView(rippleView);
                 rippleView.Dispose();
                 rippleView = null;
             }
@@ -158,10 +158,10 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
     void UpdateClickHandler()
     {
-        View.Click -= OnClick;
+        _view.Click -= OnClick;
         if (IsAccessibilityMode || (effect?.IsAvailable ?? false) && (effect?.Element?.IsEnabled ?? false))
         {
-            View.Click += OnClick;
+            _view.Click += OnClick;
             return;
         }
     }
@@ -214,7 +214,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         StartRipple(e.Event.GetX(), e.Event.GetY());
 
         if (effect?.DisallowTouchThreshold > 0)
-            Group?.Parent?.RequestDisallowInterceptTouchEvent(true);
+            _group?.Parent?.RequestDisallowInterceptTouchEvent(true);
     }
 
     void OnTouchUp()
@@ -228,8 +228,8 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         if (IsCanceled || e.Event == null)
             return;
 
-        var diffX = Math.Abs(e.Event.GetX() - startX) / View.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
-        var diffY = Math.Abs(e.Event.GetY() - startY) / View.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
+        var diffX = Math.Abs(e.Event.GetX() - startX) / _view.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
+        var diffY = Math.Abs(e.Event.GetY() - startY) / _view.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
         var maxDiff = Math.Max(diffX, diffY);
 
         var disallowTouchThreshold = effect?.DisallowTouchThreshold;
@@ -292,7 +292,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
         IsCanceled = true;
         if (effect?.DisallowTouchThreshold > 0)
-            Group?.Parent?.RequestDisallowInterceptTouchEvent(false);
+            _group?.Parent?.RequestDisallowInterceptTouchEvent(false);
 
         effect?.HandleTouch(status);
 
@@ -319,7 +319,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
             else if (IsForegroundRippleWithTapGestureRecognizer)
             {
                 ripple?.SetHotspot(x, y);
-                View.Pressed = true;
+                _view.Pressed = true;
             }
         }
     }
@@ -339,16 +339,16 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         }
         else if (IsForegroundRippleWithTapGestureRecognizer)
         {
-            if (View.Pressed)
-                View.Pressed = false;
+            if (_view.Pressed)
+                _view.Pressed = false;
         }
     }
 
     void CreateRipple()
     {
-        var drawable = Build.VERSION.SdkInt >= BuildVersionCodes.M && Group == null
-            ? View?.Foreground
-            : View?.Background;
+        var drawable = Build.VERSION.SdkInt >= BuildVersionCodes.M && _group == null
+            ? _view?.Foreground
+            : _view?.Background;
 
         var isEmptyDrawable = Element is Layout || drawable == null;
 
@@ -365,14 +365,14 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         if (effect?.IsDisabled ?? true)
             return;
 
-        if (effect.NativeAnimationColor == rippleColor && effect.NativeAnimationRadius == rippleRadius)
+        if (effect.NativeAnimationColor == _rippleColor && effect.NativeAnimationRadius == _rippleRadius)
             return;
 
-        rippleColor = effect.NativeAnimationColor;
-        rippleRadius = effect.NativeAnimationRadius;
+        _rippleColor = effect.NativeAnimationColor;
+        _rippleRadius = effect.NativeAnimationRadius;
         ripple?.SetColor(GetColorStateList());
         if (Build.VERSION.SdkInt >= BuildVersionCodes.M && ripple != null)
-            ripple.Radius = (int)(View.Context?.Resources?.DisplayMetrics?.Density * effect?.NativeAnimationRadius ?? throw new NullReferenceException());
+            ripple.Radius = (int)(_view.Context?.Resources?.DisplayMetrics?.Density * effect?.NativeAnimationRadius ?? throw new NullReferenceException());
     }
 
     ColorStateList GetColorStateList()
@@ -387,7 +387,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
     void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
     {
-        if (sender is not AView view || (Group as IVisualElementRenderer)?.Element == null || rippleView == null)
+        if (sender is not AView view || (_group as IVisualElementRenderer)?.Element == null || rippleView == null)
             return;
 
         rippleView.Right = view.Width;

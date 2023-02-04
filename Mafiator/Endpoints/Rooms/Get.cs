@@ -3,10 +3,7 @@ using Mafiator.Service.Contracts.Rooms;
 
 namespace Mafiator.Api.Endpoints.Rooms;
 
-[Authorize]
-public class Get : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<RoomDetailsResult>>
+public class Get : EndpointWithoutRequest<ApiResult<RoomDetailsResult>>
 {
     private readonly IRoomService _roomService;
 
@@ -15,10 +12,20 @@ public class Get : EndpointBaseAsync
         _roomService = roomService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/rooms/{roomId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Room Endpoints" })]
-    public override async Task<ActionResult<ApiResult<RoomDetailsResult>>> HandleAsync(string roomId, CancellationToken cancellationToken = default) =>
-        Ok(await _roomService.GetDetails(roomId));
+    public override void Configure()
+    {
+        Get("api/v1/rooms/{roomId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Rooms));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string roomId = Route<string>("roomId");
+        await SendMemoryPackAsync(await _roomService.GetDetails(roomId), cancellation: ct);
+    }
 }

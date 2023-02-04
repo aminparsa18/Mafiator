@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.GameEvents;
 
-[Authorize]
-public class GetNightResult : EndpointBaseSync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<IEnumerable<GameEventResult>>>
+public class GetNightResult : EndpointWithoutRequest<ApiResult<IEnumerable<GameEventResult>>>
 {
     private readonly IMemoryCache _cache;
 
@@ -16,16 +13,25 @@ public class GetNightResult : EndpointBaseSync
         _cache = memoryCache;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/gameevents/night/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(Get), Tags = new[] { "Game Events Endpoints" })]
-    public override ActionResult<ApiResult<IEnumerable<GameEventResult>>> Handle(string gameId)
+    public override void Configure()
     {
-        return Ok(new ApiResult<IEnumerable<GameEventResult>>()
+        Get("api/v1/gameevents/night/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d =>
+        d.Produces(200).WithTags(EndpointsTags.GameEvents));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(new ApiResult<IEnumerable<GameEventResult>>()
         {
             IsSuccess = true,
             Data = _cache.GetCache<List<GameEventResult>>($"NightResults-{gameId}")
-        });
+        }, cancellation: ct);
     }
 }

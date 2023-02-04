@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.GameMembers;
 
-[Authorize]
-public class GetWaitingPlayers : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<ApiResult<IEnumerable<WaitingPlayerResult>>>
+public class GetWaitingPlayers : EndpointWithoutRequest<ApiResult<IEnumerable<WaitingPlayerResult>>>
 {
     private readonly IGameMemberService _gameMemberService;
 
@@ -16,10 +13,20 @@ public class GetWaitingPlayers : EndpointBaseAsync
         _gameMemberService = gameMemberService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/gamemembers/waiting/{gameId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetWaitingPlayers), Tags = new[] { "Game members Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<WaitingPlayerResult>>>> HandleAsync(string gameId, CancellationToken cancellationToken = default) =>
-        Ok(await _gameMemberService.GetWaitingPlayersByGame(gameId));
+    public override void Configure()
+    {
+        Get("api/v1/gamemembers/waiting/{gameId}");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.GameMembers));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        string gameId = Route<string>("gameId");
+        await SendMemoryPackAsync(await _gameMemberService.GetWaitingPlayersByGame(gameId), cancellation: ct);
+    }
 }

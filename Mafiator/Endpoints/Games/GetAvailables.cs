@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace Mafiator.Api.Endpoints.Games;
 
-[Authorize]
-public class GetAvailables : EndpointBaseAsync
-    .WithoutRequest
-    .WithActionResult<ApiResult<IEnumerable<AvailableGameResult>>>
+public class GetAvailables : EndpointWithoutRequest<ApiResult<IEnumerable<AvailableGameResult>>>
 {
     private readonly IGameService _gameService;
 
@@ -16,10 +13,17 @@ public class GetAvailables : EndpointBaseAsync
         _gameService = gameService;
     }
 
-    [ApiVersion("1.0")]
-    [HttpGet("api/v{version:apiVersion}/games/availables")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(OperationId = nameof(GetAvailables), Tags = new[] { "Game Endpoints" })]
-    public override async Task<ActionResult<ApiResult<IEnumerable<AvailableGameResult>>>> HandleAsync(CancellationToken cancellationToken = default) => 
-        Ok(await _gameService.GetAvailable());
+    public override void Configure()
+    {
+        Get("api/v1/games/availables");
+        Summary(s =>
+        {
+            s.Summary = "sadasdas";
+            s.Description = "desxvxcvxv";
+        });
+        Description(d => d.Produces(200).WithTags(EndpointsTags.Games));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct) =>
+        await SendMemoryPackAsync(await _gameService.GetAvailable(), cancellation: ct);
 }

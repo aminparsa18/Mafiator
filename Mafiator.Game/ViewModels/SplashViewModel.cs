@@ -3,6 +3,7 @@ using Mafiator.Game.Models.PipeEvents;
 using Mafiator.Game.Services;
 using Mafiator.Game.ViewModels.Base;
 using MessagePipe;
+using System.Diagnostics;
 
 namespace Mafiator.Game.ViewModels;
 
@@ -44,7 +45,9 @@ public class SplashViewModel : ViewModelBase
                 await _navigationService.NavigateToAsync(nameof(HomeViewModel));
         }
         else
+        {
             await _navigationService.NavigateToAsync(nameof(LoginViewModel));
+        }
 
         //if (!Barrel.Current.Exists("PlayMusic") || Barrel.Current.Get<bool>("PlayMusic"))
         //    await CrossMediaManager.Current.PlayFromAssembly("mafia1.mp3", Assembly.GetExecutingAssembly());
